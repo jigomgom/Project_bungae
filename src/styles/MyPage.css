@@ -1,0 +1,66 @@
+.mypage-content-wrap{
+    margin: 30px 20px 0px 20px;
+}
+.mypage-profile-main{
+    display: flex;
+    flex-direction: row;
+}
+.mypage-profile-img > img{
+    width: 115px;
+    height: 115px;
+    border-radius: 100px;
+    margin-right: 21px;
+}
+.mypage-profile-content{
+    padding: 19px 0px;
+}
+.mypage-profile-title{
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 26px;
+    margin-bottom: 2px;
+}
+.mypage-profile-desc{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 17px;
+    color: #A7A7A7;
+    margin-bottom: 9px;
+}
+.mypage-profile-detail{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.mypage-profile-detail > span{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 17px;
+    color: #6E6A6A;
+    margin: 0px 17px 0px 6px;
+}
+.mypage-profile-btn{
+    margin: 20px 0px 25px 0px;
+    width: 335px;
+    height: 49px;   
+    border-radius: 10px;
+    border: none;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 17px;
+    text-align: center;
+}
+.mypage-selectbar{
+    border-bottom: 1.2px solid #D9D9D9;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 23px;
+}

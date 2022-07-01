@@ -5,6 +5,7 @@ import SignUp from "./pages/SignUp";
 import TagSearch from "./pages/TagSearch";
 import CategorySearch from "./pages/CategorySearch";
 import Main from "./pages/Main";
+import MyPage from "./pages/MyPage";
 
 import { Routes, Route } from "react-router-dom";
 
@@ -17,6 +18,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/tagsearch" element={<TagSearch />} />
         <Route path="/categorysearch" element={<CategorySearch />} />
+        <Route path="/mypage" element={<MyPage />} />
       </Routes>
     </div>
   );
