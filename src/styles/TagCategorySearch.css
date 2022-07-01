@@ -1,0 +1,27 @@
+.search-result-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+    margin: 20px 20px 0px 20px;
+}
+.search-result-header-title{
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 29px;
+    margin: 0;
+}
+.search-result-header-dropbox{
+    width: 60px;
+    /* width: 51px; */
+    height: 15px;
+    /* left: 301px; */
+    /* top: 246px; */
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    border: none;
+}
+
