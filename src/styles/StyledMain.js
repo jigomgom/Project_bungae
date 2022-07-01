@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const MainWrap = styled.div`
     width: 100%; // 100% -> 375px
-    /* height: 100vh; */
+    height: 100%;
 `;
 
 export const ContentDivide = styled.div`
