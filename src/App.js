@@ -1,4 +1,5 @@
 import React from "react";
+
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import TagSearch from "./pages/TagSearch";
@@ -10,13 +11,13 @@ import { Routes, Route } from "react-router-dom";
 function App() {
   return (
     <div className="App">
-     <Routes>
-     <Route path="/" element={<Login />} />
-      <Route path="/main" element={<Main />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="/tagsearch" element={<TagSearch />} />
-      <Route path="/categorysearch" element={<CategorySearch />} />
-     </Routes>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/main" element={<Main />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/tagsearch" element={<TagSearch />} />
+        <Route path="/categorysearch" element={<CategorySearch />} />
+      </Routes>
     </div>
   );
 }
