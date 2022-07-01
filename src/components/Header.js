@@ -1,9 +1,18 @@
 import React from 'react'
-import "../styles/Header.css";
+import { HeaderWrap, Logo, HeadrIconsWrap, IconNotification, IconSetting } from "../styles/StyledHeader.js";
+
+import Notification from "../assets/icon-notification.svg";
+import Setting from "../assets/icon-setting.svg";
 
 function Header() {
   return (
-    <div>Header;</div>
+    <HeaderWrap>
+      <Logo>Logo</Logo>
+      <HeadrIconsWrap>
+          <IconNotification src={Notification}/>
+          <IconSetting src={Setting}/>
+      </HeadrIconsWrap>
+    </HeaderWrap>
   )
 };
 
