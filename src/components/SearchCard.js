@@ -3,8 +3,8 @@ import React from "react";
 import "../styles/SearchCard.css";
 
 //img
-import defaultCardImg from "../assets/defaultCardImg.jpg";
-import tempImg from "../assets/icon-temp.jpg";
+import defaultCardImg from "../assets/defaultImg.jpg";
+import tempImg from "../assets/icon-temp.svg";
 
 function SearchCard() {
   return (

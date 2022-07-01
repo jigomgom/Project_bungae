@@ -3,6 +3,9 @@ import React from "react";
 import "../styles/TagCategorySearch.css";
 //Components
 import SearchCard from "../components/SearchCard";
+//Styled-Components
+import Tag from "../components/Tag";
+import Search from "../components/Search";
 
 function TagSearch() {
   //검색 정렬 드롭박스
@@ -19,6 +22,8 @@ function TagSearch() {
 
   return (
     <div>
+      <Tag />
+      <Search />
       <div className="search-result-wrap">
         <div className="search-result-header">
           <p className="search-result-header-title">검색 결과</p>
