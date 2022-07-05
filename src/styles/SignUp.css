@@ -1,0 +1,158 @@
+:root {
+    --vh: 100%;
+}
+
+.Signup_wrap{
+    max-width: 640px;
+    margin: 0px auto;
+}
+
+@media (min-width: 640px) {
+    #Signup_container{
+    min-height: calc((100vh - 375px) - 57px);
+    }
+}
+
+@media (min-width: 640px) {
+    .Signup_nav{
+    height: 64px;
+    }
+}
+
+.Signup_nav{
+    border-bottom: 1px solid rgb(242, 243, 245);
+    display: flex;
+    align-items: center;
+    margin-left: 15px;
+    margin-top: 15px;
+}
+
+.Signup{
+    position: relative;
+    font-family: "Noto Sans KR", sans-serif;
+    text-align: center;
+    font-size: 22px;
+    line-height: 34px;
+    font-weight: 700;
+    margin: auto;
+    margin-top: 15px;
+}
+
+.icon_size {
+    margin-top: 15px;
+}
+
+
+
+
+
+
+.first_Signup_input{
+    padding: 6px 24px;
+    display: flex;
+    flex-direction:column;
+}
+
+
+.first_Signup_input > input {
+    width: 100%;
+    padding: 11px 16px;
+    border-left: hidden;
+    border-right: hidden;
+    border-top: hidden;
+    background: rgb(255, 255, 255);
+    font-weight: bold;
+    color: rgb(32, 36, 41);
+    opacity: 1;
+    height: 46px;
+    font-size: 16px;
+    box-sizing: border-box;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    
+}
+
+.first_Signup_input > input::placeholder {color:#ccc; font-weight: 200;}
+
+
+
+
+
+.first_Signup_input > p {
+    position: relative;
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 18px;
+    line-height: 10px;
+    font-weight: 700;
+
+}
+
+
+
+.second_Signup_input{
+    padding: 6px 24px;
+    display: flex;
+    flex-direction:column;
+}
+
+
+.second_Signup_input > input {
+    width: 100%;
+    padding: 11px 16px;
+    border-left: hidden;
+    border-right: hidden;
+    border-top: hidden;
+    background: rgb(255, 255, 255);
+    font-weight: bold;
+    color: rgb(32, 36, 41);
+    opacity: 1;
+    height: 46px;
+    font-size: 16px;
+    box-sizing: border-box;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    
+}
+
+.second_Signup_input > input::placeholder {color:#ccc; font-weight: 200;}
+
+
+
+
+
+.second_Signup_input > p {
+    position: relative;
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 18px;
+    line-height: 10px;
+    font-weight: 700;
+
+}
+
+.Signup_button{
+    display: inline-flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    vertical-align: middle;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.0175em;
+    font-family: "Noto Sans KR";
+    padding: 0px 16px;
+    text-decoration: none;
+    background: black;
+    color: white;
+    height: 52px;
+    border-radius: 8px;
+    width: 100%;
+    margin: 10px 0px 24px 0px;
+    margin-top: 15px;
+}
+
+

@@ -10,6 +10,7 @@ export const FooterWrap = styled.div`
     height: 60px;
     background-color: white;
     box-shadow: inset 0px 1px 0px rgba(0, 0, 0, 0.1);
+    z-index: 1000; // 안해주면 다른 아이템에 덮히는 경우가 발생
 `;
 
 export const FooterIconWrap = styled.div`

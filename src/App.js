@@ -10,9 +10,9 @@ import TagSearch from "./pages/TagSearch";
 import CategorySearch from "./pages/CategorySearch";
 import Main from "./pages/Main";
 import MyPage from "./pages/MyPage";
+import Post from "./pages/Post";
 import MyPageSetting from "./pages/MyPageSetting";
 import MyPageRecent from "./pages/MyPageRecent";
-//Components
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -28,6 +28,7 @@ function App() {
         <Route path="/categorysearch" element={<CategorySearch />} />
         {/* MyPage */}
         <Route path="/mypage" element={<MyPage />} />
+        <Route path="/post" element={<Post />} />
         <Route path="/mypagesetting" element={<MyPageSetting />} />
         <Route path="/mypagerecent" element={<MyPageRecent />} />
       </Routes>
