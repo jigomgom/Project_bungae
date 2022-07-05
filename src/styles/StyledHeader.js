@@ -17,12 +17,20 @@ export const Logo = styled.h3`
     margin: 0;
 `;
 
+export const BackKey = styled.img`
+    position: absolute;
+    width: 11.67px;
+    height: 19.8px;
+    left: 25px;
+    top: 22px;
+`;
+
 export const HeadrIconsWrap = styled.div`
     display: flex;
     height: 50px;
     align-items: center;
     position: absolute;
-    right: 20px;
+    right: 22px;
     top: 5px;
     gap: 10px;
 `;

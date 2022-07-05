@@ -1,13 +1,14 @@
 import React from 'react'
-import { HeaderWrap, Logo, HeadrIconsWrap, IconNotification, IconSetting } from "../styles/StyledHeader.js";
+import { HeaderWrap, BackKey, Logo, HeadrIconsWrap, IconNotification, IconSetting } from "../styles/StyledHeader.js";
 
 import Notification from "../assets/icon-notification.svg";
 import Setting from "../assets/icon-setting.svg";
+import IconBackKey from "../assets/icon-left-arrow.svg"
 
 function Header() {
   return (
     <HeaderWrap>
-      <Logo>Logo</Logo>
+      { window.location.pathname === "/post" ? <BackKey src={IconBackKey}/> : <Logo>Logo</Logo> }
       <HeadrIconsWrap>
           <IconNotification src={Notification}/>
           <IconSetting src={Setting}/>
