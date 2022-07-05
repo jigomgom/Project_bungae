@@ -11,10 +11,11 @@ import CategorySearch from "./pages/CategorySearch";
 import Main from "./pages/Main";
 import MyPage from "./pages/MyPage";
 import Post from "./pages/Post";
-import MyPageSetting from "./pages/MyPageSetting";
+import ProfileSetting from "./pages/ProfileSetting";
 import MyPageRecent from "./pages/MyPageRecent";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Test from "./pages/Test";
 
 function App() {
   return (
@@ -29,8 +30,9 @@ function App() {
         {/* MyPage */}
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/post" element={<Post />} />
-        <Route path="/mypagesetting" element={<MyPageSetting />} />
+        <Route path="/profilesetting" element={<ProfileSetting />} />
         <Route path="/mypagerecent" element={<MyPageRecent />} />
+        <Route path="/test" element={<Test />} />
       </Routes>
       <Footer />
     </div>
