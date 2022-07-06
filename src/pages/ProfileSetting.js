@@ -53,7 +53,7 @@ function MyPageSetting() {
           <input
             type="file"
             style={{ display: "none" }}
-            accept="image/jpg,impge/png,image/jpeg"
+            accept="image/jpg,impge/png,image/jpeg, image/*"
             name="profile_img"
             onChange={onChange}
             ref={fileInput}
