@@ -9,14 +9,14 @@ export const SearchWrap = styled.div`
 export const SearchDiv = styled.div`
     width: 89%;
     height: 34px;
-    margin: auto;
+    margin-left: 15px;
     /* background: #D9D9D9;
     border-radius: 17px; */
     position: relative;
 `;
 
 export const SeachInput = styled.input`
-    width: 85%;
+    width: 89%;
     height: 34px;
     background: #D9D9D9;
     border-radius: 17px;

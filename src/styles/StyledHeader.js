@@ -32,7 +32,8 @@ export const BackKey = styled.img`
     width: 11.67px;
     height: 19.8px;
     left: 25px;
-    top: 22px;
+    top: 18px;
+    cursor: pointer;
 `;
 
 export const HeadrIconsWrap = styled.div`

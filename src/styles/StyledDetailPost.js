@@ -26,6 +26,15 @@ export const PostIconShared = styled.img`
     cursor: not-allowed;
 `;
 
+export const PostLike = styled.img`
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 58px;
+    right: 24.3px;
+    cursor: pointer;
+`;
+
 export const PostContentBody = styled.div`
     width: 100%;
 `;

@@ -163,11 +163,24 @@ export const SelectChatBtnWrap = styled.div`
     margin-bottom: 25px;
 `;
 
-export const SelectChatBtn = styled.div`
+export const SelectChatLetterBtn = styled.div`
     position: relative;
     width: 160px;
     height: 48px;
-    background-color: #D9D9D9;
+    background-color: ${(props) => props.CheckedState ? "black" : "#D9D9D9" };
+    border-radius: 8px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+`;
+
+export const SelectChatVideoBtn = styled.div`
+    position: relative;
+    width: 160px;
+    height: 48px;
+    background-color: ${(props) => props.CheckedState ? "black" : "#D9D9D9" };
     border-radius: 8px;
     display: flex;
     text-align: center;

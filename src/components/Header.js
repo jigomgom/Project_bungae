@@ -1,4 +1,6 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   HeaderWrap,
   BackKey,
@@ -16,6 +18,7 @@ import IconBackKey from "../assets/icon-left-arrow.svg";
 import IconMyPoint from "../assets/icon-mylocation.svg";
 
 function Header() {
+  const navigate = useNavigate();
   // root path, siginup 일 때 렌더링 안되도록 방지
   if (
     window.location.pathname === "/" ||
@@ -55,11 +58,11 @@ function Header() {
     )
   }
   // 게시글 헤더
-  else if( window.location.pathname === "/post" ){
+  else if( window.location.pathname === "/detailpost" ){
     return (
       <HeaderWrap>
         <Logo></Logo>
-        <BackKey src={IconBackKey}/>
+        <BackKey src={IconBackKey} onClick={()=>{ navigate("/main") }}/>
         <PageTitle></PageTitle>
 
         <HeadrIconsWrap>
@@ -75,7 +78,7 @@ function Header() {
     return (
       <HeaderWrap>
         <Logo style={{visibility:"hidden"}}></Logo>
-        <BackKey src={IconBackKey}/>
+        <BackKey src={IconBackKey} onClick={()=>{ navigate("/main") }}/>
         <PageTitle>번개 생성</PageTitle>
 
         <HeadrIconsWrap>

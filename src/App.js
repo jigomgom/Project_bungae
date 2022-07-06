@@ -13,7 +13,6 @@ import MyPage from "./pages/MyPage";
 
 import DetailPost from "./pages/DetailPost";
 import CreatePost from "./pages/CreatePost";
-import MyPageSetting from "./pages/MyPageSetting";
 
 import ProfileSetting from "./pages/ProfileSetting";
 import MyPageRecent from "./pages/MyPageRecent";
@@ -35,7 +34,6 @@ function App() {
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/detailpost" element={<DetailPost />} />
         <Route path="/createpost" element={<CreatePost />} />
-        <Route path="/mypagesetting" element={<MyPageSetting />} />
         <Route path="/profilesetting" element={<ProfileSetting />} />
         <Route path="/mypagerecent" element={<MyPageRecent />} />
         <Route path="/test" element={<Test />} />

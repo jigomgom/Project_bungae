@@ -3,7 +3,7 @@ import Divider from "../components/Divider";
 
 // slider 추가
 import Slider from "rc-slider";
-import "rc-slider/assets/index.css";
+import "../styles/rc-slider/index.css";
 
 // css styled
 import {
@@ -28,7 +28,8 @@ import {
   SelectChatWrap,
   SelectChatBox,
   SelectChatBtnWrap,
-  SelectChatBtn,
+  SelectChatLetterBtn,
+  SelectChatVideoBtn,
   SelectChatBtnName,
   SelectChatBtnImg,
   // 해쉬태그
@@ -70,6 +71,7 @@ function CreatePost() {
   const [onlyNumber, setOnlyNumber] = useState("2");
   // 문자, 화상 여부 판별
   const [isLetter, setIsLetter] = useState(false);
+  const [isVideo, setIsVideo] = useState(false);
   // 채팅 버튼 클릭 여부 판별
   const [chatBtnState, setChatBtnState] = useState(false);
   // 번개 이름 타이틀 용 ref
@@ -85,8 +87,10 @@ function CreatePost() {
     setOnlyNumber("2");
     if (text === "letter") {
       setIsLetter(true);
+      setIsVideo( false );
     } else {
       setIsLetter(false);
+      setIsVideo( true );
     }
   };
 
@@ -192,22 +196,24 @@ function CreatePost() {
         <SelectChatBox>
           <UploadTitle>채팅 설정</UploadTitle>
           <SelectChatBtnWrap>
-            <SelectChatBtn
+            <SelectChatLetterBtn
+              CheckedState={isLetter}
               onClick={() => {
                 ChatButtonClickHandler("letter");
               }}
             >
               <SelectChatBtnImg src={IconChatLetter} />
               <SelectChatBtnName>일반채팅</SelectChatBtnName>
-            </SelectChatBtn>
-            <SelectChatBtn
+            </SelectChatLetterBtn>
+            <SelectChatVideoBtn
+            CheckedState={isVideo}
               onClick={() => {
                 ChatButtonClickHandler("video");
               }}
             >
               <SelectChatBtnImg src={IconChatVideo} />
               <SelectChatBtnName>화상채팅</SelectChatBtnName>
-            </SelectChatBtn>
+            </SelectChatVideoBtn>
           </SelectChatBtnWrap>
         </SelectChatBox>
       </SelectChatWrap>

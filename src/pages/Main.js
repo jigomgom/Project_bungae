@@ -4,7 +4,7 @@
   작성 내용 :
 */
 
-import React from "react";
+import React, { useState } from "react";
 import Tag from "../components/Tag";
 import Search from "../components/Search";
 import Category from "../components/Category";
@@ -19,14 +19,19 @@ import {
   MainContentItemImg,
   MainContentItemImgTemp,
   MainContentTextWrap,
+  MainContentTitleWrap,
   MainContentItemTitle,
+  MainContentItemLike,
   MainContentItemTimePeople,
   MainContentButton,
 } from "../styles/StyledMain.js";
 
+//icons
 import IconTemp from "../assets/icon-temp.svg";
+import IconLike from "../assets/icon-like.svg";
+import IconUnlike from "../assets/icon-unlike.svg";
 
-const MainCategoryArray = ["실시간 번개", "시작 예정 번개", "운동 관련 번개"];
+const MainCategoryArray = ["실시간 번개", "평균 매너가 좋은 번개", "마감 임박순 번개"];
 
 const ContentArray = [
   "Lorem ipsum1",
@@ -53,7 +58,10 @@ function Main() {
                     <MainContentItemImg />
                     <MainContentItemImgTemp src={IconTemp} />
                     <MainContentTextWrap>
+                      <MainContentTitleWrap>
                       <MainContentItemTitle>{item}</MainContentItemTitle>
+                      <MainContentItemLike src={ IconUnlike }/>
+                      </MainContentTitleWrap>
                       <MainContentItemTimePeople>
                         16시 시작 예정 (0/5)
                       </MainContentItemTimePeople>
