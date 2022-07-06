@@ -4,7 +4,9 @@ import SearchCard from "../components/SearchCard";
 
 function MyPageRecent() {
   return (
-    <div>
+    <div style={{ marginBottom: "70px" }}>
+      <SearchCard />
+      <SearchCard />
       <SearchCard />
       <SearchCard />
       <SearchCard />

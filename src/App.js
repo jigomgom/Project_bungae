@@ -15,7 +15,7 @@ import DetailPost from "./pages/DetailPost";
 import CreatePost from "./pages/CreatePost";
 
 import ProfileSetting from "./pages/ProfileSetting";
-import MyPageRecent from "./pages/MyPageRecent";
+import MyLikeBung from "./pages/MyLikeBung";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Test from "./pages/Test";
@@ -36,7 +36,7 @@ function App() {
         <Route path="/detailpost" element={<DetailPost />} />
         <Route path="/createpost" element={<CreatePost />} />
         <Route path="/profilesetting" element={<ProfileSetting />} />
-        <Route path="/mypagerecent" element={<MyPageRecent />} />
+        <Route path="/mylikebung" element={<MyLikeBung />} />
         <Route path="/chat" element={<ChattingRoom />} />
         {/* Test */}
         <Route path="/test" element={<Test />} />
