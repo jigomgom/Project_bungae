@@ -160,7 +160,7 @@ function CreatePost() {
             //   <FileInputLabel htmlFor="file-input">
             //     <FileInputImg src={ IconUpload} />
             //   </FileInputLabel>
-            //   <FileInput id="file-input" type="file" />
+            //   <FileInput id="file-input" type="file" accept='image/jpg, image/jpeg, image/png' />
             // </UploadPictureWrap>
             )
           })}
