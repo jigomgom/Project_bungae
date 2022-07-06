@@ -2,7 +2,10 @@ import styled from "styled-components";
 
 export const MainWrap = styled.div`
     width: 100%; // 100% -> 375px
-    height: 100%;
+    /* height: 100%; */
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 90px;
 `;
 
 export const ContentDivide = styled.div`
@@ -16,7 +19,8 @@ export const ContentDivide = styled.div`
 export const MainContentWrap = styled.div`
     width: 100%;
     /* padding: 20px; */
-    
+    display: flex;
+    flex-direction: column;
     margin-top: 25px;
 `;
 
@@ -43,6 +47,7 @@ export const MainContentItemFrame = styled.div`
     width: 161px;
     height: 213px;
     position: relative;
+    cursor: pointer;
 `;
 
 export const MainContentItemImg = styled.img`
@@ -62,10 +67,26 @@ export const MainContentTextWrap = styled.div`
     display: flex;
     flex-direction: column;
 `;
+export const MainContentTitleWrap = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+`;
+
 export const MainContentItemTitle = styled.span`
     font-weight: 700;
     font-size: 16px;
     line-height: 23px;
+`;
+
+export const MainContentItemLike = styled.img`
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 5px;
+    margin-top:5px;
 `;
 
 export const MainContentItemTimePeople = styled.span`

@@ -1,5 +1,6 @@
 /* global kakao */
 import React, { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -10,6 +11,7 @@ import {
   PostContent,
   PostImg,
   PostIconShared,
+  PostLike,
   PostUserBox,
   PostUserBoxProfile,
   PostUserTexts,
@@ -33,11 +35,14 @@ import {
   PostMemberPicture,
   PostMemberName,
   PostJoinButton,
-} from "../styles/StyledPost";
+} from "../styles/StyledDetailPost";
 
+
+// icons
 import IconShared from "../assets/icon-url-shared.svg";
 import IconPostTemp from "../assets/icon-post-temp.svg";
 import IconLightening from "../assets/icon-lightening.svg";
+import IconUnlike from "../assets/icon-white-unlike.svg";
 
 const TagsArrray = ["산책", "친목", "노래방", "수다", "대화"];
 const MembersArray = [
@@ -66,6 +71,7 @@ const Post = () => {
       <PostContent>
         <PostImg />
         <PostIconShared src={IconShared} />
+        <PostLike src={IconUnlike}/>
         <PostUserBox>
           <PostUserBoxProfile />
           <PostUserTexts>
@@ -89,7 +95,7 @@ const Post = () => {
             tincidunt nisl donec ac, maecenas euismod.
           </PostBodyContent>
           <PostInfoTextWrap>
-            조회수 205회 · 서초동 1번 출구 인근
+            서초동 1번 출구 인근
           </PostInfoTextWrap>
           <PostTagWrap>
             {TagsArrray.map((item, index) => {
