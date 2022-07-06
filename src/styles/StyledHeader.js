@@ -5,7 +5,7 @@ export const HeaderWrap = styled.div`
     /* max-width: 375px; */
     height: 50px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 22px;
     position: relative;
@@ -14,7 +14,17 @@ export const HeaderWrap = styled.div`
 export const Logo = styled.h3`
     font-size: 24px;
     font-weight: 700;
-    margin: 0;
+    margin-left: 20px;
+    width: 54.97px;
+    height: 34.67px;
+    cursor: pointer;
+    /* margin-top: 29px; */
+`;
+
+export const PageTitle = styled.h3`
+    font-size: 24px;
+    font-weight: 700;
+    margin-left: 20px;
 `;
 
 export const BackKey = styled.img`
@@ -29,10 +39,17 @@ export const HeadrIconsWrap = styled.div`
     display: flex;
     height: 50px;
     align-items: center;
-    position: absolute;
-    right: 22px;
-    top: 5px;
-    gap: 10px;
+    /* position: absolute; */
+    /* right: 22px;
+    top: 5px; */
+    gap: 10px; 
+    margin-right: 22px;
+`;
+
+export const IconMyLocation = styled.img`
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
 `;
 
 export const IconNotification = styled.img`

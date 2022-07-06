@@ -13,6 +13,8 @@ import IconChat from "../assets/icon-chat.svg";
 import IconMyBungae from "../assets/icon-account.svg";
 
 const Footer = () => {
+  // root path, siginup 일 때 렌더링 안되도록 방지
+  if( window.location.pathname === "/" || window.location.pathname === "/signup" || window.location.pathname === "/createpost") return null;
   return (
     <FooterWrap>
       <FooterIconWrap>

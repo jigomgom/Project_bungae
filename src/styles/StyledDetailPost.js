@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const PostWrap = styled.div`
     width: 100%; // 100% -> 375px
     position: relative;
+    margin-bottom: 90px;
 `;
 
 export const PostContent = styled.div`
@@ -22,6 +23,7 @@ export const PostIconShared = styled.img`
     height: 24px;
     right : 22.3px;
     top: 22.3px;
+    cursor: not-allowed;
 `;
 
 export const PostContentBody = styled.div`

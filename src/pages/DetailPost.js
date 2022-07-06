@@ -33,7 +33,7 @@ import {
   PostMemberPicture,
   PostMemberName,
   PostJoinButton,
-} from "../styles/StyledPost";
+} from "../styles/StyledDetailPost";
 
 import IconShared from "../assets/icon-url-shared.svg";
 import IconPostTemp from "../assets/icon-post-temp.svg";
@@ -89,7 +89,7 @@ const Post = () => {
             tincidunt nisl donec ac, maecenas euismod.
           </PostBodyContent>
           <PostInfoTextWrap>
-            조회수 205회 · 서초동 1번 출구 인근
+            서초동 1번 출구 인근
           </PostInfoTextWrap>
           <PostTagWrap>
             {TagsArrray.map((item, index) => {
