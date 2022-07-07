@@ -15,13 +15,14 @@ import MyPageSetting from "./pages/MyPageSetting";
 import MyPageRecent from "./pages/MyPageRecent";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import ChatList from "./pages/ChatList";
 
 function App() {
   return (
     <div className="App">
       <Header />
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/main" element={<Main />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/tagsearch" element={<TagSearch />} />
@@ -31,6 +32,7 @@ function App() {
         <Route path="/post" element={<Post />} />
         <Route path="/mypagesetting" element={<MyPageSetting />} />
         <Route path="/mypagerecent" element={<MyPageRecent />} />
+        <Route path="/chatlist" element={<ChatList />} />
       </Routes>
       <Footer />
     </div>

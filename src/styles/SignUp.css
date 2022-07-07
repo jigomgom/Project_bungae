@@ -1,3 +1,9 @@
+@charset "utf-8";
+
+.text {
+  content: '\u0065\u006e\u0067\u006c\u0069\u0073\u0068\u000d';
+}
+
 :root {
     --vh: 100%;
 }
@@ -28,13 +34,12 @@
 }
 
 .Signup{
-    position: relative;
     font-family: "Noto Sans KR", sans-serif;
-    text-align: center;
     font-size: 22px;
     line-height: 34px;
     font-weight: 700;
     margin: auto;
+    margin-left: 30%;
     margin-top: 15px;
 }
 
@@ -43,18 +48,24 @@
 }
 
 
-
-
-
-
 .first_Signup_input{
     padding: 6px 24px;
     display: flex;
-    flex-direction:column;
+    flex-direction:row;
+}
+
+.first_Signup_input > img {
+margin-top: 19px;
+margin-right: 5px;
+width: 35px;
+height: 35px;
+left: 339px;
+top: 273px;
+border-bottom: 2px solid #000;
 }
 
 
-.first_Signup_input > input {
+.first_Signup_input > div > input {
     width: 100%;
     padding: 11px 16px;
     border-left: hidden;
@@ -68,68 +79,70 @@
     font-size: 16px;
     box-sizing: border-box;
     margin-top: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 1px;
     
 }
 
-.first_Signup_input > input::placeholder {color:#ccc; font-weight: 200;}
+.first_Signup_input > div > input::placeholder {color:#ccc; font-weight: 200;}
 
-
-
-
-
-.first_Signup_input > p {
-    position: relative;
-    font-family: "Noto Sans KR", sans-serif;
-    font-size: 18px;
-    line-height: 10px;
-    font-weight: 700;
-
+.first_Signup_input > div > a {
+    border-radius: 100px;
+    border-right: 70%;
+    margin-top: 25px;
+    width: 37px;
+    height: 0px;
+    font-size:10px;
+    background: #A8A8A8;
+    border-radius: 100px;
+    font-family: 'Noto Sans KR';
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
 }
-
-
 
 .second_Signup_input{
     padding: 6px 24px;
     display: flex;
-    flex-direction:column;
+    flex-direction:row;
 }
-
 
 .second_Signup_input > input {
     width: 100%;
-    padding: 11px 16px;
-    border-left: hidden;
-    border-right: hidden;
-    border-top: hidden;
-    background: rgb(255, 255, 255);
-    font-weight: bold;
-    color: rgb(32, 36, 41);
-    opacity: 1;
-    height: 46px;
-    font-size: 16px;
-    box-sizing: border-box;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    
+    padding: 10px 0;
+    background: none;
+    border: none;
+    border-bottom: 2px solid #000;
+    color: rgb(7, 7, 7);
+    font-size: 14px;
+    outline: none;
+    transition: border-color .2s;
 }
 
 .second_Signup_input > input::placeholder {color:#ccc; font-weight: 200;}
 
 
 
-
-
 .second_Signup_input > p {
     position: relative;
     font-family: "Noto Sans KR", sans-serif;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 10px;
     font-weight: 700;
 
 }
 
-.Signup_button{
+.second_Signup_input > img {
+    margin-top: 13px;
+    margin-right: 5px;
+    width: 25px;
+    height: 25px;
+    left: 339px;
+    top: 273px;
+    border-bottom: 2px solid #000;
+}
+
+.second_Signup_input > a {
     display: inline-flex;
     -webkit-box-align: center;
     align-items: center;
@@ -140,19 +153,94 @@
     outline: none;
     border: none;
     box-sizing: border-box;
-    font-size: 16px;
+    font-size: large;
     font-weight: 700;
     letter-spacing: 0.0175em;
     font-family: "Noto Sans KR";
     padding: 0px 16px;
     text-decoration: none;
     background: black;
-    color: white;
     height: 52px;
     border-radius: 8px;
     width: 100%;
     margin: 10px 0px 24px 0px;
-    margin-top: 15px;
+    margin-top: 15rem;
+    color: #fff
 }
 
 
+
+
+
+.modal {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(77, 77, 77, .7);
+    transition: all .4s;
+    width: 23.4rem;
+}
+
+.modal:target {
+    visibility: visible;
+    opacity: 1;
+}
+
+.modal__content {
+    position: absolute;
+    width: 335px;
+    height: 178px;
+    left: 20px;
+    top: 229px;
+    
+    background: #FFFFFF;
+    border-radius: 10px;
+}
+
+.modal__content > h1 {
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 23px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.modal__content > p {
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 17px;
+    text-align: center;
+    border-bottom: 1px solid rgb(195, 195, 195);
+}
+
+
+.modal__close {
+    position: absolute;
+    bottom: 5%;
+    right: 0%;
+    color: #000;
+    text-decoration: none;
+}
+
+.modal__close > div {
+
+ font-family: 'Noto Sans KR';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 25px;
+color: #000000;
+
+padding: 5px 152px;
+}

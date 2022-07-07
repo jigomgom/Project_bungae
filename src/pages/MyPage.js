@@ -7,6 +7,7 @@ import Divider from "../components/Divider";
 import defaultImg from "../assets/defaultImg.jpg";
 import lighteningImg from "../assets/icon-lightening.jpg";
 import tempImg from "../assets/icon-temp.svg";
+
 function MyPage() {
   return (
     <div>

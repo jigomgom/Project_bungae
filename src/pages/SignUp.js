@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/SignUp.css";
 import axios from "axios";
 import { BsChevronLeft } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import cancel from "../assets/icon-cancel.png";
 
 const Signup = () => {
   function setScreenSize() {
@@ -23,7 +24,7 @@ const Signup = () => {
   };
 
   // 이메일 유효성 검사
-  const checkEmail = (e) => {
+  const checkID = (e) => {
     var regExp =
       /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
     // 형식에 맞는 경우 true 리턴
@@ -37,6 +38,8 @@ const Signup = () => {
   const pwcheck_ref = React.useRef(null);
   const nick_ref = React.useRef(null);
   const email_ref = React.useRef(null);
+
+  const [isOpen, setIsOpen] = useState(false);
 
   const SignupAxios = () => {
     const SignupData = {
@@ -71,36 +74,73 @@ const Signup = () => {
           <h1 className="Signup">회원가입</h1>
         </nav>
 
-        <div className="first_Signup_input">
-          <p>아이디</p>
-          <input
-            type="text"
-            placeholder="아이디 입력"
-            onBlur={checkEmail}
-            ref={id_ref}
-          ></input>
-          {/* <input type="text" placeholder="선택" ref={id_ref}></input> */}
+        <div className="second_Signup_input">
+          <p>이메일</p>
+        </div>
+        <div>
+          <div className="second_Signup_input">
+            <input
+              type="email"
+              placeholder="email@example.com"
+              ref={pw_ref}
+              onBlur={checkID}
+            ></input>
+            <img src={cancel} alt="" />
+          </div>
         </div>
 
         <div className="second_Signup_input">
           <p>비밀번호</p>
+        </div>
+        <div className="second_Signup_input">
           <input
             type="password"
             placeholder="영문, 숫자, 특수만자 조합 8자리 이상"
             ref={pw_ref}
             onBlur={checkPassword}
           ></input>
+          <img src={cancel} alt="" />
+        </div>
 
+        <div className="second_Signup_input">
           <input
             type="password"
             placeholder="비밀번호 확인"
             ref={pwcheck_ref}
             onBlur={checkPassword}
           ></input>
+          <img src={cancel} alt="" />
+        </div>
+        <div className="second_Signup_input">
+          <a href="#demo-modal">
+            <div className="wrapper" onClick={SignupAxios}>
+              가입하기
+            </div>
+          </a>
+          <div class="modal" id="demo-modal">
+            <div class="modal__content">
+              <h1>인증 메일을 발송했습니다.</h1>
 
-          <button className="Signup_button" onClick={SignupAxios}>
-            <span> 회원가입</span>
-          </button>
+              <p>
+                메일함에서 이메일 인증하기 버튼을
+                <br />
+                누르면 이메일 인증이 완료 됩니다.
+                <br />
+                <br />
+                <br />
+              </p>
+
+              {/* <div>
+                <a href="#" target="_blank">
+                  확인
+                </a>
+              </div> */}
+
+              <a href="#" class="modal__close">
+                <div>확인</div>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>

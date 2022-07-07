@@ -1,0 +1,61 @@
+/* .swiper01{
+  margin: 20px 10px 0px 10px;
+  border-bottom: 3px solid rgb(242, 243, 245);
+} */
+.first_swiper_main{
+    display: flex;
+    flex-direction: row;
+    margin: 20px 10px 0px 10px;
+    border-bottom: 3px solid rgb(242, 243, 245);
+}
+  
+.first_swiper_img > img{
+    width: 75px;
+    height: 75px;
+    border-radius: 75px;
+    margin-right: 15px;
+}
+  
+.first_swipe{
+    display: flex;
+    flex-direction: column;
+}
+  
+.first_swipe_title{
+    font-family: 'Noto Sans KR';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 20px;
+    margin-bottom: 3px;
+}
+  
+  
+.first_swipe_content {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 17px;
+    color: #000000;
+    height: 20px;
+    overflow: hidden;
+    /* overflow: auto; */
+    margin-bottom: 26.5px;
+}
+  
+.first_swipe_sub {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1px;
+    color: #9A9A9A;
+    margin-bottom: 15px;
+}
+  
+
+button {
+    font-size: 16px;
+    border: none;
+    
+}
+  
