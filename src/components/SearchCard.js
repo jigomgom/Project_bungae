@@ -14,6 +14,7 @@ import "react-swipeable-list/dist/styles.css";
 //img
 import defaultCardImg from "../assets/defaultImg.jpg";
 import tempImg from "../assets/icon-temp.svg";
+import likeImg from "../assets/icon-like.svg";
 
 function SearchCard() {
   // const leadingActions = () => (
@@ -42,7 +43,12 @@ function SearchCard() {
     return (
       <div className="search-card-wrap">
         <div className="search-card-img">
-          <img src={defaultCardImg} alt="" />
+          <img
+            className="search-card-img-thumbnail"
+            src={defaultCardImg}
+            alt=""
+          />
+          <img className="search-card-img-like" src={likeImg} alt="" />
         </div>
         <div className="search-card-desc">
           <div className="search-card-desc-title">Lorem Ipsum</div>
@@ -70,7 +76,12 @@ function SearchCard() {
         >
           <div className="search-card-wrap">
             <div className="search-card-img">
-              <img src={defaultCardImg} alt="" />
+              <img
+                className="search-card-img-thumbnail"
+                src={defaultCardImg}
+                alt=""
+              />
+              <img className="search-card-img-like" src={likeImg} alt="" />
             </div>
             <div className="search-card-desc">
               <div className="search-card-desc-title">Lorem Ipsum</div>
