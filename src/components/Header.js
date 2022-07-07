@@ -46,7 +46,7 @@ function Header() {
   // 태그 검색, 카테고리 검색 결과 헤더
   else if (
     window.location.pathname === "/tagsearch" ||
-    window.location.pathname === "/cagetorysearch" ||
+    window.location.pathname === "/categorysearch" ||
     window.location.pathname === "/mylikebung"
   ) {
     return (
