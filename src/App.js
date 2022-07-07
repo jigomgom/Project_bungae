@@ -18,6 +18,7 @@ import ProfileSetting from "./pages/ProfileSetting";
 import MyLikeBung from "./pages/MyLikeBung";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import ChatList from "./pages/ChatList";
 import Test from "./pages/Test";
 import ChattingRoom from "./pages/ChattingRoom";
 
@@ -26,13 +27,15 @@ function App() {
     <div className="App">
       <Header />
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/main" element={<Main />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/tagsearch" element={<TagSearch />} />
         <Route path="/categorysearch" element={<CategorySearch />} />
         {/* MyPage */}
         <Route path="/mypage" element={<MyPage />} />
+
+        <Route path="/chatlist" element={<ChatList />} />
         <Route path="/detailpost" element={<DetailPost />} />
         <Route path="/createpost" element={<CreatePost />} />
         <Route path="/profilesetting" element={<ProfileSetting />} />
