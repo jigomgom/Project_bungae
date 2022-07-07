@@ -1,12 +1,15 @@
 import styled from "styled-components";
 
 export const FooterWrap = styled.div`
-    position: sticky;
+    // sticky로 하니 아이템이 다 안 차있을 경우 상단으로 붙어버림
+    // fixed로 하니 해결
+    position: fixed;
     bottom: 0px;
     display: flex;
     justify-content: space-around;
     align-items: center;
     width: 100%;
+    max-width: 375px;
     height: 60px;
     background-color: white;
     box-shadow: inset 0px 1px 0px rgba(0, 0, 0, 0.1);
