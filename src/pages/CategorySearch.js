@@ -38,6 +38,9 @@ function CategorySearch() {
           <SearchCard />
           <SearchCard />
           <SearchCard />
+          <SearchCard />
+          <SearchCard />
+          <SearchCard />
         </div>
       </div>
     </div>

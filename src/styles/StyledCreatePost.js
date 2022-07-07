@@ -89,18 +89,31 @@ export const FileUploadWrap = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 15px;
+    /* margin-left: 15px; */
     /* margin: auto; */
 `;
 export const FileInputLabel = styled.label`
-    width: 92px;
-    height: 92px;
+    width: 107px;
+    height: 107px;
     cursor: pointer;
+    position: relative;
+`;
+
+export const FileClearIcon = styled.img`
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    right: 5px;
+    top:5px;
 `;
 
 export const FileInputImg = styled.img`
-    width: 92px;
-    height: 92px;
+    width: 107px;
+    height: 107px;
+    object-fit: cover;
+    /* object-fit: fill; */
+    /* object-fit: contain; */
+    /* object-fit: scale-down; */
 `;
 
 export const FileInput = styled.input`
@@ -213,6 +226,24 @@ export const HashTagWrap = styled.div`
     margin: auto;
 `;
 
+export const HashTagBoxWrap = styled.div`
+    display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+`;
+
+export const HashTagItem = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 5px;
+  padding: 5px;
+  background-color: tomato;
+  border-radius: 5px;
+  color: white;
+  font-size: 13px;
+`;
+
 export const HashTageInput = styled.textarea`
     width: 94.5%;
     height: 120px; // 120 / 780 * 100 = 15.38%
@@ -237,6 +268,44 @@ export const HashTageInput = styled.textarea`
         outline: none;
     }
     resize: none;
+    cursor: text;
+`;
+
+// test tag
+export const TagBox = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 5px;
+  width: 89%;
+  height: 120px; // 120 / 780 * 100 = 15.38%
+  border: 1px solid #D9D9D9;
+  border-radius: 10px;
+  /* column-gap: 5px; */
+`;
+
+export const TagItem = styled.span`
+  /* display: flex;
+  align-items: center;
+  justify-content: space-between; */
+  margin-left: 5px;
+  /* padding: 10px; */
+  height: 20px;
+  background-color: tomato;
+  border-radius: 100px;
+  color: white;
+  font-weight: 400;
+    font-size: 12px;
+    line-height: 17px;
+`;
+
+export const TagInput = styled.input`
+  /* display: inline-flex; */
+  /* width: 100%; */
+  /* height: 80px; */
+  background-color: green;
+  border: none;
+  outline: none;
 `;
 
 // 인원 수 설정

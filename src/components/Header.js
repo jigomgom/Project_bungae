@@ -29,7 +29,7 @@ function Header() {
   else if (window.location.pathname === "/main") {
     return (
       <HeaderWrap>
-        <Logo>Logo</Logo>
+        <Logo>Bungle</Logo>
         <BackKey style={{ visibility:"hidden"}}/>
         <PageTitle style={{ visibility:"hidden"}}></PageTitle>
 
