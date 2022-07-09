@@ -16,6 +16,7 @@ import Notification from "../assets/icon-notification.svg";
 import Setting from "../assets/icon-setting.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
 import IconMyPoint from "../assets/icon-mylocation.svg";
+import IconMainLogo from "../assets/icon-main-logo.svg";
 
 function Header() {
   const navigate = useNavigate();
@@ -31,10 +32,9 @@ function Header() {
   else if (window.location.pathname === "/main") {
     return (
       <HeaderWrap>
-        <Logo>Logo</Logo>
-        <BackKey style={{ visibility: "hidden" }} />
-        <PageTitle style={{ visibility: "hidden" }}></PageTitle>
-
+        <Logo src={IconMainLogo}/>
+        <BackKey style={{ visibility:"hidden"}}/>
+        <PageTitle style={{ visibility:"hidden"}}></PageTitle>
         <HeadrIconsWrap>
           <IconMyLocation src={IconMyPoint} />
           <IconNotification src={Notification} />
@@ -51,7 +51,7 @@ function Header() {
   ) {
     return (
       <HeaderWrap>
-        <Logo></Logo>
+        <Logo src={IconMainLogo}/>
         <BackKey src={IconBackKey} />
         <PageTitle style={{ visibility: "hidden" }}></PageTitle>
 
@@ -67,7 +67,7 @@ function Header() {
   else if (window.location.pathname === "/detailpost") {
     return (
       <HeaderWrap>
-        <Logo></Logo>
+        <Logo style={{visibility:"hidden"}} src={IconMainLogo}/>
         <BackKey
           src={IconBackKey}
           onClick={() => {
@@ -88,7 +88,7 @@ function Header() {
   else if (window.location.pathname === "/createpost") {
     return (
       <HeaderWrap>
-        <Logo style={{ visibility: "hidden" }}></Logo>
+        <Logo style={{visibility:"hidden"}} src={IconMainLogo}/>
         <BackKey
           src={IconBackKey}
           onClick={() => {
@@ -109,7 +109,7 @@ function Header() {
   else if (window.location.pathname === "/map") {
     return (
       <HeaderWrap>
-        <Logo></Logo>
+        <Logo style={{visibility:"hidden"}} src={IconMainLogo}/>
         <BackKey style={{ visibility: "hidden" }} src={IconBackKey} />
         <PageTitle>번개 지도</PageTitle>
 

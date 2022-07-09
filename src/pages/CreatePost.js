@@ -13,11 +13,13 @@ import {
   DeleteButton,
   PostBody,
   PostUploadPictureWrap,
+  // 파일 업로드
   UploadTitle,
   UploadPictureWrap,
   FileUploadWrap,
   FileInputLabel,
   FileInputImg,
+  FileClearIcon,
   FileInput,
   DividerStyle,
   // 카테고리 설정
@@ -34,7 +36,13 @@ import {
   SelectChatBtnImg,
   // 해쉬태그
   HashTagWrap,
+  HashTagBoxWrap,
+  HashTagItem,
   HashTageInput,
+  // test 태그
+  TagBox,
+  TagItem,
+  TagInput,
   // 인원수 설정
   PostPeopleCount,
   PostPeopleCountTitleWrap,
@@ -44,6 +52,7 @@ import {
   PostCreateButton,
 } from "../styles/StyledCreatePost";
 //icon
+
 import IconClear from "../assets/icon-clear.svg";
 import IconUpload from "../assets/icon-upload.svg";
 import IconChatLetter from "../assets/icon-chat-gray.svg";
@@ -65,7 +74,16 @@ const CategoriesArray = [
 function CreatePost() {
   // 카테고리 클릭 판별용 state
   const [isCategoryClick, setIsCategoryClick] = useState([
-    false,false,false,false,false,false,false,false,false,false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
   ]);
   // 인원 설정 숫자만
   const [onlyNumber, setOnlyNumber] = useState("2");
@@ -74,6 +92,101 @@ function CreatePost() {
   const [isVideo, setIsVideo] = useState(false);
   // 채팅 버튼 클릭 여부 판별
   const [chatBtnState, setChatBtnState] = useState(false);
+
+  // 첫번째 사진 업로드 state
+  const [isFirstFile, setIsFirstFile] = useState();
+  const [firstFile, setFirstFile] = useState();
+  // 첫번째 사진 clear 버튼 state
+  const [isFirstFileClear, setFirstFileClear] = useState(false);
+
+  // 두번째 사진 업로드 state
+  const [isSecondFile, setIsSecondFile] = useState();
+  const [secondFile, setSecondFile] = useState();
+  // 두번째 사진 clear 버튼 state
+  const [isSecondFileClear, setSecondFileClear] = useState(false);
+
+  // 세번째 사진 업로드
+  const [isThirdFile, setIsThirdFile] = useState();
+  const [thirdFile, setThirdFile] = useState();
+  // 세번째 사진 clear 버튼 state
+  const [isThirdFileClear, setThirdFileClear] = useState(false);
+
+  // 첫번째 사진 clear 버튼
+  const firstFileClearOnClickHandler = () => {
+    setIsFirstFile(null);
+    setFirstFileClear(false);
+  };
+
+  // 두번째 사진 clear 버튼
+  const secondFileClearOnClickHandler = () => {
+    setIsSecondFile(null);
+    setSecondFileClear(false);
+  };
+
+  // 세번째 사진 clear 버튼
+  const thirdFileClearOnClickHandler = () => {
+    setIsThirdFile(null);
+    setThirdFileClear(false);
+  };
+
+  const onFistFileChange = (e) => {
+    if (e.target.files[0]) {
+      setFirstFile(e.target.files[0]);
+    } else {
+      //업로드 취소할 시
+      setIsFirstFile(IconUpload);
+      return;
+    }
+    //화면에 프로필 사진 표시
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        console.log(reader.result);
+        setIsFirstFile(reader.result);
+        setFirstFileClear(true);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
+
+  const onSecondFileChange = (e) => {
+    if (e.target.files[0]) {
+      setSecondFile(e.target.files[0]);
+    } else {
+      //업로드 취소할 시
+      setIsSecondFile(IconUpload);
+      return;
+    }
+    //화면에 프로필 사진 표시
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setIsSecondFile(reader.result);
+        setSecondFileClear(true);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
+
+  const onThirdFileChange = (e) => {
+    if (e.target.files[0]) {
+      setThirdFile(e.target.files[0]);
+    } else {
+      //업로드 취소할 시
+      setIsThirdFile(IconUpload);
+      return;
+    }
+    //화면에 프로필 사진 표시
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setIsThirdFile(reader.result);
+        setThirdFileClear(true);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
+
   // 번개 이름 타이틀 용 ref
   const InputTitle_Ref = useRef();
   // x 버튼 클릭 시, input 클리어
@@ -87,10 +200,10 @@ function CreatePost() {
     setOnlyNumber("2");
     if (text === "letter") {
       setIsLetter(true);
-      setIsVideo( false );
+      setIsVideo(false);
     } else {
       setIsLetter(false);
-      setIsVideo( true );
+      setIsVideo(true);
     }
   };
 
@@ -144,12 +257,12 @@ function CreatePost() {
       {/* Title 부분 */}
       <PostTilteDiv>
         <PostTitle
-          type="text"
-          placeholder="번개 이름을 입력해주세요."
+          type="search"
+          placeholder="번개 이름을 입력해주세요!."
           maxLength={36}
           ref={InputTitle_Ref}
         />
-        <DeleteButton src={IconClear} onClick={clearBtnOnClickHandler} />
+        {/* <DeleteButton src={IconClear} onClick={clearBtnOnClickHandler} /> */}
       </PostTilteDiv>
       {/* Body 저렇게 안 닫아주면 placeholder 안생김*/}
       <PostBody placeholder="번개 소개글을 작성해주세요."></PostBody>
@@ -157,17 +270,58 @@ function CreatePost() {
       <PostUploadPictureWrap>
         <UploadTitle>사진</UploadTitle>
         <FileUploadWrap>
-          {Array.from({ length: 3 }, (_, index) => {
-            return (
-              null
-            // <UploadPictureWrap key={index}>
-            //   <FileInputLabel htmlFor="file-input">
-            //     <FileInputImg src={ IconUpload} />
-            //   </FileInputLabel>
-            //   <FileInput id="file-input" type="file" accept='image/jpg, image/jpeg, image/png' />
-            // </UploadPictureWrap>
-            )
-          })}
+          <UploadPictureWrap>
+            <FileInputLabel htmlFor="file-input-1">
+              <FileInputImg src={isFirstFile ? isFirstFile : IconUpload} />
+              {isFirstFileClear && (
+                <FileClearIcon
+                  src={IconClear}
+                  onClick={firstFileClearOnClickHandler}
+                />
+              )}
+            </FileInputLabel>
+            <FileInput
+              id="file-input-1"
+              type="file"
+              accept="image/*"
+              onChange={onFistFileChange}
+              disabled={isFirstFileClear ? true : false}
+            />
+          </UploadPictureWrap>
+          <UploadPictureWrap>
+            <FileInputLabel htmlFor="file-input-2">
+              <FileInputImg src={isSecondFile ? isSecondFile : IconUpload} />
+              {isSecondFileClear && (
+                <FileClearIcon
+                  src={IconClear}
+                  onClick={secondFileClearOnClickHandler}
+                />
+              )}
+            </FileInputLabel>
+            <FileInput
+              id="file-input-2"
+              type="file"
+              accept="image/*"
+              onChange={onSecondFileChange}
+            />
+          </UploadPictureWrap>
+          <UploadPictureWrap>
+            <FileInputLabel htmlFor="file-input-3">
+              <FileInputImg src={isThirdFile ? isThirdFile : IconUpload} />
+              {isThirdFileClear && (
+                <FileClearIcon
+                  src={IconClear}
+                  onClick={thirdFileClearOnClickHandler}
+                />
+              )}
+            </FileInputLabel>
+            <FileInput
+              id="file-input-3"
+              type="file"
+              accept="image/*"
+              onChange={onThirdFileChange}
+            />
+          </UploadPictureWrap>
         </FileUploadWrap>
       </PostUploadPictureWrap>
       <DividerStyle />
@@ -206,7 +360,7 @@ function CreatePost() {
               <SelectChatBtnName>일반채팅</SelectChatBtnName>
             </SelectChatLetterBtn>
             <SelectChatVideoBtn
-            CheckedState={isVideo}
+              CheckedState={isVideo}
               onClick={() => {
                 ChatButtonClickHandler("video");
               }}
@@ -220,54 +374,25 @@ function CreatePost() {
       {/* 태그 설정 */}
       <HashTagWrap>
         <UploadTitle>태그 입력</UploadTitle>
+        <TagBox>
+        {/* <TagInput placeholder="#태그 입력( 최대 3개 )"></TagInput> */}
+        {/* <div style={{display:"flex", flexDirection:"column"}}> */}
+          {Array.from({ length: 3 }, (_, index) => {
+            return <TagItem>#태그태</TagItem>;
+          })}
+          {/* </div> */}
+          <TagInput placeholder="#태그 입력( 최대 3개 )"></TagInput>
+        </TagBox>
+        {/* <HashTagBoxWrap>
+          <HashTagItem>아아아</HashTagItem>
         <HashTageInput
           placeholder="#태그 입력( 최대 3개 )"
           onChange={HashTagChangeHandler}
         ></HashTageInput>
+        </HashTagBoxWrap> */}
       </HashTagWrap>
       <DividerStyle />
       {/* 인원 수 설정 */}
-      {/* 
-      { chatBtnState && (<PostPeopleCount>
-        <PostPeopleCountTitleWrap>
-          <PostPeopleTitle>인원 수 설정</PostPeopleTitle>
-          <div style={{ display: "flex" }}>
-            <PostPeopleCountTitle
-              style={{ textAlign: "right", paddingRight: "5px" }}
-              type="text"
-              value={onlyNumber}
-              onChange={InputTextOnChangeNumberHandler}
-              maxLength={2}
-            />
-            명
-          </div>
-        </PostPeopleCountTitleWrap>
-        // rc slider 
-        <Slider
-          className="testName"
-          style={{ marginTop: "15px" }}
-          min={2}
-          max={50}
-          value={onlyNumber}
-          trackStyle={{ backgroundColor: "#B3B3B3", border:"1px solid #B3B3B3", height: 9 }}
-          inverted={false}
-          handleStyle={{
-            border: "3px solid #B3B3B3",
-            height: 14,
-            width: 14,
-            marginLeft: 0,
-            marginTop: -2.5,
-            backgroundColor: "white",
-            cursor: "pointer",
-            opacity: 1,
-            boxShadow: "none !imporatnt"
-          }}
-          handle={{boxShadow:"none"}}
-          onChange={setOnlyNumber}
-          railStyle={{ backgroundColor: "white", border:"1px solid #B3B3B3", height: 9 }}
-        />
-      </PostPeopleCount>)}
-      */}
       <PostPeopleCount>
         <PostPeopleCountTitleWrap>
           <PostPeopleTitle>인원 수 설정</PostPeopleTitle>
