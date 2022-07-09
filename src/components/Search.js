@@ -9,7 +9,7 @@ function Search() {
   return (
     <SearchWrap>
         <SearchDiv>
-          <SeachInput type="text"/>
+          <SeachInput type="text" placeholder="검색할 단어를 입력해주세요."/>
           <IconSearch src={IconSearh} />
         </SearchDiv>
     </SearchWrap>

@@ -11,12 +11,11 @@ export const HeaderWrap = styled.div`
     position: relative;
 `;
 
-export const Logo = styled.h3`
-    font-size: 24px;
-    font-weight: 700;
-    margin-left: 20px;
-    width: 54.97px;
-    height: 34.67px;
+export const Logo = styled.img`
+    width: 78.95px;
+    height: 22.19px;
+    margin-top: 11px;
+    margin-left: 6px;
     cursor: pointer;
     /* margin-top: 29px; */
 `;

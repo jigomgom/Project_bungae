@@ -25,6 +25,14 @@ export const SeachInput = styled.input`
     &:focus{
         outline: none;
     }
+    &::placeholder{
+        font-family: 'Noto Sans KR';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 17px;
+        color: #8B8B8B;
+    }
 `;
 
 export const IconSearch = styled.img`

@@ -22,16 +22,16 @@ export const TagTitle = styled.span`
 
 export const TagItem = styled.div`
     text-align: center;
-    width: 51px;
-    height: 17px;
-    background-color: #D9D9D9;
+    width: 54px;
+    height: 20px;
+    background-color: #FDC536;
     border-radius: 11.5px;
 
     font-weight: 400;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 17px;
 
-    color: #8B8B8B;
+    color: #FFFFFF;
     margin-right: 4px;
     cursor: pointer;
 `;

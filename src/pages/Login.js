@@ -1,9 +1,13 @@
 import React, { useEffect } from "react";
-import "../styles/Login.css";
-import { BsChevronLeft } from "react-icons/bs";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+// styles
+import "../styles/Login.css";
+
+//image
 import Pikka from "../images/Pikka.png";
+import { BsChevronLeft } from "react-icons/bs";
+import cancel from "../assets/icon-cancel.png";
 
 function Login() {
   function setScreenSize() {
@@ -43,12 +47,6 @@ function Login() {
     <div>
       <div className="Login_wrap">
         <div id="Login_container">
-          <nav className="Login_nav">
-            <div>
-              <BsChevronLeft className="icon_size"></BsChevronLeft>
-            </div>
-          </nav>
-
           <div className="Login_first_container">
             <div className="Login_second_container">
               <div className="Login_first_text">
@@ -67,12 +65,20 @@ function Login() {
           <div className="Login_input">
             <input
               type="email"
-              placeholder="이메일         email@example.com"
+              placeholder="이메일       email@example.com"
               ref={id_ref}
             ></input>
-
-            <input type="password" placeholder="비밀번호 " ref={pw_ref}></input>
-
+            <img src={cancel} alt="" />
+          </div>
+          <div className="Login_input">
+            <input
+              type="password"
+              placeholder="비밀번호  "
+              ref={pw_ref}
+            ></input>
+            <img src={cancel} alt="" />
+          </div>
+          <div className="Login_input">
             <button className="Login_button" onClick={LoginAxios}>
               <span> 로그인</span>
             </button>

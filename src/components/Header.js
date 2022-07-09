@@ -16,6 +16,7 @@ import Notification from "../assets/icon-notification.svg";
 import Setting from "../assets/icon-setting.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
 import IconMyPoint from "../assets/icon-mylocation.svg";
+import IconMainLogo from "../assets/icon-main-logo.svg";
 
 function Header() {
   const navigate = useNavigate();
@@ -23,16 +24,17 @@ function Header() {
   if (
     window.location.pathname === "/" ||
     window.location.pathname === "/signup"
-  ){ return null; }
+  ) {
+    return null;
+  }
 
   // main 헤더
   else if (window.location.pathname === "/main") {
     return (
       <HeaderWrap>
-        <Logo>Bungle</Logo>
+        <Logo src={IconMainLogo}/>
         <BackKey style={{ visibility:"hidden"}}/>
         <PageTitle style={{ visibility:"hidden"}}></PageTitle>
-
         <HeadrIconsWrap>
           <IconMyLocation src={IconMyPoint} />
           <IconNotification src={Notification} />
@@ -42,70 +44,83 @@ function Header() {
     );
   }
   // 태그 검색, 카테고리 검색 결과 헤더
-  else if( window.location.pathname === "/tagsearch" || window.location.pathname === "/cagetorysearch" ){
+  else if (
+    window.location.pathname === "/tagsearch" ||
+    window.location.pathname === "/categorysearch" ||
+    window.location.pathname === "/mylikebung"
+  ) {
     return (
       <HeaderWrap>
-        <Logo></Logo>
-        <BackKey src={IconBackKey}/>
-        <PageTitle style={{visibility:"hidden"}}></PageTitle>
+        <Logo src={IconMainLogo}/>
+        <BackKey src={IconBackKey} />
+        <PageTitle style={{ visibility: "hidden" }}></PageTitle>
 
         <HeadrIconsWrap>
-          <IconMyLocation style={{ visibility:"hidden"}}src={IconMyPoint} />
+          <IconMyLocation style={{ visibility: "hidden" }} src={IconMyPoint} />
           <IconNotification src={Notification} />
           <IconSetting src={Setting} />
         </HeadrIconsWrap>
       </HeaderWrap>
-    )
+    );
   }
   // 게시글 헤더
-  else if( window.location.pathname === "/detailpost" ){
+  else if (window.location.pathname === "/detailpost") {
     return (
       <HeaderWrap>
-        <Logo></Logo>
-        <BackKey src={IconBackKey} onClick={()=>{ navigate("/main") }}/>
+        <Logo style={{visibility:"hidden"}} src={IconMainLogo}/>
+        <BackKey
+          src={IconBackKey}
+          onClick={() => {
+            navigate("/main");
+          }}
+        />
         <PageTitle></PageTitle>
 
         <HeadrIconsWrap>
-          <IconMyLocation style={{ visibility:"hidden"}}src={IconMyPoint} />
+          <IconMyLocation style={{ visibility: "hidden" }} src={IconMyPoint} />
           <IconNotification src={Notification} />
           <IconSetting src={Setting} />
         </HeadrIconsWrap>
       </HeaderWrap>
-    )
+    );
   }
   // 번개 생성
-  else if( window.location.pathname === "/createpost" ){
+  else if (window.location.pathname === "/createpost") {
     return (
       <HeaderWrap>
-        <Logo style={{visibility:"hidden"}}></Logo>
-        <BackKey src={IconBackKey} onClick={()=>{ navigate("/main") }}/>
+        <Logo style={{visibility:"hidden"}} src={IconMainLogo}/>
+        <BackKey
+          src={IconBackKey}
+          onClick={() => {
+            navigate("/main");
+          }}
+        />
         <PageTitle>번개 생성</PageTitle>
 
         <HeadrIconsWrap>
-          <IconMyLocation style={{ visibility:"hidden"}}src={IconMyPoint} />
+          <IconMyLocation style={{ visibility: "hidden" }} src={IconMyPoint} />
           <IconNotification src={Notification} />
           <IconSetting src={Setting} />
         </HeadrIconsWrap>
       </HeaderWrap>
-    )
+    );
   }
   // 번개 지도 헤더
-  else if( window.location.pathname === "/map" ){
+  else if (window.location.pathname === "/map") {
     return (
       <HeaderWrap>
-        <Logo></Logo>
-        <BackKey style={{visibility:"hidden"}}src={IconBackKey}/>
+        <Logo style={{visibility:"hidden"}} src={IconMainLogo}/>
+        <BackKey style={{ visibility: "hidden" }} src={IconBackKey} />
         <PageTitle>번개 지도</PageTitle>
 
         <HeadrIconsWrap>
-          <IconMyLocation style={{ visibility:"hidden"}}src={IconMyPoint} />
+          <IconMyLocation style={{ visibility: "hidden" }} src={IconMyPoint} />
           <IconNotification src={Notification} />
           <IconSetting src={Setting} />
         </HeadrIconsWrap>
       </HeaderWrap>
-    )
+    );
   }
-
 
   // return (
   //   <HeaderWrap>

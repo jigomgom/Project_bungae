@@ -257,12 +257,12 @@ function CreatePost() {
       {/* Title 부분 */}
       <PostTilteDiv>
         <PostTitle
-          type="text"
-          placeholder="번개 이름을 입력해주세요."
+          type="search"
+          placeholder="번개 이름을 입력해주세요!."
           maxLength={36}
           ref={InputTitle_Ref}
         />
-        <DeleteButton src={IconClear} onClick={clearBtnOnClickHandler} />
+        {/* <DeleteButton src={IconClear} onClick={clearBtnOnClickHandler} /> */}
       </PostTilteDiv>
       {/* Body 저렇게 안 닫아주면 placeholder 안생김*/}
       <PostBody placeholder="번개 소개글을 작성해주세요."></PostBody>

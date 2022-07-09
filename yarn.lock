@@ -6381,6 +6381,11 @@
   "resolved" "https://registry.npmjs.org/neo-async/-/neo-async-2.6.2.tgz"
   "version" "2.6.2"
 
+"net@^1.0.2":
+  "integrity" "sha512-kbhcj2SVVR4caaVnGLJKmlk2+f+oLkjqdKeQlmUtz6nGzOpbcobwVIeSURNgraV/v3tlmGIX82OcPCl0K6RbHQ=="
+  "resolved" "https://registry.npmjs.org/net/-/net-1.0.2.tgz"
+  "version" "1.0.2"
+
 "next-tick@^1.1.0":
   "integrity" "sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ=="
   "resolved" "https://registry.npmjs.org/next-tick/-/next-tick-1.1.0.tgz"
@@ -7724,6 +7729,11 @@
     "workbox-webpack-plugin" "^6.4.1"
   optionalDependencies:
     "fsevents" "^2.3.2"
+
+"react-swipeable-list@^1.5.1":
+  "integrity" "sha512-iBqFkVaNgRJtTW7hMXkQktgnyqEJYpiuFNgZqeGE8aSCnbQPFNpXjHwshfuf2Jb0lMuvweMf9kUrj8lhhsno1g=="
+  "resolved" "https://registry.npmjs.org/react-swipeable-list/-/react-swipeable-list-1.5.1.tgz"
+  "version" "1.5.1"
 
 "react@*", "react@^16.8 || ^17.0 || ^18.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.9.0 || ^17.0.0 || ^18", "react@^18.0.0", "react@^18.2.0", "react@>= 16", "react@>= 16.8.0", "react@>=16.8", "react@>=16.9.0":
   "integrity" "sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ=="

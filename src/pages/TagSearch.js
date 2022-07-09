@@ -3,6 +3,7 @@ import React from "react";
 import "../styles/TagCategorySearch.css";
 //Components
 import SearchCard from "../components/SearchCard";
+import Divider from "../components/Divider";
 //Styled-Components
 import Tag from "../components/Tag";
 import Search from "../components/Search";
@@ -25,6 +26,7 @@ function TagSearch() {
       <Tag />
       <Search />
       <div className="search-result-wrap">
+        <Divider />
         <div className="search-result-header">
           <p className="search-result-header-title">검색 결과</p>
           <select
