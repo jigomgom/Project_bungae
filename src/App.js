@@ -19,15 +19,16 @@ import MyLikeBung from "./pages/MyLikeBung";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ChatList from "./pages/ChatList";
-import Test from "./pages/Test";
 import ChattingRoom from "./pages/ChattingRoom";
-
+// Test
+import Test from "./pages/Test";
+import ChatTest1 from "./pages/ChatTest1";
 function App() {
   return (
     <div className="App">
       <Header />
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Login />} />
         <Route path="/main" element={<Main />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/tagsearch" element={<TagSearch />} />
@@ -43,6 +44,7 @@ function App() {
         <Route path="/chat" element={<ChattingRoom />} />
         {/* Test */}
         <Route path="/test" element={<Test />} />
+        <Route path="/chattest" element={<ChatTest1 />} />
       </Routes>
       <Footer />
     </div>
