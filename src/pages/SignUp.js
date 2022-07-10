@@ -36,28 +36,26 @@ const Signup = () => {
   const id_ref = React.useRef(null);
   const pw_ref = React.useRef(null);
   const pwcheck_ref = React.useRef(null);
-  const nick_ref = React.useRef(null);
-  const email_ref = React.useRef(null);
+  // const nick_ref = React.useRef(null);
+  // const email_ref = React.useRef(null);
 
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
 
   const SignupAxios = () => {
     const SignupData = {
-      useremail: id_ref.current.value,
-      email_ref: email_ref.current.value,
-      nickname: nick_ref.current.value,
+      username: id_ref.current.value,
       password: pw_ref.current.value,
-      checkpassword: pwcheck_ref.current.value,
+      passwordCheck: pwcheck_ref.current.value,
     };
 
     axios
-      .post("http://빽앤드한테받아야함/api/user/signup", SignupData)
+      .post("http://52.79.214.48/user/signup", SignupData)
       .then((res) => {
-        alert(res.data.message);
-        navigate("/Login");
+        console.log(res);
+        navigate("/");
       })
       .catch((err) => {
-        alert(err.response.data.errorMessage);
+        console.log(err);
       });
   };
 
@@ -82,7 +80,7 @@ const Signup = () => {
             <input
               type="email"
               placeholder="email@example.com"
-              ref={pw_ref}
+              ref={id_ref}
               onBlur={checkID}
             ></input>
             <img src={cancel} alt="" />
@@ -136,7 +134,7 @@ const Signup = () => {
                 </a>
               </div> */}
 
-              <a href="#" class="modal__close">
+              <a href="/" class="modal__close">
                 <div>확인</div>
               </a>
             </div>
