@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 export const CreatePostWrap = styled.div`
     width: 100%; // 100% -> 375px
@@ -220,45 +220,25 @@ export const SelectChatBtnImg = styled.img`
 // 해쉬 태그 시작
 export const HashTagWrap = styled.div`
     width: 89%;
-    height: 195px;
+    /* height: 155px; */
+    height: 170px;
     display: flex;
     flex-direction: column;
     margin: auto;
 `;
 
-export const HashTagBoxWrap = styled.div`
-    display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-`;
-
-export const HashTagItem = styled.span`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 5px;
-  padding: 5px;
-  background-color: tomato;
-  border-radius: 5px;
-  color: white;
-  font-size: 13px;
-`;
-
-export const HashTageInput = styled.textarea`
-    width: 94.5%;
-    height: 120px; // 120 / 780 * 100 = 15.38%
-    border: 1px solid #D9D9D9;
+export const HashTagInput = styled.input`
+    width: 90%;
+    height: 49px;
+    border: 1px solid #FFC634;
     border-radius: 10px;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 17px;
-    font-family: 'Noto Sans KR', sans-serif;
-    font-style: normal;
-    padding-top:15px;
+    text-align: left;
     padding-left: 15px;
-    margin-bottom: 25px;
-
+    padding-right: 15px;
+    margin-bottom: 11px;
     &::placeholder{
+        font-family: 'Noto Sans KR';
+        font-style: normal;
         font-weight: 400;
         font-size: 12px;
         line-height: 17px;
@@ -267,45 +247,121 @@ export const HashTageInput = styled.textarea`
     &:focus{
         outline: none;
     }
-    resize: none;
-    cursor: text;
+`;
+ export const HashTagItemWrap = styled.div`
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 11px;
+    /* margin: auto auto 11px auto; */
+ `;
+
+export const HashTagItem = styled.div`
+    height: 20px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 0px 10px;
+
+    color: #FFFFFF;
+    background-color: #FFC634;
+    border-radius: 100px;
+    cursor: pointer;
+`;
+// 주소 입력
+export const SearchAddressWrap = styled.div`
+    width: 89%;
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
 `;
 
-// test tag
-export const TagBox = styled.div`
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 5px;
-  width: 89%;
-  height: 120px; // 120 / 780 * 100 = 15.38%
-  border: 1px solid #D9D9D9;
-  border-radius: 10px;
-  /* column-gap: 5px; */
-`;
+export const SearchAddressItemWrap = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+`
+export const SearchAddressInput = styled.input`
+    width: 72%;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1.2px solid #D9D9D9;
 
-export const TagItem = styled.span`
-  /* display: flex;
-  align-items: center;
-  justify-content: space-between; */
-  margin-left: 5px;
-  /* padding: 10px; */
-  height: 20px;
-  background-color: tomato;
-  border-radius: 100px;
-  color: white;
-  font-weight: 400;
+    font-weight: 400;
     font-size: 12px;
     line-height: 17px;
+
+    &::placeholder{
+       color: #D9D9D9;
+    }
+    &:focus{
+        outline: none;
+    }
+`;
+export const SearhAddressBtn = styled.div`
+    width: 77px;
+    height: 32px;
+    background-color: #FFC634;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 17px;
+
+    color: #FFFFFF;
+    cursor: pointer;
 `;
 
-export const TagInput = styled.input`
-  /* display: inline-flex; */
-  /* width: 100%; */
-  /* height: 80px; */
-  background-color: green;
-  border: none;
-  outline: none;
+export const SearhAddressCloseBtn = styled.img`
+    height: 16px;
+    width: 16px;
+    /* background-color: black; */
+    position:absolute;
+    top: 1000px;
+    left: 360px;
+    z-index:3;
+    cursor: pointer;
+`;
+
+export const SearchCurrentPositionItemWrap = styled.div`
+    width: 100%;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
+    margin-top:22px;
+    margin-left:5px;
+    cursor: pointer;
+`
+
+export const SearchCurrentPositionIcon = styled.img`
+    width: 13px;
+    height: 13px;
+    margin-right: 8px;    
+`;
+
+export const SearchCurrentPositionTitle = styled.span`
+  width: 58px;
+  height: 14px;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 14px;
+
+  color: #9a9a9a;
+`;
+
+export const SearchCurrentPositionIconInput = styled.span`
+    width: 130px;
+    height: 14px;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 14px;
+
+    color: #D9D9D9;
 `;
 
 // 인원 수 설정

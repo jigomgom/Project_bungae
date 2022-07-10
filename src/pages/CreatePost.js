@@ -4,13 +4,14 @@ import Divider from "../components/Divider";
 // slider 추가
 import Slider from "rc-slider";
 import "../styles/rc-slider/index.css";
+// 다음 주소 검색 API 추가
+import DaumPostCode from 'react-daum-postcode';
 
 // css styled
 import {
   CreatePostWrap,
   PostTilteDiv,
   PostTitle,
-  DeleteButton,
   PostBody,
   PostUploadPictureWrap,
   // 파일 업로드
@@ -36,13 +37,20 @@ import {
   SelectChatBtnImg,
   // 해쉬태그
   HashTagWrap,
-  HashTagBoxWrap,
+  HashTagInput,
+  HashTagItemWrap,
   HashTagItem,
-  HashTageInput,
-  // test 태그
-  TagBox,
-  TagItem,
-  TagInput,
+  // 주소 입력
+  SearchAddressWrap,
+  SearchAddressItemWrap,
+  SearchAddressInput,
+  SearhAddressBtn,
+  SearhAddressCloseBtn,
+  SearchCurrentPositionItemWrap,
+  SearchCurrentPositionIcon,
+  SearchCurrentPositionTitle,
+  SearchCurrentPositionIconInput,
+
   // 인원수 설정
   PostPeopleCount,
   PostPeopleCountTitleWrap,
@@ -57,6 +65,8 @@ import IconClear from "../assets/icon-clear.svg";
 import IconUpload from "../assets/icon-upload.svg";
 import IconChatLetter from "../assets/icon-chat-gray.svg";
 import IconChatVideo from "../assets/icon-chat-video.svg";
+import IconMylocation from "../assets/icon-mylocation-gray.svg";
+import IconAddressClose from "../assets/icon-input-xbtn.svg";
 
 const CategoriesArray = [
   "맛집",
@@ -110,6 +120,23 @@ function CreatePost() {
   const [thirdFile, setThirdFile] = useState();
   // 세번째 사진 clear 버튼 state
   const [isThirdFileClear, setThirdFileClear] = useState(false);
+
+  // 해쉬 태그 관리용 state
+  const [tagItem, setTagItem] = useState('')
+  const [tagList, setTagList] = useState([])
+  // 해쉬 태그 3자 이상이면 처리할 state
+  const [ isReadOnly, setIsReadOnly ] = useState( false );
+
+  // 주소 입력 관리 State
+  const [ isAddress, setIsAddress ] = useState("");
+  // 우편번호 컴포넌트의 노출여부 상태 state
+  const [visible, setVisible] = useState(false); 
+
+  // 지도 경도, 위도 State
+  // location 정보 저장
+  const [location, setLocation] = useState();
+  // 에러 메세지 저장
+  const [error, setError] = useState();
 
   // 첫번째 사진 clear 버튼
   const firstFileClearOnClickHandler = () => {
@@ -189,10 +216,7 @@ function CreatePost() {
 
   // 번개 이름 타이틀 용 ref
   const InputTitle_Ref = useRef();
-  // x 버튼 클릭 시, input 클리어
-  const clearBtnOnClickHandler = () => {
-    InputTitle_Ref.current.value = "";
-  };
+
   // ChatButton 클릭 함수
   const ChatButtonClickHandler = (text) => {
     console.log("Chat : ", text);
@@ -219,10 +243,37 @@ function CreatePost() {
       })
     );
   };
+  // 엔터키 태그 입력
+  const onKeyPress = e => {
+    // console.log( e, e.target.value );
+    if (e.target.value.length !== 0 && e.code === 'Enter') {
+      addHashTagItemHandler()
+      e.target.value ="";
+    }
+  }
 
-  // 해쉬 태그 반별용 함수
-  const HashTagChangeHandler = (event) => {
-    console.log(event.target.value);
+  // 해쉬 태그 Add
+  const addHashTagItemHandler = () => {
+    let updatedTagList = [...tagList]
+    // 모든 공백 제거
+    updatedTagList.push(tagItem.replace(/ /g, ''));
+    setTagList([...tagList, tagItem.replace(/ /g, '')])
+    setTagItem('')
+
+    if( updatedTagList.length >= 3 ){
+      setIsReadOnly( true );
+    }
+  };
+  // 해쉬 태그 삭제
+  const removeHashTagItemHandler = ( TagItem ) => {
+    let updatedTagList = tagList.filter(( item ) => item !== TagItem ); 
+
+    setTagList( tagList.filter(( item ) => item !== TagItem ) );
+    setTagItem('');
+    
+    if( updatedTagList.length < 3 ){
+      setIsReadOnly( false );
+    }
   };
   // 인원 수 설정 숫자만 들어가도록 하는 함수
   const InputTextOnChangeNumberHandler = (event) => {
@@ -238,6 +289,66 @@ function CreatePost() {
       }
     }
     setOnlyNumber(onlyNumber);
+  };
+  // 글자수 제한, 10자 넘으면 10자만 남겨두기
+  const onInput = (e) => {
+    const maxLength = 10;
+    if( e.target.value.length > maxLength ){
+      //10글자 제한
+      e.target.value = e.target.value.substr(0, maxLength);
+    }
+  }
+  // 다음 주소 검색   
+  const addressStyle = {
+    display: "block",
+    position: "absolute",
+    top: "1120px",
+    left:"10px",
+    width: "375px",
+    height: "470px",
+    padding: "7px",
+    zIndex: 1,
+  };
+  const handleComplete = (data) => {
+    let fullAddress = data.address;
+    let extraAddress = "";
+
+    if (data.addressType === "R") {
+      if (data.bname !== "") {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== "") {
+        extraAddress +=
+          extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
+    }
+    // console.log( fullAddress );
+    setVisible(false);
+    setIsAddress( fullAddress );
+  };
+
+  // 현위치 찾아오기
+
+  // Geolocation의 `getCurrentPosition` 메소드에 대한 성공 callback 핸들러
+  const handleSuccess = (pos) => {
+    const { latitude, longitude } = pos.coords;
+
+    setLocation({
+      latitude,
+      longitude,
+    });
+  };
+
+  // Geolocation의 `getCurrentPosition` 메소드에 대한 실패 callback 핸들러
+  const handleError = (error) => {
+    setError(error.message);
+  };
+
+
+  const currentAddressClickHandler = () => {
+    console.log( "current" );
+    
   };
 
   // 등록하기 버튼 클릭
@@ -345,6 +456,62 @@ function CreatePost() {
         </PostCategoriesItemWrap>
       </PostCategoriesWrap>
       <DividerStyle />
+
+      {/* 태그 설정 */}
+      <HashTagWrap>
+        <UploadTitle>태그 입력</UploadTitle>
+        <HashTagInput
+          type="text"
+          placeholder="#태그입력 (최대 3개)"
+          readOnly={isReadOnly}
+          onKeyPress={onKeyPress}
+          onInput={onInput}
+          onChange={(e) => setTagItem(e.target.value.replace(/ /g, ""))}
+        />
+        <HashTagItemWrap>
+          {tagList.map((tagItem, index) => {
+            return (
+              <HashTagItem
+                onClick={() => removeHashTagItemHandler(tagItem)}
+                key={index}
+              >
+                #{tagItem}
+              </HashTagItem>
+            );
+          })}
+        </HashTagItemWrap>
+      </HashTagWrap>
+      <DividerStyle />
+      {/* 시간 설정 */}
+      {/* 주소 입력 */}
+      <SearchAddressWrap>
+        <UploadTitle>주소 입력</UploadTitle>
+        <SearchAddressItemWrap>
+          <SearchAddressInput readOnly={true} value={isAddress} placeholder="기본 주소" />
+          <SearhAddressBtn onClick={() => setVisible(!visible)}>
+            { visible ? "취소" : "주소찾기"}
+          </SearhAddressBtn>
+          
+          {visible ? (
+            <div>
+              <DaumPostCode
+                onComplete={handleComplete}
+                style={addressStyle}
+                autoClose
+                height={700}
+              />
+            </div>
+          ) : null}
+        </SearchAddressItemWrap>
+        <SearchCurrentPositionItemWrap onClick={currentAddressClickHandler}>
+          <SearchCurrentPositionIcon src={IconMylocation} />
+          <SearchCurrentPositionTitle>현위치로 설정</SearchCurrentPositionTitle>
+          <SearchCurrentPositionIconInput>
+            · 서울 서초구 서초대로 233
+          </SearchCurrentPositionIconInput>
+        </SearchCurrentPositionItemWrap>
+      </SearchAddressWrap>
+      <DividerStyle />
       {/* 채팅 설정 */}
       <SelectChatWrap>
         <SelectChatBox>
@@ -371,26 +538,6 @@ function CreatePost() {
           </SelectChatBtnWrap>
         </SelectChatBox>
       </SelectChatWrap>
-      {/* 태그 설정 */}
-      <HashTagWrap>
-        <UploadTitle>태그 입력</UploadTitle>
-        <TagBox>
-        {/* <TagInput placeholder="#태그 입력( 최대 3개 )"></TagInput> */}
-        {/* <div style={{display:"flex", flexDirection:"column"}}> */}
-          {Array.from({ length: 3 }, (_, index) => {
-            return <TagItem>#태그태</TagItem>;
-          })}
-          {/* </div> */}
-          <TagInput placeholder="#태그 입력( 최대 3개 )"></TagInput>
-        </TagBox>
-        {/* <HashTagBoxWrap>
-          <HashTagItem>아아아</HashTagItem>
-        <HashTageInput
-          placeholder="#태그 입력( 최대 3개 )"
-          onChange={HashTagChangeHandler}
-        ></HashTageInput>
-        </HashTagBoxWrap> */}
-      </HashTagWrap>
       <DividerStyle />
       {/* 인원 수 설정 */}
       <PostPeopleCount>

@@ -37,19 +37,9 @@ export const FooterIconText = styled.span`
     line-height: 12px;
 `;
 
-export const FooterAddBungae = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
+export const FooterAddBungae = styled.img`
     width: 40px;
     height: 40px;
-
-    background: #D9D9D9;
     border-radius: 100px;
-
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 26px;
-    color: #787878;
     cursor: pointer;
 `;
