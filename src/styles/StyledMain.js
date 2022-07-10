@@ -47,7 +47,7 @@ export const MainContentItemFrame = styled.div`
     width: 161px;
     height: 213px;
     position: relative;
-    cursor: pointer;
+    
 `;
 
 export const MainContentItemImg = styled.img`
@@ -55,6 +55,7 @@ export const MainContentItemImg = styled.img`
     height: 168px;
     border-radius: 10px;
     background: #D9D9D9;
+    cursor: pointer;
 `;
 
 export const MainContentItemImgTemp = styled.img`
@@ -66,6 +67,7 @@ export const MainContentItemImgTemp = styled.img`
 export const MainContentTextWrap = styled.div`
     display: flex;
     flex-direction: column;
+    
 `;
 export const MainContentTitleWrap = styled.div`
     width: 100%;
@@ -77,6 +79,7 @@ export const MainContentItemTitle = styled.span`
     font-weight: 700;
     font-size: 16px;
     line-height: 23px;
+    cursor: pointer;
 `;
 
 export const MainContentItemLike = styled.img`
@@ -87,6 +90,7 @@ export const MainContentItemLike = styled.img`
     align-items: center;
     margin-right: 5px;
     margin-top:5px;
+    cursor: pointer;
 `;
 
 export const MainContentItemTimePeople = styled.span`
