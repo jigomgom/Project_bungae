@@ -355,7 +355,7 @@ export const SearchCurrentPositionTitle = styled.span`
 `;
 
 export const SearchCurrentPositionIconInput = styled.span`
-    width: 130px;
+    width: 150px;
     height: 14px;
     font-weight: 400;
     font-size: 10px;

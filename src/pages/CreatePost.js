@@ -1,4 +1,5 @@
-import React, { useRef, useState } from "react";
+/* global kakao */
+import React, { useRef, useState, useEffect } from "react";
 import Divider from "../components/Divider";
 
 // slider 추가
@@ -137,6 +138,27 @@ function CreatePost() {
   const [location, setLocation] = useState();
   // 에러 메세지 저장
   const [error, setError] = useState();
+
+  // 지번 주소
+  const [ currentAddress, setCurrentAddress ] = useState();
+  // 도로명 주소
+  const [ currentRoadAddress, setCurrentRoadAddress ] = useState();
+  
+  // GPS 옵션
+  const options = {
+    /*
+    maximumAge
+    : 캐시에 저장한 위치정보를 대신 반환할 수 있는 최대 시간을 나타내는 양의 long 값입니다. 0을 지정한 경우 장치가 위치정보 캐시를 사용할 수 없으며 반드시 실시간으로 위치를 알아내려 시도해야 한다는 뜻입니다. Infinity를 지정한 경우 지난 시간에 상관없이 항상 캐시에 저장된 위치정보를 반환해야 함을 나타냅니다. 기본 값은 0입니다.
+    timeout
+    : 기기가 위치를 반환할 때 소모할 수 있는 최대 시간(밀리초)을 나타내는 양의 long 값입니다. 기본 값은 Infinity로, 위치를 알아내기 전에는 getCurrentPosition()이 반환하지 않을 것임을 나타냅니다.
+    enableHighAccuracy
+    : 위치정보를 가장 높은 정확도로 수신하고 싶음을 나타내는 불리언 값입니다. true를 지정했으면, 지원하는 경우 장치가 더 정확한 위치를 제공합니다. 그러나 응답 속도가 느려지며 전력 소모량이 증가하는 점에 주의해야 합니다. 반면 false를 지정한 경우 기기가 더 빠르게 반응하고 전력 소모도 줄일 수 있는 대신 정확도가 떨어집니다. 기본 값은 false입니다.
+    */
+    enableHighAccuracy: true,
+    // timeout 
+    timeout: 5000,
+    maximumAge: 0
+  };
 
   // 첫번째 사진 clear 버튼
   const firstFileClearOnClickHandler = () => {
@@ -330,26 +352,54 @@ function CreatePost() {
 
   // 현위치 찾아오기
 
-  // Geolocation의 `getCurrentPosition` 메소드에 대한 성공 callback 핸들러
   const handleSuccess = (pos) => {
     const { latitude, longitude } = pos.coords;
-
-    setLocation({
+    
+    setLocation( {
       latitude,
       longitude,
     });
   };
+ 
 
   // Geolocation의 `getCurrentPosition` 메소드에 대한 실패 callback 핸들러
   const handleError = (error) => {
     setError(error.message);
+    console.log( error )
   };
 
+  const getCurrentLocationBtnClick = () => {
+    navigator.geolocation.getCurrentPosition( handleSuccess, handleError, options );
+  }; 
 
-  const currentAddressClickHandler = () => {
-    console.log( "current" );
-    
-  };
+  useEffect(()=>{
+    navigator.geolocation.getCurrentPosition( handleSuccess, handleError, options );
+  },[])
+
+  useEffect(() => {
+    // let coord = new kakao.maps.LatLng(location?.latitude, location?.longitude);
+    if (location) {
+      let geocoder = new kakao.maps.services.Geocoder();
+      let coord = new kakao.maps.LatLng(location.latitude, location.longitude);
+
+      let callback = function (result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+          const arr = { ...result };
+          console.log(arr[0]);
+          const _arr = arr[0].address.address_name;
+          const _arrLoad = arr[0].address.road_address;
+          setCurrentRoadAddress(_arrLoad);
+          setCurrentAddress(_arr);
+          console.log(_arr);
+        }
+        // else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+        //   geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+        // }
+      };
+
+      geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+    }
+  }, [location]);
 
   // 등록하기 버튼 클릭
   const CreateBunggleOnClickHandler = () => {
@@ -503,11 +553,12 @@ function CreatePost() {
             </div>
           ) : null}
         </SearchAddressItemWrap>
-        <SearchCurrentPositionItemWrap onClick={currentAddressClickHandler}>
+        <SearchCurrentPositionItemWrap onClick={getCurrentLocationBtnClick}>
           <SearchCurrentPositionIcon src={IconMylocation} />
           <SearchCurrentPositionTitle>현위치로 설정</SearchCurrentPositionTitle>
           <SearchCurrentPositionIconInput>
-            · 서울 서초구 서초대로 233
+            · {currentAddress ? currentAddress : currentRoadAddress }
+            {/* · 서울 서초구 서초대로 233 */}
           </SearchCurrentPositionIconInput>
         </SearchCurrentPositionItemWrap>
       </SearchAddressWrap>

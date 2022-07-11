@@ -53,17 +53,6 @@ const Footer = () => {
         <FooterIconImg src={IconMyBungae} />
         <FooterIconText>나의 번개</FooterIconText>
       </FooterIconWrap>
-<<<<<<< HEAD
-      
-=======
-      <FooterAddBungae
-        onClick={() => {
-          navigate("/createpost");
-        }}
-      >
-        +
-      </FooterAddBungae>
->>>>>>> 9de301498b6847d03def144c188e8cc4c2346a67
     </FooterWrap>
   );
 };

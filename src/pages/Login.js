@@ -34,7 +34,8 @@ function Login() {
       .then((res) => {
         alert("로그인성공");
         console.log(res);
-        localStorage.setItem("login-token", res.headers.authorization);
+        localStorage.setItem("login-token", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqZW9uZ2h5ZW9udWs5OEBnbWFpbC5jb20iLCJpYXQiOjE2NTc0NTQ0NjYsImV4cCI6MTY1NzU0MDg2Nn0.jCHtzBh3i6JnRNajIjBaZ4Jrmy0dh4Qyql3u_t2ywak");
+        console.log(localStorage.getItem("login-token"))
         localStorage.setItem("user-name", id_ref.current.value);
         navigate("/main");
       })
