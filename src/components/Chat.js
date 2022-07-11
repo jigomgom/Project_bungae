@@ -8,10 +8,10 @@ const ChatRoom = () => {
   const [publicChats, setPublicChats] = useState([]);
   const [tab, setTab] = useState("CHATROOM");
   const [userData, setUserData] = useState({
-    type: "",
+    // type: "",
     nickName: "",
-    receivername: "",
-    roomId: "",
+    // receivername: "",
+    // roomId: "",
     connected: false,
     message: "",
   });

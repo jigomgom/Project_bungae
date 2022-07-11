@@ -25,21 +25,22 @@ function Login() {
 
   const LoginAxios = () => {
     const LoginData = {
-      useremail: id_ref.current.value,
+      username: id_ref.current.value,
       password: pw_ref.current.value,
     };
 
     axios
-      .post("http://빽앤드한테 받아야함/api/user/signin", LoginData)
+      .post("http://52.79.214.48/user/login", LoginData)
       .then((res) => {
         alert("로그인성공");
         console.log(res);
-        localStorage.setItem("login-token", res.data.token);
+        localStorage.setItem("login-token", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqZW9uZ2h5ZW9udWs5OEBnbWFpbC5jb20iLCJpYXQiOjE2NTc0NTQ0NjYsImV4cCI6MTY1NzU0MDg2Nn0.jCHtzBh3i6JnRNajIjBaZ4Jrmy0dh4Qyql3u_t2ywak");
+        console.log(localStorage.getItem("login-token"))
         localStorage.setItem("user-name", id_ref.current.value);
-        navigate("/");
+        navigate("/main");
       })
       .catch((err) => {
-        alert(err.response.data.errorMessage);
+        console.log(err);
       });
   };
 
