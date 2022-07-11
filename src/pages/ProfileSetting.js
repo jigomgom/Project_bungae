@@ -1,29 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 //Img
 import profileSetImg from "../assets/icon-profilesetting.svg";
 //CSS
 import "../styles/ProfileSetting.css";
 
 function MyPageSetting() {
+  //프로필 미리보기 state
   const [profile, setProfile] = React.useState(profileSetImg);
+  //프로필 파일 객체
   const [file, setFile] = React.useState();
   const fileInput = React.useRef(null);
-  //ProfileImage 선택 창
-  // const getFilePicker = async () => {
-  //   const [fileHandle] = await window.showOpenFilePicker();
 
-  //   const file = await fileHandle.getFile();
-
-  //   console.log(file);
-  //   setProfile(file);
-  // };
-  // console.log(profile);
-
-  // const saveFileImage = (e) => {
-  //   setProfile(URL.createObjectURL(e.target.files[0]));
-  // };
-  // console.log(profile);
-
+  //미리보기, 파일
   const onChange = (e) => {
     if (e.target.files[0]) {
       setFile(e.target.files[0]);
@@ -36,12 +24,13 @@ function MyPageSetting() {
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.readyState === 2) {
-        console.log(reader.result);
+        console.log(reader);
         setProfile(reader.result);
       }
     };
     reader.readAsDataURL(e.target.files[0]);
   };
+  console.log(file);
 
   return (
     <div>
@@ -54,7 +43,7 @@ function MyPageSetting() {
           <input
             type="file"
             style={{ display: "none" }}
-            accept="image/jpg,impge/png,image/jpeg, image/*"
+            accept="image/*"
             name="profile_img"
             onChange={onChange}
             ref={fileInput}
@@ -67,7 +56,6 @@ function MyPageSetting() {
               fileInput.current.click();
             }}
           />
-          {/* <img src={profile} alt="" /> */}
         </div>
         <div className="profile-setting-form">
           <div className="profile-setting-form-nickname">
