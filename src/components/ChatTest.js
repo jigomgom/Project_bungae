@@ -82,7 +82,7 @@ function ChatTest() {
 
   const sendValue = () => {
     console.log("Test user send");
-    if (client) {
+    if (client && userData.message) {
       var chatMessage = {
         type: "TALK",
         nickName: "seowoo",
@@ -104,9 +104,9 @@ function ChatTest() {
       setPublicChats([...publicChats]);
     }
   };
-  console.log(publicChats);
+
   //날짜 커스텀
-  let chattingDate = "";
+  let chattingDate = [];
   let ampm = "";
   let hour;
   let minutes;
@@ -116,21 +116,26 @@ function ChatTest() {
     if (hour > 12) {
       ampm = "오후";
       hour = hour - 12;
+      chattingDate.push(ampm + " " + hour + ":" + minutes);
     } else {
       ampm = "오전";
       hour = hour;
+      chattingDate.push(ampm + " " + hour + ":" + minutes);
     }
   }
-  console.log(hour);
-  console.log(ampm);
-  console.log(minutes);
+  console.log(publicChats);
 
   const chatDisconnect = () => {
     client.disconnect(function () {
       alert("See you next time!");
     });
   };
-  //scroll
+  //엔터키
+  const onKeyPress = (e) => {
+    if (e.key === "Enter") {
+      sendValue();
+    }
+  };
 
   return (
     <div>
@@ -143,37 +148,46 @@ function ChatTest() {
           <IconNotification src={IconHamburger} />
         </HeadrIconsWrap>
       </HeaderWrap>
-      {/* {publicChats.map((chat, index) => (
-        <li
-          className={`message ${chat.username === username && "self"}`}
-          key={index}
-        >
-          {chat.nickName !== userData.nickName && (
-            <div className="avatar">{chat.nickName}</div>
-          )}
-          <div className="message-data">{chat.message}</div>
-          {chat.nickName === userData.nickName && (
-            <div className="avatar self">{chat.nickName}</div>
-          )}
-        </li>
-      ))} */}
       <div className="chat-wrap">
-        {publicChats.map((chat, index) => (
-          <div key={index}>
-            <div className="item">
-              <div className="profile">
-                <img src={defaultProfile} alt="" />
+        {username !== publicChats.username ? (
+          <>
+            {publicChats.map((chat, index) => (
+              <div key={index}>
+                <div className="item">
+                  <div className="profile">
+                    <img src={defaultProfile} alt="" />
+                  </div>
+                  <div className="box">
+                    <span className="nickname">Sender</span>
+                    <p className="msg">{chat.message}</p>
+                    <span className="time" key={index}>
+                      {chattingDate[index]}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div className="box">
-                <span className="nickname">Sender</span>
-                <p className="msg">{chat.message}</p>
-                <span className="time">
-                  {ampm + " " + hour + ":" + minutes}
-                </span>
+            ))}
+          </>
+        ) : (
+          <>
+            {publicChats.map((chat, index) => (
+              <div key={index}>
+                <div className="myitem">
+                  {/* <div className="profile">
+                    <img src={defaultProfile} alt="" />
+                  </div> */}
+                  <div className="mybox">
+                    <span className="mynickname">Sender</span>
+                    <p className="mymsg">{chat.message}</p>
+                    <span className="mytime" key={index}>
+                      {chattingDate[index]}
+                    </span>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        ))}
+            ))}
+          </>
+        )}
       </div>
       <div className="chatting-footer-wrap">
         <div className="chatting-footer">
@@ -181,12 +195,13 @@ function ChatTest() {
             <img src={IconCamera} alt="" />
           </div>
           <div className="chatting-footer-input">
-            <textarea
+            <input
               className="mymsg"
               type="text"
               placeholder={"체크할 항목"}
               value={userData.message}
               onChange={handleMessage}
+              onKeyPress={onKeyPress}
             />
             <button onClick={sendValue}>Send</button>
             <button onClick={chatDisconnect}>disconnect</button>

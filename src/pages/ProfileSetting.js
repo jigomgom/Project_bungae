@@ -36,6 +36,7 @@ function MyPageSetting() {
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.readyState === 2) {
+        console.log(reader.result);
         setProfile(reader.result);
       }
     };

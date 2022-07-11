@@ -62,11 +62,122 @@
     height: 80vh;
     overflow: auto;
 }
+/* other Chatting */
 .item{
+    /* background-color: green; */
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    /* align-items: center; */
+    /* text-align: right; */
+    padding: 10px;
+}
+.box{
+    /* background-color: red; */
+    width: 200px;
+    word-break:break-all;
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+}
+.box > p {
+    margin: 0;
+}
+.nickname{
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 17px;
+    text-align: center;
+}
+.msg{
+    background-color: #d9d9d9;
+    position: relative;
+    border-radius: 10px;
+    padding: 15px;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 17px;
+}
+.msg::after{
+    position: absolute;
+    content: "";
+    border-top: 16px solid #d9d9d9;
+    border-left: 25px solid transparent;
+    border-right: 0px solid transparent;
+    border-bottom: 0px solid transparent;
+    top: 0px;
+    left: -10px;
+}
+.time{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 14px;
+    text-align: center;
+    float: right;
+    margin-top: 4px;
 }
 .profile{
+    /* background-color: yellow; */
+    margin-right: 10px;
+}
+.profile > img {
+    border-radius: 100px;
+    width: 10vw;
+}
 
+/* my Chatting */
+.myitem{
+    /* background-color: green; */
+    display: flex;
+    /* align-items: center; */
+    text-align: right;
+    padding: 10px;
+    float: right;
+}
+.mybox{
+    /* background-color: red; */
+    width: 200px;
+    word-break:break-all;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+.mybox > p {
+    margin: 0;
+}
+.mynickname{
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 17px;
+    /* text-align: center; */
+}
+.mymsg{
+    background-color: #d9d9d9;
+    position: relative;
+    border-radius: 10px;
+    padding: 15px;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 17px;
+    display: inline-block;
+    text-align: initial;
+    max-width: fit-content;
+}
+.mymsg::after{
+    position: absolute;
+    content: "";
+    border-top: 16px solid #d9d9d9;
+    border-left: 0px solid transparent;
+    border-right: 25px solid transparent;
+    border-bottom: 0px solid transparent;
+    top: 0px;
+    right: -10px;
+}
+.mytime{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 14px;
+    text-align: initial;
+    float: left;
+    margin-top: 4px;
 }
