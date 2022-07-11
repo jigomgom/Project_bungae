@@ -390,11 +390,7 @@ function CreatePost() {
           const _arrLoad = arr[0].address.road_address;
           setCurrentRoadAddress(_arrLoad);
           setCurrentAddress(_arr);
-          console.log(_arr);
         }
-        // else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-        //   geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
-        // }
       };
 
       geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);

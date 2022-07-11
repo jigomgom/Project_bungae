@@ -23,10 +23,24 @@ function Header() {
   // root path, siginup, chat 일 때 렌더링 안되도록 방지
   if (
     window.location.pathname === "/" ||
-    window.location.pathname === "/signup" ||
+    // window.location.pathname === "/signup" ||
     window.location.pathname === "/chat"
   ) {
     return null;
+  }
+  else if( window.location.pathname === "/signup" ){
+    return(
+      <HeaderWrap>
+        <Logo style={{ visibility:"hidden"}} src={IconMainLogo}/>
+        <BackKey src={IconBackKey}/>
+        <PageTitle >회원가입</PageTitle>
+        <HeadrIconsWrap>
+          <IconMyLocation style={{ visibility:"hidden"}} src={IconMyPoint} />
+          <IconNotification style={{ visibility:"hidden"}} src={Notification} />
+          <IconSetting style={{ visibility:"hidden"}} src={Setting} />
+        </HeadrIconsWrap>
+      </HeaderWrap>
+    )
   }
 
   // main 헤더
