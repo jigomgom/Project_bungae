@@ -11,7 +11,7 @@ import { createBungleList } from "../redux/modules/BungleSlice";
 import Slider from "rc-slider";
 import "../styles/rc-slider/index.css";
 // 다음 주소 검색 API 추가
-import DaumPostCode from 'react-daum-postcode';
+import DaumPostCode from "react-daum-postcode";
 
 // css styled
 import {
@@ -139,15 +139,15 @@ function CreatePost() {
   const [isThirdFileClear, setThirdFileClear] = useState(false);
 
   // 해쉬 태그 관리용 state
-  const [tagItem, setTagItem] = useState('')
-  const [tagList, setTagList] = useState([])
+  const [tagItem, setTagItem] = useState("");
+  const [tagList, setTagList] = useState([]);
   // 해쉬 태그 3자 이상이면 처리할 state
-  const [ isReadOnly, setIsReadOnly ] = useState( false );
+  const [isReadOnly, setIsReadOnly] = useState(false);
 
   // 주소 입력 관리 State
-  const [ isAddress, setIsAddress ] = useState("");
+  const [isAddress, setIsAddress] = useState("");
   // 우편번호 컴포넌트의 노출여부 상태 state
-  const [visible, setVisible] = useState(false); 
+  const [visible, setVisible] = useState(false);
 
   // 지도 경도, 위도 State
   // location 정보 저장
@@ -156,10 +156,10 @@ function CreatePost() {
   const [error, setError] = useState();
 
   // 지번 주소
-  const [ currentAddress, setCurrentAddress ] = useState();
+  const [currentAddress, setCurrentAddress] = useState();
   // 도로명 주소
-  const [ currentRoadAddress, setCurrentRoadAddress ] = useState();
-  
+  const [currentRoadAddress, setCurrentRoadAddress] = useState();
+
   // GPS 옵션
   const options = {
     /*
@@ -171,9 +171,9 @@ function CreatePost() {
     : 위치정보를 가장 높은 정확도로 수신하고 싶음을 나타내는 불리언 값입니다. true를 지정했으면, 지원하는 경우 장치가 더 정확한 위치를 제공합니다. 그러나 응답 속도가 느려지며 전력 소모량이 증가하는 점에 주의해야 합니다. 반면 false를 지정한 경우 기기가 더 빠르게 반응하고 전력 소모도 줄일 수 있는 대신 정확도가 떨어집니다. 기본 값은 false입니다.
     */
     enableHighAccuracy: true,
-    // timeout 
+    // timeout
     timeout: 5000,
-    maximumAge: 0
+    maximumAge: 0,
   };
 
   // 첫번째 사진 clear 버튼
@@ -258,33 +258,35 @@ function CreatePost() {
     reader.readAsDataURL(e.target.files[0]);
   };
 
-  const [isFile, setIsFile] = useState(["","",""]);
+  const [isFile, setIsFile] = useState(["", "", ""]);
 
-  const AddFileItem = (item, index ) => {
-    setIsFile( isFile.map( ( file, file_index ) => {
-      if( file_index === index ){
-        return file = item;
-      }else{
-        if (file === "") {
-          return (file = "");
-        }else{
-          return file;
+  const AddFileItem = (item, index) => {
+    setIsFile(
+      isFile.map((file, file_index) => {
+        if (file_index === index) {
+          return (file = item);
+        } else {
+          if (file === "") {
+            return (file = "");
+          } else {
+            return file;
+          }
         }
-      }
-    }));
+      })
+    );
   };
 
   const RemoveFileItme = (number) => {
     setIsFile(isFile.filter((_, index) => index !== number));
   };
 
-  const uploadFiles = ( e, index ) => {
-    AddFileItem( e.target.files[0], index );
-  }
+  const uploadFiles = (e, index) => {
+    AddFileItem(e.target.files[0], index);
+  };
 
-  const deleteFiles = ( index ) => {
-    RemoveFileItme( index )
-  }
+  const deleteFiles = (index) => {
+    RemoveFileItme(index);
+  };
 
   // ChatButton 클릭 함수
   const ChatButtonClickHandler = (text) => {
@@ -313,35 +315,35 @@ function CreatePost() {
     );
   };
   // 엔터키 태그 입력
-  const onKeyPress = e => {
+  const onKeyPress = (e) => {
     // console.log( e, e.target.value );
-    if (e.target.value.length !== 0 && e.code === 'Enter') {
-      addHashTagItemHandler()
-      e.target.value ="";
+    if (e.target.value.length !== 0 && e.code === "Enter") {
+      addHashTagItemHandler();
+      e.target.value = "";
     }
-  }
+  };
 
   // 해쉬 태그 Add
   const addHashTagItemHandler = () => {
-    let updatedTagList = [...tagList]
+    let updatedTagList = [...tagList];
     // 모든 공백 제거
-    updatedTagList.push(tagItem.replace(/ /g, ''));
-    setTagList([...tagList, tagItem.replace(/ /g, '')])
-    setTagItem('')
+    updatedTagList.push(tagItem.replace(/ /g, ""));
+    setTagList([...tagList, tagItem.replace(/ /g, "")]);
+    setTagItem("");
 
-    if( updatedTagList.length >= 3 ){
-      setIsReadOnly( true );
+    if (updatedTagList.length >= 3) {
+      setIsReadOnly(true);
     }
   };
   // 해쉬 태그 삭제
-  const removeHashTagItemHandler = ( TagItem ) => {
-    let updatedTagList = tagList.filter(( item ) => item !== TagItem ); 
+  const removeHashTagItemHandler = (TagItem) => {
+    let updatedTagList = tagList.filter((item) => item !== TagItem);
 
-    setTagList( tagList.filter(( item ) => item !== TagItem ) );
-    setTagItem('');
-    
-    if( updatedTagList.length < 3 ){
-      setIsReadOnly( false );
+    setTagList(tagList.filter((item) => item !== TagItem));
+    setTagItem("");
+
+    if (updatedTagList.length < 3) {
+      setIsReadOnly(false);
     }
   };
   // 인원 수 설정 숫자만 들어가도록 하는 함수
@@ -362,36 +364,34 @@ function CreatePost() {
   // 글자수 제한, 10자 넘으면 10자만 남겨두기
   const onInput = (e) => {
     const maxLength = 10;
-    if( e.target.value.length > maxLength ){
+    if (e.target.value.length > maxLength) {
       //10글자 제한
       e.target.value = e.target.value.substr(0, maxLength);
     }
-  }
+  };
   // 시간 관련 state
-  const [ hour, setHour ] = useState();
-  const [ minute, setMinute ] = useState();
+  const [hour, setHour] = useState();
+  const [minute, setMinute] = useState();
   // 오늘 내일 여부 판별 state
-  const [ isToday, setIsToday ] = useState(false);
-  const [ isTommorow, setIsTommorow ] = useState(false);
-  const [ dates, setDates ] = useState("");
+  const [isToday, setIsToday] = useState(false);
+  const [isTommorow, setIsTommorow] = useState(false);
+  const [dates, setDates] = useState("");
 
   // 시간 숫자만 입력 ( 시 )
-  const InputHourNumberChangeHandler = ( event ) => {
-    let onlyNumber = event.target.value
-      .replace(/[^0-9.]/g, "");
-      // .replace(/(\..*)\./g, "$1");
-    setHour( onlyNumber );
+  const InputHourNumberChangeHandler = (event) => {
+    let onlyNumber = event.target.value.replace(/[^0-9.]/g, "");
+    // .replace(/(\..*)\./g, "$1");
+    setHour(onlyNumber);
   };
 
   // 시간 숫자만 입력 ( 분 )
-  const InputMinuteNumberChangeHandler = ( event ) => {
-    let onlyNumber = event.target.value
-      .replace(/[^0-9.]/g, "");
+  const InputMinuteNumberChangeHandler = (event) => {
+    let onlyNumber = event.target.value.replace(/[^0-9.]/g, "");
 
-    setMinute( onlyNumber );
+    setMinute(onlyNumber);
   };
   // 오늘인지 내일인지 체크
-  const selectTodayOrTommorowClickHanlder = ( text ) => {
+  const selectTodayOrTommorowClickHanlder = (text) => {
     const today = new Date();
 
     const year = today.getFullYear();
@@ -400,22 +400,22 @@ function CreatePost() {
 
     let dateString = "";
 
-    if( text === "today" ){
+    if (text === "today") {
       console.log("Today");
-      setIsToday( true );
-      setIsTommorow( false );
+      setIsToday(true);
+      setIsTommorow(false);
       dateString = year + "-" + month + "-" + day;
-      setDates( dateString );
-    }else{
+      setDates(dateString);
+    } else {
       console.log("Tommorow");
-      setIsToday( false );
-      setIsTommorow( true );
-      day = ("0" + ( today.getDate() + 1 )).slice(-2);
+      setIsToday(false);
+      setIsTommorow(true);
+      day = ("0" + (today.getDate() + 1)).slice(-2);
       dateString = year + "-" + month + "-" + day;
-      setDates( dateString ); 
+      setDates(dateString);
     }
-  }
-  // 다음 주소 검색   
+  };
+  // 다음 주소 검색
   // 모바일용
   // const addressStyle = {
   //   display: "block",
@@ -432,7 +432,7 @@ function CreatePost() {
     // display: "flex",
     position: "absolute",
     top: "1280px",
-    left:"650px",
+    left: "650px",
     width: "375px",
     height: "470px",
     padding: "7px",
@@ -455,33 +455,41 @@ function CreatePost() {
     }
     // console.log( fullAddress );
     setVisible(false);
-    setIsAddress( fullAddress );
+    setIsAddress(fullAddress);
   };
 
   // 현위치 찾아오기
 
   const handleSuccess = (pos) => {
     const { latitude, longitude } = pos.coords;
-    
-    setLocation( {
+
+    setLocation({
       latitude,
       longitude,
     });
   };
- 
+
   // Geolocation의 `getCurrentPosition` 메소드에 대한 실패 callback 핸들러
   const handleError = (error) => {
     setError(error.message);
-    console.log( error )
+    console.log(error);
   };
 
   const getCurrentLocationBtnClick = () => {
-    navigator.geolocation.getCurrentPosition( handleSuccess, handleError, options );
-  }; 
+    navigator.geolocation.getCurrentPosition(
+      handleSuccess,
+      handleError,
+      options
+    );
+  };
 
-  useEffect(()=>{
-    navigator.geolocation.getCurrentPosition( handleSuccess, handleError, options );
-  },[])
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      handleSuccess,
+      handleError,
+      options
+    );
+  }, []);
 
   useEffect(() => {
     // let coord = new kakao.maps.LatLng(location?.latitude, location?.longitude);
@@ -530,40 +538,37 @@ function CreatePost() {
       address = currentAddress;
     }
     if (address.includes("(")) {
-      address = (address.slice(0, address.indexOf("(") - 1)); //, address.length - 1 ));
+      address = address.slice(0, address.indexOf("(") - 1); //, address.length - 1 ));
     }
 
     const postDto = {
       title: title,
       content: content,
       time: dates + ` ${hour}:${minute}:00`, //yyyy-MM-dd HH:mm:ss
-      personnel: Number( onlyNumber ),
+      personnel: Number(onlyNumber),
       place: address,
       tags: tagList,
       categories: SeelectedCategories,
       isLetter: true,
     };
-    const appendFile = isFile.filter( item => {
-      if( item !== "" ){
+    const appendFile = isFile.filter((item) => {
+      if (item !== "") {
         return item;
       }
-    })
-    console.log( postDto );
+    });
+    console.log(postDto);
     const formData = new FormData();
 
     formData.append(
       "postDto",
-      new Blob(
-        [JSON.stringify( postDto, { contentType: "application/json" })],
-        {
-          type: "application/json",
-        }
-      )
+      new Blob([JSON.stringify(postDto, { contentType: "application/json" })], {
+        type: "application/json",
+      })
     );
     if (appendFile.length <= 0) {
       // formData는 문자열만 받을 수 있기 때문에 null 을 넣으면 안된다
       // 빈 공백으로 처리
-        formData.append("postImg", "");
+      formData.append("postImg", "");
     } else {
       appendFile.forEach((item) => {
         // console.log(item);
@@ -571,11 +576,11 @@ function CreatePost() {
         // console.log( JSON.stringify( formData ));
       });
     }
-    
+
     // const ReturnCategories = SeelectedCategories.join(",");
     // console.log(ReturnCategories);
-    dispatch( createBungleList( formData ) );
-    navigate("/main")
+    dispatch(createBungleList(formData));
+    navigate("/chat");
   };
 
   return (
@@ -591,7 +596,11 @@ function CreatePost() {
         {/* <DeleteButton src={IconClear} onClick={clearBtnOnClickHandler} /> */}
       </PostTilteDiv>
       {/* Body 저렇게 안 닫아주면 placeholder 안생김*/}
-      <PostBody type="text" ref={Content_ref} placeholder="번개 소개글을 작성해주세요."></PostBody>
+      <PostBody
+        type="text"
+        ref={Content_ref}
+        placeholder="번개 소개글을 작성해주세요."
+      ></PostBody>
       <Divider />
       <PostUploadPictureWrap>
         <UploadTitle>사진</UploadTitle>
@@ -701,7 +710,12 @@ function CreatePost() {
       <SetTimeWapper>
         <UploadTitle>시간 설정</UploadTitle>
         <TimeItemWapper>
-          <TimeSelectToday isToday={isToday} onClick={()=>{selectTodayOrTommorowClickHanlder("today")}}>
+          <TimeSelectToday
+            isToday={isToday}
+            onClick={() => {
+              selectTodayOrTommorowClickHanlder("today");
+            }}
+          >
             <span
               className="material-icons"
               style={{
@@ -714,7 +728,12 @@ function CreatePost() {
             </span>
             오늘
           </TimeSelectToday>
-          <TimeSelectTommrow isTommorow={isTommorow} onClick={()=>{selectTodayOrTommorowClickHanlder("tommorow")}}>
+          <TimeSelectTommrow
+            isTommorow={isTommorow}
+            onClick={() => {
+              selectTodayOrTommorowClickHanlder("tommorow");
+            }}
+          >
             <span
               className="material-icons"
               style={{
@@ -734,9 +753,9 @@ function CreatePost() {
             type="text"
             maxLength={2}
             value={hour || ""}
-            onChange={InputHourNumberChangeHandler}           
+            onChange={InputHourNumberChangeHandler}
           />
-          
+
           <span
             style={{
               fontWeight: "400",

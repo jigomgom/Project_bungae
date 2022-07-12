@@ -7,7 +7,8 @@ import {
 } from "react-swipeable-list";
 import "react-swipeable-list/dist/styles.css";
 
-import 와왕 from "../images/와왕.png";
+// import 와왕 from "../images/와왕.png";
+import defaultProfile from "../assets/icon-default-profile.svg";
 import "../styles/ChatListSwiper.css";
 
 function App() {
@@ -38,7 +39,7 @@ function App() {
         >
           <div className="first_swiper_main">
             <div className="first_swiper_img">
-              <img src={와왕} alt="" />
+              <img src={defaultProfile} alt="" />
             </div>
             <div className="first_swipe">
               <div className="first_swipe_title">Lorem Ipsum</div>

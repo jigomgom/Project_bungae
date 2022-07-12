@@ -44,7 +44,6 @@ function App() {
         <Route path="/chat" element={<ChattingRoom />} />
         {/* Test */}
         <Route path="/test" element={<Test />} />
-        <Route path="/chattest" element={<ChatTest1 />} />
       </Routes>
       <Footer />
     </div>

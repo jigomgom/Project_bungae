@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const SERVER_URL = "http://3.37.61.25";
-const token = localStorage.getItem("login-token")
+// const SERVER_URL = "http://3.37.61.25";
+const SERVER_URL = "http://52.79.214.48";
+
+const token = localStorage.getItem("login-token");
 
 // 벙글 생성하기
 export const createBungleList = createAsyncThunk(
@@ -17,29 +19,27 @@ export const createBungleList = createAsyncThunk(
           Authorization: token,
         },
       });
-      console.log( response );
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
   }
 );
 
-
 const BungleSlice = createSlice({
   name: "Bungle",
   initialState: {
     list: [{}],
   },
-  reducers: {
-  },
+  reducers: {},
   extraReducers: {
     // middlewares
-    [createBungleList.fulfilled] : ( state, action ) => {
-        console.log("create fullfill");
+    [createBungleList.fulfilled]: (state, action) => {
+      console.log("create fullfill");
     },
-    [ createBungleList.rejected ] : ( state, action ) => {
-        console.log("create reject");
-    }
+    [createBungleList.rejected]: (state, action) => {
+      console.log("create reject");
+    },
   },
 });
 
