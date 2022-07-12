@@ -28,8 +28,10 @@ import SendBtn from "../assets/icon-sendbtn (1).svg";
 import IconMainLogo from "../assets/icon-main-logo.svg";
 
 let client = null;
-function ChatTest() {
+function ChatTest(props) {
   const token = localStorage.getItem("login-token");
+  const postId = props.Bungle;
+  console.log( "Chattest ", postId );
   // const token =
   //   "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqZW9uZ2h5ZW9udWs5OEBnbWFpbC5jb20iLCJpYXQiOjE2NTc1NjcxNTMsImV4cCI6MTY1NzY1MzU1M30.JOSRNC06Sp7xwvWbJ35kWONEV3NPm8M3T5V77f8wKPc";
   const username = localStorage.getItem("user-name");
@@ -46,8 +48,10 @@ function ChatTest() {
   });
 
   React.useEffect(() => {
-    connect();
-  }, []);
+    if (postId > 0) {
+      connect();
+    }
+  }, [postId]);
 
   const connect = () => {
     let sock = new SockJS("http://52.79.214.48/ws/chat");
