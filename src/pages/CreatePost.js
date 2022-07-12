@@ -2,6 +2,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import Divider from "../components/Divider";
 
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+// import redux slice
+import { createBungleList } from "../redux/modules/BungleSlice";
+
 // slider 추가
 import Slider from "rc-slider";
 import "../styles/rc-slider/index.css";
@@ -51,7 +56,14 @@ import {
   SearchCurrentPositionIcon,
   SearchCurrentPositionTitle,
   SearchCurrentPositionIconInput,
-
+  // 시간 설정
+  SetTimeWapper,
+  TimeItemWapper,
+  TimeSelectToday,
+  TimeSelectTommrow,
+  TimeInputWrapper,
+  TimeInputHour,
+  TimeInputMinute,
   // 인원수 설정
   PostPeopleCount,
   PostPeopleCountTitleWrap,
@@ -83,6 +95,10 @@ const CategoriesArray = [
 ];
 
 function CreatePost() {
+  // dispatch
+  const dispatch = useDispatch();
+  // navigate
+  const navigate = useNavigate();
   // 카테고리 클릭 판별용 state
   const [isCategoryClick, setIsCategoryClick] = useState([
     false,
@@ -181,16 +197,18 @@ function CreatePost() {
   const onFistFileChange = (e) => {
     if (e.target.files[0]) {
       setFirstFile(e.target.files[0]);
+      uploadFiles(e, 0);
     } else {
       //업로드 취소할 시
       setIsFirstFile(IconUpload);
+      deleteFiles(0);
       return;
     }
     //화면에 프로필 사진 표시
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.readyState === 2) {
-        console.log(reader.result);
+        // console.log(reader.result);
         setIsFirstFile(reader.result);
         setFirstFileClear(true);
       }
@@ -201,9 +219,11 @@ function CreatePost() {
   const onSecondFileChange = (e) => {
     if (e.target.files[0]) {
       setSecondFile(e.target.files[0]);
+      uploadFiles(e, 1);
     } else {
       //업로드 취소할 시
       setIsSecondFile(IconUpload);
+      deleteFiles(1);
       return;
     }
     //화면에 프로필 사진 표시
@@ -220,9 +240,11 @@ function CreatePost() {
   const onThirdFileChange = (e) => {
     if (e.target.files[0]) {
       setThirdFile(e.target.files[0]);
+      uploadFiles(e, 2);
     } else {
       //업로드 취소할 시
       setIsThirdFile(IconUpload);
+      deleteFiles(2);
       return;
     }
     //화면에 프로필 사진 표시
@@ -236,8 +258,33 @@ function CreatePost() {
     reader.readAsDataURL(e.target.files[0]);
   };
 
-  // 번개 이름 타이틀 용 ref
-  const InputTitle_Ref = useRef();
+  const [isFile, setIsFile] = useState(["","",""]);
+
+  const AddFileItem = (item, index ) => {
+    setIsFile( isFile.map( ( file, file_index ) => {
+      if( file_index === index ){
+        return file = item;
+      }else{
+        if (file === "") {
+          return (file = "");
+        }else{
+          return file;
+        }
+      }
+    }));
+  };
+
+  const RemoveFileItme = (number) => {
+    setIsFile(isFile.filter((_, index) => index !== number));
+  };
+
+  const uploadFiles = ( e, index ) => {
+    AddFileItem( e.target.files[0], index );
+  }
+
+  const deleteFiles = ( index ) => {
+    RemoveFileItme( index )
+  }
 
   // ChatButton 클릭 함수
   const ChatButtonClickHandler = (text) => {
@@ -320,15 +367,76 @@ function CreatePost() {
       e.target.value = e.target.value.substr(0, maxLength);
     }
   }
+  // 시간 관련 state
+  const [ hour, setHour ] = useState();
+  const [ minute, setMinute ] = useState();
+  // 오늘 내일 여부 판별 state
+  const [ isToday, setIsToday ] = useState(false);
+  const [ isTommorow, setIsTommorow ] = useState(false);
+  const [ dates, setDates ] = useState("");
+
+  // 시간 숫자만 입력 ( 시 )
+  const InputHourNumberChangeHandler = ( event ) => {
+    let onlyNumber = event.target.value
+      .replace(/[^0-9.]/g, "");
+      // .replace(/(\..*)\./g, "$1");
+    setHour( onlyNumber );
+  };
+
+  // 시간 숫자만 입력 ( 분 )
+  const InputMinuteNumberChangeHandler = ( event ) => {
+    let onlyNumber = event.target.value
+      .replace(/[^0-9.]/g, "");
+
+    setMinute( onlyNumber );
+  };
+  // 오늘인지 내일인지 체크
+  const selectTodayOrTommorowClickHanlder = ( text ) => {
+    const today = new Date();
+
+    const year = today.getFullYear();
+    const month = ("0" + (today.getMonth() + 1)).slice(-2);
+    let day = ("0" + today.getDate()).slice(-2);
+
+    let dateString = "";
+
+    if( text === "today" ){
+      console.log("Today");
+      setIsToday( true );
+      setIsTommorow( false );
+      dateString = year + "-" + month + "-" + day;
+      setDates( dateString );
+    }else{
+      console.log("Tommorow");
+      setIsToday( false );
+      setIsTommorow( true );
+      day = ("0" + ( today.getDate() + 1 )).slice(-2);
+      dateString = year + "-" + month + "-" + day;
+      setDates( dateString ); 
+    }
+  }
   // 다음 주소 검색   
+  // 모바일용
+  // const addressStyle = {
+  //   display: "block",
+  //   position: "absolute",
+  //   top: "1120px",
+  //   left:"10px",
+  //   width: "375px",
+  //   height: "470px",
+  //   padding: "7px",
+  //   zIndex: 1,
+  // };
+  // 웹용
   const addressStyle = {
-    display: "block",
+    // display: "flex",
     position: "absolute",
-    top: "1120px",
-    left:"10px",
+    top: "1280px",
+    left:"650px",
     width: "375px",
     height: "470px",
     padding: "7px",
+    // margin:"auto",
     zIndex: 1,
   };
   const handleComplete = (data) => {
@@ -361,7 +469,6 @@ function CreatePost() {
     });
   };
  
-
   // Geolocation의 `getCurrentPosition` 메소드에 대한 실패 callback 핸들러
   const handleError = (error) => {
     setError(error.message);
@@ -398,15 +505,77 @@ function CreatePost() {
   }, [location]);
 
   // 등록하기 버튼 클릭
+
+  const Title_ref = useRef();
+  const Content_ref = useRef();
+  const currentHour = useRef();
+  const currentMinute = useRef();
+
   const CreateBunggleOnClickHandler = () => {
     const SeelectedCategories = CategoriesArray.filter((item, index) => {
       if (isCategoryClick[index]) {
         return item;
       }
     });
+    const title = Title_ref.current.value;
+    const content = Content_ref.current.value;
+    const hour = ("0" + currentHour.current.value).slice(-2);
+    const minute = ("0" + currentMinute.current.value).slice(-2);
 
-    const ReturnCategories = SeelectedCategories.join(",");
-    console.log(ReturnCategories);
+    let address = "";
+
+    if (isAddress !== "") {
+      address = isAddress;
+    } else {
+      address = currentAddress;
+    }
+    if (address.includes("(")) {
+      address = (address.slice(0, address.indexOf("(") - 1)); //, address.length - 1 ));
+    }
+
+    const postDto = {
+      title: title,
+      content: content,
+      time: dates + ` ${hour}:${minute}:00`, //yyyy-MM-dd HH:mm:ss
+      personnel: Number( onlyNumber ),
+      place: address,
+      tags: tagList,
+      categories: SeelectedCategories,
+      isLetter: true,
+    };
+    const appendFile = isFile.filter( item => {
+      if( item !== "" ){
+        return item;
+      }
+    })
+    console.log( postDto );
+    const formData = new FormData();
+
+    formData.append(
+      "postDto",
+      new Blob(
+        [JSON.stringify( postDto, { contentType: "application/json" })],
+        {
+          type: "application/json",
+        }
+      )
+    );
+    if (appendFile.length <= 0) {
+      // formData는 문자열만 받을 수 있기 때문에 null 을 넣으면 안된다
+      // 빈 공백으로 처리
+        formData.append("postImg", "");
+    } else {
+      appendFile.forEach((item) => {
+        // console.log(item);
+        formData.append("postImg", item);
+        // console.log( JSON.stringify( formData ));
+      });
+    }
+    
+    // const ReturnCategories = SeelectedCategories.join(",");
+    // console.log(ReturnCategories);
+    dispatch( createBungleList( formData ) );
+    navigate("/main")
   };
 
   return (
@@ -417,12 +586,12 @@ function CreatePost() {
           type="search"
           placeholder="번개 이름을 입력해주세요!."
           maxLength={36}
-          ref={InputTitle_Ref}
+          ref={Title_ref}
         />
         {/* <DeleteButton src={IconClear} onClick={clearBtnOnClickHandler} /> */}
       </PostTilteDiv>
       {/* Body 저렇게 안 닫아주면 placeholder 안생김*/}
-      <PostBody placeholder="번개 소개글을 작성해주세요."></PostBody>
+      <PostBody type="text" ref={Content_ref} placeholder="번개 소개글을 작성해주세요."></PostBody>
       <Divider />
       <PostUploadPictureWrap>
         <UploadTitle>사진</UploadTitle>
@@ -529,15 +698,90 @@ function CreatePost() {
       </HashTagWrap>
       <DividerStyle />
       {/* 시간 설정 */}
+      <SetTimeWapper>
+        <UploadTitle>시간 설정</UploadTitle>
+        <TimeItemWapper>
+          <TimeSelectToday isToday={isToday} onClick={()=>{selectTodayOrTommorowClickHanlder("today")}}>
+            <span
+              className="material-icons"
+              style={{
+                fontWeight: "bold",
+                marginRight: "5px",
+                fontSize: "20px",
+              }}
+            >
+              check
+            </span>
+            오늘
+          </TimeSelectToday>
+          <TimeSelectTommrow isTommorow={isTommorow} onClick={()=>{selectTodayOrTommorowClickHanlder("tommorow")}}>
+            <span
+              className="material-icons"
+              style={{
+                fontWeight: "bold",
+                marginRight: "5px",
+                fontSize: "20px",
+              }}
+            >
+              check
+            </span>
+            내일
+          </TimeSelectTommrow>
+        </TimeItemWapper>
+        <TimeInputWrapper>
+          <TimeInputHour
+            ref={currentHour}
+            type="text"
+            maxLength={2}
+            value={hour || ""}
+            onChange={InputHourNumberChangeHandler}           
+          />
+          
+          <span
+            style={{
+              fontWeight: "400",
+              fontSize: "14px",
+              lineHeight: "20px",
+              marginLeft: "10px",
+              marginRight: "16px",
+            }}
+          >
+            시
+          </span>
+          <TimeInputMinute
+            ref={currentMinute}
+            type="text"
+            value={minute || ""}
+            max={59}
+            maxLength={2}
+            onChange={InputMinuteNumberChangeHandler}
+          />
+          <span
+            style={{
+              fontWeight: "400",
+              fontSize: "14px",
+              lineHeight: "20px",
+              marginLeft: "10px",
+            }}
+          >
+            분
+          </span>
+        </TimeInputWrapper>
+      </SetTimeWapper>
+      <DividerStyle />
       {/* 주소 입력 */}
       <SearchAddressWrap>
         <UploadTitle>주소 입력</UploadTitle>
         <SearchAddressItemWrap>
-          <SearchAddressInput readOnly={true} value={isAddress} placeholder="기본 주소" />
+          <SearchAddressInput
+            readOnly={true}
+            value={isAddress}
+            placeholder="기본 주소"
+          />
           <SearhAddressBtn onClick={() => setVisible(!visible)}>
-            { visible ? "취소" : "주소찾기"}
+            {visible ? "취소" : "주소찾기"}
           </SearhAddressBtn>
-          
+
           {visible ? (
             <div>
               <DaumPostCode
@@ -553,7 +797,7 @@ function CreatePost() {
           <SearchCurrentPositionIcon src={IconMylocation} />
           <SearchCurrentPositionTitle>현위치로 설정</SearchCurrentPositionTitle>
           <SearchCurrentPositionIconInput>
-            · {currentAddress ? currentAddress : currentRoadAddress }
+            · {currentAddress ? currentAddress : currentRoadAddress}
             {/* · 서울 서초구 서초대로 233 */}
           </SearchCurrentPositionIconInput>
         </SearchCurrentPositionItemWrap>
@@ -570,17 +814,29 @@ function CreatePost() {
                 ChatButtonClickHandler("letter");
               }}
             >
-              <SelectChatBtnImg src={IconChatLetter} />
-              <SelectChatBtnName>일반채팅</SelectChatBtnName>
+              {/* <SelectChatBtnImg src={IconChatLetter} /> */}
+              <span
+                style={{ marginRight: "7px", marginTop: "4px" }}
+                className="material-icons"
+              >
+                chat_bubble_outline
+              </span>
+              일반채팅
             </SelectChatLetterBtn>
             <SelectChatVideoBtn
               CheckedState={isVideo}
               onClick={() => {
-                ChatButtonClickHandler("video");
+                // ChatButtonClickHandler("video");
               }}
             >
-              <SelectChatBtnImg src={IconChatVideo} />
-              <SelectChatBtnName>화상채팅</SelectChatBtnName>
+              {/* <SelectChatBtnImg src={IconChatVideo} /> */}
+              <span
+                className="material-icons"
+                style={{ marginRight: "7px", marginTop: "2px" }}
+              >
+                video_camera_front
+              </span>
+              화상채팅
             </SelectChatVideoBtn>
           </SelectChatBtnWrap>
         </SelectChatBox>
@@ -590,7 +846,13 @@ function CreatePost() {
       <PostPeopleCount>
         <PostPeopleCountTitleWrap>
           <PostPeopleTitle>인원 수 설정</PostPeopleTitle>
-          <div style={{ display: "flex" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <PostPeopleCountTitle
               style={{ textAlign: "right", paddingRight: "5px" }}
               type="text"
@@ -609,13 +871,13 @@ function CreatePost() {
           max={isLetter ? 50 : 4}
           value={onlyNumber}
           trackStyle={{
-            backgroundColor: "#B3B3B3",
-            border: "1px solid #B3B3B3",
+            backgroundColor: "#FFC634",
+            border: "1px solid #898989",
             height: 9,
           }}
           inverted={false}
           handleStyle={{
-            border: "3px solid #B3B3B3",
+            border: "3px solid #FFC634",
             height: 14,
             width: 14,
             marginLeft: 0,
@@ -629,7 +891,7 @@ function CreatePost() {
           onChange={setOnlyNumber}
           railStyle={{
             backgroundColor: "white",
-            border: "1px solid #B3B3B3",
+            border: "1px solid #898989",
             height: 9,
           }}
         />

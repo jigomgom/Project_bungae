@@ -127,11 +127,11 @@ export const PostBodyContent = styled.div`
     /* margin-right: 20px; */
 `;
 
-export const PostInfoTextWrap = styled.div`
+export const PostInfoTextWrap = styled.h3`
     width: 187px;
     height: 17px;
-    margin-left:20px;
-
+    margin-left:11px;
+    margin-top:24px;
     font-weight: 400;
     font-size: 12px;
     line-height: 17px;
@@ -140,10 +140,27 @@ export const PostInfoTextWrap = styled.div`
     margin-bottom: 10px;
 `;
 
+export const PostCategoriesWrapper = styled.div`
+  display: flex;
+  margin-left: 20px;
+  margin-bottom: 8px;
+
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 17px;
+
+  color: #898989;
+`;
+
+export const PostCategoriesItem = styled.span`
+
+`;
+
 export const PostTagWrap = styled.div`
     width: 276px;
     height: 17px;
     margin-left: 20px;
+    margin-bottom: 21px;
     gap: 5px;
     display: flex;
 `;
@@ -157,10 +174,10 @@ export const PostTag = styled.div`
   font-weight: 400;
   font-size: 12px;
   line-height: 17px;
+  padding: 0px 10px;
+  color: #FFFFFF;;
 
-  color: #8b8b8b;
-
-  background: #d9d9d9;
+  background-color: #FFC634;
   border-radius: 100px;
 `;
 
@@ -220,6 +237,18 @@ export const PostMemberName = styled.div`
     line-height: 17px;
 `;
 
+export const PostJoinButtonWrapper = styled.div`
+    position: relative;
+`;
+
+export const PostJoinIcon = styled.img`
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 135px;
+    top: 17px;
+`;
+
 export const PostJoinButton = styled.div`
   display: flex;
   justify-content: center;
@@ -230,7 +259,9 @@ export const PostJoinButton = styled.div`
   font-weight: 400;
   font-size: 16px;
   line-height: 23px;
-  background: #d9d9d9;
+  border: 2px solid #434343;
+  background-color: white;
   border-radius: 10px;
   margin-left: 20px;
+  cursor: pointer;
 `;

@@ -8,7 +8,7 @@ export const LoginWrap = styled.div`
 `;
 
 export const LoginInquiry = styled.div`
-  width: 45px;
+  width: 70px;
   height: 17px;
   font-weight: 700;
   font-size: 12px;
@@ -22,7 +22,7 @@ export const LoginInquiry = styled.div`
 `;
 
 export const LoginTitle = styled.div`
-  width: 206px;
+  width: 220px;
   height: 46px;
 
   font-weight: 700;

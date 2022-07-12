@@ -23,16 +23,22 @@ function Header() {
   const navigate = useNavigate();
   // root path, siginup, chat 일 때 렌더링 안되도록 방지
   if (
-    window.location.pathname === "/"
-    // window.location.pathname === "/signup" ||
-    // window.location.pathname === "/chat"
+    window.location.pathname === "/" ||
+    window.location.pathname === "/profilesetting"
+    // window.location.pathname === "/mypage"
   ) {
+    // console.log("???")
     return null;
   } else if (window.location.pathname === "/signup") {
     return (
       <HeaderWrap>
         <Logo style={{ visibility: "hidden" }} src={IconMainLogo} />
-        <BackKey src={IconBackKey} />
+        <BackKey
+          src={IconBackKey}
+          onClick={() => {
+            navigate("/");
+          }}
+        />
         <PageTitle>회원가입</PageTitle>
         <HeadrIconsWrap>
           <IconMyLocation style={{ visibility: "hidden" }} src={IconMyPoint} />
@@ -64,8 +70,7 @@ function Header() {
   // 태그 검색, 카테고리 검색 결과 헤더
   else if (
     window.location.pathname === "/tagsearch" ||
-    window.location.pathname === "/categorysearch" ||
-    window.location.pathname === "/mylikebung"
+    window.location.pathname === "/categorysearch"
   ) {
     return (
       <HeaderWrap>
@@ -114,6 +119,49 @@ function Header() {
           }}
         />
         <PageTitle>번개 생성</PageTitle>
+
+        <HeadrIconsWrap>
+          <IconMyLocation style={{ visibility: "hidden" }} src={IconMyPoint} />
+          <IconNotification src={Notification} />
+          <IconSetting src={Setting} />
+        </HeadrIconsWrap>
+      </HeaderWrap>
+    );
+  }
+  // 번개 수정
+  // 마이 벙글
+  else if (window.location.pathname === "/mypage") {
+    return (
+      <HeaderWrap>
+        <Logo style={{ visibility: "hidden" }} src={IconMainLogo} />
+        <BackKey
+          src={IconBackKey}
+          onClick={() => {
+            navigate("/main");
+          }}
+        />
+        <PageTitle>나의 벙글</PageTitle>
+
+        <HeadrIconsWrap>
+          <IconMyLocation style={{ visibility: "hidden" }} src={IconMyPoint} />
+          <IconNotification src={Notification} />
+          <IconSetting src={Setting} />
+        </HeadrIconsWrap>
+      </HeaderWrap>
+    );
+  }
+  // 내 찜 목록
+  else if (window.location.pathname === "/mylikebung") {
+    return (
+      <HeaderWrap>
+        <Logo style={{ visibility: "hidden" }} src={IconMainLogo} />
+        <BackKey
+          src={IconBackKey}
+          onClick={() => {
+            navigate("/mypage");
+          }}
+        />
+        <PageTitle style={{ visibility: "hidden" }}></PageTitle>
 
         <HeadrIconsWrap>
           <IconMyLocation style={{ visibility: "hidden" }} src={IconMyPoint} />
