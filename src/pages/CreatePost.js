@@ -2,6 +2,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import Divider from "../components/Divider";
 
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+// import redux slice
+import { createBungleList } from "../redux/modules/BungleSlice";
+
 // slider 추가
 import Slider from "rc-slider";
 import "../styles/rc-slider/index.css";
@@ -90,6 +95,10 @@ const CategoriesArray = [
 ];
 
 function CreatePost() {
+  // dispatch
+  const dispatch = useDispatch();
+  // navigate
+  const navigate = useNavigate();
   // 카테고리 클릭 판별용 state
   const [isCategoryClick, setIsCategoryClick] = useState([
     false,
@@ -520,27 +529,26 @@ function CreatePost() {
     } else {
       address = currentAddress;
     }
+    if (address.includes("(")) {
+      address = (address.slice(0, address.indexOf("(") - 1)); //, address.length - 1 ));
+    }
 
     const postDto = {
       title: title,
       content: content,
-      time: dates + ` ${hour}:${minute}`, //yyyy-MM-dd HH:mm:ss
-      personnel: onlyNumber,
+      time: dates + ` ${hour}:${minute}:00`, //yyyy-MM-dd HH:mm:ss
+      personnel: Number( onlyNumber ),
       place: address,
       tags: tagList,
       categories: SeelectedCategories,
       isLetter: true,
     };
-    // console.log( postDto );
-    // console.log( isFile );
-
     const appendFile = isFile.filter( item => {
       if( item !== "" ){
         return item;
       }
     })
-
-    // console.log( appendFile );
+    console.log( postDto );
     const formData = new FormData();
 
     formData.append(
@@ -563,9 +571,11 @@ function CreatePost() {
         // console.log( JSON.stringify( formData ));
       });
     }
-
+    
     // const ReturnCategories = SeelectedCategories.join(",");
     // console.log(ReturnCategories);
+    dispatch( createBungleList( formData ) );
+    navigate("/main")
   };
 
   return (

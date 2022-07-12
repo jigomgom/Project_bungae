@@ -111,6 +111,7 @@ export const FileInputImg = styled.img`
     width: 107px;
     height: 107px;
     object-fit: cover;
+    border-radius: 10px;
     /* object-fit: fill; */
     /* object-fit: contain; */
     /* object-fit: scale-down; */

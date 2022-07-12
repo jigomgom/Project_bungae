@@ -1,4 +1,6 @@
 import React from "react";
+// Library
+import { useNavigate } from "react-router-dom";
 //CSS
 import "../styles/MyPage.css";
 //Components
@@ -9,6 +11,7 @@ import lighteningImg from "../assets/icon-lightening.jpg";
 import tempImg from "../assets/icon-temp.svg";
 
 function MyPage() {
+  const navigate = useNavigate();
   return (
     <div>
       <div className="mypage-content-wrap">
@@ -27,18 +30,19 @@ function MyPage() {
             </div>
           </div>
         </div>
-        <button className="mypage-profile-btn">프로필 수정</button>
+        <button className="mypage-profile-btn" onClick={()=>{navigate("/profilesetting")}}>프로필 수정</button>
+      </div>
+      <Divider />
+      {/* 지용 리스트들 변경 */}
+      <div className="mypage-selectbar-list">
+        <div className="mypage-selectbar">내가 찜한 벙글</div>
+        <div className="mypage-selectbar">내가 작성한 벙글</div>
       </div>
       <Divider />
       <div className="mypage-selectbar-list">
-        <div className="mypage-selectbar">Lorem ipsum</div>
-        <div className="mypage-selectbar">Lorem ipsum</div>
-      </div>
-      <Divider />
-      <div className="mypage-selectbar-list">
-        <div className="mypage-selectbar">Lorem ipsum</div>
-        <div className="mypage-selectbar">Lorem ipsum</div>
-        <div className="mypage-selectbar">Lorem ipsum</div>
+        <div className="mypage-selectbar">비매너 유저 신고</div>
+        <div className="mypage-selectbar">나의 신고 내역</div>
+        {/* <div className="mypage-selectbar">Lorem ipsum</div> */}
       </div>
     </div>
   );
