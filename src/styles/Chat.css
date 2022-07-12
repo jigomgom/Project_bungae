@@ -33,23 +33,30 @@
 }
 .chatting-footer-input{
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    /* flex-direction: row;
+    justify-content: space-around; */
 }
 .chatting-footer-input > input {
     /* margin-right: 20px; */
-    width: 100vw;
-    /* line-height: 27px; */
+    width: 300px;
+    line-height: 27px;
     /* padding: 5px 0; */
     resize: none;
-    border: none;
+    border: 1px solid #898989;
+    /* background-color: #d9d9d9; */
+    border-radius: 10px;
+    
 }
 .chatting-footer-input > button{
-    background-color: #d9d9d9;
-    width: 15vw;
-    margin-left: -15px;
+    /* background-color: #d9d9d9; */
+    /* width: 15vw; */
+    height: 10px;
+    margin-left: -30px;
+    margin-top: 4px;
     border-radius: 10px;
 }
+
+
 /* Chatting Content */
 .show-menu{
     background: red;
@@ -70,6 +77,8 @@
     /* right: -376px; */
     transition: 1s;
     }
+
+
 /* chatting ================ */
 .chat-wrap{
     height: 80vh;
@@ -166,7 +175,7 @@
     /* text-align: center; */
 }
 .mymsg{
-    background-color: #d9d9d9;
+    background-color: #FFC632;
     position: relative;
     border-radius: 10px;
     padding: 15px;
@@ -180,7 +189,7 @@
 .mymsg::after{
     position: absolute;
     content: "";
-    border-top: 16px solid #d9d9d9;
+    border-top: 16px solid #FFC632;
     border-left: 0px solid transparent;
     border-right: 25px solid transparent;
     border-bottom: 0px solid transparent;

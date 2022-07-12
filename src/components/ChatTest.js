@@ -14,6 +14,7 @@ import {
   HeadrIconsWrap,
   IconMyLocation,
   IconNotification,
+  IconSetting,
 } from "../styles/StyledHeader.js";
 //CSS
 import "../styles/Chat.css";
@@ -21,13 +22,16 @@ import "../styles/Chat.css";
 import IconHamburger from "../assets/icon-hamburger.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
 import IconMyPoint from "../assets/icon-mylocation.svg";
-import IconCamera from "../assets/icon-camera-mono.svg";
+import IconCamera from "../assets/icon-camera-mono (1).svg";
 import defaultProfile from "../assets/icon-default-profile.svg";
-import SendBtn from "../assets/icon-sendbtn.svg";
+import SendBtn from "../assets/icon-sendbtn (1).svg";
+import IconMainLogo from "../assets/icon-main-logo.svg";
 
 let client = null;
 function ChatTest() {
   const token = localStorage.getItem("login-token");
+  // const token =
+  //   "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqZW9uZ2h5ZW9udWs5OEBnbWFpbC5jb20iLCJpYXQiOjE2NTc1NjcxNTMsImV4cCI6MTY1NzY1MzU1M30.JOSRNC06Sp7xwvWbJ35kWONEV3NPm8M3T5V77f8wKPc";
   const username = localStorage.getItem("user-name");
 
   // console.log(token);
@@ -53,7 +57,7 @@ function ChatTest() {
 
   const onConnected = () => {
     setUserData({ ...userData, connected: true });
-    client.subscribe("/sub/chat/room/42", onMessageReceived);
+    client.subscribe("/sub/chat/room/3", onMessageReceived);
 
     userJoin();
   };
@@ -68,7 +72,7 @@ function ChatTest() {
     var chatMessage = {
       type: "ENTER",
       nickName: "seowoo",
-      roomId: "42",
+      roomId: "3",
       status: "JOIN",
     };
     client.send("/pub/chat/message", { token }, JSON.stringify(chatMessage));
@@ -86,7 +90,7 @@ function ChatTest() {
       var chatMessage = {
         type: "TALK",
         message: userData.message,
-        roomId: "42",
+        roomId: "3",
         fileUrl: fileUrl,
       };
       console.log(chatMessage);
@@ -181,18 +185,26 @@ function ChatTest() {
     chatImg();
   }, [isFile]);
 
+  //햄버거 메뉴 토글
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <div>
+      {menuOpen === true ? <ChattingRoomSlider /> : null}
       <HeaderWrap>
-        <Logo></Logo>
+        <Logo src={IconMainLogo} style={{ visibility: "hidden" }} />
         <BackKey src={IconBackKey} />
         <PageTitle style={{ visibility: "hidden" }}></PageTitle>
+
         <HeadrIconsWrap>
           <IconMyLocation style={{ visibility: "hidden" }} src={IconMyPoint} />
-          <IconNotification src={IconHamburger} />
+          <IconNotification
+            src={Notification}
+            style={{ visibility: "hidden" }}
+          />
+          <IconSetting src={IconHamburger} />
         </HeadrIconsWrap>
       </HeaderWrap>
-
       <div className="chat-wrap">
         {publicChats.map((chat, index) => (
           <div key={index}>
@@ -207,7 +219,7 @@ function ChatTest() {
                     <span className="nickname">Sender</span>
                     {chat.message && chat.message !== "" ? (
                       <>
-                        <p className="mymsg">{chat.message}</p>
+                        <p className="msg">{chat.message}</p>
                       </>
                     ) : (
                       <>
@@ -304,7 +316,6 @@ function ChatTest() {
           </div>
           <div className="chatting-footer-input">
             <input
-              className="mymsg"
               type="text"
               placeholder={"체크할 항목"}
               value={userData.message}

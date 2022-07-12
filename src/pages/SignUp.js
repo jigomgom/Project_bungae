@@ -128,12 +128,6 @@ const Signup = () => {
                 <br />
               </p>
 
-              {/* <div>
-                <a href="#" target="_blank">
-                  확인
-                </a>
-              </div> */}
-
               <a href="/" class="modal__close">
                 <div>확인</div>
               </a>

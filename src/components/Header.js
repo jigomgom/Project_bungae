@@ -17,25 +17,42 @@ import Setting from "../assets/icon-setting.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
 import IconMyPoint from "../assets/icon-mylocation.svg";
 import IconMainLogo from "../assets/icon-main-logo.svg";
+import IconHamburger from "../assets/icon-hamburger.svg";
 
 function Header() {
   const navigate = useNavigate();
   // root path, siginup, chat 일 때 렌더링 안되도록 방지
   if (
-    window.location.pathname === "/" ||
-    window.location.pathname === "/signup" ||
-    window.location.pathname === "/chat"
+    window.location.pathname === "/"
+    // window.location.pathname === "/signup" ||
+    // window.location.pathname === "/chat"
   ) {
     return null;
+  } else if (window.location.pathname === "/signup") {
+    return (
+      <HeaderWrap>
+        <Logo style={{ visibility: "hidden" }} src={IconMainLogo} />
+        <BackKey src={IconBackKey} />
+        <PageTitle>회원가입</PageTitle>
+        <HeadrIconsWrap>
+          <IconMyLocation style={{ visibility: "hidden" }} src={IconMyPoint} />
+          <IconNotification
+            style={{ visibility: "hidden" }}
+            src={Notification}
+          />
+          <IconSetting style={{ visibility: "hidden" }} src={Setting} />
+        </HeadrIconsWrap>
+      </HeaderWrap>
+    );
   }
 
   // main 헤더
   else if (window.location.pathname === "/main") {
     return (
       <HeaderWrap>
-        <Logo src={IconMainLogo}/>
-        <BackKey style={{ visibility:"hidden"}}/>
-        <PageTitle style={{ visibility:"hidden"}}></PageTitle>
+        <Logo src={IconMainLogo} />
+        <BackKey style={{ visibility: "hidden" }} />
+        <PageTitle style={{ visibility: "hidden" }}></PageTitle>
         <HeadrIconsWrap>
           <IconMyLocation src={IconMyPoint} />
           <IconNotification src={Notification} />
@@ -52,7 +69,7 @@ function Header() {
   ) {
     return (
       <HeaderWrap>
-        <Logo src={IconMainLogo}/>
+        <Logo src={IconMainLogo} />
         <BackKey src={IconBackKey} />
         <PageTitle style={{ visibility: "hidden" }}></PageTitle>
 
@@ -68,7 +85,7 @@ function Header() {
   else if (window.location.pathname === "/detailpost") {
     return (
       <HeaderWrap>
-        <Logo style={{visibility:"hidden"}} src={IconMainLogo}/>
+        <Logo style={{ visibility: "hidden" }} src={IconMainLogo} />
         <BackKey
           src={IconBackKey}
           onClick={() => {
@@ -89,7 +106,7 @@ function Header() {
   else if (window.location.pathname === "/createpost") {
     return (
       <HeaderWrap>
-        <Logo style={{visibility:"hidden"}} src={IconMainLogo}/>
+        <Logo style={{ visibility: "hidden" }} src={IconMainLogo} />
         <BackKey
           src={IconBackKey}
           onClick={() => {
@@ -110,7 +127,7 @@ function Header() {
   else if (window.location.pathname === "/map") {
     return (
       <HeaderWrap>
-        <Logo style={{visibility:"hidden"}} src={IconMainLogo}/>
+        <Logo style={{ visibility: "hidden" }} src={IconMainLogo} />
         <BackKey style={{ visibility: "hidden" }} src={IconBackKey} />
         <PageTitle>번개 지도</PageTitle>
 

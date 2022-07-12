@@ -13,6 +13,7 @@ import IconHome from "../assets/icon-home.svg";
 import IconLocation from "../assets/icon-location.svg";
 import IconChat from "../assets/icon-chat.svg";
 import IconMyBungae from "../assets/icon-account.svg";
+import IconCreate from "../assets/icon-create-post.svg";
 
 const Footer = () => {
   // navigate
@@ -39,6 +40,7 @@ const Footer = () => {
         <FooterIconImg src={IconLocation} />
         <FooterIconText>번개지도</FooterIconText>
       </FooterIconWrap>
+      <FooterAddBungae src={IconCreate} onClick={()=>{navigate("/createpost")}} />
       <FooterIconWrap>
         <FooterIconImg src={IconChat} />
         <FooterIconText>채팅</FooterIconText>
@@ -51,13 +53,6 @@ const Footer = () => {
         <FooterIconImg src={IconMyBungae} />
         <FooterIconText>나의 번개</FooterIconText>
       </FooterIconWrap>
-      <FooterAddBungae
-        onClick={() => {
-          navigate("/createpost");
-        }}
-      >
-        +
-      </FooterAddBungae>
     </FooterWrap>
   );
 };
