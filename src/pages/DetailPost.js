@@ -35,6 +35,10 @@ import {
   PostMemberPicture,
   PostMemberName,
   PostJoinButton,
+  PostCategoriesWrapper,
+  PostCategoriesItem,
+  PostJoinButtonWrapper,
+  PostJoinIcon
 } from "../styles/StyledDetailPost";
 
 
@@ -43,6 +47,7 @@ import IconShared from "../assets/icon-url-shared.svg";
 import IconPostTemp from "../assets/icon-post-temp.svg";
 import IconLightening from "../assets/icon-lightening.svg";
 import IconUnlike from "../assets/icon-white-unlike.svg";
+import IconChat from "../assets/icon-chat.svg";
 
 const TagsArrray = ["산책", "친목", "노래방", "수다", "대화"];
 const MembersArray = [
@@ -95,9 +100,11 @@ const Post = () => {
             varius ut velit sed. Ut lorem vulputate sit non vel at. Neque mauris
             tincidunt nisl donec ac, maecenas euismod.
           </PostBodyContent>
-          <PostInfoTextWrap>
-            서초동 1번 출구 인근
-          </PostInfoTextWrap>
+          <PostCategoriesWrapper>
+            <PostCategoriesItem>친목</PostCategoriesItem>
+            <PostCategoriesItem>운동</PostCategoriesItem>
+            <PostCategoriesItem>게임</PostCategoriesItem>
+          </PostCategoriesWrapper>          
           <PostTagWrap>
             {TagsArrray.map((item, index) => {
               return <PostTag>#{item}</PostTag>;
@@ -107,7 +114,12 @@ const Post = () => {
       </PostContent>
       <Divider />
       <PostMap>
+        <div style={{display:"flex"}}>
         <PostMapTitle>번개 위치</PostMapTitle>
+        <PostInfoTextWrap>
+            서초동 1번 출구 인근
+          </PostInfoTextWrap>
+          </div>
         <PostMapView className="map" id="map" ref={container} />
       </PostMap>
       <Divider />
@@ -130,7 +142,10 @@ const Post = () => {
           })}
         </Swiper>
       </PostMemberWrap>
-      <PostJoinButton>참여하기</PostJoinButton>
+      <PostJoinButtonWrapper>
+        <PostJoinIcon src={IconChat}/>
+        <PostJoinButton>참여하기</PostJoinButton>
+      </PostJoinButtonWrapper>
     </PostWrap>
   );
 };

@@ -1,6 +1,10 @@
 .profile-setting-wrap{
     margin: 8px 20px 12px 20px;
+    /* display: flex;
+    width: 100%;
+    margin: auto; */
 }
+
 .profile-setting-done{
     display: flex;
     flex-direction: row;
@@ -10,8 +14,10 @@
 .profile-setting-done > span{
     font-style: normal;
     font-weight: 400;
-    font-size: 20px;
+    font-size: 14px;
     line-height: 29px;
+    margin-top: 2px;
+    cursor: pointer;
 }
 .profile-setting-profile{
     margin-bottom: 20px;

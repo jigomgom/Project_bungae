@@ -1,137 +1,245 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 // styles
 import "../styles/Login.css";
+// jiyong css
+import {
+  LoginWrap,
+  LoginInquiry,
+  LoginTitle,
+  LoginExplain,
+  LoginLogo,
+  LoginContentWrap,
+  LoginEmailText,
+  LoginEmailInput,
+  LoginEmailClearBtn,
+  LoginPasswordText,
+  LoginPasswordInput,
+  LoginPasswordClearBtn,
+  LoginSns,
+  LoginSnsIconWarp,
+  SignupFindPasswordWarp,
+  LoginBottomText,
+  // Moadl
+  ModalWrapper,
+  ModalOverlay,
+  ModalInner,
+  ModalContentWrap,
+  ModalDivider,
+  ModalButton,
+} from "../styles/StyledLogin";
 
 //image
 import Pikka from "../images/Pikka.png";
 import { BsChevronLeft } from "react-icons/bs";
-import cancel from "../assets/icon-cancel.png";
+
+// icon
+import IconLoginLogo from "../assets/icon-login-main.svg";
+import IconTextClear from "../assets/icon-login-clear.svg";
 
 function Login() {
-  function setScreenSize() {
-    let vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty("--vh", `${vh}px`);
-  }
-  useEffect(() => {
-    setScreenSize();
-  });
+  //http://52.79.214.48
+  //http://3.37.61.25
+  const SERVER_URL = "http://52.79.214.48";
+  // 이메일 ref
+  const email_Ref = useRef();
+  // 비밀번호 ref
+  const password_Ref = useRef();
 
-  let navigate = useNavigate();
+  // navigate
+  const navigate = useNavigate();
+  // 한글 입력 방지 email state
+  const [notHangle, setNotHangle] = useState();
+  // 비밀번호 State
+  const [isPassword, setIsPassword] = useState();
+  // email clear btn state
+  const [isEmailClear, setIsEmailClear] = useState(false);
+  // email clear btn state
+  const [isPasswordClear, setIsPasswordClear] = useState(false);
 
-  const id_ref = React.useRef(null);
-  const pw_ref = React.useRef(null);
+  // Modal state
+  const [isModal, setIsModal] = useState(false);
+  // 로그인 에러 메세지 state
+  const [isError, setIsError] = useState("");
 
-  const LoginAxios = () => {
-    const LoginData = {
-      username: id_ref.current.value,
-      password: pw_ref.current.value,
-    };
-
-    axios
-      .post("http://52.79.214.48/user/login", LoginData)
-      .then((res) => {
-        alert("로그인성공");
-        console.log(res);
-        localStorage.setItem("login-token", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqZW9uZ2h5ZW9udWs5OEBnbWFpbC5jb20iLCJpYXQiOjE2NTc0NTQ0NjYsImV4cCI6MTY1NzU0MDg2Nn0.jCHtzBh3i6JnRNajIjBaZ4Jrmy0dh4Qyql3u_t2ywak");
-        console.log(localStorage.getItem("login-token"))
-        localStorage.setItem("user-name", id_ref.current.value);
+  // 로그인
+  const LoginEnterKeyPressHanlder = async (LoginUser) => {
+    try {
+      const response = await axios.post(`${SERVER_URL}/user/login`, LoginUser);
+      // localStorage.setItem("login-token", response.headers.authorization );
+      console.log(response);
+      if (response.data.response) {
+        localStorage.setItem("login-token", response.headers.authorization);
+        localStorage.setItem("user-name", response.data.username);
         navigate("/main");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      } else {
+        setIsModal(true);
+        setIsError(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 이메일 입력 한글 방지
+  const notInputHangleInputHandler = (event) => {
+    // console.log(event.target.value);
+    setNotHangle(event.target.value.replace(/[^a-zA-Z-_0-9@.]/g, ""));
+    const RegEx = /[^a-zA-Z-_0-9@.]/g;
+
+    if (RegEx.test(event.target.value)) {
+      event.target.value = "";
+    }
+
+    if (event.target.value.length > 0) {
+      setIsEmailClear(true);
+    } else {
+      setIsEmailClear(false);
+    }
+  };
+
+  // 비밀번호 입력시 clear 아이콘 보이기
+  const appearPasswordClearBtnHandler = (event) => {
+    if (event.target.value.length > 0) {
+      setIsPassword(event.target.value);
+      setIsPasswordClear(true);
+    } else {
+      setIsPassword("");
+      setIsPasswordClear(false);
+    }
+  };
+  // 이메일 입력시 클리어 버튼 동작
+  const emailClearClickHanlder = () => {
+    setNotHangle("");
+    setIsEmailClear(false);
+  };
+
+  // 비밀번호 입력시 클리어 버튼 동작
+  const passwordClearClickHanlder = () => {
+    setIsPassword("");
+    setIsPasswordClear(false);
+  };
+
+  // 비밀번호 enter event
+  const onKeyPress = (event) => {
+    // console.log( event.code );
+    if (
+      email_Ref.current.value.length > 0 &&
+      password_Ref.current.value.length > 0 &&
+      event.code === "Enter"
+    ) {
+      const LoginUser = {
+        username: email_Ref.current.value,
+        password: password_Ref.current.value,
+      };
+      LoginEnterKeyPressHanlder(LoginUser);
+    } else if (email_Ref.current.value.length <= 0 && event.code === "Enter") {
+      setIsModal(true);
+      setIsError("이메일을 입력해주세요.");
+    } else if (
+      password_Ref.current.value.length <= 0 &&
+      event.code === "Enter"
+    ) {
+      setIsModal(true);
+      setIsError("비밀번호를 입력해주세요.");
+    }
   };
 
   return (
-    <div>
-      <div className="Login_wrap">
-        <div id="Login_container">
-          <div className="Login_first_container">
-            <div className="Login_second_container">
-              <div className="Login_first_text">
-                Lorem ipsum
-                <br />
-              </div>
-              <p className="Login_second_text">
-                Lorem ipsum dolr sit amet
-                <br />
-              </p>
-
-              <img src={Pikka} alt="피카츄" />
-            </div>
-          </div>
-
-          <div className="Login_input">
-            <input
-              type="email"
-              placeholder="이메일       email@example.com"
-              ref={id_ref}
-            ></input>
-            <img src={cancel} alt="" />
-          </div>
-          <div className="Login_input">
-            <input
-              type="password"
-              placeholder="비밀번호  "
-              ref={pw_ref}
-            ></input>
-            <img src={cancel} alt="" />
-          </div>
-          <div className="Login_input">
-            <button className="Login_button" onClick={LoginAxios}>
-              <span> 로그인</span>
-            </button>
-          </div>
-
-          <div className="Login_sns">
-            <span></span>
-            <p>SNS</p>
-            <span></span>
-          </div>
-
-          <div className="Login_sns_icon">
-            <span>
-              <img
-                src="https://member.brandi.co.kr/images/ic_kakao.svg"
-                alt="카카오톡"
-              />
-            </span>
-            <span>
-              <img
-                src="https://member.brandi.co.kr/images/ic_facebook.svg"
-                alt="페이스북"
-              />
-            </span>
-            <span>
-              <img
-                src="https://member.brandi.co.kr/images/ic_google.svg"
-                alt="구글"
-              />
-            </span>
-            <span>
-              <img
-                src="https://member.brandi.co.kr/images/ic_naver.svg"
-                alt="네이버"
-              />
-            </span>
-            <span>
-              <img
-                src="https://member.brandi.co.kr/images/ic_apple.svg"
-                alt="애플"
-              />
-            </span>
-          </div>
-
-          <div className="Login_a">
-            {/* <a href="##">아이디 찾기</a> */}
-            <a href="##"> &nbsp;비밀번호 찾기 &nbsp;|</a>
-            <a href="./Signup">회원가입</a>
-          </div>
-        </div>
-      </div>
-    </div>
+    <LoginWrap>
+      <LoginInquiry>문의하기</LoginInquiry>
+      <LoginTitle>Lorem ipsum</LoginTitle>
+      <LoginExplain>Lorem ipsum dolor sit amet</LoginExplain>
+      <LoginLogo src={IconLoginLogo} />
+      {/* 로그인 회원가입 창 */}
+      <LoginContentWrap>
+        <LoginEmailText>이메일</LoginEmailText>
+        <LoginEmailInput
+          ref={email_Ref}
+          type="email"
+          value={notHangle || ""}
+          maxLength={27}
+          placeholder="email@example.com"
+          onChange={notInputHangleInputHandler}
+        />
+        {isEmailClear && (
+          <LoginEmailClearBtn
+            src={IconTextClear}
+            onClick={emailClearClickHanlder}
+          />
+        )}
+        <LoginPasswordText>비밀번호</LoginPasswordText>
+        <LoginPasswordInput
+          ref={password_Ref}
+          type="password"
+          value={isPassword || ""}
+          maxLength={20}
+          onChange={appearPasswordClearBtnHandler}
+          onKeyPress={onKeyPress}
+        />
+        {isPasswordClear && (
+          <LoginPasswordClearBtn
+            src={IconTextClear}
+            onClick={passwordClearClickHanlder}
+          />
+        )}
+      </LoginContentWrap>
+      <LoginSns>
+        <span></span>
+        <p>소셜 로그인</p>
+        <span></span>
+      </LoginSns>
+      <LoginSnsIconWarp>
+        <img
+          src="https://member.brandi.co.kr/images/ic_kakao.svg"
+          alt="카카오톡"
+        />
+        <img
+          src="https://member.brandi.co.kr/images/ic_google.svg"
+          alt="구글"
+        />
+        <img
+          src="https://member.brandi.co.kr/images/ic_naver.svg"
+          alt="네이버"
+        />
+        <img src="https://member.brandi.co.kr/images/ic_apple.svg" alt="애플" />
+      </LoginSnsIconWarp>
+      <SignupFindPasswordWarp>
+        <LoginBottomText
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            navigate("/signup");
+          }}
+        >
+          회원가입
+        </LoginBottomText>
+        <LoginBottomText> · </LoginBottomText>
+        <LoginBottomText style={{ cursor: "pointer" }}>
+          비밀번호 찾기
+        </LoginBottomText>
+      </SignupFindPasswordWarp>
+      {isModal && (
+        <ModalWrapper>
+          <ModalOverlay>
+            <ModalInner>
+              <ModalContentWrap>
+                <h3>로그인 실패</h3>
+                <div>{isError}</div>
+              </ModalContentWrap>
+              <ModalDivider />
+              <ModalButton
+                onClick={() => {
+                  setIsModal(false);
+                }}
+              >
+                확인
+              </ModalButton>
+            </ModalInner>
+          </ModalOverlay>
+        </ModalWrapper>
+      )}
+    </LoginWrap>
   );
 }
 export default Login;

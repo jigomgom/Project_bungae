@@ -38,7 +38,7 @@ const Footer = () => {
       </FooterIconWrap>
       <FooterIconWrap>
         <FooterIconImg src={IconLocation} />
-        <FooterIconText>번개지도</FooterIconText>
+        <FooterIconText>벙글지도</FooterIconText>
       </FooterIconWrap>
       <FooterAddBungae src={IconCreate} onClick={()=>{navigate("/createpost")}} />
       <FooterIconWrap>
@@ -51,7 +51,7 @@ const Footer = () => {
         }}
       >
         <FooterIconImg src={IconMyBungae} />
-        <FooterIconText>나의 번개</FooterIconText>
+        <FooterIconText>나의 벙글</FooterIconText>
       </FooterIconWrap>
     </FooterWrap>
   );

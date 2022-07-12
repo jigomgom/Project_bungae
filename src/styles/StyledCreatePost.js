@@ -111,6 +111,7 @@ export const FileInputImg = styled.img`
     width: 107px;
     height: 107px;
     object-fit: cover;
+    border-radius: 10px;
     /* object-fit: fill; */
     /* object-fit: contain; */
     /* object-fit: scale-down; */
@@ -144,13 +145,13 @@ export const PostCategoriesItemWrap = styled.div`
 export const PostCategoriesItem = styled.div`
   width: 62px;
   height: 26px;
-  background-color: ${( props ) => props.isChecked ? "black" : "#d9d9d9"};//#d9d9d9;//${( props ) => props.isChecked ? "#d9d9d9" : "black"};
+  background-color: ${( props ) => props.isChecked ? "#FFC632" : "#d9d9d9"};//#d9d9d9;//${( props ) => props.isChecked ? "#d9d9d9" : "black"};
   border-radius: 5px;
   font-weight: 400;
   font-size: 16px;
   line-height: 23px;
 
-  color: #8b8b8b;
+  color: ${( props ) => props.isChecked ? "white" : "#8b8b8b"};
   text-align: center;
   cursor: pointer;
 `;
@@ -176,37 +177,50 @@ export const SelectChatBtnWrap = styled.div`
     margin-bottom: 25px;
 `;
 
+
 export const SelectChatLetterBtn = styled.div`
-    position: relative;
-    width: 160px;
-    height: 48px;
-    background-color: ${(props) => props.CheckedState ? "black" : "#D9D9D9" };
-    border-radius: 8px;
-    display: flex;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+  /* position: relative; */
+  width: 160px;
+  height: 48px;
+  background-color: ${(props) => (props.CheckedState ? "#FFC634" : "#D9D9D9")};
+  border-radius: 8px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 17px;
+  color: ${(props) => (props.CheckedState ? "#FFFFFF" : "#898989")};
+
+  cursor: pointer;
 `;
 
 export const SelectChatVideoBtn = styled.div`
-    position: relative;
-    width: 160px;
-    height: 48px;
-    background-color: ${(props) => props.CheckedState ? "black" : "#D9D9D9" };
-    border-radius: 8px;
-    display: flex;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+  /* position: relative; */
+  width: 160px;
+  height: 48px;
+  background-color: ${(props) => (props.CheckedState ? "#FFC634" : "#D9D9D9")};
+  border-radius: 8px;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 17px;
+  color: ${(props) => (props.CheckedState ? "#FFFFFF" : "#898989")};
+
+  cursor: not-allowed;
 `;
+
+
 
 export const SelectChatBtnName = styled.span`
     font-weight: 400;
     font-size: 12px;
-    position: absolute;
-    left: 70px;
+    /* position: absolute; */
+    /* left: 70px; */
 `;
 
 export const SelectChatBtnImg = styled.img`
@@ -269,6 +283,87 @@ export const HashTagItem = styled.div`
     border-radius: 100px;
     cursor: pointer;
 `;
+
+// 시간 설정 시작
+export const SetTimeWapper = styled.div`
+    width: 89%;
+    height: 155px;
+    /* height: 170px; */
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+`;
+
+export const TimeItemWapper = styled.div`
+    display: flex;
+    width: 148px;
+    height: 26px;
+    column-gap: 12px;
+`;
+
+export const TimeSelectToday = styled.div`
+  width: 68px;
+  height: 26px;
+  background-color: ${( props ) => props.isToday ? "#FFC632" : "#d9d9d9"};//#ffc632;
+  border-radius: 5px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: ${( props ) => props.isToday ? "#FFFFFF" : "#898989"};;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
+
+export const TimeSelectTommrow = styled.div`
+  width: 68px;
+  height: 26px;
+  background-color: ${( props ) => props.isTommorow ? "#FFC632" : "#d9d9d9"};//#ffc632;
+  border-radius: 5px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: ${( props ) => props.isTommorow ? "#FFFFFF" : "#898989"};;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
+
+export const TimeInputWrapper = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin-top:25px;
+`;
+
+export const TimeInputHour = styled.input`
+  width: 123px;
+  height: 27px;
+  border: 1px solid #898989;
+  border-radius: 5px;
+  text-align: right;
+  padding-right:13px;
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+export const TimeInputMinute = styled.input`
+  width: 123px;
+  height: 27px;
+  border: 1px solid #898989;
+  border-radius: 5px;
+  text-align: right;
+  padding-right:13px;
+  &:focus {
+    outline: none;
+  }
+`;
+
 // 주소 입력
 export const SearchAddressWrap = styled.div`
     width: 89%;
@@ -277,6 +372,7 @@ export const SearchAddressWrap = styled.div`
     flex-direction: column;
     margin: auto;
 `;
+
 
 export const SearchAddressItemWrap = styled.div`
     width: 100%;
@@ -391,12 +487,13 @@ export const PostPeopleTitle = styled.div`
 
 export const PostPeopleCountTitle = styled.input`
   font-weight: 400;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 17px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid #898989;
   border-radius: 5px;
-  width: 45px;
-  height: 20px;
+  width: 144px;
+  height: 25px;
+  margin-right:5px;
   color: #b3b3b3;
   &:focus {
     outline: none;
@@ -413,7 +510,7 @@ export const PostCreateButton = styled.div`
   font-weight: 400;
   font-size: 16px;
   line-height: 23px;
-  background: #d9d9d9;
+  background-color: #FFC632;
   border-radius: 10px;
   margin-left: 20px;
   cursor: pointer;
