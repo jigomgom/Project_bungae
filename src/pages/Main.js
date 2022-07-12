@@ -139,7 +139,7 @@ function Main() {
         <MainContentButton onClick={() => MoreBtnClickHandler( "realTime" )}>더보기</MainContentButton>
       </MainContentWrap>
       {/* 평균 매너가 좋은 벙글 */}
-      <MainContentWrap>
+      {/* <MainContentWrap>
         <MainContentTitle>평균 매너가 좋은 벙글</MainContentTitle>
         <MainContentItemWrap>
           {ContentArray.map((item, index) => {
@@ -161,7 +161,7 @@ function Main() {
           })}
         </MainContentItemWrap>
         <MainContentButton onClick={ () => { MoreBtnClickHandler( "manner" ) } }>더보기</MainContentButton>
-      </MainContentWrap>
+      </MainContentWrap> */}
       {/* 마감 임박순 벙글 */}
       <MainContentWrap>
         <MainContentTitle>마감 임박순 벙글</MainContentTitle>

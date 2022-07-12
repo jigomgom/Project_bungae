@@ -32,7 +32,7 @@ function Header() {
     return(
       <HeaderWrap>
         <Logo style={{ visibility:"hidden"}} src={IconMainLogo}/>
-        <BackKey src={IconBackKey}/>
+        <BackKey src={IconBackKey} onClick={()=>{navigate("/")}}/>
         <PageTitle >회원가입</PageTitle>
         <HeadrIconsWrap>
           <IconMyLocation style={{ visibility:"hidden"}} src={IconMyPoint} />

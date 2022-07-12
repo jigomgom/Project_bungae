@@ -30,8 +30,6 @@ import {
   ModalButton
 } from "../styles/StyledLogin";
 
-import CustomModal from "../components/CustomModal";
-
 //image
 import Pikka from "../images/Pikka.png";
 import { BsChevronLeft } from "react-icons/bs";
@@ -153,12 +151,11 @@ function Login() {
         <LoginEmailText>이메일</LoginEmailText>
         <LoginEmailInput
           ref={email_Ref}
-          type="text"
+          type="email"
           value={notHangle || ""}
           maxLength={27}
           placeholder="email@example.com"
           onChange={notInputHangleInputHandler}
-          // onKeyDown={ event => event.target.value.replace(/[^a-zA-Z-_0-9@]/g,"")}
         />
         {isEmailClear && (
           <LoginEmailClearBtn
