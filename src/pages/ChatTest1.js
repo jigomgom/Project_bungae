@@ -3,10 +3,13 @@ import { useState } from "react";
 import { over } from "stompjs";
 import SockJS from "sockjs-client";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 var client = null;
-function ChatTest1() {
-  const navigate = useNavigate();
+function ChatTest1( props ) {
+  // const navigate = useNavigate();
+  const Bungle = useSelector( state => state.Bungle.postId );
+  console.log("PostID ", props.Bungle );
   const headers = { Authorization: localStorage.getItem("login-token") };
   console.log(headers);
   const [userData, setUserData] = useState({

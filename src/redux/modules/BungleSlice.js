@@ -8,6 +8,7 @@ const token = localStorage.getItem("login-token")
 export const createBungleList = createAsyncThunk(
   "CREATE/createBungleList",
   async (formData) => {
+    
     // console.log( JSON.stringify(formData));
     // console.log( token );
     try {
@@ -18,6 +19,9 @@ export const createBungleList = createAsyncThunk(
         },
       });
       console.log( response );
+      if( response.data.response ){
+        return response.data.postId;
+      }
     } catch (error) {
       console.log(error);
     }
@@ -28,6 +32,7 @@ export const createBungleList = createAsyncThunk(
 const BungleSlice = createSlice({
   name: "Bungle",
   initialState: {
+    postId: 0,
     list: [{}],
   },
   reducers: {
@@ -36,6 +41,11 @@ const BungleSlice = createSlice({
     // middlewares
     [createBungleList.fulfilled] : ( state, action ) => {
         console.log("create fullfill");
+        console.log( action.payload );
+        
+        state.postId = action.payload;
+        // navigate("/chat");
+        
     },
     [ createBungleList.rejected ] : ( state, action ) => {
         console.log("create reject");

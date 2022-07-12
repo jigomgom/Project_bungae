@@ -575,7 +575,7 @@ function CreatePost() {
     // const ReturnCategories = SeelectedCategories.join(",");
     // console.log(ReturnCategories);
     dispatch( createBungleList( formData ) );
-    navigate("/main")
+    navigate("/chat");
   };
 
   return (
