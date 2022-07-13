@@ -97,15 +97,15 @@ function Main() {
   useEffect(()=>{
     if (isLoad) {
       navigator.geolocation.getCurrentPosition( handleSuccess, handleError, options);
-      setTimeout(()=>{ setIsLoad( false )}, 200 );
+      setTimeout(()=>{ setIsLoad( false )}, 250 );
     }
   },[]);
 
   useEffect(()=>{
-    if (!isLoad) {
+    if (location) {
       dispatch(getMainBungleList(location));
     }
-  },[isLoad]);
+  },[location]);
 
   // 실시간 벙글 하트 state
   const [isRealTimeHeart, setIsRealTimeHeart] = useState([
@@ -191,7 +191,8 @@ function Main() {
   };
   
   return (
-    <MainWrap>
+    <>
+    { !isLoad && <MainWrap>
       <Tag />
       <Search location={location}/>
       <Category location={location} />
@@ -268,7 +269,8 @@ function Main() {
         </MainContentItemWrap>
         <MainContentButton onClick={ () => { MoreBtnClickHandler( "endTime") }}>더보기</MainContentButton>
       </MainContentWrap>
-    </MainWrap>
+    </MainWrap>}
+    </>
   );
 }
 
