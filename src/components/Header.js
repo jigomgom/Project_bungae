@@ -69,13 +69,13 @@ function Header() {
   }
   // 태그 검색, 카테고리 검색 결과 헤더
   else if (
-    window.location.pathname === "/tagsearch" ||
-    window.location.pathname === "/categorysearch"
+    window.location.pathname === "/tagsearch"
+    // window.location.pathname === "/categorysearch"
   ) {
     return (
       <HeaderWrap>
-        <Logo src={IconMainLogo} />
-        <BackKey src={IconBackKey} />
+        <Logo style={{ visibility:"hidden"}} src={IconMainLogo} />
+        <BackKey src={IconBackKey} onClick={()=>{ navigate("/main")}}/>
         <PageTitle style={{ visibility: "hidden" }}></PageTitle>
 
         <HeadrIconsWrap>
@@ -87,26 +87,26 @@ function Header() {
     );
   }
   // 게시글 헤더
-  else if (window.location.pathname === "/detailpost") {
-    return (
-      <HeaderWrap>
-        <Logo style={{ visibility: "hidden" }} src={IconMainLogo} />
-        <BackKey
-          src={IconBackKey}
-          onClick={() => {
-            navigate("/main");
-          }}
-        />
-        <PageTitle></PageTitle>
+  // else if (window.location.pathname === "/detailpost") {
+  //   return (
+  //     <HeaderWrap>
+  //       <Logo style={{ visibility: "hidden" }} src={IconMainLogo} />
+  //       <BackKey
+  //         src={IconBackKey}
+  //         onClick={() => {
+  //           navigate("/main");
+  //         }}
+  //       />
+  //       <PageTitle></PageTitle>
 
-        <HeadrIconsWrap>
-          <IconMyLocation style={{ visibility: "hidden" }} src={IconMyPoint} />
-          <IconNotification src={Notification} />
-          <IconSetting src={Setting} />
-        </HeadrIconsWrap>
-      </HeaderWrap>
-    );
-  }
+  //       <HeadrIconsWrap>
+  //         <IconMyLocation style={{ visibility: "hidden" }} src={IconMyPoint} />
+  //         <IconNotification src={Notification} />
+  //         <IconSetting src={Setting} />
+  //       </HeadrIconsWrap>
+  //     </HeaderWrap>
+  //   );
+  // }
   // 번개 생성
   else if (window.location.pathname === "/createpost") {
     return (

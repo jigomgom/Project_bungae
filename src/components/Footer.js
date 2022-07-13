@@ -1,5 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 // css
 import {
   FooterWrap,
@@ -14,10 +16,12 @@ import IconLocation from "../assets/icon-location.svg";
 import IconChat from "../assets/icon-chat.svg";
 import IconMyBungae from "../assets/icon-account.svg";
 import IconCreate from "../assets/icon-create-post.svg";
+import IconEdit from "../assets/icon-edit-footer.svg";
 
 const Footer = () => {
   // navigate
   const navigate = useNavigate();
+  const ownerCheck = useSelector( state => state.Bungle.isOwner );
   // root path, siginup 일 때 렌더링 안되도록 방지
   if (
     window.location.pathname === "/" ||
@@ -40,7 +44,7 @@ const Footer = () => {
         <FooterIconImg src={IconLocation} />
         <FooterIconText>벙글지도</FooterIconText>
       </FooterIconWrap>
-      <FooterAddBungae src={IconCreate} onClick={()=>{navigate("/createpost")}} />
+      { ownerCheck ? <FooterAddBungae src={ IconEdit } onClick={()=>{navigate("/createpost")}} /> : <FooterAddBungae src={ IconCreate } onClick={()=>{navigate("/createpost")}} /> }
       <FooterIconWrap>
         <FooterIconImg src={IconChat} />
         <FooterIconText>채팅</FooterIconText>
@@ -50,8 +54,10 @@ const Footer = () => {
           navigate("/mypage");
         }}
       >
+        <div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center"}} onClick={()=>{navigate("/mypage")}}>
         <FooterIconImg src={IconMyBungae} />
         <FooterIconText>나의 벙글</FooterIconText>
+        </div>
       </FooterIconWrap>
     </FooterWrap>
   );

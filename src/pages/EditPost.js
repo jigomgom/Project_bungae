@@ -94,7 +94,7 @@ const CategoriesArray = [
   "게임",
 ];
 
-function CreatePost() {
+function EditPost() {
   // dispatch
   const dispatch = useDispatch();
   // navigate
@@ -906,4 +906,4 @@ function CreatePost() {
   );
 }
 
-export default CreatePost;
+export default EditPost;
