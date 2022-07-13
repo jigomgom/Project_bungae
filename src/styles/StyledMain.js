@@ -55,6 +55,7 @@ export const MainContentItemImg = styled.img`
     height: 168px;
     border-radius: 10px;
     background: #D9D9D9;
+    object-fit: cover;
     cursor: pointer;
 `;
 
@@ -80,6 +81,11 @@ export const MainContentItemTitle = styled.span`
     font-size: 16px;
     line-height: 23px;
     cursor: pointer;
+
+    /* 한줄 말줄임 속성 */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 `;
 
 export const MainContentItemLike = styled.img`
@@ -109,9 +115,11 @@ export const MainContentButton = styled.div`
     font-weight: 400;
     font-size: 16px;
     line-height: 23px;
-    background: #D9D9D9;
+    background-color: white;
     border-radius: 10px;
+    border: 1px solid #434343;
 
     margin-left: 20px;
     margin-top: 25px;
+    cursor: pointer;
 `;

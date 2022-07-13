@@ -31,12 +31,12 @@ function App() {
         <Route path="/main" element={<Main />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/tagsearch" element={<TagSearch />} />
-        <Route path="/categorysearch" element={<CategorySearch />} />
+        <Route path="/categorysearch/:category" element={<CategorySearch />} />
         {/* MyPage */}
         <Route path="/mypage" element={<MyPage />} />
 
         <Route path="/chatlist" element={<ChatList />} />
-        <Route path="/detailpost" element={<DetailPost />} />
+        <Route path="/detailpost/:postId" element={<DetailPost />} />
         <Route path="/createpost" element={<CreatePost />} />
         <Route path="/profilesetting" element={<ProfileSetting />} />
         <Route path="/mylikebung" element={<MyLikeBung />} />
