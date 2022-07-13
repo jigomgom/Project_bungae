@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../styles/SignUp.css";
 import axios from "axios";
 
@@ -31,7 +31,7 @@ import {
 import IconInputClear from "../assets/icon-input-xbtn.svg";
 
 const Signup = () => {
-  const SERVER_URL = "http://52.79.214.48";
+  const SERVER_URL = "http://3.37.61.25";
   //비밀번호 유효성 검사
   const checkPassword = (e) => {
     //  8 ~ 30자 영문, 숫자 조합, 문자 조합
@@ -56,12 +56,12 @@ const Signup = () => {
     if (!emailRegEx.test(e.target.value)) {
       setEmailMessage("*메일 형식이 올바르지 않습니다.");
       setIsEmail(false);
+      
     } else {
       setEmailMessage("*메일 형식이 올바릅니다.");
       setIsEmail(true);
     }
   };
-
   const navigate = useNavigate();
 
   const id_ref = useRef(null);
@@ -187,10 +187,19 @@ const Signup = () => {
     }
   };
 
+  const Interval = useRef(null);
   // onKeyUp
 
-  const onKeyUp = () => {};
-
+  const onKeyUp = (event) => {
+    if (isEmail) {
+      Interval.current = setInterval(() => {
+        
+      }, 2000);
+    } else {
+      
+      clearInterval(Interval.current);
+    }
+  };
   return (
     <SignUpWrapper>
       <SiginUpEmailWrapper>

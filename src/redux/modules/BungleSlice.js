@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// const SERVER_URL = "http://3.37.61.25";
-const SERVER_URL = "http://52.79.214.48";
+const SERVER_URL = "http://3.37.61.25";
+// const SERVER_URL = "http://52.79.214.48";
 const token = localStorage.getItem("login-token");
 
 // 벙글 생성하기
@@ -45,18 +45,44 @@ export const getMyBungleList = createAsyncThunk(
 );
 // 벙글 수정하기
 export const editMyBungleList = createAsyncThunk(
-  "EDIT/editMyBungleList",
-  async () => {}
+  "EDIT/editMyBungleList"
+  // async( formData ) => {
+  //   try {
+  //     const response = await axios.put(`${SERVER_URL}/posts/${postID}`, formData, {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //         Authorization: token,
+  //       },
+  //     });
+  //     console.log( response );
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }
 );
 
 // 벙글 삭제하기
-
+export const deleteMyBungleList = createAsyncThunk(
+  "DELETE/deleteMyBungleList"
+  // async () => {
+  //   try {
+  //     //axios.delete(URL, {params: payload}, header);
+  //     const response = await axios.delete(`${SERVER_URL}/posts/${postID}`, {
+  //       headers: {
+  //         Authorization: token,
+  //       },
+  //     });
+  //     console.log(response);
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }
+);
 // main 게시글 전체 조회
-
 export const getMainBungleList = createAsyncThunk(
   "GET/getMainBungleList",
   async (position) => {
-    // console.log( position );
+    console.log(position);
     try {
       const response = await axios.get(`${SERVER_URL}/posts`, {
         headers: {
@@ -316,6 +342,7 @@ const BungleSlice = createSlice({
     [getMainBungleList.fulfilled]: (state, action) => {
       console.log("Main get");
       // console.log( action.payload );
+      // console.log(action.payload.isOwner );
       state.isOwner = action.payload.isOwner;
       state.endTime = action.payload.postListEndTime;
       state.realTime = action.payload.postListRealTime;

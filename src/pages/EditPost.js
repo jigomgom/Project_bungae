@@ -2,10 +2,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import Divider from "../components/Divider";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
 // import redux slice
-import { createBungleList } from "../redux/modules/BungleSlice";
+import { getMyBungleList } from "../redux/modules/BungleSlice";
 
 // slider 추가
 import Slider from "rc-slider";
@@ -71,15 +72,14 @@ import {
   PostPeopleCountTitle,
   // 게시글 작성 버튼
   PostCreateButton,
-} from "../styles/StyledCreatePost";
-//icon
+} from "../styles/StyledEditPost";
+import { HeaderWrap,Logo, BackKey, PageTitle, HeadrIconsWrap, IconMyLocation, IconNotification, IconSetting } from "../styles/StyledHeader";
 
+//icon
 import IconClear from "../assets/icon-clear.svg";
 import IconUpload from "../assets/icon-upload.svg";
-import IconChatLetter from "../assets/icon-chat-gray.svg";
-import IconChatVideo from "../assets/icon-chat-video.svg";
 import IconMylocation from "../assets/icon-mylocation-gray.svg";
-import IconAddressClose from "../assets/icon-input-xbtn.svg";
+import IconBackKey from "../assets/icon-left-arrow.svg";
 
 const CategoriesArray = [
   "맛집",
@@ -95,10 +95,88 @@ const CategoriesArray = [
 ];
 
 function EditPost() {
+  
   // dispatch
   const dispatch = useDispatch();
   // navigate
   const navigate = useNavigate();
+  // 게시물 수정 dispatch 시작
+  // isLoad 
+  const [ isLoad, setIsLoad ] = useState( true );
+  // 나의 벙글 가져오기
+  const myBungle = useSelector( state => state.Bungle.myBungleList);
+  // console.log( myBungle );
+  // load
+  useEffect(()=>{
+    if( isLoad ){
+      dispatch( getMyBungleList() );
+      setTimeout(()=>{ setIsLoad( false )}, 200 );
+    }
+  },[])
+  //초기 세팅
+  let CategoriesObjArray = [
+    { category: "맛집", clicked: false },
+    { category: "카페", clicked: false },
+    { category: "노래방", clicked: false },
+    { category: "운동", clicked: false },
+    { category: "친목", clicked: false },
+    { category: "전시", clicked: false },
+    { category: "여행", clicked: false },
+    { category: "쇼핑", clicked: false },
+    { category: "스터디", clicked: false },
+    { category: "게임", clicked: false },
+  ];
+  const [ checkedCategory, setCheckedCategory ] = useState([{}]);
+
+  useEffect(()=>{
+    if( isLoad ){
+      setTagList( myBungle.tags );
+
+      myBungle.categories.forEach( Checkeditem => {
+        CategoriesObjArray.map( item => {
+          if( item.category === Checkeditem ){
+            item.clicked = true;
+            return item;
+          }else{
+            return item;
+          }
+        })
+      }); 
+      setCheckedCategory( CategoriesObjArray );
+
+      const receivedTime = myBungle.time.split(" ");
+
+      const today = new Date();
+
+      const year = today.getFullYear();
+      const month = ("0" + (today.getMonth() + 1)).slice(-2);
+      let day = ("0" + today.getDate()).slice(-2);
+
+      const dateString = year + "-" + month + "-" + day;
+
+      if( dateString === receivedTime[0] ){
+        setIsToday( true );
+        setIsTommorow( false );
+      }else{
+        setIsToday( false );
+        setIsTommorow( true );
+      }
+      const times = receivedTime[1].split(":");
+      setHour( times[0] );
+      setMinute( times[1] );
+      setIsAddress( myBungle.place );
+      setOnlyNumber( myBungle.personnel );
+
+      if( myBungle.isLetter ){
+        setIsLetter( true );
+        setIsVideo( false );
+      }else{
+        setIsLetter( false );
+        setIsVideo( true );
+      }
+    };
+  },[isLoad])
+
   // 카테고리 클릭 판별용 state
   const [isCategoryClick, setIsCategoryClick] = useState([
     false,
@@ -175,6 +253,8 @@ function EditPost() {
     timeout: 5000,
     maximumAge: 0
   };
+
+  
 
   // 첫번째 사진 clear 버튼
   const firstFileClearOnClickHandler = () => {
@@ -301,16 +381,26 @@ function EditPost() {
   };
 
   // 카테고리 중복 선택 가능 함수
-  const CategoryClickHandler = (index) => {
-    setIsCategoryClick(
-      isCategoryClick.map((item, Checkedindex) => {
-        if (Checkedindex === index) {
-          return (item = !item);
-        } else {
-          return item;
-        }
-      })
-    );
+  const CategoryClickHandler = ( selectCategory ) => {
+    console.log( selectCategory );
+    setCheckedCategory( checkedCategory.map( ( item ) => {
+      if( item.category === selectCategory ){
+        item.clicked = !item.clicked;
+        return item;
+      }else{
+        return item;
+      }
+    }));
+    // setCheckedCategory()
+    // setIsCategoryClick(
+      // isCategoryClick.map((item, Checkedindex) => {
+      //   if (Checkedindex === index) {
+      //     return (item = !item);
+      //   } else {
+      //     return item;
+      //   }
+      // })
+    // );
   };
   // 엔터키 태그 입력
   const onKeyPress = e => {
@@ -492,7 +582,7 @@ function EditPost() {
       let callback = function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
           const arr = { ...result };
-          console.log(arr[0]);
+          // console.log(arr[0]);
           const _arr = arr[0].address.address_name;
           const _arrLoad = arr[0].address.road_address;
           setCurrentRoadAddress(_arrLoad);
@@ -511,12 +601,16 @@ function EditPost() {
   const currentHour = useRef();
   const currentMinute = useRef();
 
-  const CreateBunggleOnClickHandler = () => {
-    const SeelectedCategories = CategoriesArray.filter((item, index) => {
-      if (isCategoryClick[index]) {
-        return item;
+  const editBungleOnClickHandler = () => {
+  const SelectedCategories = checkedCategory.filter((item) => {
+      if (item.clicked) {
+        return item.category;
       }
     });
+    const extractCategory = SelectedCategories.map( item => {
+      return item.category;
+    })
+    const sendCategory = extractCategory.join(",");
     const title = Title_ref.current.value;
     const content = Content_ref.current.value;
     const hour = ("0" + currentHour.current.value).slice(-2);
@@ -540,10 +634,11 @@ function EditPost() {
         time: dates + ` ${hour}:${minute}:00`, //yyyy-MM-dd HH:mm:ss
         personnel: Number(onlyNumber),
         place: address,
-        tags: tagList,
-        categories: SeelectedCategories,
+        tags: tagList.join(","),
+        categories: sendCategory,
         isLetter: true,
       };
+
       const appendFile = isFile.filter((item) => {
         if (item !== "") {
           return item;
@@ -575,334 +670,384 @@ function EditPost() {
 
       // const ReturnCategories = SeelectedCategories.join(",");
       // console.log(ReturnCategories);
-      dispatch(createBungleList(formData));
-      navigate("/chat");
+      // dispatch(createBungleList(formData));
+      // navigate("/chat");
     }
   };
+  // 벙글 삭제
+  const deleteBunggleOnClickHandler = () => {
+
+  }
 
   return (
-    <CreatePostWrap>
-      {/* Title 부분 */}
-      <PostTilteDiv>
-        <PostTitle
-          type="search"
-          placeholder="번개 이름을 입력해주세요!."
-          maxLength={36}
-          ref={Title_ref}
+    <>
+      <HeaderWrap>
+        <Logo style={{ visibility: "hidden" }} />
+        <BackKey
+          src={IconBackKey}
+          onClick={() => {
+            navigate("/main");
+          }}
         />
-        {/* <DeleteButton src={IconClear} onClick={clearBtnOnClickHandler} /> */}
-      </PostTilteDiv>
-      {/* Body 저렇게 안 닫아주면 placeholder 안생김*/}
-      <PostBody type="text" ref={Content_ref} placeholder="번개 소개글을 작성해주세요."></PostBody>
-      <Divider />
-      <PostUploadPictureWrap>
-        <UploadTitle>사진</UploadTitle>
-        <FileUploadWrap>
-          <UploadPictureWrap>
-            <FileInputLabel htmlFor="file-input-1">
-              <FileInputImg src={isFirstFile ? isFirstFile : IconUpload} />
-              {isFirstFileClear && (
-                <FileClearIcon
-                  src={IconClear}
-                  onClick={firstFileClearOnClickHandler}
+        <PageTitle>벙글수정</PageTitle>
+        <HeadrIconsWrap>
+          <IconMyLocation style={{ visibility: "hidden" }} />
+
+          <IconSetting style={{ visibility: "hidden" }} />
+          <div
+            style={{ fontWeight: "400", fontSize: "14px", lineHeight: "20px" }}
+            onClick={editBungleOnClickHandler}
+          >
+            완료
+          </div>
+        </HeadrIconsWrap>
+      </HeaderWrap>
+      <CreatePostWrap>
+        {/* Title 부분 */}
+        <PostTilteDiv>
+          <PostTitle
+            type="search"
+            placeholder="번개 이름을 입력해주세요!."
+            maxLength={36}
+            defaultValue={myBungle.title ? myBungle.title : ""}
+            ref={Title_ref}
+          />
+          {/* <DeleteButton src={IconClear} onClick={clearBtnOnClickHandler} /> */}
+        </PostTilteDiv>
+        {/* Body 저렇게 안 닫아주면 placeholder 안생김*/}
+        <PostBody
+          type="text"
+          defaultValue={myBungle.content ? myBungle.content : ""}
+          ref={Content_ref}
+          placeholder="번개 소개글을 작성해주세요."
+        ></PostBody>
+        <Divider />
+        <PostUploadPictureWrap>
+          <UploadTitle>사진</UploadTitle>
+          <FileUploadWrap>
+            <UploadPictureWrap>
+              <FileInputLabel htmlFor="file-input-1">
+                <FileInputImg
+                  src={myBungle.postUrls[0] ? myBungle.postUrls[0] : IconUpload}
                 />
-              )}
-            </FileInputLabel>
-            <FileInput
-              id="file-input-1"
-              type="file"
-              accept="image/*"
-              onChange={onFistFileChange}
-              disabled={isFirstFileClear ? true : false}
-            />
-          </UploadPictureWrap>
-          <UploadPictureWrap>
-            <FileInputLabel htmlFor="file-input-2">
-              <FileInputImg src={isSecondFile ? isSecondFile : IconUpload} />
-              {isSecondFileClear && (
-                <FileClearIcon
-                  src={IconClear}
-                  onClick={secondFileClearOnClickHandler}
+                {myBungle.postUrls[0] && (
+                  <FileClearIcon
+                    src={IconClear}
+                    onClick={firstFileClearOnClickHandler}
+                  />
+                )}
+              </FileInputLabel>
+              <FileInput
+                id="file-input-1"
+                type="file"
+                accept="image/*"
+                onChange={onFistFileChange}
+                disabled={isFirstFileClear ? true : false}
+              />
+            </UploadPictureWrap>
+            <UploadPictureWrap>
+              <FileInputLabel htmlFor="file-input-2">
+                <FileInputImg
+                  src={myBungle.postUrls[1] ? myBungle.postUrls[1] : IconUpload}
                 />
-              )}
-            </FileInputLabel>
-            <FileInput
-              id="file-input-2"
-              type="file"
-              accept="image/*"
-              onChange={onSecondFileChange}
-            />
-          </UploadPictureWrap>
-          <UploadPictureWrap>
-            <FileInputLabel htmlFor="file-input-3">
-              <FileInputImg src={isThirdFile ? isThirdFile : IconUpload} />
-              {isThirdFileClear && (
-                <FileClearIcon
-                  src={IconClear}
-                  onClick={thirdFileClearOnClickHandler}
+                {myBungle.postUrls[1] && (
+                  <FileClearIcon
+                    src={IconClear}
+                    onClick={secondFileClearOnClickHandler}
+                  />
+                )}
+              </FileInputLabel>
+              <FileInput
+                id="file-input-2"
+                type="file"
+                accept="image/*"
+                onChange={onSecondFileChange}
+              />
+            </UploadPictureWrap>
+            <UploadPictureWrap>
+              <FileInputLabel htmlFor="file-input-3">
+                <FileInputImg
+                  src={myBungle.postUrls[2] ? myBungle.postUrls[2] : IconUpload}
                 />
-              )}
-            </FileInputLabel>
-            <FileInput
-              id="file-input-3"
-              type="file"
-              accept="image/*"
-              onChange={onThirdFileChange}
-            />
-          </UploadPictureWrap>
-        </FileUploadWrap>
-      </PostUploadPictureWrap>
-      <DividerStyle />
-      {/* 카테고리 설정 */}
-      <PostCategoriesWrap>
-        <UploadTitle>카테고리 설정</UploadTitle>
-        <PostCategoriesItemWrap>
-          {CategoriesArray.map((item, index) => {
-            return (
-              <PostCategoriesItem
-                isChecked={isCategoryClick[index]}
+                {myBungle.postUrls[2] && (
+                  <FileClearIcon
+                    src={IconClear}
+                    onClick={thirdFileClearOnClickHandler}
+                  />
+                )}
+              </FileInputLabel>
+              <FileInput
+                id="file-input-3"
+                type="file"
+                accept="image/*"
+                onChange={onThirdFileChange}
+              />
+            </UploadPictureWrap>
+          </FileUploadWrap>
+        </PostUploadPictureWrap>
+        <DividerStyle />
+        {/* 카테고리 설정 */}
+        <PostCategoriesWrap>
+          <UploadTitle>카테고리 설정</UploadTitle>
+          <PostCategoriesItemWrap>
+            { checkedCategory.map( ( item, index ) => {
+              // console.log( item )
+              // console.log( item.clicked[index] );
+              return (<PostCategoriesItem
+                isChecked={item.clicked}
                 key={index}
                 onClick={() => {
-                  CategoryClickHandler(index);
+                  CategoryClickHandler(item.category);
+                }}
+              >{item.category}</PostCategoriesItem>)
+            })}
+          </PostCategoriesItemWrap>
+        </PostCategoriesWrap>
+        <DividerStyle />
+
+        {/* 태그 설정 */}
+        <HashTagWrap>
+          <UploadTitle>태그 입력</UploadTitle>
+          <HashTagInput
+            type="text"
+            placeholder="#태그입력 (최대 3개)"
+            readOnly={ tagList.length === 3 ? true : isReadOnly}
+            onKeyPress={onKeyPress}
+            onInput={onInput}
+            onChange={(e) => setTagItem(e.target.value.replace(/ /g, ""))}
+          />
+          <HashTagItemWrap>
+            {tagList.map((tagItem, index) => {
+              return (
+                <HashTagItem
+                  onClick={() => removeHashTagItemHandler(tagItem)}
+                  key={index}
+                >
+                  #{tagItem}
+                </HashTagItem>
+              );
+            })}
+          </HashTagItemWrap>
+        </HashTagWrap>
+        <DividerStyle />
+        {/* 시간 설정 */}
+        <SetTimeWapper>
+          <UploadTitle>시간 설정</UploadTitle>
+          <TimeItemWapper>
+            <TimeSelectToday
+              isToday={isToday}
+              onClick={() => {
+                selectTodayOrTommorowClickHanlder("today");
+              }}
+            >
+              <span
+                className="material-icons"
+                style={{
+                  fontWeight: "bold",
+                  marginRight: "5px",
+                  fontSize: "20px",
                 }}
               >
-                {item}
-              </PostCategoriesItem>
-            );
-          })}
-        </PostCategoriesItemWrap>
-      </PostCategoriesWrap>
-      <DividerStyle />
-
-      {/* 태그 설정 */}
-      <HashTagWrap>
-        <UploadTitle>태그 입력</UploadTitle>
-        <HashTagInput
-          type="text"
-          placeholder="#태그입력 (최대 3개)"
-          readOnly={isReadOnly}
-          onKeyPress={onKeyPress}
-          onInput={onInput}
-          onChange={(e) => setTagItem(e.target.value.replace(/ /g, ""))}
-        />
-        <HashTagItemWrap>
-          {tagList.map((tagItem, index) => {
-            return (
-              <HashTagItem
-                onClick={() => removeHashTagItemHandler(tagItem)}
-                key={index}
-              >
-                #{tagItem}
-              </HashTagItem>
-            );
-          })}
-        </HashTagItemWrap>
-      </HashTagWrap>
-      <DividerStyle />
-      {/* 시간 설정 */}
-      <SetTimeWapper>
-        <UploadTitle>시간 설정</UploadTitle>
-        <TimeItemWapper>
-          <TimeSelectToday isToday={isToday} onClick={()=>{selectTodayOrTommorowClickHanlder("today")}}>
-            <span
-              className="material-icons"
-              style={{
-                fontWeight: "bold",
-                marginRight: "5px",
-                fontSize: "20px",
-              }}
-            >
-              check
-            </span>
-            오늘
-          </TimeSelectToday>
-          <TimeSelectTommrow isTommorow={isTommorow} onClick={()=>{selectTodayOrTommorowClickHanlder("tommorow")}}>
-            <span
-              className="material-icons"
-              style={{
-                fontWeight: "bold",
-                marginRight: "5px",
-                fontSize: "20px",
-              }}
-            >
-              check
-            </span>
-            내일
-          </TimeSelectTommrow>
-        </TimeItemWapper>
-        <TimeInputWrapper>
-          <TimeInputHour
-            ref={currentHour}
-            type="text"
-            maxLength={2}
-            value={hour || ""}
-            onChange={InputHourNumberChangeHandler}           
-          />
-          
-          <span
-            style={{
-              fontWeight: "400",
-              fontSize: "14px",
-              lineHeight: "20px",
-              marginLeft: "10px",
-              marginRight: "16px",
-            }}
-          >
-            시
-          </span>
-          <TimeInputMinute
-            ref={currentMinute}
-            type="text"
-            value={minute || ""}
-            max={59}
-            maxLength={2}
-            onChange={InputMinuteNumberChangeHandler}
-          />
-          <span
-            style={{
-              fontWeight: "400",
-              fontSize: "14px",
-              lineHeight: "20px",
-              marginLeft: "10px",
-            }}
-          >
-            분
-          </span>
-        </TimeInputWrapper>
-      </SetTimeWapper>
-      <DividerStyle />
-      {/* 주소 입력 */}
-      <SearchAddressWrap>
-        <UploadTitle>주소 입력</UploadTitle>
-        <SearchAddressItemWrap>
-          <SearchAddressInput
-            readOnly={true}
-            value={isAddress}
-            placeholder="기본 주소"
-          />
-          <SearhAddressBtn onClick={() => setVisible(!visible)}>
-            {visible ? "취소" : "주소찾기"}
-          </SearhAddressBtn>
-
-          {visible ? (
-            <div>
-              <DaumPostCode
-                onComplete={handleComplete}
-                style={addressStyle}
-                autoClose
-                height={700}
-              />
-            </div>
-          ) : null}
-        </SearchAddressItemWrap>
-        <SearchCurrentPositionItemWrap onClick={getCurrentLocationBtnClick}>
-          <SearchCurrentPositionIcon src={IconMylocation} />
-          <SearchCurrentPositionTitle>현위치로 설정</SearchCurrentPositionTitle>
-          <SearchCurrentPositionIconInput>
-            · {currentAddress ? currentAddress : currentRoadAddress}
-            {/* · 서울 서초구 서초대로 233 */}
-          </SearchCurrentPositionIconInput>
-        </SearchCurrentPositionItemWrap>
-      </SearchAddressWrap>
-      <DividerStyle />
-      {/* 채팅 설정 */}
-      <SelectChatWrap>
-        <SelectChatBox>
-          <UploadTitle>채팅 설정</UploadTitle>
-          <SelectChatBtnWrap>
-            <SelectChatLetterBtn
-              CheckedState={isLetter}
-              onClick={() => {
-                ChatButtonClickHandler("letter");
-              }}
-            >
-              {/* <SelectChatBtnImg src={IconChatLetter} /> */}
-              <span
-                style={{ marginRight: "7px", marginTop: "4px" }}
-                className="material-icons"
-              >
-                chat_bubble_outline
+                check
               </span>
-              일반채팅
-            </SelectChatLetterBtn>
-            <SelectChatVideoBtn
-              CheckedState={isVideo}
+              오늘
+            </TimeSelectToday>
+            <TimeSelectTommrow
+              isTommorow={isTommorow}
               onClick={() => {
-                // ChatButtonClickHandler("video");
+                selectTodayOrTommorowClickHanlder("tommorow");
               }}
             >
-              {/* <SelectChatBtnImg src={IconChatVideo} /> */}
               <span
                 className="material-icons"
-                style={{ marginRight: "7px", marginTop: "2px" }}
+                style={{
+                  fontWeight: "bold",
+                  marginRight: "5px",
+                  fontSize: "20px",
+                }}
               >
-                video_camera_front
+                check
               </span>
-              화상채팅
-            </SelectChatVideoBtn>
-          </SelectChatBtnWrap>
-        </SelectChatBox>
-      </SelectChatWrap>
-      <DividerStyle />
-      {/* 인원 수 설정 */}
-      <PostPeopleCount>
-        <PostPeopleCountTitleWrap>
-          <PostPeopleTitle>인원 수 설정</PostPeopleTitle>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <PostPeopleCountTitle
-              style={{ textAlign: "right", paddingRight: "5px" }}
+              내일
+            </TimeSelectTommrow>
+          </TimeItemWapper>
+          <TimeInputWrapper>
+            <TimeInputHour
+              ref={currentHour}
               type="text"
-              value={onlyNumber}
-              onChange={InputTextOnChangeNumberHandler}
               maxLength={2}
+              value={hour || ""}
+              onChange={InputHourNumberChangeHandler}
             />
-            명
-          </div>
-        </PostPeopleCountTitleWrap>
-        {/* rc slider   */}
-        <Slider
-          className="testName"
-          style={{ marginTop: "15px" }}
-          min={2}
-          max={isLetter ? 50 : 4}
-          value={onlyNumber}
-          trackStyle={{
-            backgroundColor: "#FFC634",
-            border: "1px solid #898989",
-            height: 9,
-          }}
-          inverted={false}
-          handleStyle={{
-            border: "3px solid #FFC634",
-            height: 14,
-            width: 14,
-            marginLeft: 0,
-            marginTop: -2.5,
-            backgroundColor: "white",
-            cursor: "pointer",
-            opacity: 1,
-            boxShadow: "none !imporatnt",
-          }}
-          handle={{ boxShadow: "none" }}
-          onChange={setOnlyNumber}
-          railStyle={{
-            backgroundColor: "white",
-            border: "1px solid #898989",
-            height: 9,
-          }}
-        />
-      </PostPeopleCount>
-      <DividerStyle />
-      <PostCreateButton onClick={CreateBunggleOnClickHandler}>
-        등록하기
-      </PostCreateButton>
-    </CreatePostWrap>
+
+            <span
+              style={{
+                fontWeight: "400",
+                fontSize: "14px",
+                lineHeight: "20px",
+                marginLeft: "10px",
+                marginRight: "16px",
+              }}
+            >
+              시
+            </span>
+            <TimeInputMinute
+              ref={currentMinute}
+              type="text"
+              value={minute || ""}
+              max={59}
+              maxLength={2}
+              onChange={InputMinuteNumberChangeHandler}
+            />
+            <span
+              style={{
+                fontWeight: "400",
+                fontSize: "14px",
+                lineHeight: "20px",
+                marginLeft: "10px",
+              }}
+            >
+              분
+            </span>
+          </TimeInputWrapper>
+        </SetTimeWapper>
+        <DividerStyle />
+        {/* 주소 입력 */}
+        <SearchAddressWrap>
+          <UploadTitle>주소 입력</UploadTitle>
+          <SearchAddressItemWrap>
+            <SearchAddressInput
+              type="text"
+              readOnly={true}
+              value={isAddress}
+              placeholder="기본 주소"
+            />
+            <SearhAddressBtn onClick={() => setVisible(!visible)}>
+              {visible ? "취소" : "주소찾기"}
+            </SearhAddressBtn>
+
+            {visible ? (
+              <div>
+                <DaumPostCode
+                  onComplete={handleComplete}
+                  style={addressStyle}
+                  autoClose
+                  height={700}
+                />
+              </div>
+            ) : null}
+          </SearchAddressItemWrap>
+          <SearchCurrentPositionItemWrap onClick={getCurrentLocationBtnClick}>
+            <SearchCurrentPositionIcon src={IconMylocation} />
+            <SearchCurrentPositionTitle>
+              현위치로 설정
+            </SearchCurrentPositionTitle>
+            <SearchCurrentPositionIconInput>
+              · {currentAddress ? currentAddress : currentRoadAddress}
+              {/* · 서울 서초구 서초대로 233 */}
+            </SearchCurrentPositionIconInput>
+          </SearchCurrentPositionItemWrap>
+        </SearchAddressWrap>
+        <DividerStyle />
+        {/* 채팅 설정 */}
+        <SelectChatWrap>
+          <SelectChatBox>
+            <UploadTitle>채팅 설정</UploadTitle>
+            <SelectChatBtnWrap>
+              <SelectChatLetterBtn
+                CheckedState={isLetter}
+                onClick={() => {
+                  ChatButtonClickHandler("letter");
+                }}
+              >
+                {/* <SelectChatBtnImg src={IconChatLetter} /> */}
+                <span
+                  style={{ marginRight: "7px", marginTop: "4px" }}
+                  className="material-icons"
+                >
+                  chat_bubble_outline
+                </span>
+                일반채팅
+              </SelectChatLetterBtn>
+              <SelectChatVideoBtn
+                CheckedState={isVideo}
+                onClick={() => {
+                  // ChatButtonClickHandler("video");
+                }}
+              >
+                {/* <SelectChatBtnImg src={IconChatVideo} /> */}
+                <span
+                  className="material-icons"
+                  style={{ marginRight: "7px", marginTop: "2px" }}
+                >
+                  video_camera_front
+                </span>
+                화상채팅
+              </SelectChatVideoBtn>
+            </SelectChatBtnWrap>
+          </SelectChatBox>
+        </SelectChatWrap>
+        <DividerStyle />
+        {/* 인원 수 설정 */}
+        <PostPeopleCount>
+          <PostPeopleCountTitleWrap>
+            <PostPeopleTitle>인원 수 설정</PostPeopleTitle>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <PostPeopleCountTitle
+                style={{ textAlign: "right", paddingRight: "5px" }}
+                type="text"
+                value={onlyNumber}
+                onChange={InputTextOnChangeNumberHandler}
+                maxLength={2}
+              />
+              명
+            </div>
+          </PostPeopleCountTitleWrap>
+          {/* rc slider   */}
+          <Slider
+            className="testName"
+            style={{ marginTop: "15px" }}
+            min={2}
+            max={isLetter ? 50 : 4}
+            value={onlyNumber}
+            trackStyle={{
+              backgroundColor: "#FFC634",
+              border: "1px solid #898989",
+              height: 9,
+            }}
+            inverted={false}
+            handleStyle={{
+              border: "3px solid #FFC634",
+              height: 14,
+              width: 14,
+              marginLeft: 0,
+              marginTop: -2.5,
+              backgroundColor: "white",
+              cursor: "pointer",
+              opacity: 1,
+              boxShadow: "none !imporatnt",
+            }}
+            handle={{ boxShadow: "none" }}
+            onChange={setOnlyNumber}
+            railStyle={{
+              backgroundColor: "white",
+              border: "1px solid #898989",
+              height: 9,
+            }}
+          />
+        </PostPeopleCount>
+        <DividerStyle />
+        <PostCreateButton onClick={deleteBunggleOnClickHandler}>
+          삭제하기
+        </PostCreateButton>
+      </CreatePostWrap>
+    </>
   );
 }
 

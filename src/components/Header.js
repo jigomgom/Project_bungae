@@ -25,8 +25,8 @@ function Header() {
   // root path, siginup, chat 일 때 렌더링 안되도록 방지
   if (
     window.location.pathname === "/" ||
-    window.location.pathname === "/profilesetting"
-    // window.location.pathname === "/mypage"
+    window.location.pathname === "/profilesetting" ||
+    window.location.pathname === "/editpost"
   ) {
     // console.log("???")
     return null;
@@ -188,38 +188,6 @@ function Header() {
       </HeaderWrap>
     );
   }
-  // else if (window.location.pathname === "/chat") {
-  //   return (
-  //     <HeaderWrap>
-  //       <Logo src={IconMainLogo} style={{ visibility: "hidden" }} />
-  //       <BackKey src={IconBackKey} />
-  //       <PageTitle style={{ visibility: "hidden" }}></PageTitle>
-  //       <HeadrIconsWrap>
-  //         <IconMyLocation style={{ visibility: "hidden" }} src={IconMyPoint} />
-  //         <IconNotification
-  //           src={Notification}
-  //           style={{ visibility: "hidden" }}
-  //         />
-  //         <IconSetting src={Setting} style={{ visibility: "hidden" }} />
-  //         <IconHamburger src={Hamburger} />
-  //       </HeadrIconsWrap>
-  //     </HeaderWrap>
-  //   );
-  // }
-
-  // return (
-  //   <HeaderWrap>
-  //     <Logo>Logo</Logo>
-  //     <BackKey src={IconBackKey} />
-  //     <PageTitle>Title</PageTitle>
-
-  //     <HeadrIconsWrap>
-  //       <IconMyLocation src={IconMyPoint} />
-  //       <IconNotification src={Notification} />
-  //       <IconSetting src={Setting} />
-  //     </HeadrIconsWrap>
-  //   </HeaderWrap>
-  // );
 }
 
 export default Header;

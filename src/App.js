@@ -13,6 +13,7 @@ import MyPage from "./pages/MyPage";
 
 import DetailPost from "./pages/DetailPost";
 import CreatePost from "./pages/CreatePost";
+import EditPost from "./pages/EditPost";
 
 import ProfileSetting from "./pages/ProfileSetting";
 import MyLikeBung from "./pages/MyLikeBung";
@@ -38,6 +39,7 @@ function App() {
         <Route path="/chatlist" element={<ChatList />} />
         <Route path="/detailpost/:postId" element={<DetailPost />} />
         <Route path="/createpost" element={<CreatePost />} />
+        <Route path="/editpost" element={<EditPost/>} />
         <Route path="/profilesetting" element={<ProfileSetting />} />
         <Route path="/mylikebung" element={<MyLikeBung />} />
         <Route path="/chat/:postId" element={<ChattingRoom />} />
