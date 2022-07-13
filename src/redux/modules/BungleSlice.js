@@ -3,7 +3,6 @@ import axios from "axios";
 
 // const SERVER_URL = "http://3.37.61.25";
 const SERVER_URL = "http://52.79.214.48";
-
 const token = localStorage.getItem("login-token");
 
 // 벙글 생성하기
@@ -28,12 +27,36 @@ export const createBungleList = createAsyncThunk(
     }
   }
 );
+// 벙글 수정페이지 이동 시 데이터 전달받기
+export const getMyBungleList = createAsyncThunk(
+  "GET/getMyBungleList",
+  async () => {
+    try {
+      const response = await axios.get(`${SERVER_URL}/posts/mypost`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+// 벙글 수정하기
+export const editMyBungleList = createAsyncThunk(
+  "EDIT/editMyBungleList",
+  async () => {}
+);
+
+// 벙글 삭제하기
+
 // main 게시글 전체 조회
 
 export const getMainBungleList = createAsyncThunk(
   "GET/getMainBungleList",
   async (position) => {
-    console.log(position);
+    // console.log( position );
     try {
       const response = await axios.get(`${SERVER_URL}/posts`, {
         headers: {
@@ -245,6 +268,20 @@ const BungleSlice = createSlice({
   name: "Bungle",
   initialState: {
     isOwner: false,
+    myBungleList: {
+      title: "막걸리 한잔 하실 분",
+      content: "비도 오는데 막걸리에 파전 어떠세요?",
+      categories: ["맛집", "친목"],
+      tags: ["비", "막걸리", "파전"],
+      time: "2022-07-13 19:00:00",
+      place: "수원시 영통구 매영대로 31",
+      postUrls: [
+        "https://meeting-project.s3.ap-northeast-2.amazonaws.com/0c7f4d22-8a40-423d-ba5b-341c6635dae9.jpg",
+        "https://meeting-project.s3.ap-northeast-2.amazonaws.com/3c6926fc-5bc6-471d-93ce-1e0e4f22e092.jpg",
+      ],
+      personnel: 5,
+      isLetter: true,
+    },
     // 유저 프로필
     userProfile: {},
     // 게시물 생성 하자마자 채팅룸 아이디 전달
@@ -266,7 +303,6 @@ const BungleSlice = createSlice({
   reducers: {},
   extraReducers: {
     // middlewares
-
     // 벙글 생성, post ID 전달
     [createBungleList.fulfilled]: (state, action) => {
       console.log("create fullfill");
@@ -323,7 +359,6 @@ const BungleSlice = createSlice({
       state.endTime = endTimeUpdate;
 
       // more or Tag search Update
-
       const moreTempUpdate = current(state.moreList).map((item) => {
         // console.log( item )
         if (item.id === action.payload) {

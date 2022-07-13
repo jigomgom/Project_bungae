@@ -383,6 +383,7 @@ input[type="checkbox" i]{
     font-size: 12px;
     line-height: 17px;
     margin: 20px;
+    height: 550px;
     max-height: 550px;
     overflow: auto;
 }
@@ -489,7 +490,7 @@ input[type="checkbox" i]{
     /* display: flex;
     flex-direction: column;
     justify-content: center; */
-    top: 340px;
+    top: 275px;
     margin: 0 auto;
 }
 .modal-content-wrap{
@@ -558,7 +559,7 @@ input[type="checkbox" i]{
     /* display: flex;
     flex-direction: column;
     justify-content: center; */
-    top: 670px;
+    top: 610px;
     margin: 0 auto;
 }
 .modal-content-wrap-btn{

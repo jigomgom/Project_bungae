@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { over } from "stompjs";
 import SockJS from "sockjs-client";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useSelector } from "react-redux";
 import "swiper/css";
@@ -26,6 +26,7 @@ import {
 import {
   PostMemberCard,
   PostMemberPicture,
+  PostMemberVideo,
   PostMemberName,
 } from "../styles/StyledDetailPost";
 //CSS
@@ -47,12 +48,13 @@ import Setting from "../assets/icon-setting.svg";
 let client = null;
 
 function ChattingRoom() {
-  const Bungle = useSelector((state) => state.Bungle.postId);
-  if (Bungle) {
-    console.log("PostID ", Bungle);
-  }
+  // const Bungle = useSelector((state) => state.Bungle.postId);
+  // if (Bungle) {
+  //   console.log("PostID ", Bungle);
+  // }
   const token = localStorage.getItem("login-token");
-  const postId = Bungle;
+  const { postId } = useParams();
+  // const postId = Bungle;
   // const postId = 6;
   console.log("Chattest ", postId);
   // const token =
@@ -221,13 +223,6 @@ function ChattingRoom() {
     chatImg();
   }, [isFile]);
 
-  //햄버거 메뉴 토글
-  // const [menuOpen, setMenuOpen] = useState(false);
-  // const handlers = useSwipeable({
-  //   trackMouse: true,
-  //   onSwipedRight: () => setMenuOpen(true),
-  // });
-
   //채팅 상세 Modal Files Array
   const FilesArray = [
     "Lorem ipsum1",
@@ -238,19 +233,7 @@ function ChattingRoom() {
   ];
 
   //채팅 상세 Modal Members Array
-  const MembersArray = [
-    "Lorem ipsum1",
-    "Lorem ipsum2",
-    "Lorem ipsum3",
-    "Lorem ipsum4",
-    "Lorem ipsum5",
-    "Lorem ipsum6",
-    "Lorem ipsum7",
-    "Lorem ipsum8",
-    "Lorem ipsum9",
-    "Lorem ipsum10",
-    "Lorem ipsum11",
-  ];
+  const MembersArray = [];
 
   //채팅 상세 Modal Report Array
   const ReportArray = [
@@ -264,6 +247,9 @@ function ChattingRoom() {
   ];
 
   //토클 클릭시 회원 정보, 사진/동영상 정보 불러오기
+  const [chatPeople, setChatPeople] = useState([]);
+  const [chatFiles, setChatFiles] = useState([]);
+
   const chatPerson = () => {
     axios({
       method: "get",
@@ -273,8 +259,9 @@ function ChattingRoom() {
       },
     })
       .then((response) => {
-        console.log(response.data.userId);
-        // setUserId(response.data.userId);
+        console.log(response.data);
+        setChatPeople(() => response.data);
+        MembersArray.push(chatPeople);
       })
       .catch((error) => {
         console.log(error);
@@ -291,12 +278,15 @@ function ChattingRoom() {
       },
     })
       .then((response) => {
-        console.log(response);
+        console.log(response.data);
+        setChatFiles(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+  console.log("사람 : ", chatPeople);
+  console.log("파일 : ", chatFiles);
 
   // Modal state
 
@@ -338,14 +328,18 @@ function ChattingRoom() {
 
   //신고하기
   const [report, setReport] = useState("");
+  const [reportUserId, setReportUserId] = useState();
   console.log(report);
   const chatReportPerson = () => {
     setUserId();
     axios({
-      method: "get",
-      url: `http://52.79.214.48/user/report/${userId}`,
+      method: "post",
+      url: `http://52.79.214.48/user/report/${reportUserId}`,
       headers: {
         Authorization: token,
+      },
+      data: {
+        history: report,
       },
     })
       .then((response) => {
@@ -355,6 +349,13 @@ function ChattingRoom() {
         console.log(error);
       });
   };
+  //userId 가져오는 함수
+  function getInnerHTML(id) {
+    const element = document.getElementById("userId");
+    setReportUserId(id);
+    console.log(id);
+  }
+  console.log("유저 Id: ", reportUserId);
 
   return (
     <>
@@ -404,11 +405,32 @@ function ChattingRoom() {
                         spaceBetween={10}
                         slidesPerView={3}
                       >
-                        {FilesArray.map((item, index) => {
+                        {chatFiles.map((item, index) => {
                           return (
                             <SwiperSlide key={index}>
                               <PostMemberCard>
-                                <PostMemberPicture />
+                                {item.fileUrl.slice(-3) === "jpg" ||
+                                item.fileUrl.slice(-3) === "png" ||
+                                item.fileUrl.slice(-4) === "jpeg" ||
+                                item.fileUrl.slice(-3) === "gif" ||
+                                item.fileUrl.slice(-3) === "bmp" ||
+                                item.fileUrl.slice(-3) === "img" ||
+                                item.fileUrl.slice(-3) === "JPG" ||
+                                item.fileUrl.slice(-3) === "PNG" ||
+                                item.fileUrl.slice(-4) === "JPEG" ||
+                                item.fileUrl.slice(-3) === "GIF" ||
+                                item.fileUrl.slice(-3) === "BMP" ||
+                                item.fileUrl.slice(-3) === "IMG" ? (
+                                  <>
+                                    <PostMemberPicture src={item.fileUrl} />
+                                  </>
+                                ) : (
+                                  <>
+                                    <PostMemberVideo>
+                                      <source src={item.fileUrl} />
+                                    </PostMemberVideo>
+                                  </>
+                                )}
                               </PostMemberCard>
                             </SwiperSlide>
                           );
@@ -418,18 +440,23 @@ function ChattingRoom() {
                     <div className="modal-divider"></div>
                     <div className="modal-member-list">
                       <p>번개 멤버</p>
-                      {MembersArray.map((item, index) => {
+                      {chatPeople.map((item, index) => {
                         return (
                           <div className="modal-member" key={index}>
                             <div className="modal-member-profile-img">
                               <img
                                 className="modal-member-img"
-                                src={defaultProfile}
+                                src={item.profileUrl}
                                 alt=""
                               />
                             </div>
-                            <div className="modal-member-profile-content">
-                              <p>{item}</p>
+                            <div
+                              className="modal-member-profile-content"
+                              onClick={() => {
+                                getInnerHTML(item.userId);
+                              }}
+                            >
+                              <p>{item.nickname}</p>
                               <img
                                 className="modal-member-siren"
                                 src={IconSiren}
@@ -438,13 +465,21 @@ function ChattingRoom() {
                                   ModalOnClickHandler();
                                 }}
                               />
+                              <p id="userId" style={{ visibility: "hidden" }}>
+                                {item.userId}
+                              </p>
                             </div>
                           </div>
                         );
                       })}
                     </div>
                     <div className="modal-footer">
-                      <div className="modal-footer-exit">
+                      <div
+                        className="modal-footer-exit"
+                        onClick={() => {
+                          chatDisconnect();
+                        }}
+                      >
                         <img
                           className="modal-footer-moon"
                           src={IconMoon}
@@ -494,11 +529,15 @@ function ChattingRoom() {
                       <div className="modal-wrapper-btn">
                         <div className="modal-inner-btn">
                           <div className="modal-content-wrap-btn">
-                            <div className="modal-content-wrap-report">
+                            <div
+                              className="modal-content-wrap-report"
+                              onClick={() => {
+                                chatReportPerson();
+                              }}
+                            >
                               신고하기
                             </div>
                             <div className="modal-content-divider"></div>
-
                             <div
                               className="modal-content-wrap-exit"
                               onClick={() => {
@@ -514,6 +553,7 @@ function ChattingRoom() {
                                 className="modal-content-wrap-reselect"
                                 onClick={() => {
                                   setIsBtn(!isBtn);
+                                  setReport(undefined);
                                 }}
                               >
                                 다른 항목으로 신고하기
