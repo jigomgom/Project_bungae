@@ -1,3 +1,9 @@
-.modal{
-    
+.chat-modal{
+    position: fixed;
+    background-color: green;
+    height: 100vh;
+    z-index: 1;
+    width: 300px;
+    max-width: 375px;
+    left: 75px;
 }

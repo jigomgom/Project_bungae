@@ -1,5 +1,10 @@
 .mypage-content-wrap{
     /* margin: 30px 20px 0px 20px; */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 .mypage-profile-main{
     display: flex;

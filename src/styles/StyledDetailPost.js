@@ -11,10 +11,11 @@ export const PostContent = styled.div`
     width: 100%;
 `;
 
-export const PostImg = styled.div`
+export const PostImg = styled.img`
     width: 100%;
     height: 207px;
-    background: #D9D9D9;
+    /* background: #D9D9D9; */
+    object-fit: cover;
 `;
 
 export const PostIconShared = styled.img`
@@ -166,7 +167,7 @@ export const PostTagWrap = styled.div`
 `;
 
 export const PostTag = styled.div`
-  width: 49px;
+  /* width: 49px; */
   height: 17px;
 
   text-align: center;
