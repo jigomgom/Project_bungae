@@ -6,9 +6,9 @@ function ChatList() {
   return (
     <div>
       <ChatListSwiper />
+      {/* <ChatListSwiper />
       <ChatListSwiper />
-      <ChatListSwiper />
-      <ChatListSwiper />
+      <ChatListSwiper /> */}
     </div>
   );
 }

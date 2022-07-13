@@ -20,6 +20,9 @@ export const createBungleList = createAsyncThunk(
         },
       });
       console.log(response);
+      if (response.data.response) {
+        return response.data.postId;
+      }
     } catch (error) {
       console.log(error);
     }
@@ -29,6 +32,7 @@ export const createBungleList = createAsyncThunk(
 const BungleSlice = createSlice({
   name: "Bungle",
   initialState: {
+    postId: 0,
     list: [{}],
   },
   reducers: {},
@@ -36,9 +40,10 @@ const BungleSlice = createSlice({
     // middlewares
     [createBungleList.fulfilled]: (state, action) => {
       console.log("create fullfill");
-    },
-    [createBungleList.rejected]: (state, action) => {
-      console.log("create reject");
+      console.log(action.payload);
+
+      state.postId = action.payload;
+      // navigate("/chat");
     },
   },
 });

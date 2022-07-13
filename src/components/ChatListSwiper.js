@@ -1,3 +1,6 @@
+import React from "react";
+import axios from "axios";
+
 import {
   // LeadingActions,
   SwipeableList,
@@ -12,13 +15,7 @@ import defaultProfile from "../assets/icon-default-profile.svg";
 import "../styles/ChatListSwiper.css";
 
 function App() {
-  // const leadingActions = () => (
-  //   <LeadingActions>
-  //     <SwipeAction onClick={() => console.info("swipe action triggered")}>
-  //       Action name
-  //     </SwipeAction>
-  //   </LeadingActions>
-  // );
+  const token = localStorage.getItem("login-token");
 
   const trailingActions = () => (
     <TrailingActions>
@@ -26,10 +23,32 @@ function App() {
         destructive={true}
         onClick={() => console.info("swipe action triggered")}
       >
-        <button>나가기</button>
+        나가기
       </SwipeAction>
     </TrailingActions>
   );
+
+  const chattingRoomCall = () => {
+    axios({
+      method: "get",
+      url: `http://52.79.214.48/chat/rooms`,
+      headers: {
+        Authorization: token,
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        // setUserId(response.data.userId);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  React.useEffect(() => {
+    chattingRoomCall();
+  }, []);
+
   return (
     <>
       <SwipeableList>

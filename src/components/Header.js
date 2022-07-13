@@ -10,6 +10,7 @@ import {
   IconMyLocation,
   IconNotification,
   IconSetting,
+  IconHamburger,
 } from "../styles/StyledHeader.js";
 
 import Notification from "../assets/icon-notification.svg";
@@ -17,7 +18,7 @@ import Setting from "../assets/icon-setting.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
 import IconMyPoint from "../assets/icon-mylocation.svg";
 import IconMainLogo from "../assets/icon-main-logo.svg";
-import IconHamburger from "../assets/icon-hamburger.svg";
+import Hamburger from "../assets/icon-hamburger.svg";
 
 function Header() {
   const navigate = useNavigate();
@@ -187,6 +188,24 @@ function Header() {
       </HeaderWrap>
     );
   }
+  // else if (window.location.pathname === "/chat") {
+  //   return (
+  //     <HeaderWrap>
+  //       <Logo src={IconMainLogo} style={{ visibility: "hidden" }} />
+  //       <BackKey src={IconBackKey} />
+  //       <PageTitle style={{ visibility: "hidden" }}></PageTitle>
+  //       <HeadrIconsWrap>
+  //         <IconMyLocation style={{ visibility: "hidden" }} src={IconMyPoint} />
+  //         <IconNotification
+  //           src={Notification}
+  //           style={{ visibility: "hidden" }}
+  //         />
+  //         <IconSetting src={Setting} style={{ visibility: "hidden" }} />
+  //         <IconHamburger src={Hamburger} />
+  //       </HeadrIconsWrap>
+  //     </HeaderWrap>
+  //   );
+  // }
 
   // return (
   //   <HeaderWrap>

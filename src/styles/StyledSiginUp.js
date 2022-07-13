@@ -1,21 +1,20 @@
 import styled from "styled-components";
 
 export const SignUpWrapper = styled.div`
-    width: 100%; // 100% -> 375px
-    height: 780px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: auto;
-    /* padding: 40px 20px; */
-    
+  width: 100%; // 100% -> 375px
+  height: 780px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  /* padding: 40px 20px; */
 `;
 
 export const SiginUpEmailWrapper = styled.div`
-    width: 89%;
-    position: relative;
-    margin-bottom: 45px;
+  width: 89%;
+  position: relative;
+  margin-bottom: 45px;
 `;
 
 export const SignUpTitle = styled.h3`
@@ -40,18 +39,18 @@ export const SignUpEmailInput = styled.input`
   padding: 10px 0;
   margin-bottom: 10px;
 
-  &:focus{
+  &:focus {
     outline: none;
   }
 
-  &::placeholder{
+  &::placeholder {
     color: #434343;
   }
 `;
 
 export const SignUpPasswordWrapper = styled.div`
-    width: 89%;
-    position: relative;
+  width: 89%;
+  position: relative;
 `;
 
 export const SignUpPasswordInput = styled.input`
@@ -67,51 +66,51 @@ export const SignUpPasswordInput = styled.input`
   line-height: 17px;
   padding: 10px 0;
   margin-bottom: 10px;
-  &:focus{
+  &:focus {
     outline: none;
   }
-  &::placeholder{
+  &::placeholder {
     color: #434343;
   }
 `;
 
 export const SignUpInputClearBtn = styled.img`
-    width: 16px;
-    height: 16px;
-    position: absolute;
-    right: 5px;
-    top: 55px;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  right: 5px;
+  top: 55px;
 `;
 
 export const SignUpPasswordClearBtn = styled.img`
-    width: 16px;
-    height: 16px;
-    position: absolute;
-    right: 5px;
-    top: 55px;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  right: 5px;
+  top: 55px;
 `;
 
 export const SignUpPasswordConfirmClearBtn = styled.img`
-    width: 16px;
-    height: 16px;
-    position: absolute;
-    right: 5px;
-    top: 110px;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  right: 5px;
+  top: 110px;
 `;
 
 export const SiginUpButton = styled.div`
-    display: flex;
-    /* position: fixed; */
-    /* bottom: 100px; */
-    width: 335px;
-    height: 53px;
-    /* max-width: 335px; */
-    background: #D9D9D9;
-    border-radius: 10px;
-    margin: 300px auto auto;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
+  display: flex;
+  /* position: fixed; */
+  /* bottom: 100px; */
+  width: 335px;
+  height: 53px;
+  /* max-width: 335px; */
+  background: #d9d9d9;
+  border-radius: 10px;
+  margin: 300px auto auto;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 `;
 
 export const ErrorMessage = styled.div`
@@ -127,7 +126,7 @@ export const ErrorMessage = styled.div`
 
 export const ModalWrapper = styled.div`
   box-sizing: border-box;
-  /* display: ${(props) => (props.visible ? 'block' : 'none')}; */
+  /* display: ${(props) => (props.visible ? "block" : "none")}; */
   display: block;
   position: fixed;
   top: 0;
@@ -137,7 +136,7 @@ export const ModalWrapper = styled.div`
   z-index: 1000;
   overflow: auto;
   outline: 0;
-`; 
+`;
 
 export const ModalOverlay = styled.div`
   box-sizing: border-box;
@@ -165,7 +164,7 @@ export const ModalInner = styled.div`
   justify-content: center; */
   top: 229px;
   margin: 0 auto;
-`
+`;
 
 export const ModalContentWrap = styled.div`
   width: 220px;

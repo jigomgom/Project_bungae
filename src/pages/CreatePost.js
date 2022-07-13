@@ -579,7 +579,9 @@ function CreatePost() {
 
     // const ReturnCategories = SeelectedCategories.join(",");
     // console.log(ReturnCategories);
+
     dispatch(createBungleList(formData));
+
     navigate("/chat");
   };
 
