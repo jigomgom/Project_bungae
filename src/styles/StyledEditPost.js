@@ -510,10 +510,11 @@ export const PostCreateButton = styled.div`
   font-weight: 400;
   font-size: 16px;
   line-height: 23px;
-  background-color: #FFC632;
+  /* background-color: #FFC632; */
   border-radius: 10px;
   margin-left: 20px;
   cursor: pointer;
   margin-top: 27px;
   margin-bottom: 27px;
+  color: #E82727;
 `;
