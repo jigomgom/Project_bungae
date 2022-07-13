@@ -58,4 +58,12 @@ button {
     border: none;
     
 }
-  
+
+.swipe-action{
+    background: #FFC632;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+

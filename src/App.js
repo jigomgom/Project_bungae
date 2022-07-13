@@ -23,7 +23,6 @@ import ChatList from "./pages/ChatList";
 import ChattingRoom from "./pages/ChattingRoom";
 // Test
 import Test from "./pages/Test";
-import ChatTest1 from "./pages/ChatTest1";
 function App() {
   return (
     <div className="App">
@@ -46,7 +45,6 @@ function App() {
         <Route path="/chat" element={<ChattingRoom />} />
         {/* Test */}
         <Route path="/test" element={<Test />} />
-        <Route path="/chattest" element={<ChatTest1 />} />
       </Routes>
       <Footer />
     </div>

@@ -4,7 +4,6 @@ import axios from "axios";
 
 import { useNavigate } from "react-router-dom";
 
-
 // styled css
 import {
   SignUpWrapper,
@@ -24,7 +23,7 @@ import {
   ModalInner,
   ModalContentWrap,
   ModalDivider,
-  ModalButton
+  ModalButton,
 } from "../styles/StyledSiginUp";
 
 // icon
@@ -33,21 +32,18 @@ import IconInputClear from "../assets/icon-input-xbtn.svg";
 
 const Signup = () => {
   const SERVER_URL = "http://3.37.61.25";
-
-  
   //비밀번호 유효성 검사
   const checkPassword = (e) => {
     //  8 ~ 30자 영문, 숫자 조합, 문자 조합
-    var regExp =
-    /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
-      // /^(?=.*\d)(?=.*[a-zA-Z~!@#$%";'^,&*()_+|</>=>`?:{[}])[0-9a-zA-Z~!@#$%";'^,&*()_+|</>=>`?:{[}]{8,30}$/;
+    var regExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+    // /^(?=.*\d)(?=.*[a-zA-Z~!@#$%";'^,&*()_+|</>=>`?:{[}])[0-9a-zA-Z~!@#$%";'^,&*()_+|</>=>`?:{[}]{8,30}$/;
     // 형식에 맞는 경우 true 리턴
-    if(!regExp.test( e.target.value )){
+    if (!regExp.test(e.target.value)) {
       setIsSetPassword(false);
-      setPasswordMessage("*비밀번호 형식이 틀립니다.")
-    }else{
+      setPasswordMessage("*비밀번호 형식이 틀립니다.");
+    } else {
       setIsSetPassword(true);
-      setPasswordMessage("*비밀번호 형식이 올바릅니다.")
+      setPasswordMessage("*비밀번호 형식이 올바릅니다.");
     }
     // console.log("비밀번호 유효성 검사 :: ", regExp.test(e.target.value));
   };
@@ -55,7 +51,7 @@ const Signup = () => {
   // 이메일 유효성 검사
   const checkID = (e) => {
     var emailRegEx =
-    /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+      /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     // 형식에 맞는 경우 true 리턴
     if (!emailRegEx.test(e.target.value)) {
       setEmailMessage("*메일 형식이 올바르지 않습니다.");
@@ -85,14 +81,14 @@ const Signup = () => {
   // email clear btn state
   const [isEmailClear, setIsEmailClear] = useState(false);
   // Modal state
-  const [ isModal, setIsModal ] = useState( false );
+  const [isModal, setIsModal] = useState(false);
 
   // email error message
-  const [ emailMessage, setEmailMessage ] = useState("");
-  const [ isEmail, setIsEmail] = useState(false);
+  const [emailMessage, setEmailMessage] = useState("");
+  const [isEmail, setIsEmail] = useState(false);
   // password error message
-  const [ passwordMessage, setPasswordMessage ] = useState("");
-  const [ isSetPassword, setIsSetPassword] = useState(false);
+  const [passwordMessage, setPasswordMessage] = useState("");
+  const [isSetPassword, setIsSetPassword] = useState(false);
 
   // 이메일 입력 한글 방지
   const notInputHangleInputHandler = (event) => {
@@ -105,7 +101,7 @@ const Signup = () => {
     }
     // setEmail( event.target.value.length );
     if (event.target.value.length > 0) {
-      checkID( event );
+      checkID(event);
       setIsEmailClear(true);
     } else {
       setIsEmailClear(false);
@@ -114,7 +110,7 @@ const Signup = () => {
 
   // modal onclick
   const ModalOnClickHandler = () => {
-    setIsModal( false );
+    setIsModal(false);
     navigate("/");
   };
 
@@ -130,7 +126,7 @@ const Signup = () => {
         `${SERVER_URL}/user/signup`,
         SignUserInfo
       );
-      if( response.data.response ){
+      if (response.data.response) {
         setIsModal(true);
       }
       console.log(response);
@@ -148,15 +144,15 @@ const Signup = () => {
   // password clear click
   const passwordClearClickHandler = () => {
     setIsPassword("");
-    setIsPasswordClear( false );
-  }
+    setIsPasswordClear(false);
+  };
 
   // password clear click
   const passwordConfirmClearClickHandler = () => {
     setIsPasswordConfirm("");
-    setIsPasswordConfirmClear( false );
-  }
-  
+    setIsPasswordConfirmClear(false);
+  };
+
   // 비밀번호 입력시 clear 아이콘 보이기
   const appearPasswordClearBtnHandler = (event) => {
     if (event.target.value.length > 0) {
@@ -169,21 +165,21 @@ const Signup = () => {
     }
   };
 
-  const checkConfirmPassword = ( event ) => {
-    if( event.target.value !== pw_ref.current.value ){
+  const checkConfirmPassword = (event) => {
+    if (event.target.value !== pw_ref.current.value) {
       setPasswordMessage("*비밀번호가 다릅니다.");
-      setIsSetPassword( false );
-    }else{
+      setIsSetPassword(false);
+    } else {
       setPasswordMessage("*비밀번호가 동일합니다.");
-      setIsSetPassword( true );
+      setIsSetPassword(true);
     }
-  }
+  };
 
   // 비밀번호 확인 입력시 clear 아이콘 보이기
   const appearPasswordConfirmClearBtnHandler = (event) => {
     if (event.target.value.length > 0) {
       setIsPasswordConfirm(event.target.value);
-      checkConfirmPassword( event );
+      checkConfirmPassword(event);
       setIsPasswordConfirmClear(true);
     } else {
       setIsPasswordConfirm("");
@@ -193,6 +189,7 @@ const Signup = () => {
 
   const Interval = useRef(null);
   // onKeyUp
+
   const onKeyUp = (event) => {
     if (isEmail) {
       Interval.current = setInterval(() => {
@@ -203,7 +200,6 @@ const Signup = () => {
       clearInterval(Interval.current);
     }
   };
-  
   return (
     <SignUpWrapper>
       <SiginUpEmailWrapper>
