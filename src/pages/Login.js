@@ -41,6 +41,7 @@ import IconTextClear from "../assets/icon-login-clear.svg";
 function Login() {
   //http://52.79.214.48
   //http://3.37.61.25
+  // const SERVER_URL = "http://52.79.214.48";
   const SERVER_URL = "http://3.37.61.25";
   // 이메일 ref
   const email_Ref = useRef();
@@ -92,6 +93,8 @@ function Login() {
 
     if (RegEx.test(event.target.value)) {
       event.target.value = "";
+      setIsModal(true);
+      setIsError("영문 숫자만 입력해주세요.");
     }
 
     if (event.target.value.length > 0) {

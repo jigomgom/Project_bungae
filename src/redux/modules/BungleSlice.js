@@ -31,13 +31,19 @@ export const createBungleList = createAsyncThunk(
 export const getMyBungleList = createAsyncThunk(
   "GET/getMyBungleList",
   async () => {
+    // console.log("!!");
+    // console.log( token );
     try {
+      // const response = await axios.get(`${SERVER_URL}/posts/posts/mypost`, {
       const response = await axios.get(`${SERVER_URL}/posts/mypost`, {
         headers: {
           Authorization: token,
         },
       });
-      console.log(response);
+      // console.log(response);
+      if( response.data.response ){
+        return response.data.postResponseDto;
+      }
     } catch (error) {
       console.log(error);
     }
@@ -45,44 +51,48 @@ export const getMyBungleList = createAsyncThunk(
 );
 // 벙글 수정하기
 export const editMyBungleList = createAsyncThunk(
-  "EDIT/editMyBungleList"
-  // async( formData ) => {
-  //   try {
-  //     const response = await axios.put(`${SERVER_URL}/posts/${postID}`, formData, {
-  //       headers: {
-  //         "Content-Type": "multipart/form-data",
-  //         Authorization: token,
-  //       },
-  //     });
-  //     console.log( response );
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
+  "EDIT/editMyBungleList",
+  async( data ) => {
+    // console.log( data );
+    try {
+      const response = await axios.put(`${SERVER_URL}/posts/${data.postId}`, data.formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: token,
+        },
+      });
+      console.log( response );
+    } catch (e) {
+      console.log(e);
+    }
+  }
 );
 
 // 벙글 삭제하기
 export const deleteMyBungleList = createAsyncThunk(
-  "DELETE/deleteMyBungleList"
-  // async () => {
-  //   try {
-  //     //axios.delete(URL, {params: payload}, header);
-  //     const response = await axios.delete(`${SERVER_URL}/posts/${postID}`, {
-  //       headers: {
-  //         Authorization: token,
-  //       },
-  //     });
-  //     console.log(response);
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }
+  "DELETE/deleteMyBungleList",
+  async ( postId ) => {
+    try {
+      //axios.delete(URL, {params: payload}, header);
+      const response = await axios.delete(`${SERVER_URL}/posts/${postId}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log(response);
+      if( response.data.response ){
+        return response.data.isOwner;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
 );
 // main 게시글 전체 조회
 export const getMainBungleList = createAsyncThunk(
   "GET/getMainBungleList",
   async (position) => {
-    console.log(position);
+    // console.log(position);
     try {
       const response = await axios.get(`${SERVER_URL}/posts`, {
         headers: {
@@ -93,7 +103,7 @@ export const getMainBungleList = createAsyncThunk(
           longitude: position?.longitude,
         },
       });
-      console.log(response);
+      // console.log(response);
       if (response.status === 200) {
         // console.log("왜?");
         return response.data;
@@ -235,7 +245,7 @@ export const getUserProfile = createAsyncThunk(
           Authorization: token,
         },
       });
-      // console.log( response );
+      console.log( response );
       if (response.data.response) {
         return response.data.profileResponseDto;
       }
@@ -261,9 +271,9 @@ export const editUserProfile = createAsyncThunk(
         }
       );
       console.log(response);
-      // if( response.data.response ){
-      //   return response.data.postId;
-      // }
+      if( response.data.response ){
+        return response.data.profileResponseDto;
+      }
     } catch (error) {
       console.log(error);
     }
@@ -293,25 +303,28 @@ export const myLikeBungleList = createAsyncThunk(
 const BungleSlice = createSlice({
   name: "Bungle",
   initialState: {
-    isOwner: false,
-    myBungleList: {
-      title: "막걸리 한잔 하실 분",
-      content: "비도 오는데 막걸리에 파전 어떠세요?",
-      categories: ["맛집", "친목"],
-      tags: ["비", "막걸리", "파전"],
-      time: "2022-07-13 19:00:00",
-      place: "수원시 영통구 매영대로 31",
-      postUrls: [
-        "https://meeting-project.s3.ap-northeast-2.amazonaws.com/0c7f4d22-8a40-423d-ba5b-341c6635dae9.jpg",
-        "https://meeting-project.s3.ap-northeast-2.amazonaws.com/3c6926fc-5bc6-471d-93ce-1e0e4f22e092.jpg",
-      ],
-      personnel: 5,
-      isLetter: true,
-    },
+    isOwner:false,
+    // myBunglePost: {
+    //   title: "막걸리 한잔 하실 분",
+    //   content: "비도 오는데 막걸리에 파전 어떠세요?",
+    //   categories: ["맛집", "친목"],
+    //   tags: ["비", "막걸리", "파전"],
+    //   time: "2022-07-13 19:00:00",
+    //   place: "수원시 영통구 매영대로 31",
+    //   postUrls: [
+    //     "https://meeting-project.s3.ap-northeast-2.amazonaws.com/0c7f4d22-8a40-423d-ba5b-341c6635dae9.jpg",
+    //     "https://meeting-project.s3.ap-northeast-2.amazonaws.com/3c6926fc-5bc6-471d-93ce-1e0e4f22e092.jpg",
+    //   ],
+    //   personnel: 5,
+    //   isLetter: true,
+    //  postId:14
+    // },
     // 유저 프로필
     userProfile: {},
     // 게시물 생성 하자마자 채팅룸 아이디 전달
-    postId: 0,
+    OnwerPostId: 0,
+    // 채팅 참여 postId
+    GuestPostId: 0,
     // 상세 조회
     detailBungle: {},
     // 마감 임박
@@ -324,26 +337,30 @@ const BungleSlice = createSlice({
     categoriesList: [{}],
     // 내 찜 목록
     myLikeList: [{}],
+    // 내가 작성한 게시물 조회
+    myBunglePost:{},
     list: [{}],
   },
   reducers: {},
   extraReducers: {
-    // middlewares
+    // 
+    
     // 벙글 생성, post ID 전달
     [createBungleList.fulfilled]: (state, action) => {
       console.log("create fullfill");
       // console.log( action.payload );
-      state.postId = action.payload;
+      state.OnwerPostId = action.payload;
     },
     [createBungleList.rejected]: (state, action) => {
       // console.log("create reject");
     },
+
     // Main 전체 게시글 조회
     [getMainBungleList.fulfilled]: (state, action) => {
       console.log("Main get");
       // console.log( action.payload );
       // console.log(action.payload.isOwner );
-      state.isOwner = action.payload.isOwner;
+      state.isOwner = action.payload?.isOwner;
       state.endTime = action.payload.postListEndTime;
       state.realTime = action.payload.postListRealTime;
       // console.log( current( state.endTime ), current( state.realTime ) );
@@ -351,13 +368,15 @@ const BungleSlice = createSlice({
     [getMainBungleList.rejected]: (state, action) => {
       console.log("Main reject");
     },
+
+
     // 게시글 찜하기
     [likeBungleList.fulfilled]: (state, action) => {
-      // console.log( action.payload );
+      console.log( action.payload );
       // realTime Update
       const realTimeUpdate = current(state.realTime).map((item) => {
         // console.log( item )
-        if (item.id === action.payload) {
+        if (item.postId === action.payload) {
           // console.log( item.isLike );
           if (item.isLike) {
             return { ...item, isLike: false };
@@ -372,7 +391,7 @@ const BungleSlice = createSlice({
       // endTimeUpdate
       const endTimeUpdate = current(state.endTime).map((item) => {
         // console.log( item )
-        if (item.id === action.payload) {
+        if (item.postId === action.payload) {
           // console.log( item.isLike );
           if (item.isLike) {
             return { ...item, isLike: false };
@@ -388,7 +407,7 @@ const BungleSlice = createSlice({
       // more or Tag search Update
       const moreTempUpdate = current(state.moreList).map((item) => {
         // console.log( item )
-        if (item.id === action.payload) {
+        if (item.postId === action.payload) {
           // console.log( item.isLike );
           if (item.isLike) {
             return { ...item, isLike: false };
@@ -405,7 +424,7 @@ const BungleSlice = createSlice({
       // 카테고리 update
       const CategoryUpdate = current(state.categoriesList).map((item) => {
         // console.log( item )
-        if (item.id === action.payload) {
+        if (item.postId === action.payload) {
           // console.log( item.isLike );
           if (item.isLike) {
             return { ...item, isLike: false };
@@ -427,6 +446,8 @@ const BungleSlice = createSlice({
       state.moreList = action.payload;
     },
     [moreBungleList.rejected]: (state, action) => {},
+
+    // 상세 조회
     [detailBungleList.fulfilled]: (state, action) => {
       // console.log( action.payload );
       state.detailBungle = action.payload;
@@ -434,29 +455,52 @@ const BungleSlice = createSlice({
     [detailBungleList.rejected]: (state, action) => {
       console.log("상세조회 실패");
     },
+
     // 카테고리 조회
     [categoryBungleList.fulfilled]: (state, action) => {
       console.log(action.payload);
       state.categoriesList = action.payload;
     },
     [categoryBungleList.rejected]: (state, action) => {},
+
+    // 태그 조회
     [tagBungleList.fulfilled]: (state, action) => {
       //console.log( action.payload );
       state.moreList = action.payload;
     },
     [tagBungleList.rejected]: (state, action) => {},
+    
+    
     // 유저 프로필 조회
     [getUserProfile.fulfilled]: (state, action) => {
+      console.log( action.payload)
       state.userProfile = action.payload;
     },
     [getUserProfile.rejected]: (state, action) => {},
+
+    // 유저 프로필 수정
     [editUserProfile.fulfilled]: (state, action) => {
       console.log(action.payload);
+      state.userProfile = action.payload;
     },
     [editUserProfile.rejected]: (state, action) => {},
     [myLikeBungleList.fulfilled]: (state, action) => {
       state.myLikeList = action.payload;
     },
+
+    [ getMyBungleList.fulfilled ] : (state,action) => {
+      // console.log( action.payload );
+      state.myBunglePost = action.payload;
+    },
+
+    // 게시물 삭제
+    [ deleteMyBungleList.fulfilled ] : ( state, action ) => {
+      // console.log( action.payload );
+      state.isOwner = action.payload;
+    },
+    [ deleteMyBungleList.rejected ] : (state, action) => {
+
+    }
   },
 });
 

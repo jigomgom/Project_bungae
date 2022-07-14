@@ -48,15 +48,31 @@ import Setting from "../assets/icon-setting.svg";
 let client = null;
 
 function ChattingRoom() {
-  // const Bungle = useSelector((state) => state.Bungle.postId);
+  // SERVER URL
+  const SERVER_URL = "http://3.37.61.25";
+  // navigate
+  const navigate = useNavigate();
+  // 방장권한
+  const BungleOnwer = useSelector( state => state.Bungle.OnwerPostId );
+  // 내가 만든 채팅 룸 ID
+  const Bungle = useSelector((state) => state.Bungle.OnwerPostId);
+  // 참여자 채팅 룸 ID
+  const Guest = useSelector( state => state.Bungle.detailBungle.postId );
   // if (Bungle) {
   //   console.log("PostID ", Bungle);
   // }
   const token = localStorage.getItem("login-token");
-  const { postId } = useParams();
-  // const postId = Bungle;
-  // const postId = 6;
-  console.log("Chattest ", postId);
+  let postId;
+
+  if( Bungle ){
+    postId = Bungle;
+  }else{
+    postId = Guest;
+  }
+
+  console.log( Bungle, Guest, postId);
+  // const { postID } = useParams();
+
   // const token =
   //   "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqZW9uZ2h5ZW9udWs5OEBnbWFpbC5jb20iLCJpYXQiOjE2NTc1NjcxNTMsImV4cCI6MTY1NzY1MzU1M30.JOSRNC06Sp7xwvWbJ35kWONEV3NPm8M3T5V77f8wKPc";
   const username = localStorage.getItem("user-name");
@@ -83,7 +99,7 @@ function ChattingRoom() {
   }, [postId]);
 
   const connect = () => {
-    let sock = new SockJS("http://52.79.214.48/ws/chat");
+    let sock = new SockJS(`${SERVER_URL}/ws/chat`);
     client = over(sock);
     client.connect({ token }, onConnected, onError);
   };
@@ -204,7 +220,7 @@ function ChattingRoom() {
       const formData = new FormData();
       formData.append("file ", isFile);
       const response = await axios.post(
-        `http://52.79.214.48/chat/message/file`,
+        `${SERVER_URL}/chat/message/file`,
         formData,
         {
           headers: {
@@ -253,7 +269,7 @@ function ChattingRoom() {
   const chatPerson = () => {
     axios({
       method: "get",
-      url: `http://52.79.214.48/chat/message/userinfo/${postId}`,
+      url: `${SERVER_URL}/chat/message/userinfo/${postId}`,
       headers: {
         Authorization: token,
       },
@@ -272,7 +288,7 @@ function ChattingRoom() {
   const chatFile = () => {
     axios({
       method: "get",
-      url: `http://52.79.214.48/chat/message/files/${postId}`,
+      url: `${SERVER_URL}/chat/message/files/${postId}`,
       headers: {
         Authorization: token,
       },
@@ -334,7 +350,7 @@ function ChattingRoom() {
     setUserId();
     axios({
       method: "post",
-      url: `http://52.79.214.48/user/report/${reportUserId}`,
+      url: `${SERVER_URL}/user/report/${reportUserId}`,
       headers: {
         Authorization: token,
       },
@@ -363,7 +379,7 @@ function ChattingRoom() {
         <div id="page-wrap">
           <HeaderWrap>
             <Logo src={IconMainLogo} style={{ visibility: "hidden" }} />
-            <BackKey src={IconBackKey} />
+            <BackKey src={IconBackKey} onClick={()=>{navigate("/main")}}/>
             <PageTitle style={{ visibility: "hidden" }}></PageTitle>
             <HeadrIconsWrap>
               <IconMyLocation
@@ -478,6 +494,7 @@ function ChattingRoom() {
                         className="modal-footer-exit"
                         onClick={() => {
                           chatDisconnect();
+                          navigate("/main");
                         }}
                       >
                         <img

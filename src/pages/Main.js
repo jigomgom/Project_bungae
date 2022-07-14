@@ -49,7 +49,7 @@ function Main() {
   const [ isLoad, setIsLoad ] = useState( true );
   const realTimeList = useSelector( state => state.Bungle.realTime );
   const endTimeList = useSelector( state => state.Bungle.endTime );  
-  
+  // console.log( endTimeList );
   // 벙글 리스트 전체 조회하기
   // const Bungle = useSelector( state => state.Bungle.postId );
   // 현위치 찾아오기
@@ -131,6 +131,7 @@ function Main() {
 
   // 실시간 벙글 하트 클릭
   const HeartRealTimeClickHanlder = (realTimeIndex, postId ) => {
+    console.log( realTimeIndex, postId );
     setIsRealTimeHeart(
       isRealTimeHeart.map((item, Checkedindex) => {
         if (Checkedindex === realTimeIndex) {
@@ -202,14 +203,15 @@ function Main() {
         <MainContentTitle>실시간 벙글</MainContentTitle>
         <MainContentItemWrap>
           {realTimeList.map((item, index) => {
+            // console.log( item );
             return (
               <MainContentItemFrame key={index} >
-                <MainContentItemImg src={ item.postUrl ? item.postUrl : defaultCardImg} onClick={() => { showDetailBungle( item.id ) }}/>
+                <MainContentItemImg src={ item.postUrl ? item.postUrl : defaultCardImg} onClick={() => { showDetailBungle( item.postId ) }}/>
                 <MainContentItemImgTemp src={ item.avgTemp >= 50 ? IconHighTemp : ( item.avgTemp >= 25 ? IconMiddleTemp : IconLowTemp ) } />
                 <MainContentTextWrap>
                   <MainContentTitleWrap>
                     <MainContentItemTitle>{item.title}</MainContentItemTitle>
-                    <MainContentItemLike src={ item.isLike ? IconLike :IconUnlike} onClick={ () => HeartRealTimeClickHanlder( index, item.id ) } />
+                    <MainContentItemLike src={ item.isLike ? IconLike :IconUnlike} onClick={ () => HeartRealTimeClickHanlder( index, item.postId ) } />
                   </MainContentTitleWrap>
                   <MainContentItemTimePeople>
                     {item.time} ({item.joinCount}/{item.personnel})
@@ -250,14 +252,15 @@ function Main() {
         <MainContentTitle>마감 임박순 벙글</MainContentTitle>
         <MainContentItemWrap>
           {endTimeList.map((item, index) => {
+            // console.log( item );
             return (
               <MainContentItemFrame key={index} >
-                <MainContentItemImg src={ item.postUrl ? item.postUrl : defaultCardImg } onClick={() => { showDetailBungle( item.id ) }}/>
+                <MainContentItemImg src={ item.postUrl ? item.postUrl : defaultCardImg } onClick={() => { showDetailBungle( item.postId ) }}/>
                 <MainContentItemImgTemp src={ item.avgTemp >= 50 ? IconHighTemp : ( item.avgTemp >= 25 ? IconMiddleTemp : IconLowTemp ) } />
                 <MainContentTextWrap>
                   <MainContentTitleWrap>
                     <MainContentItemTitle>{item.title}</MainContentItemTitle>
-                    <MainContentItemLike src={ item.isLike ? IconLike : IconUnlike } onClick={ () => { HeartEndTimeClickHandler( index, item.id ) } }/>
+                    <MainContentItemLike src={ item.isLike ? IconLike : IconUnlike } onClick={ () => { HeartEndTimeClickHandler( index, item.postId ) } }/>
                   </MainContentTitleWrap>
                   <MainContentItemTimePeople>
                     {item.time} ({item.joinCount}/{item.personnel})

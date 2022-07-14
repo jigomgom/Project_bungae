@@ -18,7 +18,9 @@ function MyPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [ isLoad, setIsLoad ] = useState( true );
+  const [ receiveUrl, setReceiveUrl ] = useState();
   const userProfileInfo = useSelector( state => state.Bungle.userProfile);
+
   console.log( userProfileInfo );
 
   const myLikeBungleClickHandler = () => {
@@ -29,12 +31,20 @@ function MyPage() {
   useEffect(()=>{
     if( isLoad ){
       dispatch( getUserProfile() );
+      // setReceiveUrl( userProfileInfo.profileUrl );
       setTimeout(()=>{setIsLoad( false )}, 150);
     }
   }, []);
 
+  // useEffect(()=>{
+  //   if( !isLoad ){
+  //     setReceiveUrl( userProfileInfo.profileUrl );
+  //   }
+  // },[isLoad]);
+
   return (
-    <div>
+    <>
+    {!isLoad && <div>
       <div className="mypage-content-wrap">
         <div className="mypage-profile-main">
           <div className="mypage-profile-img">
@@ -65,7 +75,8 @@ function MyPage() {
         <div className="mypage-selectbar">나의 신고 내역</div>
         {/* <div className="mypage-selectbar">Lorem ipsum</div> */}
       </div>
-    </div>
+    </div>}
+    </>
   );
 }
 

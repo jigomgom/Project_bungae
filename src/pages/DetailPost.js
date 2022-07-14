@@ -99,7 +99,7 @@ const Post = () => {
       dispatch(detailBungleList(postId));
       setTimeout(() => {
         setIsLoaded(false);
-      }, 200);
+      }, 400);
     }
   }, []);
 
