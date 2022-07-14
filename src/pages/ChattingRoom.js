@@ -79,8 +79,6 @@ function ChattingRoom() {
   console.log(Bungle, Guest, postId);
   // const { postID } = useParams();
 
-  // const token =
-  //   "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqZW9uZ2h5ZW9udWs5OEBnbWFpbC5jb20iLCJpYXQiOjE2NTc1NjcxNTMsImV4cCI6MTY1NzY1MzU1M30.JOSRNC06Sp7xwvWbJ35kWONEV3NPm8M3T5V77f8wKPc";
   const username = localStorage.getItem("user-name");
 
   // console.log(token);

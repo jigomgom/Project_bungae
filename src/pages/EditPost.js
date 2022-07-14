@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 // import redux slice
-import { getMyBungleList } from "../redux/modules/BungleSlice";
+import { getMyBungleList, editMyBungleList, deleteMyBungleList } from "../redux/modules/BungleSlice";
 
 // slider 추가
 import Slider from "rc-slider";
@@ -104,8 +104,8 @@ function EditPost() {
   // isLoad 
   const [ isLoad, setIsLoad ] = useState( true );
   // 나의 벙글 가져오기
-  const myBungle = useSelector( state => state.Bungle.myBungleList);
-  // console.log( myBungle );
+  const myBungle = useSelector( state => state.Bungle.myBunglePost);
+  console.log( myBungle );
   // load
   useEffect(()=>{
     if( isLoad ){
@@ -127,9 +127,10 @@ function EditPost() {
     { category: "게임", clicked: false },
   ];
   const [ checkedCategory, setCheckedCategory ] = useState([{}]);
+  const [ postUrls, setPostUrls ] = useState([]);
 
   useEffect(()=>{
-    if( isLoad ){
+    if( !isLoad ){
       setTagList( myBungle.tags );
 
       myBungle.categories.forEach( Checkeditem => {
@@ -174,6 +175,10 @@ function EditPost() {
         setIsLetter( false );
         setIsVideo( true );
       }
+      // setPostUrls( myBungle.postUrls );
+      setIsFirstFile( myBungle.postUrls[0] );
+      setIsSecondFile( myBungle.postUrls[1] );
+      setIsThirdFile(myBungle.postUrls[2]);
     };
   },[isLoad])
 
@@ -258,6 +263,12 @@ function EditPost() {
 
   // 첫번째 사진 clear 버튼
   const firstFileClearOnClickHandler = () => {
+    setPostUrls( postUrls.map((item, index ) => {
+      if( index === 0 ){
+        console.log("!!");
+        return item = "";
+      }
+    }));
     setIsFirstFile(null);
     setFirstFileClear(false);
   };
@@ -275,7 +286,9 @@ function EditPost() {
   };
 
   const onFistFileChange = (e) => {
+    // console.log( e );
     if (e.target.files[0]) {
+      console.log("gg");
       setFirstFile(e.target.files[0]);
       uploadFiles(e, 0);
     } else {
@@ -359,6 +372,7 @@ function EditPost() {
   };
 
   const uploadFiles = ( e, index ) => {
+    console.log( e, index );
     AddFileItem( e.target.files[0], index );
   }
 
@@ -391,16 +405,6 @@ function EditPost() {
         return item;
       }
     }));
-    // setCheckedCategory()
-    // setIsCategoryClick(
-      // isCategoryClick.map((item, Checkedindex) => {
-      //   if (Checkedindex === index) {
-      //     return (item = !item);
-      //   } else {
-      //     return item;
-      //   }
-      // })
-    // );
   };
   // 엔터키 태그 입력
   const onKeyPress = e => {
@@ -601,7 +605,7 @@ function EditPost() {
   const currentHour = useRef();
   const currentMinute = useRef();
 
-  const editBungleOnClickHandler = () => {
+  const editBungleOnClickHandler = ( postId ) => {
   const SelectedCategories = checkedCategory.filter((item) => {
       if (item.clicked) {
         return item.category;
@@ -610,7 +614,8 @@ function EditPost() {
     const extractCategory = SelectedCategories.map( item => {
       return item.category;
     })
-    const sendCategory = extractCategory.join(",");
+    
+    // const sendCategory = extractCategory.join(",");
     const title = Title_ref.current.value;
     const content = Content_ref.current.value;
     const hour = ("0" + currentHour.current.value).slice(-2);
@@ -634,17 +639,19 @@ function EditPost() {
         time: dates + ` ${hour}:${minute}:00`, //yyyy-MM-dd HH:mm:ss
         personnel: Number(onlyNumber),
         place: address,
-        tags: tagList.join(","),
-        categories: sendCategory,
+        tags: tagList,
+        categories: extractCategory,
         isLetter: true,
       };
-
+      
       const appendFile = isFile.filter((item) => {
+        console.log( item );
         if (item !== "") {
           return item;
         }
       });
-      console.log(postDto);
+      console.log("append ", appendFile );
+      console.log( "isFile ", isFile );
       const formData = new FormData();
 
       formData.append(
@@ -662,26 +669,26 @@ function EditPost() {
         formData.append("postImg", "");
       } else {
         appendFile.forEach((item) => {
-          // console.log(item);
+          console.log( item );
           formData.append("postImg", item);
-          // console.log( JSON.stringify( formData ));
         });
       }
 
       // const ReturnCategories = SeelectedCategories.join(",");
       // console.log(ReturnCategories);
-      // dispatch(createBungleList(formData));
-      // navigate("/chat");
+      dispatch(editMyBungleList({formData, postId}));
+      navigate("/main");
     }
   };
   // 벙글 삭제
-  const deleteBunggleOnClickHandler = () => {
-
+  const deleteBunggleOnClickHandler = ( postId ) => {
+    dispatch( deleteMyBungleList( postId ) );
+    navigate("/main");
   }
 
   return (
     <>
-      <HeaderWrap>
+      { !isLoad && <><HeaderWrap>
         <Logo style={{ visibility: "hidden" }} />
         <BackKey
           src={IconBackKey}
@@ -696,7 +703,7 @@ function EditPost() {
           <IconSetting style={{ visibility: "hidden" }} />
           <div
             style={{ fontWeight: "400", fontSize: "14px", lineHeight: "20px" }}
-            onClick={editBungleOnClickHandler}
+            onClick={()=>{editBungleOnClickHandler( myBungle.postId )}}
           >
             완료
           </div>
@@ -727,10 +734,11 @@ function EditPost() {
           <FileUploadWrap>
             <UploadPictureWrap>
               <FileInputLabel htmlFor="file-input-1">
+                {/* 사진 1번 */}
                 <FileInputImg
-                  src={myBungle.postUrls[0] ? myBungle.postUrls[0] : IconUpload}
+                  src={isFirstFile ? isFirstFile : IconUpload}
                 />
-                {myBungle.postUrls[0] && (
+                {isFirstFile && (
                   <FileClearIcon
                     src={IconClear}
                     onClick={firstFileClearOnClickHandler}
@@ -747,10 +755,11 @@ function EditPost() {
             </UploadPictureWrap>
             <UploadPictureWrap>
               <FileInputLabel htmlFor="file-input-2">
+                {/* 사진 2번 */}
                 <FileInputImg
-                  src={myBungle.postUrls[1] ? myBungle.postUrls[1] : IconUpload}
+                  src={isSecondFile ? isSecondFile : IconUpload}
                 />
-                {myBungle.postUrls[1] && (
+                {isSecondFile && (
                   <FileClearIcon
                     src={IconClear}
                     onClick={secondFileClearOnClickHandler}
@@ -766,10 +775,11 @@ function EditPost() {
             </UploadPictureWrap>
             <UploadPictureWrap>
               <FileInputLabel htmlFor="file-input-3">
+                {/* 사진 3번 */}
                 <FileInputImg
-                  src={myBungle.postUrls[2] ? myBungle.postUrls[2] : IconUpload}
+                  src={isThirdFile ? isThirdFile : IconUpload}
                 />
-                {myBungle.postUrls[2] && (
+                {isThirdFile && (
                   <FileClearIcon
                     src={IconClear}
                     onClick={thirdFileClearOnClickHandler}
@@ -1043,10 +1053,10 @@ function EditPost() {
           />
         </PostPeopleCount>
         <DividerStyle />
-        <PostCreateButton onClick={deleteBunggleOnClickHandler}>
+        <PostCreateButton onClick={()=>{ deleteBunggleOnClickHandler(myBungle.postId) }}>
           삭제하기
         </PostCreateButton>
-      </CreatePostWrap>
+      </CreatePostWrap></> }
     </>
   );
 }

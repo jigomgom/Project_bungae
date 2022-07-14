@@ -50,7 +50,7 @@ function CategorySearchCard(props) {
               className="search-card-img-thumbnail"
               src={categoryList.postUrl ? categoryList.postUrl : defaultCardImg}
               alt=""
-              onClick={() => { showDetailBungle( categoryList.id ) }}
+              onClick={() => { showDetailBungle( categoryList.postId ) }}
             />
             <img
               className="search-card-img-like"

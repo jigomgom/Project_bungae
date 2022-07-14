@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
@@ -21,9 +21,25 @@ function MyPageSetting() {
   const [file, setFile] = React.useState();
   const fileInput = React.useRef(null);
 
+  const [ isLoad, setIsLoad ] = useState( true );
+  const [ receiveProfileUrl, setReceiveProfileUrl ] = useState();
+
+  useEffect(()=>{
+    if( isLoad ){
+      setTimeout(()=>{ setIsLoad( false )}, 200 );
+    }
+  },[]);
+
+  useEffect(()=>{
+    if( !isLoad ){
+      setReceiveProfileUrl( userProfileInfo.profileUrl );
+    }
+  }, [isLoad]);
+
   //미리보기, 파일
   const onChange = (e) => {
     if (e.target.files[0]) {
+      setReceiveProfileUrl( "" );
       setFile(e.target.files[0]);
     } else {
       //업로드 취소할 시
@@ -34,7 +50,7 @@ function MyPageSetting() {
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.readyState === 2) {
-        console.log(reader);
+        // console.log(reader);
         setProfile(reader.result);
       }
     };
@@ -64,8 +80,10 @@ function MyPageSetting() {
       })
     );
     if( file === undefined ){
+      console.log( "??");
       formData.append("profileImg ", "");
     }else{
+      console.log( file );
       formData.append("profileImg ", file);
     }
 
@@ -110,12 +128,12 @@ function MyPageSetting() {
             ref={fileInput}
           />
           <img
-            src={ userProfileInfo.profileUrl ? userProfileInfo.profileUrl : profile}
+            src={ receiveProfileUrl ? receiveProfileUrl : profile }
             alt=""
             style={{ objectFit:"cover", alignItems: "center", cursor: "pointer" }}
             onClick={() => {
               fileInput.current.click();
-            }}
+            }}           
           />
         </div>
         <div className="profile-setting-form">
@@ -123,15 +141,18 @@ function MyPageSetting() {
             <label className="profile-setting-form-title">{userProfileInfo.nickName ? userProfileInfo.nickName : "닉네임" }</label>
             <input
               ref={nickName_Ref}
+              defaultValue={userProfileInfo.nickName ? userProfileInfo.nickName : "" }
               className="profile-setting-form-input"
               type="search"
               placeholder="닉네임을 입력해주세요."
             />
+            
           </div>
           <div className="profile-setting-form-desc">
             <label className="profile-setting-form-title">{ userProfileInfo.intro ? userProfileInfo.intro: "자기소개"}</label>
             <input
               ref={intro_Ref}
+              defaultValue={ userProfileInfo.intro ? userProfileInfo.intro:""}
               className="profile-setting-form-input"
               type="search"
               placeholder="자기소개를 입력해주세요."

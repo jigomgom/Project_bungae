@@ -41,8 +41,8 @@ import IconTextClear from "../assets/icon-login-clear.svg";
 function Login() {
   //http://52.79.214.48
   //http://3.37.61.25
-  const SERVER_URL = "http://52.79.214.48";
-  // const SERVER_URL = "http://3.37.61.25";
+  // const SERVER_URL = "http://52.79.214.48";
+  const SERVER_URL = "http://3.37.61.25";
   // 이메일 ref
   const email_Ref = useRef();
   // 비밀번호 ref

@@ -188,50 +188,9 @@ const Signup = () => {
   };
 
   const Interval = useRef(null);
-  // onKeyUp
 
-  const onKeyUp = async (event) => {
-    //   // console.log( event.target.value );
-    //   let checked = false;
-    //   if (isEmail && !checked) {
-    //     //   try {
-    //     //     const response = await axios.post(`${SERVER_URL}/user/duplicate/username`, {
-    //     //       username: event.target.value,
-    //     //     });
-    //     //     console.log(response);
-    //     //   } catch (error) {
-    //     //     console.log(error);
-    //     //   }
-    //   //   Interval.current = setInterval(async () => {
-    //   //     try {
-    //   //       const response = await axios.post(
-    //   //         `${SERVER_URL}/user/duplicate/username`,
-    //   //         {
-    //   //           username: event.target.value,
-    //   //         }
-    //   //       );
-    //   //       console.log(response);
-    //   //       if (response.data.response) {
-    //   //         console.log("!!");
-    //   //         clearInterval(Interval.current);
-    //   //         setIsEmail(false);
-    //   //         setEmailMessage(response.data.message);
-    //   //         checked = true;
-    //   //       } else {
-    //   //         setIsEmail(false);
-    //   //         setEmailMessage(response.data.message);
-    //   //         clearInterval(Interval.current);
-    //   //       }
-    //   //     } catch (error) {
-    //   //       console.log(error);
-    //   //     }
-    //   //     console.log(event.target.value);
-    //   //   }, 2000);
-    //   // } else {
-    //   //   console.log("??");
-    //   //   clearInterval(Interval.current);
-    //   // }
-  };
+  // onKeyUp
+  const onKeyUp = async (event) => {};
   return (
     <SignUpWrapper>
       <SiginUpEmailWrapper>
