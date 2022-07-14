@@ -41,6 +41,7 @@ const Footer = () => {
     window.location.pathname === "/signup" ||
     window.location.pathname === "/createpost" ||
     window.location.pathname === `/chat/${postId}` ||
+    window.location.pathname === `/chat` ||
     window.location.pathname === "/editpost"
   )
     return null;
@@ -76,7 +77,12 @@ const Footer = () => {
             />
           )}
           <FooterIconWrap>
-            <FooterIconImg src={IconChat} />
+            <FooterIconImg
+              src={IconChat}
+              onClick={() => {
+                navigate("/chatlist");
+              }}
+            />
             <FooterIconText>채팅</FooterIconText>
           </FooterIconWrap>
           <FooterIconWrap

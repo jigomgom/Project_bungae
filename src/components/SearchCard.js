@@ -26,7 +26,7 @@ import IconLowTemp from "../assets/icon-manner-low.svg";
 
 function SearchCard(props) {
   const { moreList, categoryList, myLikeList } = props;
-
+  console.log( moreList );
   const [ isLoad, setIsLoad ] = useState( true );
 
   useEffect(()=>{
@@ -75,14 +75,14 @@ function SearchCard(props) {
             className="search-card-img-thumbnail"
             src={moreList.postUrl ? moreList.postUrl : defaultCardImg}
             alt=""
-            onClick={() => { showDetailBungle( moreList.id ) }}
+            onClick={() => { showDetailBungle( moreList.postId ) }}
           />
           <img
             className="search-card-img-like"
             src={moreList.isLike ? likeImg : UnlikeImg}
             alt=""
             onClick={() => {
-              moreTagLikeOnClick(moreList.id);
+              moreTagLikeOnClick(moreList.postId);
             }}
           />
         </div>

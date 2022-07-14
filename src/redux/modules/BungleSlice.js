@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const SERVER_URL = "http://3.37.61.25";
-// const SERVER_URL = "http://52.79.214.48";
+// const SERVER_URL = "http://3.37.61.25";
+const SERVER_URL = "http://52.79.214.48";
 const token = localStorage.getItem("login-token");
 
 // 벙글 생성하기
@@ -290,10 +290,31 @@ export const myLikeBungleList = createAsyncThunk(
   }
 );
 
+// 채팅 목록 조회
+export const myChattingList = createAsyncThunk(
+  "GET/myChattingList",
+  async () => {
+    // console.log(1);
+    try {
+      const response = await axios.get(`${SERVER_URL}/chat/rooms`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log(response);
+      if (response.data) {
+        return response.data;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
+
 const BungleSlice = createSlice({
   name: "Bungle",
+  isOwner: false,
   initialState: {
-    isOwner: false,
     myBungleList: {
       title: "막걸리 한잔 하실 분",
       content: "비도 오는데 막걸리에 파전 어떠세요?",
@@ -311,7 +332,9 @@ const BungleSlice = createSlice({
     // 유저 프로필
     userProfile: {},
     // 게시물 생성 하자마자 채팅룸 아이디 전달
-    postId: 0,
+    OnwerPostId: 0,
+    // 채팅 참여 postId
+    GuestPostId: 0,
     // 상세 조회
     detailBungle: {},
     // 마감 임박
@@ -325,6 +348,8 @@ const BungleSlice = createSlice({
     // 내 찜 목록
     myLikeList: [{}],
     list: [{}],
+    // 내 채팅 목록
+    myChatting: [],
   },
   reducers: {},
   extraReducers: {
@@ -333,7 +358,7 @@ const BungleSlice = createSlice({
     [createBungleList.fulfilled]: (state, action) => {
       console.log("create fullfill");
       // console.log( action.payload );
-      state.postId = action.payload;
+      state.OnwerPostId = action.payload;
     },
     [createBungleList.rejected]: (state, action) => {
       // console.log("create reject");
@@ -343,7 +368,7 @@ const BungleSlice = createSlice({
       console.log("Main get");
       // console.log( action.payload );
       // console.log(action.payload.isOwner );
-      state.isOwner = action.payload.isOwner;
+      state.isOwner = action.payload?.isOwner;
       state.endTime = action.payload.postListEndTime;
       state.realTime = action.payload.postListRealTime;
       // console.log( current( state.endTime ), current( state.realTime ) );
@@ -456,6 +481,14 @@ const BungleSlice = createSlice({
     [editUserProfile.rejected]: (state, action) => {},
     [myLikeBungleList.fulfilled]: (state, action) => {
       state.myLikeList = action.payload;
+    },
+    // 채팅 목록 조회
+    [myChattingList.fulfilled]: (state, action) => {
+      console.log(action.payload);
+      state.myChatting = action.payload;
+    },
+    [myChattingList.rejected]: (state, action) => {
+      console.log("상세조회 실패");
     },
   },
 });
