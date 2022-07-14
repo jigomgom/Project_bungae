@@ -42,7 +42,7 @@ function App() {
         <Route path="/editpost" element={<EditPost/>} />
         <Route path="/profilesetting" element={<ProfileSetting />} />
         <Route path="/mylikebung" element={<MyLikeBung />} />
-        <Route path="/chat/:postId" element={<ChattingRoom />} />
+        <Route path="/chat" element={<ChattingRoom />} />
         {/* Test */}
         <Route path="/test" element={<Test />} />
       </Routes>
