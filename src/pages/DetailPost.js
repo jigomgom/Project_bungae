@@ -89,6 +89,7 @@ const Post = () => {
   const detailBungleInfo = useSelector((state) => state.Bungle.detailBungle);
 
   const { postId } = useParams();
+
   const dispatch = useDispatch();
 
   const container = useRef(null);
@@ -99,7 +100,7 @@ const Post = () => {
       dispatch(detailBungleList(postId));
       setTimeout(() => {
         setIsLoaded(false);
-      }, 400);
+      }, 600);
     }
   }, []);
 
@@ -149,6 +150,7 @@ const Post = () => {
           </HeaderWrap>
           <PostWrap>
             <PostContent>
+              {console.log(detailBungleInfo)}
               <PostImg src={detailBungleInfo.postUrls[0]} />
               <PostIconShared src={IconShared} />
               <PostLike src={detailBungleInfo.isLike ? IconLike : IconUnlike} />

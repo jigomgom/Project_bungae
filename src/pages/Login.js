@@ -79,7 +79,7 @@ function Login() {
         setIsError(response.data.message);
       }
     } catch (error) {
-      setIsModal( true );
+      setIsModal(true);
       setIsError("error!");
       console.log(error);
     }

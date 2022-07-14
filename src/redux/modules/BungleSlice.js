@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const SERVER_URL = "http://3.37.61.25";
-// const SERVER_URL = "http://52.79.214.48";
+// const SERVER_URL = "http://3.37.61.25";
+const SERVER_URL = "http://52.79.214.48";
 const token = localStorage.getItem("login-token");
 
 // 벙글 생성하기
@@ -41,7 +41,7 @@ export const getMyBungleList = createAsyncThunk(
         },
       });
       // console.log(response);
-      if( response.data.response ){
+      if (response.data.response) {
         return response.data.postResponseDto;
       }
     } catch (error) {
@@ -52,16 +52,20 @@ export const getMyBungleList = createAsyncThunk(
 // 벙글 수정하기
 export const editMyBungleList = createAsyncThunk(
   "EDIT/editMyBungleList",
-  async( data ) => {
+  async (data) => {
     // console.log( data );
     try {
-      const response = await axios.put(`${SERVER_URL}/posts/${data.postId}`, data.formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: token,
-        },
-      });
-      console.log( response );
+      const response = await axios.put(
+        `${SERVER_URL}/posts/${data.postId}`,
+        data.formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: token,
+          },
+        }
+      );
+      console.log(response);
     } catch (e) {
       console.log(e);
     }
@@ -71,7 +75,7 @@ export const editMyBungleList = createAsyncThunk(
 // 벙글 삭제하기
 export const deleteMyBungleList = createAsyncThunk(
   "DELETE/deleteMyBungleList",
-  async ( postId ) => {
+  async (postId) => {
     try {
       //axios.delete(URL, {params: payload}, header);
       const response = await axios.delete(`${SERVER_URL}/posts/${postId}`, {
@@ -80,7 +84,7 @@ export const deleteMyBungleList = createAsyncThunk(
         },
       });
       console.log(response);
-      if( response.data.response ){
+      if (response.data.response) {
         return response.data.isOwner;
       }
     } catch (e) {
@@ -245,7 +249,7 @@ export const getUserProfile = createAsyncThunk(
           Authorization: token,
         },
       });
-      console.log( response );
+      console.log(response);
       if (response.data.response) {
         return response.data.profileResponseDto;
       }
@@ -271,7 +275,7 @@ export const editUserProfile = createAsyncThunk(
         }
       );
       console.log(response);
-      if( response.data.response ){
+      if (response.data.response) {
         return response.data.profileResponseDto;
       }
     } catch (error) {
@@ -300,25 +304,32 @@ export const myLikeBungleList = createAsyncThunk(
   }
 );
 
+// 채팅 목록 조회
+export const myChattingList = createAsyncThunk(
+  "GET/myChattingList",
+  async () => {
+    // console.log(1);
+    try {
+      const response = await axios.get(`${SERVER_URL}/chat/rooms`, {
+        headers: {
+          Authorization: token,
+        },
+      });
+      console.log(response);
+      if (response.data) {
+        return response.data;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
+
 const BungleSlice = createSlice({
   name: "Bungle",
+  isOwner: false,
   initialState: {
-    isOwner:false,
-    // myBunglePost: {
-    //   title: "막걸리 한잔 하실 분",
-    //   content: "비도 오는데 막걸리에 파전 어떠세요?",
-    //   categories: ["맛집", "친목"],
-    //   tags: ["비", "막걸리", "파전"],
-    //   time: "2022-07-13 19:00:00",
-    //   place: "수원시 영통구 매영대로 31",
-    //   postUrls: [
-    //     "https://meeting-project.s3.ap-northeast-2.amazonaws.com/0c7f4d22-8a40-423d-ba5b-341c6635dae9.jpg",
-    //     "https://meeting-project.s3.ap-northeast-2.amazonaws.com/3c6926fc-5bc6-471d-93ce-1e0e4f22e092.jpg",
-    //   ],
-    //   personnel: 5,
-    //   isLetter: true,
-    //  postId:14
-    // },
+    isOwner: false,
     // 유저 프로필
     userProfile: {},
     // 게시물 생성 하자마자 채팅룸 아이디 전달
@@ -338,13 +349,15 @@ const BungleSlice = createSlice({
     // 내 찜 목록
     myLikeList: [{}],
     // 내가 작성한 게시물 조회
-    myBunglePost:{},
+    myBunglePost: {},
     list: [{}],
+    // 내 채팅 목록
+    myChatting: [],
   },
   reducers: {},
   extraReducers: {
-    // 
-    
+    //
+
     // 벙글 생성, post ID 전달
     [createBungleList.fulfilled]: (state, action) => {
       console.log("create fullfill");
@@ -369,10 +382,9 @@ const BungleSlice = createSlice({
       console.log("Main reject");
     },
 
-
     // 게시글 찜하기
     [likeBungleList.fulfilled]: (state, action) => {
-      console.log( action.payload );
+      console.log(action.payload);
       // realTime Update
       const realTimeUpdate = current(state.realTime).map((item) => {
         // console.log( item )
@@ -469,11 +481,10 @@ const BungleSlice = createSlice({
       state.moreList = action.payload;
     },
     [tagBungleList.rejected]: (state, action) => {},
-    
-    
+
     // 유저 프로필 조회
     [getUserProfile.fulfilled]: (state, action) => {
-      console.log( action.payload)
+      console.log(action.payload);
       state.userProfile = action.payload;
     },
     [getUserProfile.rejected]: (state, action) => {},
@@ -487,20 +498,25 @@ const BungleSlice = createSlice({
     [myLikeBungleList.fulfilled]: (state, action) => {
       state.myLikeList = action.payload;
     },
-
-    [ getMyBungleList.fulfilled ] : (state,action) => {
+    // 채팅 목록 조회
+    [myChattingList.fulfilled]: (state, action) => {
+      console.log(action.payload);
+      state.myChatting = action.payload;
+    },
+    [myChattingList.rejected]: (state, action) => {
+      console.log("상세조회 실패");
+    },
+    [getMyBungleList.fulfilled]: (state, action) => {
       // console.log( action.payload );
       state.myBunglePost = action.payload;
     },
 
     // 게시물 삭제
-    [ deleteMyBungleList.fulfilled ] : ( state, action ) => {
+    [deleteMyBungleList.fulfilled]: (state, action) => {
       // console.log( action.payload );
       state.isOwner = action.payload;
     },
-    [ deleteMyBungleList.rejected ] : (state, action) => {
-
-    }
+    [deleteMyBungleList.rejected]: (state, action) => {},
   },
 });
 

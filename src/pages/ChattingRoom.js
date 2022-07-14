@@ -49,32 +49,36 @@ let client = null;
 
 function ChattingRoom() {
   // SERVER URL
-  const SERVER_URL = "http://3.37.61.25";
+  // const SERVER_URL = "http://3.37.61.25";
+  const SERVER_URL = "http://52.79.214.48";
   // navigate
   const navigate = useNavigate();
   // 방장권한
-  const BungleOnwer = useSelector( state => state.Bungle.OnwerPostId );
+  const BungleOnwer = useSelector((state) => state.Bungle.isOwner);
   // 내가 만든 채팅 룸 ID
   const Bungle = useSelector((state) => state.Bungle.OnwerPostId);
   // 참여자 채팅 룸 ID
-  const Guest = useSelector( state => state.Bungle.detailBungle.postId );
+  const Guest = useSelector((state) => state.Bungle.detailBungle.postId);
   // if (Bungle) {
   //   console.log("PostID ", Bungle);
   // }
   const token = localStorage.getItem("login-token");
+
   let postId;
 
-  if( Bungle ){
+  console.log(Bungle);
+  console.log(Guest);
+
+  if (Bungle > 0) {
     postId = Bungle;
-  }else{
-    postId = Guest;
+  } else if (Guest > 0) {
+    postId = String(Guest);
+    // console.log(parseInt(postId));
   }
 
-  console.log( Bungle, Guest, postId);
+  console.log(Bungle, Guest, postId);
   // const { postID } = useParams();
 
-  // const token =
-  //   "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqZW9uZ2h5ZW9udWs5OEBnbWFpbC5jb20iLCJpYXQiOjE2NTc1NjcxNTMsImV4cCI6MTY1NzY1MzU1M30.JOSRNC06Sp7xwvWbJ35kWONEV3NPm8M3T5V77f8wKPc";
   const username = localStorage.getItem("user-name");
 
   // console.log(token);
@@ -93,7 +97,7 @@ function ChattingRoom() {
   // }, []);
 
   React.useEffect(() => {
-    if (postId > 0) {
+    if (postId > 0 || Number(postId) > 0) {
       connect();
     }
   }, [postId]);
@@ -106,8 +110,11 @@ function ChattingRoom() {
 
   const onConnected = () => {
     setUserData({ ...userData, connected: true });
-    client.subscribe(`/sub/chat/room/${postId}`, onMessageReceived);
-
+    if (Bungle) {
+      client.subscribe(`/sub/chat/room/${postId}`, onMessageReceived);
+    } else if (Guest) {
+      client.subscribe(`/sub/chat/room/${parseInt(postId)}`, onMessageReceived);
+    }
     userJoin();
   };
   // console.log(userData);
@@ -118,12 +125,22 @@ function ChattingRoom() {
 
   const userJoin = () => {
     console.log("Test user Join");
-    var chatMessage = {
-      type: "ENTER",
-      nickName: "seowoo",
-      roomId: `${postId}`,
-      status: "JOIN",
-    };
+    if (Bungle) {
+      var chatMessage = {
+        type: "ENTER",
+        nickName: "seowoo",
+        roomId: `${postId}`,
+        status: "JOIN",
+      };
+    } else if (Guest) {
+      var chatMessage = {
+        type: "ENTER",
+        nickName: "seowoo",
+        roomId: `${parseInt(postId)}`,
+        status: "JOIN",
+      };
+    }
+
     client.send("/pub/chat/message", { token }, JSON.stringify(chatMessage));
     console.log("Test user Subscribe");
   };
@@ -136,12 +153,21 @@ function ChattingRoom() {
   const sendValue = () => {
     console.log("Test user send");
     if ((client && userData.message) || (client && fileUrl)) {
-      var chatMessage = {
-        type: "TALK",
-        message: userData.message,
-        roomId: `${postId}`,
-        fileUrl: fileUrl,
-      };
+      if (Bungle) {
+        var chatMessage = {
+          type: "TALK",
+          message: userData.message,
+          roomId: `${postId}`,
+          fileUrl: fileUrl,
+        };
+      } else if (Guest) {
+        var chatMessage = {
+          type: "TALK",
+          message: userData.message,
+          roomId: `${parseInt(postId)}`,
+          fileUrl: fileUrl,
+        };
+      }
       console.log(chatMessage);
       client.send("/pub/chat/message", { token }, JSON.stringify(chatMessage));
       setUserData({ ...userData, message: "" });
@@ -180,10 +206,17 @@ function ChattingRoom() {
 
   //Disconnect
   const chatDisconnect = () => {
-    var chatMessage = {
-      type: "QUIT",
-      roomId: `${postId}`,
-    };
+    if (Bungle) {
+      var chatMessage = {
+        type: "QUIT",
+        roomId: `${postId}`,
+      };
+    } else if (Guest) {
+      var chatMessage = {
+        type: "QUIT",
+        roomId: `${parseInt(postId)}`,
+      };
+    }
     client.send("/pub/chat/message", { token }, JSON.stringify(chatMessage));
     client.disconnect(function () {
       alert("See you next time!");
@@ -373,13 +406,54 @@ function ChattingRoom() {
   }
   console.log("유저 Id: ", reportUserId);
 
+  console.log(publicChats);
+
+  //이전 메세지 불러오기
+  const getMessage = () => {
+    axios({
+      method: "get",
+      url: `${SERVER_URL}/chat/message/${postId}`,
+      headers: {
+        Authorization: token,
+      },
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  React.useEffect(() => {
+    getMessage();
+  }, []);
+
+  //채팅 자동 스크롤
+  const messagesEndRef = React.useRef(null);
+
+  const scrollToBottom = () => {
+    const { scrollHeight, clientHeight } = messagesEndRef.current;
+    messagesEndRef.current.scrollTop = scrollHeight - clientHeight;
+    console.log(messagesEndRef);
+  };
+
+  React.useEffect(() => {
+    scrollToBottom();
+  }, [publicChats]);
+
   return (
     <>
       <div id="chat-app">
         <div id="page-wrap">
           <HeaderWrap>
             <Logo src={IconMainLogo} style={{ visibility: "hidden" }} />
-            <BackKey src={IconBackKey} onClick={()=>{navigate("/main")}}/>
+            <BackKey
+              src={IconBackKey}
+              onClick={() => {
+                navigate("/main");
+              }}
+            />
             <PageTitle style={{ visibility: "hidden" }}></PageTitle>
             <HeadrIconsWrap>
               <IconMyLocation
@@ -431,6 +505,7 @@ function ChattingRoom() {
                                 item.fileUrl.slice(-3) === "gif" ||
                                 item.fileUrl.slice(-3) === "bmp" ||
                                 item.fileUrl.slice(-3) === "img" ||
+                                item.fileUrl.slice(-4) === "jfif" ||
                                 item.fileUrl.slice(-3) === "JPG" ||
                                 item.fileUrl.slice(-3) === "PNG" ||
                                 item.fileUrl.slice(-4) === "JPEG" ||
@@ -550,6 +625,8 @@ function ChattingRoom() {
                               className="modal-content-wrap-report"
                               onClick={() => {
                                 chatReportPerson();
+                                setIsModal(!isModal);
+                                setIsBtn(!isBtn);
                               }}
                             >
                               신고하기
@@ -585,18 +662,18 @@ function ChattingRoom() {
               </div>
             </div>
           )}
-          <div className="chat-wrap">
+          <div className="chat-wrap" ref={messagesEndRef}>
             {publicChats.map((chat, index) => (
               <div key={index}>
-                {/* {console.log(chat.fileUrl)} */}
+                {/* {console.log(chat)} */}
                 {username !== chat.username ? (
                   <>
                     <div className="item">
                       <div className="profile">
-                        <img src={defaultProfile} alt="" />
+                        <img src={chat.profileUrl} alt="" />
                       </div>
                       <div className="box">
-                        <span className="nickname">Sender</span>
+                        <span className="nickname">{chat.sender}</span>
                         {chat.message && chat.message !== "" ? (
                           <>
                             <p className="msg">{chat.message}</p>
@@ -607,6 +684,7 @@ function ChattingRoom() {
                             {chat.fileUrl.slice(-3) === "jpg" ||
                             chat.fileUrl.slice(-3) === "png" ||
                             chat.fileUrl.slice(-4) === "jpeg" ||
+                            chat.fileUrl.slice(-4) === "jfif" ||
                             chat.fileUrl.slice(-3) === "gif" ||
                             chat.fileUrl.slice(-3) === "bmp" ||
                             chat.fileUrl.slice(-3) === "img" ||
@@ -648,7 +726,7 @@ function ChattingRoom() {
                     <img src={defaultProfile} alt="" />
                   </div> */}
                       <div className="mybox">
-                        <span className="mynickname">Sender</span>
+                        <span className="mynickname">{chat.sender}</span>
                         {chat.message && chat.message !== "" ? (
                           <>
                             <p className="mymsg">{chat.message}</p>
@@ -659,9 +737,16 @@ function ChattingRoom() {
                             {chat.fileUrl.slice(-3) === "jpg" ||
                             chat.fileUrl.slice(-3) === "png" ||
                             chat.fileUrl.slice(-4) === "jpeg" ||
+                            chat.fileUrl.slice(-4) === "jfif" ||
                             chat.fileUrl.slice(-3) === "gif" ||
                             chat.fileUrl.slice(-3) === "bmp" ||
-                            chat.fileUrl.slice(-3) === "img" ? (
+                            chat.fileUrl.slice(-3) === "img" ||
+                            chat.fileUrl.slice(-3) === "JPG" ||
+                            chat.fileUrl.slice(-3) === "PNG" ||
+                            chat.fileUrl.slice(-4) === "JPEG" ||
+                            chat.fileUrl.slice(-3) === "GIF" ||
+                            chat.fileUrl.slice(-3) === "BMP" ||
+                            chat.fileUrl.slice(-3) === "IMG" ? (
                               <>
                                 <p className="mymsg-file">
                                   <img src={chat.fileUrl} alt="" />

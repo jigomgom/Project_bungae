@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { myChattingList } from "../redux/modules/BungleSlice";
 
 import {
   // LeadingActions,
@@ -10,13 +11,13 @@ import {
 } from "react-swipeable-list";
 import "react-swipeable-list/dist/styles.css";
 
-// import 와왕 from "../images/와왕.png";
 import defaultProfile from "../assets/icon-default-profile.svg";
 import "../styles/ChatListSwiper.css";
 
 function App() {
-  const token = localStorage.getItem("login-token");
-  const [chatList, setChatList] = useState();
+  const myChattingInfo = useSelector((state) => state.Bungle.myChatting);
+
+  const dispatch = useDispatch();
 
   const trailingActions = () => (
     <TrailingActions>
@@ -36,30 +37,15 @@ function App() {
     "Lorem ipsum5",
   ];
 
-  const chattingRoomCall = () => {
-    axios({
-      method: "get",
-      url: `http://52.79.214.48/chat/rooms`,
-      headers: {
-        Authorization: token,
-      },
-    })
-      .then((response) => {
-        console.log(response);
-        setChatList(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  React.useEffect(() => {
-    chattingRoomCall();
+  useEffect(() => {
+    dispatch(myChattingList());
   }, []);
+
+  //시간 커스텀
 
   return (
     <>
-      {chatList.map((item, index) => {
+      {myChattingInfo.map((item, index) => {
         return (
           <SwipeableList key={index}>
             <SwipeableListItem
@@ -68,20 +54,24 @@ function App() {
             >
               <div className="first_swiper_main">
                 <div className="first_swiper_img">
-                  <img src={defaultProfile} alt="" />
+                  {/* <img src={defaultProfile} alt="" /> */}
+                  <img src={item.postUrl} alt="" />
                 </div>
                 <div className="first_swipe">
                   <div className="first_swipe_title">
-                    {item.ChatMessageResponseDto[index].title}
+                    {item.postTitle}
+                    {/* 제목 */}
                   </div>
 
                   <div className="first_swipe_content">
                     <span>
-                      {item.ChatMessageResponseDto[index].lastMessage}
+                      {item.lastMessage}
+                      {/* 마지막 메세지 */}
                     </span>
                   </div>
                   <div className="first_swipe_sub">
-                    {item.ChatMessageResponseDto[index].lastMessageTime}
+                    {item.lastMessageTime} ∙ {item.postTime}
+                    {/* 마지막 시간 */}
                   </div>
                 </div>
               </div>

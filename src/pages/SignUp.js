@@ -31,7 +31,8 @@ import {
 import IconInputClear from "../assets/icon-input-xbtn.svg";
 
 const Signup = () => {
-  const SERVER_URL = "http://3.37.61.25";
+  // const SERVER_URL = "http://3.37.61.25";
+  const SERVER_URL = "http://52.79.214.48";
   //비밀번호 유효성 검사
   const checkPassword = (e) => {
     //  8 ~ 30자 영문, 숫자 조합, 문자 조합
@@ -56,7 +57,6 @@ const Signup = () => {
     if (!emailRegEx.test(e.target.value)) {
       setEmailMessage("*메일 형식이 올바르지 않습니다.");
       setIsEmail(false);
-      
     } else {
       setEmailMessage("*메일 형식이 올바릅니다.");
       setIsEmail(true);
@@ -188,50 +188,9 @@ const Signup = () => {
   };
 
   const Interval = useRef(null);
-  // onKeyUp
 
-  const onKeyUp = async (event) => {
-  //   // console.log( event.target.value );
-  //   let checked = false;
-  //   if (isEmail && !checked) {
-  //     //   try {
-  //     //     const response = await axios.post(`${SERVER_URL}/user/duplicate/username`, {
-  //     //       username: event.target.value,
-  //     //     });
-  //     //     console.log(response);
-  //     //   } catch (error) {
-  //     //     console.log(error);
-  //     //   }
-  //   //   Interval.current = setInterval(async () => {
-  //   //     try {
-  //   //       const response = await axios.post(
-  //   //         `${SERVER_URL}/user/duplicate/username`,
-  //   //         {
-  //   //           username: event.target.value,
-  //   //         }
-  //   //       );
-  //   //       console.log(response);
-  //   //       if (response.data.response) {
-  //   //         console.log("!!");
-  //   //         clearInterval(Interval.current);
-  //   //         setIsEmail(false);
-  //   //         setEmailMessage(response.data.message);
-  //   //         checked = true;
-  //   //       } else {
-  //   //         setIsEmail(false);
-  //   //         setEmailMessage(response.data.message);
-  //   //         clearInterval(Interval.current);
-  //   //       }
-  //   //     } catch (error) {
-  //   //       console.log(error);
-  //   //     }
-  //   //     console.log(event.target.value);
-  //   //   }, 2000);
-  //   // } else {
-  //   //   console.log("??");
-  //   //   clearInterval(Interval.current);
-  //   // }
-  };
+  // onKeyUp
+  const onKeyUp = async (event) => {};
   return (
     <SignUpWrapper>
       <SiginUpEmailWrapper>
