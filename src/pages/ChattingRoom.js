@@ -49,8 +49,8 @@ let client = null;
 
 function ChattingRoom() {
   // SERVER URL
-  // const SERVER_URL = "http://3.37.61.25";
-  const SERVER_URL = "http://52.79.214.48";
+  const SERVER_URL = "http://3.37.61.25";
+  // const SERVER_URL = "http://52.79.214.48";
   // navigate
   const navigate = useNavigate();
   // 방장권한
@@ -69,13 +69,18 @@ function ChattingRoom() {
   console.log(Bungle);
   console.log(Guest);
 
-  if (Bungle > 0) {
-    postId = Bungle;
-  } else if (Guest > 0) {
-    postId = String(Guest);
-    // console.log(parseInt(postId));
-  }
+  // if (Bungle > 0) {
+  //   postId = Bungle;
+  // } else if (Guest > 0) {
+  //   postId = String(Guest);
+  //   // console.log(parseInt(postId));
+  // }
 
+  if (Bungle) {
+    postId = Bungle;
+  } else {
+    postId = String(Guest);
+  }// console.log(parseInt(postId)); }
   console.log(Bungle, Guest, postId);
   // const { postID } = useParams();
 

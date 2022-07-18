@@ -110,6 +110,7 @@ function EditPost() {
   useEffect(()=>{
     if( isLoad ){
       dispatch( getMyBungleList() );
+      window.scrollTo(0,0);
       setTimeout(()=>{ setIsLoad( false )}, 200 );
     }
   },[])
@@ -133,7 +134,7 @@ function EditPost() {
     if( !isLoad ){
       setTagList( myBungle.tags );
 
-      myBungle.categories.forEach( Checkeditem => {
+      myBungle?.categories.forEach( Checkeditem => {
         CategoriesObjArray.map( item => {
           if( item.category === Checkeditem ){
             item.clicked = true;

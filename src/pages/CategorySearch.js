@@ -26,12 +26,13 @@ function CategorySearch() {
   const navigate = useNavigate();
   const { category } = useParams();
 
-  console.log( category );
+  // console.log( category );
 
   useEffect(()=>{
-    if( isLoad ){
-      setTimeout(()=>{ setIsLaod( false )}, 200);
-    }
+    // if( isLoad ){
+      window.scrollTo(0,0);
+    //   setTimeout(()=>{ setIsLaod( false )}, 200);
+    // }
   },[]);
   //검색 정렬 드롭박스
   const [selected, setSelected] = React.useState("최신순");

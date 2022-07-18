@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // const SERVER_URL = "http://3.37.61.25";
-const SERVER_URL = "http://52.79.214.48";
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const token = localStorage.getItem("login-token");
 
 // 벙글 생성하기
@@ -85,7 +86,11 @@ export const deleteMyBungleList = createAsyncThunk(
       });
       console.log(response);
       if (response.data.response) {
-        return response.data.isOwner;
+        let data = {
+          postId,
+          isOwner: response.data.isOwner
+        }
+        return data;
       }
     } catch (e) {
       console.log(e);
@@ -96,11 +101,10 @@ export const deleteMyBungleList = createAsyncThunk(
 export const getMainBungleList = createAsyncThunk(
   "GET/getMainBungleList",
   async (position) => {
-    // console.log(position);
     try {
       const response = await axios.get(`${SERVER_URL}/posts`, {
         headers: {
-          Authorization: token,
+          Authorization: localStorage.getItem("login-token"),
         },
         params: {
           latitude: position?.latitude,
@@ -154,7 +158,7 @@ export const likeBungleList = createAsyncThunk(
         {},
         {
           headers: {
-            Authorization: token,
+            Authorization: localStorage.getItem("login-token"),
           },
         }
       );
@@ -176,7 +180,7 @@ export const detailBungleList = createAsyncThunk(
     try {
       const response = await axios.get(`${SERVER_URL}/posts/${postId}`, {
         headers: {
-          Authorization: token,
+          Authorization: localStorage.getItem("login-token"),
         },
       });
       console.log(response);
@@ -188,6 +192,32 @@ export const detailBungleList = createAsyncThunk(
     }
   }
 );
+
+// 게시글 상세 조회 like 클릭
+export const detailLikeBungleList = createAsyncThunk(
+  "LIKE/detailLikeBungleList",
+  async( postId ) => {
+    console.log(postId);
+    try {
+      const response = await axios.post(
+        `${SERVER_URL}/posts/like/${postId}`,
+        {},
+        {
+          headers: {
+            Authorization: localStorage.getItem("login-token"),
+          },
+        }
+      );
+      console.log(response);
+      if (response.data.response) {
+        return postId;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+)
+
 
 // 게시글 단일 카테고리 조회
 export const categoryBungleList = createAsyncThunk(
@@ -206,8 +236,11 @@ export const categoryBungleList = createAsyncThunk(
           categories: item.category,
         },
       });
+      console.log(response);
       if (response.data.response) {
         return response.data.list;
+      }else{
+        alert(`${response.data.message}`);
       }
     } catch (e) {
       console.log(e);
@@ -246,7 +279,7 @@ export const getUserProfile = createAsyncThunk(
     try {
       const response = await axios.get(`${SERVER_URL}/user/profile`, {
         headers: {
-          Authorization: token,
+          Authorization: localStorage.getItem("login-token"),
         },
       });
       console.log(response);
@@ -270,7 +303,7 @@ export const editUserProfile = createAsyncThunk(
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: token,
+            Authorization: localStorage.getItem("login-token"),
           },
         }
       );
@@ -354,10 +387,9 @@ const BungleSlice = createSlice({
     // 내 채팅 목록
     myChatting: [],
   },
-  reducers: {},
+  reducers: {
+  },
   extraReducers: {
-    //
-
     // 벙글 생성, post ID 전달
     [createBungleList.fulfilled]: (state, action) => {
       console.log("create fullfill");
@@ -371,9 +403,8 @@ const BungleSlice = createSlice({
     // Main 전체 게시글 조회
     [getMainBungleList.fulfilled]: (state, action) => {
       console.log("Main get");
-      // console.log( action.payload );
-      // console.log(action.payload.isOwner );
       state.isOwner = action.payload?.isOwner;
+      
       state.endTime = action.payload.postListEndTime;
       state.realTime = action.payload.postListRealTime;
       // console.log( current( state.endTime ), current( state.realTime ) );
@@ -467,7 +498,14 @@ const BungleSlice = createSlice({
     [detailBungleList.rejected]: (state, action) => {
       console.log("상세조회 실패");
     },
-
+    // 상세 게시글 좋아요 클릭
+    [ detailLikeBungleList.fulfilled ] : ( state, action ) => {
+      if( ( state.detailBungle.isLike )){
+        state.detailBungle.isLike = false;
+      }else{
+        state.detailBungle.isLike = true;
+      }
+    },
     // 카테고리 조회
     [categoryBungleList.fulfilled]: (state, action) => {
       console.log(action.payload);
@@ -513,12 +551,45 @@ const BungleSlice = createSlice({
 
     // 게시물 삭제
     [deleteMyBungleList.fulfilled]: (state, action) => {
-      // console.log( action.payload );
-      state.isOwner = action.payload;
+      console.log( action.payload );
+      const postId = action.payload.postId;
+      const isOwner = action.payload.isOwner;
+      // let deleteSelector = "";
+      //  // 마감 임박
+      // const returnEndList = state.endTime.filter( ( item)=>{
+      //   if( item.postId === postId ){
+      //     deleteSelector = "real";
+      //   }
+      //   return item.postId !== postId;
+      //   // if( item.postId !== postId ){
+      //   //   // console.log( item );
+      //   //   return item;
+      //   // }
+      // });
+      // // 실시간
+      // const returnRealList = state.realTime.filter( ( item ) => {
+      //   if( item.postId === postId ){
+      //     deleteSelector = "end";
+      //   }
+      //   return item.postId !== postId;
+      // })
+
+      // console.log(returnEndList );
+      // console.log( returnRealList);
+      // // state.endTime = [];
+      // if( deleteSelector === "real" ){
+      //   state.realTime = [];
+      // }else if( deleteSelector === "end" ){
+      //   state.endTime = [];
+      // }
+      
+      // state.endTime = returnEndList;
+      // state.realTime = returnRealList;
+      state.isOwner = isOwner;
+      // console.log( state.endTime, state.realTime );
     },
     [deleteMyBungleList.rejected]: (state, action) => {},
   },
 });
 
-// export const { changeLoginState } = FeedSlice.actions;
 export default BungleSlice.reducer;

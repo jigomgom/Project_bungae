@@ -1,7 +1,7 @@
 /* global kakao */
 import React, { useEffect, useRef, useState } from "react";
 
-import { detailBungleList } from "../redux/modules/BungleSlice";
+import { detailBungleList, detailLikeBungleList } from "../redux/modules/BungleSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
@@ -73,7 +73,6 @@ import Notification from "../assets/icon-notification.svg";
 import Setting from "../assets/icon-setting.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
 
-const TagsArrray = ["산책", "친목", "노래방", "수다", "대화"];
 const MembersArray = [
   "Lorem ipsum1",
   "Lorem ipsum2",
@@ -84,30 +83,26 @@ const MembersArray = [
 //채팅 입장 client
 const Post = () => {
   const navigate = useNavigate();
-  const [isLoaded, setIsLoaded] = useState(true);
 
   const detailBungleInfo = useSelector((state) => state.Bungle.detailBungle);
-
+  // console.log( detailBungleInfo, detailBungleInfo.length );
   const { postId } = useParams();
 
   const dispatch = useDispatch();
 
   const container = useRef(null);
   // const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
-
+  const [isLoaded, setIsLoaded] = useState(true);
   useEffect(() => {
-    if (isLoaded) {
+    // postId가 있을 경우, dispatch 실행
       dispatch(detailBungleList(postId));
-      setTimeout(() => {
-        setIsLoaded(false);
-      }, 600);
-    }
-  }, []);
+      console.log("Detail mount");
+      window.scrollTo(0,0);
+  }, [postId]);
 
   useEffect(() => {
-    // const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
-    // if (detailBungleInfo !== "") {
-    if (!isLoaded) {
+      if( detailBungleInfo.latitude ){
+        // latitude 값이 들어왔을 경우 실행
       const options = {
         //지도를 생성할 때 필요한 기본 옵션
         // center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
@@ -119,18 +114,25 @@ const Post = () => {
       };
 
       const map = new kakao.maps.Map(container.current, options); //지도 생성 및 객체 리턴
-      // }
     }
-  }, [isLoaded]);
+  }, [detailBungleInfo.latitude]);
 
   //참여하기 버튼 클릭 시 해당 채팅방으로 이동
   const goToChatRoom = () => {
     navigate(`/chat/${postId}`);
   };
 
+  // 좋아요 클릭
+
+  const isLikeClick = ( postId ) => {
+    dispatch( detailLikeBungleList( postId ) );
+    console.log("like ", postId);
+  };
+
   return (
     <>
-      {isLoaded === false && (
+      {/* Urls가 있으면 렌더링 */}
+      {detailBungleInfo.postUrls && (
         <>
           <HeaderWrap>
             <Logo style={{ visibility: "hidden" }} />
@@ -150,19 +152,42 @@ const Post = () => {
           </HeaderWrap>
           <PostWrap>
             <PostContent>
-              {console.log(detailBungleInfo)}
-              <PostImg src={detailBungleInfo.postUrls[0]} />
               <PostIconShared src={IconShared} />
-              <PostLike src={detailBungleInfo.isLike ? IconLike : IconUnlike} />
+              <PostLike src={detailBungleInfo.isLike ? IconLike : IconUnlike} onClick={()=>{ isLikeClick( detailBungleInfo.postId ) }}/>
+              {detailBungleInfo.postUrls.length > 1 ? (
+                <Swiper
+                style={{ position: "relative", width: "100%", height:"207px"}}
+                >
+                  {detailBungleInfo.postUrls.map( ( item, index ) =>{
+                    return(
+                      <SwiperSlide key={index}>
+                       <PostImg src={item} />
+                     </SwiperSlide>
+                    )
+                  })}
+                </Swiper>
+              ) : (
+                <PostImg src={detailBungleInfo.postUrls[0]} />
+              )}
+              {/* <PostImg src={detailBungleInfo.postUrls[0]} /> */}
+
               <PostUserBox>
-                <PostUserBoxProfile />
+                <PostUserBoxProfile
+                  src={
+                    detailBungleInfo.joinPeopleUrl[0]
+                      ? detailBungleInfo.joinPeopleUrl[0]
+                      : ""
+                  }
+                />
                 <PostUserTexts>
-                  <PostUserName>닉네임</PostUserName>
+                  <PostUserName>
+                    {detailBungleInfo.joinPeopleNickname[0]}
+                  </PostUserName>
                   <PostUserIntro>자기 소개를 입력해주세요</PostUserIntro>
                   <PostUserIcon>
                     <PostUserIconImg src={IconLightening} />
                     <PostUserIconText>
-                      {detailBungleInfo.joinCount}회 참여
+                      {detailBungleInfo.bungCount}회 참여
                     </PostUserIconText>
                     <PostUserIconImg
                       src={
@@ -189,7 +214,7 @@ const Post = () => {
                 </PostCategoriesWrapper>
                 <PostTagWrap>
                   {detailBungleInfo.tags.map((item, index) => {
-                    return <PostTag>#{item}</PostTag>;
+                    return <PostTag key={item}>#{item}</PostTag>;
                   })}
                 </PostTagWrap>
               </PostBodyTextWrap>
@@ -213,12 +238,14 @@ const Post = () => {
                 spaceBetween={5}
                 slidesPerView={3}
               >
-                {MembersArray.map((item, index) => {
+                {detailBungleInfo.joinPeopleUrl.map((item, index) => {
                   return (
                     <SwiperSlide key={index}>
-                      <PostMemberCard>
-                        <PostMemberPicture />
-                        <PostMemberName>{item}</PostMemberName>
+                      <PostMemberCard >
+                        <PostMemberPicture src={item} />
+                        <PostMemberName>
+                          {detailBungleInfo.joinPeopleNickname[index]}
+                        </PostMemberName>
                       </PostMemberCard>
                     </SwiperSlide>
                   );

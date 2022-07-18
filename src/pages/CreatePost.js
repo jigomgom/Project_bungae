@@ -432,7 +432,7 @@ function CreatePost() {
     // display: "flex",
     position: "absolute",
     top: "1280px",
-    left: "650px",
+    left: "760px",
     width: "375px",
     height: "470px",
     padding: "7px",
@@ -489,6 +489,7 @@ function CreatePost() {
       handleError,
       options
     );
+    window.scrollTo(0,0);
   }, []);
 
   useEffect(() => {

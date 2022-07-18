@@ -23,6 +23,7 @@ function TagSearch() {
   };
   useEffect(()=>{
     if( isLoad ){
+      window.scrollTo(0,0);
       setTimeout(()=>{ setIsLoad( false )}, 200 );
     }
   },[])
