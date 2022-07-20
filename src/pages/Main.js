@@ -43,6 +43,7 @@ import defaultCardImg from "../assets/defaultImg.jpg";
 import IconHighTemp from "../assets/icon-manner-high.svg";
 import IconMiddleTemp from "../assets/icon-manner-middle.svg";
 import IconLowTemp from "../assets/icon-manner-low.svg";
+import SockJS from "sockjs-client";
 
 
 
@@ -55,7 +56,8 @@ function Main() {
   const [isLoad, setIsLoad] = useState(true);
   const realTimeList = useSelector((state) => state.Bungle.realTime);
   const endTimeList = useSelector((state) => state.Bungle.endTime);
-
+  console.log( realTimeList );
+  console.log( endTimeList );
   // 벙글 리스트 전체 조회하기
   // 현위치 찾아오기
   // 지도 경도, 위도 State
@@ -123,7 +125,7 @@ function Main() {
           handleSuccess,
           handleError,
           options
-        );
+        );    
   }, []);
 
   useEffect(() => {

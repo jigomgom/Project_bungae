@@ -185,8 +185,8 @@ export const LoginSns = styled.div`
 
 export const LoginSnsIconWarp = styled.div`
   display: flex;
-  width: 89%;
-  justify-content: space-around;
+  width: 56%;
+  justify-content: space-between;
 
   margin-top: 23px;
   margin-bottom: 26px;

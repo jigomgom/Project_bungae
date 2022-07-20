@@ -76,7 +76,8 @@ function Login() {
         localStorage.setItem("login-token", response.headers.authorization);
         localStorage.setItem("user-name", response.data.username);
         console.log( localStorage.getItem("login-token") );
-        navigate("/main");
+        // navigate("/main");
+        window.location.href = "/main";
       }
     }catch( error ){
       console.log( error );
@@ -332,7 +333,7 @@ function Login() {
           alt="네이버"
           onClick={naverSocialLogin}
         />
-        <img src="https://member.brandi.co.kr/images/ic_apple.svg" alt="애플" />
+        {/* <img src="https://member.brandi.co.kr/images/ic_apple.svg" alt="애플" /> */}
       </LoginSnsIconWarp>
       <SignupFindPasswordWarp>
         <LoginBottomText

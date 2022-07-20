@@ -73,6 +73,8 @@ import Notification from "../assets/icon-notification.svg";
 import Setting from "../assets/icon-setting.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
 
+import IconCurrentMarker from "../assets/icon-marker-current.svg";
+
 const MembersArray = [
   "Lorem ipsum1",
   "Lorem ipsum2",
@@ -112,8 +114,20 @@ const Post = () => {
         ), //지도의 중심좌표.
         level: 3, //지도의 레벨(확대, 축소 정도)
       };
-
+      
       const map = new kakao.maps.Map(container.current, options); //지도 생성 및 객체 리턴
+      // 마커 생성
+      const imageSrc = IconCurrentMarker;
+      const imageSize = new kakao.maps.Size( 10, 10 );
+      const imageOption = '';
+      const markerImage = new kakao.maps.MarkerImage( imageSrc, imageSize, imageOption );
+      const markerPosition = new kakao.maps.LatLng( detailBungleInfo.latitude,detailBungleInfo.longitude );
+      const marker = new kakao.maps.Marker({
+        position: markerPosition,
+        image: markerImage
+      });
+
+      marker.setMap(map);
     }
   }, [detailBungleInfo.latitude]);
 
@@ -183,7 +197,7 @@ const Post = () => {
                   <PostUserName>
                     {detailBungleInfo.joinPeopleNickname[0]}
                   </PostUserName>
-                  <PostUserIntro>자기 소개를 입력해주세요</PostUserIntro>
+                  <PostUserIntro>{detailBungleInfo.joinPeopleIntro[0]}</PostUserIntro>
                   <PostUserIcon>
                     <PostUserIconImg src={IconLightening} />
                     <PostUserIconText>

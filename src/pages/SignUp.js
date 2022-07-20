@@ -32,7 +32,7 @@ import IconInputClear from "../assets/icon-input-xbtn.svg";
 
 const Signup = () => {
   // const SERVER_URL = "http://3.37.61.25";
-  const SERVER_URL = "http://52.79.214.48";
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   //비밀번호 유효성 검사
   const checkPassword = (e) => {
     //  8 ~ 30자 영문, 숫자 조합, 문자 조합
@@ -57,6 +57,7 @@ const Signup = () => {
     if (!emailRegEx.test(e.target.value)) {
       setEmailMessage("*메일 형식이 올바르지 않습니다.");
       setIsEmail(false);
+      setDuplicateEmail( false );
     } else {
       setEmailMessage("*메일 형식이 올바릅니다.");
       setIsEmail(true);
@@ -110,8 +111,8 @@ const Signup = () => {
 
   // modal onclick
   const ModalOnClickHandler = () => {
-    setIsModal(false);
-    navigate("/");
+      setIsModal(false);
+      navigate("/");
   };
 
   // 가입하기 onclick
@@ -128,6 +129,8 @@ const Signup = () => {
       );
       if (response.data.response) {
         setIsModal(true);
+      }else{
+        alert( response.data.message );
       }
       console.log(response);
     } catch (err) {
@@ -188,9 +191,27 @@ const Signup = () => {
   };
 
   const Interval = useRef(null);
+  const [ duplicateEmail, setDuplicateEmail ] = useState( false );
 
   // onKeyUp
-  const onKeyUp = async (event) => {};
+  const onKeyUp = (event) => {
+    let timer;
+    // 메일 형식이 맞고, duplicate 가 체크되지 않으면 키가 떨어지고 1.2초 후에 서버에 요청
+    if( isEmail ){      
+        if( !duplicateEmail ){
+          timer = setTimeout( async ()=>{
+            const response = await axios.post(`${SERVER_URL}/user/duplicate/username`, { username:event.target.value } );
+            console.log( response );
+            setIsEmail(false);
+            setEmailMessage(response.data.message);
+            setDuplicateEmail( response.data.response );
+          }, 1200)
+        }else{
+          return ()=>{clearTimeout(timer)}
+        }      
+    }
+  };
+
   return (
     <SignUpWrapper>
       <SiginUpEmailWrapper>
