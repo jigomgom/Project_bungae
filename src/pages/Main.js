@@ -43,6 +43,9 @@ import defaultCardImg from "../assets/defaultImg.jpg";
 import IconHighTemp from "../assets/icon-manner-high.svg";
 import IconMiddleTemp from "../assets/icon-manner-middle.svg";
 import IconLowTemp from "../assets/icon-manner-low.svg";
+import SockJS from "sockjs-client";
+
+
 
 function Main() {
   // dispatch
@@ -53,10 +56,9 @@ function Main() {
   const [isLoad, setIsLoad] = useState(true);
   const realTimeList = useSelector((state) => state.Bungle.realTime);
   const endTimeList = useSelector((state) => state.Bungle.endTime);
-  // console.log( endTimeList );
-
+  console.log( realTimeList );
+  console.log( endTimeList );
   // 벙글 리스트 전체 조회하기
-  // const Bungle = useSelector( state => state.Bungle.postId );
   // 현위치 찾아오기
   // 지도 경도, 위도 State
   // location 정보 저장
@@ -67,15 +69,20 @@ function Main() {
   const options = {
     /*
     maximumAge
-    : 캐시에 저장한 위치정보를 대신 반환할 수 있는 최대 시간을 나타내는 양의 long 값입니다. 0을 지정한 경우 장치가 위치정보 캐시를 사용할 수 없으며 반드시 실시간으로 위치를 알아내려 시도해야 한다는 뜻입니다. Infinity를 지정한 경우 지난 시간에 상관없이 항상 캐시에 저장된 위치정보를 반환해야 함을 나타냅니다. 기본 값은 0입니다.
+    : 캐시에 저장한 위치정보를 대신 반환할 수 있는 최대 시간을 나타내는 양의 long 값. 
+    0을 지정한 경우 장치가 위치정보 캐시를 사용할 수 없으며 반드시 실시간으로 위치를 알아내려 시도해야 한다는 뜻. 
+    Infinity를 지정한 경우 지난 시간에 상관없이 항상 캐시에 저장된 위치정보를 반환해야 함. 기본 값은 0입니다.
     timeout
-    : 기기가 위치를 반환할 때 소모할 수 있는 최대 시간(밀리초)을 나타내는 양의 long 값입니다. 기본 값은 Infinity로, 위치를 알아내기 전에는 getCurrentPosition()이 반환하지 않을 것임을 나타냅니다.
+    : 기기가 위치를 반환할 때 소모할 수 있는 최대 시간(밀리초)을 나타내는 양의 long 값. 
+    기본 값은 Infinity로, 위치를 알아내기 전에는 getCurrentPosition()이 반환하지 않을 것임을 나타냄.
     enableHighAccuracy
-    : 위치정보를 가장 높은 정확도로 수신하고 싶음을 나타내는 불리언 값입니다. true를 지정했으면, 지원하는 경우 장치가 더 정확한 위치를 제공합니다. 그러나 응답 속도가 느려지며 전력 소모량이 증가하는 점에 주의해야 합니다. 반면 false를 지정한 경우 기기가 더 빠르게 반응하고 전력 소모도 줄일 수 있는 대신 정확도가 떨어집니다. 기본 값은 false입니다.
+    : 위치정보를 가장 높은 정확도로 수신하고 싶음을 나타내는 불리언 값. true를 지정했으면, 지원하는 경우 장치가 더 정확한 위치를 제공. 
+     그러나 응답 속도가 느려지며 전력 소모량이 증가. 
+     반면 false를 지정한 경우 기기가 더 빠르게 반응하고 전력 소모도 줄일 수 있는 대신 정확도가 떨어짐. 기본 값은 false.
     */
     enableHighAccuracy: true,
     // timeout
-    timeout: 5000,
+    timeout: 10000,  // 10000
     maximumAge: 0,
   };
 
@@ -104,22 +111,27 @@ function Main() {
   };
 
   useEffect(() => {
-    if (isLoad) {
-      navigator.geolocation.getCurrentPosition(
-        handleSuccess,
-        handleError,
-        options
-      );
-      setTimeout(() => {
-        setIsLoad(false);
-      }, 250);
-    }
+    // if (isLoad) {
+    //   navigator.geolocation.getCurrentPosition(
+    //     handleSuccess,
+    //     handleError,
+    //     options
+    //   );
+    //   setTimeout(() => {
+    //     setIsLoad(false);
+    //   }, 400);
+    // }
+    navigator.geolocation.getCurrentPosition(
+          handleSuccess,
+          handleError,
+          options
+        );    
   }, []);
 
   useEffect(() => {
-    if (location) {
+    // if (location) {
       dispatch(getMainBungleList(location));
-    }
+    // }
   }, [location]);
 
   // 실시간 벙글 하트 state
@@ -208,7 +220,7 @@ function Main() {
 
   return (
     <>
-      {!isLoad && (
+      {/* {!isLoad && ( */}
         <MainWrap>
           <Tag />
           <Search location={location} />
@@ -337,7 +349,7 @@ function Main() {
             </MainContentButton>
           </MainContentWrap>
         </MainWrap>
-      )}
+      {/* )} */}
     </>
   );
 }
