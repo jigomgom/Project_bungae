@@ -45,9 +45,20 @@ import IconMiddleTemp from "../assets/icon-manner-middle.svg";
 import IconLowTemp from "../assets/icon-manner-low.svg";
 import SockJS from "sockjs-client";
 
-
-
 function Main() {
+  // 새로고침 막기
+  // const preventClose = (e) => {
+  //   e.preventDefault();
+  //   e.returnValue = ""; //Chrome에서 동작하도록; deprecated
+  // };
+  // useEffect(() => {
+  //   (() => {
+  //     window.addEventListener("beforeunload", preventClose);
+  //   })();
+  //   return () => {
+  //     window.removeEventListener("beforeunload", preventClose);
+  //   };
+  // }, []);
   // dispatch
   const dispatch = useDispatch();
   // navigate
@@ -56,8 +67,7 @@ function Main() {
   const [isLoad, setIsLoad] = useState(true);
   const realTimeList = useSelector((state) => state.Bungle.realTime);
   const endTimeList = useSelector((state) => state.Bungle.endTime);
-  console.log( realTimeList );
-  console.log( endTimeList );
+
   // 벙글 리스트 전체 조회하기
   // 현위치 찾아오기
   // 지도 경도, 위도 State
@@ -82,7 +92,7 @@ function Main() {
     */
     enableHighAccuracy: true,
     // timeout
-    timeout: 10000,  // 10000
+    timeout: 10000, // 10000
     maximumAge: 0,
   };
 
@@ -109,7 +119,7 @@ function Main() {
       options
     );
   };
-  
+
   useEffect(() => {
     // if (isLoad) {
     //   navigator.geolocation.getCurrentPosition(
@@ -122,15 +132,15 @@ function Main() {
     //   }, 400);
     // }
     navigator.geolocation.getCurrentPosition(
-          handleSuccess,
-          handleError,
-          options
-        );    
+      handleSuccess,
+      handleError,
+      options
+    );
   }, []);
 
   useEffect(() => {
     // if (location) {
-      dispatch(getMainBungleList(location));
+    dispatch(getMainBungleList(location));
     // }
   }, [location]);
 
@@ -221,60 +231,58 @@ function Main() {
   return (
     <>
       {/* {!isLoad && ( */}
-        <MainWrap>
-          <Tag />
-          <Search location={location} />
-          <Category location={location} />
-          <ContentDivide />
-          {/* 실시간 벙글 */}
-          <MainContentWrap>
-            <MainContentTitle>실시간 벙글</MainContentTitle>
-            <MainContentItemWrap>
-              {realTimeList.map((item, index) => {
-                // console.log( item );
-                return (
-                  <MainContentItemFrame key={index}>
-                    <MainContentItemImg
-                      src={item.postUrl ? item.postUrl : defaultCardImg}
-                      onClick={() => {
-                        showDetailBungle(item.postId);
-                      }}
-                    />
-                    <MainContentItemImgTemp
-                      src={
-                        item.avgTemp >= 50
-                          ? IconHighTemp
-                          : item.avgTemp >= 25
-                          ? IconMiddleTemp
-                          : IconLowTemp
-                      }
-                    />
-                    <MainContentTextWrap>
-                      <MainContentTitleWrap>
-                        <MainContentItemTitle>
-                          {item.title}
-                        </MainContentItemTitle>
-                        <MainContentItemLike
-                          src={item.isLike ? IconLike : IconUnlike}
-                          onClick={() =>
-                            HeartRealTimeClickHanlder(index, item.postId)
-                          }
-                        />
-                      </MainContentTitleWrap>
-                      <MainContentItemTimePeople>
-                        {item.time} ({item.joinCount}/{item.personnel})
-                      </MainContentItemTimePeople>
-                    </MainContentTextWrap>
-                  </MainContentItemFrame>
-                );
-              })}
-            </MainContentItemWrap>
-            <MainContentButton onClick={() => MoreBtnClickHandler("realTime")}>
-              더보기
-            </MainContentButton>
-          </MainContentWrap>
-          {/* 평균 매너가 좋은 벙글 */}
-          {/* <MainContentWrap>
+      <MainWrap>
+        <Tag />
+        <Search location={location} />
+        <Category location={location} />
+        <ContentDivide />
+        {/* 실시간 벙글 */}
+        <MainContentWrap>
+          <MainContentTitle>실시간 벙글</MainContentTitle>
+          <MainContentItemWrap>
+            {realTimeList.map((item, index) => {
+              // console.log( item );
+              return (
+                <MainContentItemFrame key={index}>
+                  <MainContentItemImg
+                    src={item.postUrl ? item.postUrl : defaultCardImg}
+                    onClick={() => {
+                      showDetailBungle(item.postId);
+                    }}
+                  />
+                  <MainContentItemImgTemp
+                    src={
+                      item.avgTemp >= 50
+                        ? IconHighTemp
+                        : item.avgTemp >= 25
+                        ? IconMiddleTemp
+                        : IconLowTemp
+                    }
+                  />
+                  <MainContentTextWrap>
+                    <MainContentTitleWrap>
+                      <MainContentItemTitle>{item.title}</MainContentItemTitle>
+                      <MainContentItemLike
+                        src={item.isLike ? IconLike : IconUnlike}
+                        onClick={() =>
+                          HeartRealTimeClickHanlder(index, item.postId)
+                        }
+                      />
+                    </MainContentTitleWrap>
+                    <MainContentItemTimePeople>
+                      {item.time} ({item.joinCount}/{item.personnel})
+                    </MainContentItemTimePeople>
+                  </MainContentTextWrap>
+                </MainContentItemFrame>
+              );
+            })}
+          </MainContentItemWrap>
+          <MainContentButton onClick={() => MoreBtnClickHandler("realTime")}>
+            더보기
+          </MainContentButton>
+        </MainContentWrap>
+        {/* 평균 매너가 좋은 벙글 */}
+        {/* <MainContentWrap>
         <MainContentTitle>평균 매너가 좋은 벙글</MainContentTitle>
         <MainContentItemWrap>
           {ContentArray.map((item, index) => {
@@ -297,58 +305,56 @@ function Main() {
         </MainContentItemWrap>
         <MainContentButton onClick={ () => { MoreBtnClickHandler( "manner" ) } }>더보기</MainContentButton>
       </MainContentWrap> */}
-          {/* 마감 임박순 벙글 */}
-          <MainContentWrap>
-            <MainContentTitle>마감 임박순 벙글</MainContentTitle>
-            <MainContentItemWrap>
-              {endTimeList.map((item, index) => {
-                // console.log( item );
-                return (
-                  <MainContentItemFrame key={index}>
-                    <MainContentItemImg
-                      src={item.postUrl ? item.postUrl : defaultCardImg}
-                      onClick={() => {
-                        showDetailBungle(item.postId);
-                      }}
-                    />
-                    <MainContentItemImgTemp
-                      src={
-                        item.avgTemp >= 50
-                          ? IconHighTemp
-                          : item.avgTemp >= 25
-                          ? IconMiddleTemp
-                          : IconLowTemp
-                      }
-                    />
-                    <MainContentTextWrap>
-                      <MainContentTitleWrap>
-                        <MainContentItemTitle>
-                          {item.title}
-                        </MainContentItemTitle>
-                        <MainContentItemLike
-                          src={item.isLike ? IconLike : IconUnlike}
-                          onClick={() => {
-                            HeartEndTimeClickHandler(index, item.postId);
-                          }}
-                        />
-                      </MainContentTitleWrap>
-                      <MainContentItemTimePeople>
-                        {item.time} ({item.joinCount}/{item.personnel})
-                      </MainContentItemTimePeople>
-                    </MainContentTextWrap>
-                  </MainContentItemFrame>
-                );
-              })}
-            </MainContentItemWrap>
-            <MainContentButton
-              onClick={() => {
-                MoreBtnClickHandler("endTime");
-              }}
-            >
-              더보기
-            </MainContentButton>
-          </MainContentWrap>
-        </MainWrap>
+        {/* 마감 임박순 벙글 */}
+        <MainContentWrap>
+          <MainContentTitle>마감 임박순 벙글</MainContentTitle>
+          <MainContentItemWrap>
+            {endTimeList.map((item, index) => {
+              // console.log( item );
+              return (
+                <MainContentItemFrame key={index}>
+                  <MainContentItemImg
+                    src={item.postUrl ? item.postUrl : defaultCardImg}
+                    onClick={() => {
+                      showDetailBungle(item.postId);
+                    }}
+                  />
+                  <MainContentItemImgTemp
+                    src={
+                      item.avgTemp >= 50
+                        ? IconHighTemp
+                        : item.avgTemp >= 25
+                        ? IconMiddleTemp
+                        : IconLowTemp
+                    }
+                  />
+                  <MainContentTextWrap>
+                    <MainContentTitleWrap>
+                      <MainContentItemTitle>{item.title}</MainContentItemTitle>
+                      <MainContentItemLike
+                        src={item.isLike ? IconLike : IconUnlike}
+                        onClick={() => {
+                          HeartEndTimeClickHandler(index, item.postId);
+                        }}
+                      />
+                    </MainContentTitleWrap>
+                    <MainContentItemTimePeople>
+                      {item.time} ({item.joinCount}/{item.personnel})
+                    </MainContentItemTimePeople>
+                  </MainContentTextWrap>
+                </MainContentItemFrame>
+              );
+            })}
+          </MainContentItemWrap>
+          <MainContentButton
+            onClick={() => {
+              MoreBtnClickHandler("endTime");
+            }}
+          >
+            더보기
+          </MainContentButton>
+        </MainContentWrap>
+      </MainWrap>
       {/* )} */}
     </>
   );

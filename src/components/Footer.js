@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getMyBungleList } from "../redux/modules/BungleSlice";
 
@@ -25,7 +25,18 @@ const Footer = () => {
 
   const ownerCheck = useSelector((state) => state.Bungle.isOwner);
   const postId = useSelector((state) => state.Bungle.detailBungle.postId);
-  console.log(ownerCheck, postId);
+  const chatListPostId = useSelector((state) => state.Bungle.myChatting);
+
+  const [listPostId, setListPostId] = useState(0);
+  const getChatListPostId = () => {
+    for (let i = 0; i < chatListPostId.length; i++) {
+      setListPostId(() => chatListPostId[i].postId);
+    }
+  };
+  useEffect(() => {
+    getChatListPostId();
+  }, [chatListPostId]);
+  console.log(listPostId);
 
   // root path, siginup 일 때 렌더링 안되도록 방지
   const [isLoad, setIsLoad] = useState(true);
@@ -41,8 +52,10 @@ const Footer = () => {
     window.location.pathname === "/signup" ||
     window.location.pathname === "/createpost" ||
     window.location.pathname === `/chat/${postId}` ||
+    window.location.pathname === `/chat/${listPostId}` ||
     window.location.pathname === `/chat` ||
     window.location.pathname === "/editpost"
+    // window.location.pathname === "/map"
   )
     return null;
   return (
@@ -57,7 +70,11 @@ const Footer = () => {
             <FooterIconImg src={IconHome} />
             <FooterIconText>홈</FooterIconText>
           </FooterIconWrap>
-          <FooterIconWrap>
+          <FooterIconWrap
+            onClick={() => {
+              navigate("/map");
+            }}
+          >
             <FooterIconImg src={IconLocation} />
             <FooterIconText>벙글지도</FooterIconText>
           </FooterIconWrap>

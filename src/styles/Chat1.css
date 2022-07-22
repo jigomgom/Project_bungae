@@ -112,6 +112,7 @@
     font-size: 12px;
     line-height: 17px;
     text-align: center;
+    margin-bottom: 4px;
 }
 .msg{
     background-color: #d9d9d9;
@@ -121,6 +122,7 @@
     font-weight: 700;
     font-size: 13px;
     line-height: 17px;
+    /* box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5); */
 }
 .msg::after{
     position: absolute;
@@ -131,6 +133,20 @@
     border-bottom: 0px solid transparent;
     top: 0px;
     left: -10px;
+}
+.msg-noti{
+    background-color: #f5f3f0;
+    position: relative;
+    border-radius: 10px;
+    padding: 15px;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 17px;
+    display: inline-block;
+    text-align: center;
+    width: 70%;
+    display: flex;
+    margin: 50px auto;
 }
 .time{
     font-style: normal;
@@ -143,7 +159,7 @@
 }
 .profile{
     /* background-color: yellow; */
-    margin-right: 10px;
+    margin-right: 22px;
 }
 .profile > img {
     border-radius: 100px;
@@ -168,6 +184,7 @@
     display: flex;
     flex-direction: column;
     align-items: end;
+    margin-right: 25px;
 }
 .mybox > p {
     margin: 0;
@@ -189,6 +206,7 @@
     display: inline-block;
     text-align: initial;
     max-width: fit-content;
+    margin-right: 25px;
 }
 .mymsg::after{
     position: absolute;
@@ -201,7 +219,7 @@
     right: -10px;
 }
 .mymsg-file{
-    background-color: #d9d9d9;
+    /* background-color: #FFC632; */
     position: relative;
     border-radius: 10px;
     padding: 15px;
@@ -213,10 +231,12 @@
     max-width: fit-content;
 }
 .mymsg-file > img{
+    border-radius: 10px;
     max-width:200px;
     max-height:200px;
 }
 .mymsg-file > video{
+    border-radius: 10px;
     max-width:200px;
     max-height:200px;
 }
@@ -313,33 +333,44 @@ input[type="checkbox" i]{
 
 /* Chatting Detail Modal */
 .modal-chat-wrapper{
-    box-sizing: border-box;
-    display: block;
+    /* box-sizing: border-box;
+    display: block; */
     position: fixed;
-    top: 0;
+    /* top: 0;
     right: 0;
     bottom: 0;
-    left: 0;
+    left: 0; */
     z-index: 1000;
-    overflow: auto;
-    outline: 0;
+    /* overflow: auto;
+    outline: 0; */
+    /* ---------- */
+    display: flex;
+    margin: auto;
+    height: auto;
+    top: 0;
+    width: 100%;
+    max-width: 375px;
+    height: 100%;
 }
 .modal-chat-overlay{
+    /* background-color: yellow; */
     width: 375px;
-    box-sizing: border-box;
-    position: fixed;
-    top: 0;
-    left: 230px;
-    bottom: 0;
-    right: 0;
+    /* box-sizing: border-box; */
+    /* position: fixed; */
+    /* top: 0; */
+    /* left: 230px; */
+    /* bottom: 0; */
+    /* right: 0; */
     background-color: rgba(0, 0, 0, 0.6);
     z-index: 999;
+    /* ---------------------------------- */
 }
 .modal-chat-inner{
-    box-sizing: border-box;
-    position: relative;
+    background-color: white;
+    /* box-sizing: border-box;
+    position: relative; */
     /* box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5); */
-    background-color: #fff;
+    /* background-color: #fff; */
     /* border-radius: 10px; */
     width: 320px;
     /* max-width: 178px; */
@@ -347,18 +378,27 @@ input[type="checkbox" i]{
     /* display: flex;
     flex-direction: column;
     justify-content: center; */
-    top: 0px;
-    left: 28px;
-    margin: 0 auto;
+    /* top: 0px; */
+    /* left: 28px; */
+    margin: 0px 0px 0px 55px;
+    /* --------------------- */
+    width: 85.2%;
+    max-width: 375px;
+    height: 100%;
 }
 .modal-chat-content-wrap{
-    width: 320px;
-    height: 100vw;
+    /* background-color: green; */
+    /* width: 320px; */
+    /* height: 100vw; */
     display: flex;
     flex-direction: column;
     /* justify-content: center; */
     /* align-items: center; */
-    margin: auto;
+    /* margin: auto; */
+    /* ---------- */
+    width: 100%;
+    max-width: 375px;
+    height: 100%;
 }
 .modal-chat-content-title {
     display: flex;
@@ -384,9 +424,12 @@ input[type="checkbox" i]{
     font-size: 12px;
     line-height: 17px;
     margin: 20px;
-    height: 550px;
-    max-height: 550px;
+    /* height: 550px; */
+    /* min-height: 40vw; */
+    /* max-height: 550px; */
     overflow: auto;
+    /* ------------------- */
+    height: 100%;
 }
 .modal-member-list > p{
     margin: 0;
@@ -458,16 +501,22 @@ input[type="checkbox" i]{
 
 /* Report Modal */
 .modal-wrapper{
-    box-sizing: border-box;
-    display: block;
+    /* box-sizing: border-box;
+    display: block; */
     position: fixed;
-    top: 0;
+    /* top: 0;
     right: 0;
     bottom: 0;
-    left: 0;
+    left: 0; */
     z-index: 1000;
-    overflow: auto;
-    outline: 0;
+    /* overflow: auto;
+    outline: 0; */
+    /* ---------- */
+    width: 100%;
+    max-width: 375px;
+    height: 100%;
+    /* background-color: green; */
+
 }
 .modal-overlay{
     box-sizing: border-box;
@@ -478,6 +527,10 @@ input[type="checkbox" i]{
     right: 0;
     background-color: rgba(0, 0, 0, 0.6);
     z-index: 999;
+    width: 100%;
+    max-width: 375px;
+    height: 100%;
+    margin: auto;
 }
 .modal-inner{
     box-sizing: border-box;
@@ -485,14 +538,16 @@ input[type="checkbox" i]{
     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
     background-color: #fff;
     border-radius: 10px;
-    width: 335px;
     /* max-width: 178px; */
     /* height: 400px; */
     /* display: flex;
     flex-direction: column;
     justify-content: center; */
-    top: 275px;
-    margin: 0 auto;
+    /* top: 275px; */
+    margin: auto;
+    width: 100%;
+    max-width: 335px;
+    top: 33%;
 }
 .modal-content-wrap{
     width: 335px;
@@ -537,16 +592,22 @@ input[type="checkbox" i]{
 }
 /* Modal Btn */
 .modal-wrapper-btn{
-    box-sizing: border-box;
-    display: block;
+    /* box-sizing: border-box; */
+    /* display: block; */
     position: fixed;
-    top: 0;
+    /* top: 0;
     right: 0;
     bottom: 0;
-    left: 0;
+    left: 0; */
     z-index: 1000;
-    overflow: auto;
-    outline: 0;
+    /* overflow: auto;
+    outline: 0; */
+    /* ------------ */
+    /* background-color: green; */
+    width: 100%;
+    max-width: 375px;
+    /* height: 100%; */
+    top: 78%;
 }
 .modal-inner-btn{
     box-sizing: border-box;
@@ -554,14 +615,16 @@ input[type="checkbox" i]{
     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
     background-color: #fff;
     border-radius: 10px;
-    width: 335px;
     /* max-width: 178px; */
     /* height: 400px; */
     /* display: flex;
     flex-direction: column;
     justify-content: center; */
-    top: 610px;
-    margin: 0 auto;
+    /* top: 275px; */
+    /* margin: auto; */
+    width: 100%;
+    max-width: 335px;
+    top: 20%;
 }
 .modal-content-wrap-btn{
     width: 335px;
@@ -584,4 +647,105 @@ input[type="checkbox" i]{
 .modal-content-wrap-reselect{
     padding: 15px;
     color: blue;
+}
+
+/* Profile Modal */
+.modal-wrapper-profile{
+    /* box-sizing: border-box;
+    display: block; */
+    position: fixed;
+    /* top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0; */
+    z-index: 1000;
+    /* overflow: auto;
+    outline: 0; */
+    /* ---------- */
+    width: 100%;
+    max-width: 375px;
+    height: 100%;
+    /* background-color: green; */
+
+}
+.modal-overlay-profile{
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 999;
+    width: 100%;
+    max-width: 375px;
+    height: 100%;
+    margin: auto;
+}
+.modal-inner-profile{
+    box-sizing: border-box;
+    position: relative;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
+    background-color: #fff;
+    border-radius: 10px;
+    /* max-width: 178px; */
+    /* height: 400px; */
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center; */
+    /* top: 275px; */
+    margin: auto;
+    width: 100%;
+    max-width: 335px;
+    top: 33%;
+}
+.modal-content-wrap-profile{
+    width: 335px;
+    /* height: 128px; */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* margin: auto; */
+}
+.modal-content-title-profile {
+    width: 100%;
+    text-align: center;
+    margin: 0;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 17px;
+    color: #434343;
+ }
+.modal-content-title-profile > p {
+    margin: 0;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 26px;
+    margin-bottom: 10px;
+}
+.modal-content-title-profile > img{
+    border-radius: 100%;
+    width: 115px;
+    height: 115px;
+    margin-top: 40px;
+    margin-bottom: 10px;
+}
+.modal-content-profile-detail{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.icon-ligtening{
+    margin-right: 5px;
+}
+.modal-content-profile-detail > span {
+    margin-right: 10px;
+    margin-left: 6px;
+}
+.modal-content-profile-intro{
+    margin-bottom: 60px;
 }

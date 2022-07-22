@@ -268,7 +268,26 @@ const Post = () => {
             </PostMemberWrap>
             <PostJoinButtonWrapper>
               <PostJoinIcon src={IconChat} />
-              <PostJoinButton onClick={goToChatRoom}>참여하기</PostJoinButton>
+              {detailBungleInfo.joinCount === detailBungleInfo.personnel ? (
+                <>
+                  <PostJoinButton
+                    onClick={goToChatRoom}
+                    style={{
+                      pointerEvents: "none",
+                      backgroundColor: "#D9D9D9",
+                      color: "red",
+                    }}
+                  >
+                    정원초과
+                  </PostJoinButton>
+                </>
+              ) : (
+                <>
+                  <PostJoinButton onClick={goToChatRoom}>
+                    참여하기
+                  </PostJoinButton>
+                </>
+              )}
             </PostJoinButtonWrapper>
           </PostWrap>
         </>

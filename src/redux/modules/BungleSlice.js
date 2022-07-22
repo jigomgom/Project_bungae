@@ -3,7 +3,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 // const SERVER_URL = "http://3.37.61.25";
-const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+
+const SERVER_URL = "https://gutner.shop";
+// const SERVER_URL = "https://meeting-platform.shop";
+const token = localStorage.getItem("login-token");
+
+// const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 // const token = localStorage.getItem("login-token");
 
 // 벙글 생성하기
@@ -12,6 +17,7 @@ export const createBungleList = createAsyncThunk(
   async (formData) => {
     // console.log( JSON.stringify(formData));
     // console.log( token );
+    // console.log("들어오나?????????????");
     try {
       const response = await axios.post(`${SERVER_URL}/posts`, formData, {
         headers: {
@@ -66,7 +72,7 @@ export const editMyBungleList = createAsyncThunk(
           },
         }
       );
-      if( response.data.response ){
+      if (response.data.response) {
         window.location.href = "/main";
       }
       console.log(response);
@@ -91,8 +97,8 @@ export const deleteMyBungleList = createAsyncThunk(
       if (response.data.response) {
         let data = {
           postId,
-          isOwner: response.data.isOwner
-        }
+          isOwner: response.data.isOwner,
+        };
         window.location.href = "/main";
         return data;
       }
@@ -209,7 +215,7 @@ export const detailBungleList = createAsyncThunk(
 // 게시글 상세 조회 like 클릭
 export const detailLikeBungleList = createAsyncThunk(
   "LIKE/detailLikeBungleList",
-  async( postId ) => {
+  async (postId) => {
     console.log(postId);
     try {
       const response = await axios.post(
@@ -229,8 +235,7 @@ export const detailLikeBungleList = createAsyncThunk(
       console.log(e);
     }
   }
-)
-
+);
 
 // 게시글 단일 카테고리 조회
 export const categoryBungleList = createAsyncThunk(
@@ -252,7 +257,7 @@ export const categoryBungleList = createAsyncThunk(
       console.log(response);
       if (response.data.response) {
         return response.data.list;
-      }else{
+      } else {
         alert(`${response.data.message}`);
       }
     } catch (e) {
@@ -400,8 +405,7 @@ const BungleSlice = createSlice({
     // 내 채팅 목록
     myChatting: [],
   },
-  reducers: {
-  },
+  reducers: {},
   extraReducers: {
     // 벙글 생성, post ID 전달
     [createBungleList.fulfilled]: (state, action) => {
@@ -417,7 +421,7 @@ const BungleSlice = createSlice({
     [getMainBungleList.fulfilled]: (state, action) => {
       console.log("Main get");
       state.isOwner = action.payload?.isOwner;
-      
+
       state.endTime = action.payload.postListEndTime;
       state.realTime = action.payload.postListRealTime;
       // console.log( current( state.endTime ), current( state.realTime ) );
@@ -512,10 +516,10 @@ const BungleSlice = createSlice({
       console.log("상세조회 실패");
     },
     // 상세 게시글 좋아요 클릭
-    [ detailLikeBungleList.fulfilled ] : ( state, action ) => {
-      if( ( state.detailBungle.isLike )){
+    [detailLikeBungleList.fulfilled]: (state, action) => {
+      if (state.detailBungle.isLike) {
         state.detailBungle.isLike = false;
-      }else{
+      } else {
         state.detailBungle.isLike = true;
       }
     },
@@ -564,7 +568,7 @@ const BungleSlice = createSlice({
 
     // 게시물 삭제
     [deleteMyBungleList.fulfilled]: (state, action) => {
-      console.log( action.payload );
+      console.log(action.payload);
       const postId = action.payload.postId;
       const isOwner = action.payload.isOwner;
       // let deleteSelector = "";
@@ -595,7 +599,7 @@ const BungleSlice = createSlice({
       // }else if( deleteSelector === "end" ){
       //   state.endTime = [];
       // }
-      
+
       // state.endTime = returnEndList;
       // state.realTime = returnRealList;
       state.isOwner = isOwner;

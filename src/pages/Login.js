@@ -38,18 +38,21 @@ import { BsChevronLeft } from "react-icons/bs";
 import IconLoginLogo from "../assets/icon-login-main.svg";
 import IconTextClear from "../assets/icon-login-clear.svg";
 
-
 // 소셜 로그인 URL - Naver
-const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?client_id=${process.env.REACT_APP_NAVER_LOGIN_CLIENT_KEY}&response_type=code&redirect_uri=${process.env.REACT_APP_SOCIAL_LOGIN_REDIRECTION_URL}`
+const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?client_id=${process.env.REACT_APP_NAVER_LOGIN_CLIENT_KEY}&response_type=code&redirect_uri=${process.env.REACT_APP_SOCIAL_LOGIN_REDIRECTION_URL}`;
 // 소셜 로그인 URL - Google
-const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.REACT_APP_GOOGLE_LOGIN_CLIENT_KEY}&redirect_uri=${process.env.REACT_APP_SOCIAL_LOGIN_REDIRECTION_URL}&scope=https://www.googleapis.com/auth/userinfo.email%20profile%20&response_type=code`
+const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${process.env.REACT_APP_GOOGLE_LOGIN_CLIENT_KEY}&redirect_uri=${process.env.REACT_APP_SOCIAL_LOGIN_REDIRECTION_URL}&scope=https://www.googleapis.com/auth/userinfo.email%20profile%20&response_type=code`;
 // 소셜 로그인 URL - Kakao
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_LOGIN_CLIENT_KEY}&redirect_uri=${process.env.REACT_APP_SOCIAL_LOGIN_REDIRECTION_URL}&response_type=code`;
-
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 function Login() {
+  //http://52.79.214.48
+  //http://3.37.61.25
+  const SERVER_URL = "https://gutner.shop";
+  // const SERVER_URL = "https://meeting-platform.shop";
+
   // navigate
   const navigate = useNavigate();
 
@@ -59,40 +62,39 @@ function Login() {
 
   // 네이버 소셜 로그인 시작
   // 네이버 소셜 로그인 시도 후, JWT 토큰 획득
-  const getNaverLoginJWTtoken = async ( ) => {
-    console.log( SERVER_URL );
-    console.log( code );
-    
-    try{
-      const response = await axios.get(`${SERVER_URL}/user/signin/naver`,{
-        params:{
-          code : code,
-          state: createStateToken( code )
-        }
-      }
-      );
-      console.log( response );
-      if( response.data.response ){
+  const getNaverLoginJWTtoken = async () => {
+    console.log(SERVER_URL);
+    console.log(code);
+
+    try {
+      const response = await axios.get(`${SERVER_URL}/user/signin/naver`, {
+        params: {
+          code: code,
+          state: createStateToken(code),
+        },
+      });
+      console.log(response);
+      if (response.data.response) {
         localStorage.setItem("login-token", response.headers.authorization);
         localStorage.setItem("user-name", response.data.username);
-        console.log( localStorage.getItem("login-token") );
+        console.log(localStorage.getItem("login-token"));
         // navigate("/main");
         window.location.href = "/main";
       }
-    }catch( error ){
-      console.log( error );
+    } catch (error) {
+      console.log(error);
     }
-  }
+  };
 
-  const createStateToken = ( code ) =>{
-    const md5 = require("md5"); 
+  const createStateToken = (code) => {
+    const md5 = require("md5");
     return md5(code).slice(0, 16);
-  }
+  };
 
   // naver 소셜 로그인 함수
   const naverSocialLogin = () => {
     window.location.href = NAVER_AUTH_URL;
-  }
+  };
 
   // 카카오 소셜 로그인 시작
   // 카카오 소셜 로그인 시도 후, JWT 토큰 획득
@@ -104,23 +106,21 @@ function Login() {
         },
       });
       console.log(response);
-      if( response.data.response ){
+      if (response.data.response) {
         localStorage.setItem("login-token", response.headers.authorization);
         localStorage.setItem("user-name", response.data.username);
-        console.log( localStorage.getItem("login-token") );
+        console.log(localStorage.getItem("login-token"));
         navigate("/main");
       }
     } catch (error) {
       console.log(error);
     }
-
   };
   // 카카오 로그인
-  const kakaoSocialLogin = () =>{
-    console.log( KAKAO_AUTH_URL );
+  const kakaoSocialLogin = () => {
+    console.log(KAKAO_AUTH_URL);
     window.location.href = KAKAO_AUTH_URL;
   };
-
 
   // 구글 소셜 로그인 시작
   // 구글 소셜 로그인 시도 후, JWT 토큰 획득
@@ -132,10 +132,10 @@ function Login() {
         },
       });
       console.log(response);
-      if( response.data.response ){
+      if (response.data.response) {
         localStorage.setItem("login-token", response.headers.authorization);
         localStorage.setItem("user-name", response.data.username);
-        console.log( localStorage.getItem("login-token") );
+        console.log(localStorage.getItem("login-token"));
         navigate("/main");
       }
     } catch (error) {
@@ -144,28 +144,25 @@ function Login() {
   };
   // 구글 로그인 함수
   const googleSocialLogin = () => {
-    console.log( GOOGLE_AUTH_URL );
+    console.log(GOOGLE_AUTH_URL);
     window.location.href = GOOGLE_AUTH_URL;
     // window.localStorage.href = "";
-  }
+  };
 
-  if( code !== null ){
-    console.log( code, url );
-    if( url.href.includes("state") ){
-      console.log("naver login")
+  if (code !== null) {
+    console.log(code, url);
+    if (url.href.includes("state")) {
+      console.log("naver login");
       getNaverLoginJWTtoken();
-    }else if( url.href.includes("scope") ){
-      console.log("google login")
+    } else if (url.href.includes("scope")) {
+      console.log("google login");
       getGoogleLoginJWTtoken();
-    }else{
+    } else {
       console.log("kakao login");
       getKakaoLoginJWTtoken();
     }
   }
-  
-  
-  
-  // const SERVER_URL = "http://3.37.61.25";
+
   // 이메일 ref
   const email_Ref = useRef();
   // 비밀번호 ref
@@ -185,6 +182,9 @@ function Login() {
   // 로그인 에러 메세지 state
   const [isError, setIsError] = useState("");
 
+  //token
+  const token = localStorage.getItem("login-token");
+
   // 로그인
   const LoginEnterKeyPressHanlder = async (LoginUser) => {
     try {
@@ -193,8 +193,8 @@ function Login() {
       console.log(response);
       if (response.data.response) {
         localStorage.setItem("login-token", response.headers.authorization);
-        localStorage.setItem("user-name", response.data.username);
-        
+        localStorage.setItem("userId", response.data.userId);
+
         navigate("/main");
       } else {
         setIsModal(true);

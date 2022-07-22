@@ -1,6 +1,8 @@
 //Libraries
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+// Notification Hook
+// import usePushNotification from "./hook/usePushNotification";
 //CSS
 import "./App.css";
 //Pages
@@ -21,9 +23,21 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import ChatList from "./pages/ChatList";
 import ChattingRoom from "./pages/ChattingRoom";
+import Map from "./pages/Map";
 // Test
-import Test from "./pages/Test";
+
 function App() {
+  // 실시간 채팅 state
+  // const [realTimeChat, setRealTimeChat] = useState({});
+
+  //실시간 채팅 알림
+  // const { fireNotificationWithTimeout } = usePushNotification();
+  // useEffect(() => {
+  //   fireNotificationWithTimeout("Babble 채팅 메시지", 5000, {
+  //     body: `${realTimeChat.sender}: ${realTimeChat.message}`,
+  //   });
+  // }, [realTimeChat]);
+
   return (
     <div className="App">
       <Header />
@@ -46,8 +60,9 @@ function App() {
         <Route path="/mylikebung" element={<MyLikeBung />} />
         <Route path="/chat" element={<ChattingRoom />} />
         <Route path="/chat/:postId" element={<ChattingRoom />} />
+        <Route path="/map" element={<Map />} />
         {/* Test */}
-        <Route path="/test" element={<Test />} />
+        {/* <Route path="/test" element={<Test />} /> */}
       </Routes>
       <Footer />
     </div>

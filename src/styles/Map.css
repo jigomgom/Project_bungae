@@ -1,0 +1,64 @@
+.map-wrapper{
+    width: 100%;
+    max-width: 375px;
+    margin-top: -15vh;
+}
+.map-content-searchbar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    position: relative;
+    z-index: 1000;
+    width: 90%;
+    margin: auto;
+    top: 20vh;
+    border-radius: 17px;
+}
+.map-content-searchbar > input{
+    width: 90%;
+    background: url("../assets/icon-search.svg");
+    background-repeat: no-repeat;
+    background-position: 15px center;
+    padding-left: 50px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    border-radius: 17px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 17px;
+    color: #898989;
+    align-items: center;
+    border: none;
+}
+.map-content-button{
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    width: 10%;
+    position: relative;
+    top: 23vh;
+    z-index: 1000;
+    align-items: center;
+    float: right;
+    margin-right: 5%;
+}
+.map-content-button-1{
+    background-color: white;
+    margin-bottom: 15px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    border-radius: 100%;
+}
+.map-content-button-2{
+    background-color: white;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    border-radius: 100%;
+}
