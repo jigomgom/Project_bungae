@@ -601,7 +601,11 @@ function CreatePost() {
         {/* <DeleteButton src={IconClear} onClick={clearBtnOnClickHandler} /> */}
       </PostTilteDiv>
       {/* Body 저렇게 안 닫아주면 placeholder 안생김*/}
-      <PostBody type="text" ref={Content_ref} placeholder="벙글 소개글을 작성해주세요."></PostBody>
+      <PostBody
+        type="text"
+        ref={Content_ref}
+        placeholder="벙글 소개글을 작성해주세요."
+      ></PostBody>
       <Divider />
       <PostUploadPictureWrap>
         <UploadTitle>사진</UploadTitle>

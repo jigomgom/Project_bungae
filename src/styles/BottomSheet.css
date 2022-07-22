@@ -1,0 +1,54 @@
+#bottomSheetController{
+    background-color: red;
+    z-index: 1000;
+    height: 43px;
+    position: relative;
+    bottom: 55px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    padding-top: 10px;
+}
+#bottomSheetControllerHeader{
+    width: 32px;
+    height: 4px;
+    border-radius: 2px;
+    background-color: #d0d0d0;
+    margin: auto;
+}
+#bottomSheetContainer {
+    width: 100%;
+    max-width: 375px;
+    height: 100%;
+    position: fixed;
+    top: 0px;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    z-index: 1000;
+    display: none;
+}
+#bottomSheetContainer.active {
+    display: flex;
+}
+#bottomSheet {
+    background-color: palevioletred;
+    width: 100%;
+    height: 80%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    padding-top: 10px;
+    transform: translateY(100%);
+    transition: transform 0.4s ease-in-out;
+}
+#bottomSheet.active {
+    transform: translateY(0);
+}
+
+#bottomSheetHeader{
+    width: 32px;
+    height: 4px;
+    border-radius: 2px;
+    background-color: #d0d0d0;
+    margin: auto;
+}

@@ -45,6 +45,19 @@ import IconMiddleTemp from "../assets/icon-manner-middle.svg";
 import IconLowTemp from "../assets/icon-manner-low.svg";
 
 function Main() {
+  // 새로고침 막기
+  // const preventClose = (e) => {
+  //   e.preventDefault();
+  //   e.returnValue = ""; //Chrome에서 동작하도록; deprecated
+  // };
+  // useEffect(() => {
+  //   (() => {
+  //     window.addEventListener("beforeunload", preventClose);
+  //   })();
+  //   return () => {
+  //     window.removeEventListener("beforeunload", preventClose);
+  //   };
+  // }, []);
   // dispatch
   const dispatch = useDispatch();
   // navigate
@@ -53,6 +66,7 @@ function Main() {
   const [isLoad, setIsLoad] = useState(true);
   const realTimeList = useSelector((state) => state.Bungle.realTime);
   const endTimeList = useSelector((state) => state.Bungle.endTime);
+
   // console.log( endTimeList );
 
   // 벙글 리스트 전체 조회하기

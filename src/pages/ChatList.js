@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { myChattingList } from "../redux/modules/BungleSlice";
+import { useNavigate } from "react-router-dom";
 
 import {
   // LeadingActions,
@@ -37,6 +38,20 @@ function App() {
     "Lorem ipsum5",
   ];
 
+  //postId 가져오는 함수
+  const [getPostId, setGetPostId] = useState();
+  function getInnerHTML(id) {
+    setGetPostId(() => id);
+    console.log(id);
+    enterChat(id);
+  }
+  console.log("post Id: ", getPostId);
+
+  const navigate = useNavigate();
+  const enterChat = (id) => {
+    navigate(`/chat/${id}`);
+  };
+
   useEffect(() => {
     dispatch(myChattingList());
   }, []);
@@ -57,7 +72,12 @@ function App() {
                   {/* <img src={defaultProfile} alt="" /> */}
                   <img src={item.postUrl} alt="" />
                 </div>
-                <div className="first_swipe">
+                <div
+                  className="first_swipe"
+                  onClick={() => {
+                    getInnerHTML(item.postId);
+                  }}
+                >
                   <div className="first_swipe_title">
                     {item.postTitle}
                     {/* 제목 */}
@@ -73,6 +93,7 @@ function App() {
                     {item.lastMessageTime} ∙ {item.postTime}
                     {/* 마지막 시간 */}
                   </div>
+                  <p id="postId">{item.postId}</p>
                 </div>
               </div>
             </SwipeableListItem>

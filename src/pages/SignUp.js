@@ -32,7 +32,8 @@ import IconInputClear from "../assets/icon-input-xbtn.svg";
 
 const Signup = () => {
   // const SERVER_URL = "http://3.37.61.25";
-  const SERVER_URL = "http://52.79.214.48";
+  const SERVER_URL = "https://gutner.shop";
+  // const SERVER_URL = "https://meeting-platform.shop";
   //비밀번호 유효성 검사
   const checkPassword = (e) => {
     //  8 ~ 30자 영문, 숫자 조합, 문자 조합

@@ -41,8 +41,9 @@ import IconTextClear from "../assets/icon-login-clear.svg";
 function Login() {
   //http://52.79.214.48
   //http://3.37.61.25
-  // const SERVER_URL = "http://52.79.214.48";
-  const SERVER_URL = "http://3.37.61.25";
+  const SERVER_URL = "https://gutner.shop";
+  // const SERVER_URL = "https://meeting-platform.shop";
+  // const SERVER_URL = "http://3.37.61.25";
   // 이메일 ref
   const email_Ref = useRef();
   // 비밀번호 ref
@@ -64,6 +65,9 @@ function Login() {
   // 로그인 에러 메세지 state
   const [isError, setIsError] = useState("");
 
+  //token
+  const token = localStorage.getItem("login-token");
+
   // 로그인
   const LoginEnterKeyPressHanlder = async (LoginUser) => {
     try {
@@ -72,7 +76,7 @@ function Login() {
       console.log(response);
       if (response.data.response) {
         localStorage.setItem("login-token", response.headers.authorization);
-        localStorage.setItem("user-name", response.data.username);
+        localStorage.setItem("userId", response.data.userId);
         navigate("/main");
       } else {
         setIsModal(true);

@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
 import { over } from "stompjs";
 import SockJS from "sockjs-client";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useSelector } from "react-redux";
 import "swiper/css";
 import "swiper/css/pagination";
+
 //Component
 // import Chat from "../components/Chat";
 // import ChatTest from "../components/ChatTest";
@@ -45,33 +46,44 @@ import IconMoon from "../assets/icon-share-mono.svg";
 import Notification from "../assets/icon-notification.svg";
 import Setting from "../assets/icon-setting.svg";
 
-let client = null;
+import IconHighTemp from "../assets/icon-manner-high.svg";
+import IconMiddleTemp from "../assets/icon-manner-middle.svg";
+import IconLowTemp from "../assets/icon-manner-low.svg";
 
-function ChattingRoom() {
+import IconLightening from "../assets/icon-lightening.svg";
+
+let client = null;
+function ChattingRoom({ setRealTimeChat }) {
   // SERVER URL
   // const SERVER_URL = "http://3.37.61.25";
-  const SERVER_URL = "http://52.79.214.48";
+  const SERVER_URL = "https://gutner.shop";
+  // const SERVER_URL = "https://meeting-platform.shop";
   // navigate
   const navigate = useNavigate();
+
   // 방장권한
   const BungleOnwer = useSelector((state) => state.Bungle.isOwner);
   // 내가 만든 채팅 룸 ID
   const Bungle = useSelector((state) => state.Bungle.OnwerPostId);
   // 참여자 채팅 룸 ID
-  const Guest = useSelector((state) => state.Bungle.detailBungle.postId);
+  // const Guest = useSelector((state) => state.Bungle.detailBungle.postId);
+  const userProfileInfo = useSelector((state) => state.Bungle.userProfile);
+  console.log(userProfileInfo);
+  const params = useParams();
   // if (Bungle) {
   //   console.log("PostID ", Bungle);
   // }
   const token = localStorage.getItem("login-token");
 
   let postId;
+  const Guest = params.postId;
 
   console.log(Bungle);
   console.log(Guest);
 
-  if (Bungle > 0) {
+  if (Bungle) {
     postId = Bungle;
-  } else if (Guest > 0) {
+  } else {
     postId = String(Guest);
     // console.log(parseInt(postId));
   }
@@ -79,10 +91,11 @@ function ChattingRoom() {
   console.log(Bungle, Guest, postId);
   // const { postID } = useParams();
 
-  const username = localStorage.getItem("user-name");
+  const userPersonalId = Number(localStorage.getItem("userId"));
 
   // console.log(token);
   const [publicChats, setPublicChats] = useState([]);
+  const [notiChats, setNotiChats] = useState({});
   const [userData, setUserData] = useState({
     type: "",
     nickName: "",
@@ -92,20 +105,20 @@ function ChattingRoom() {
     message: "",
   });
 
-  // React.useEffect(() => {
-  //   connect();
-  // }, []);
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (postId > 0 || Number(postId) > 0) {
       connect();
     }
   }, [postId]);
 
   const connect = () => {
-    let sock = new SockJS(`${SERVER_URL}/ws/chat`);
+    let sock = new SockJS(`${SERVER_URL}/wss/chat`);
     client = over(sock);
     client.connect({ token }, onConnected, onError);
+  };
+
+  const onError = (err) => {
+    console.log("Test ", err);
   };
 
   const onConnected = () => {
@@ -117,11 +130,7 @@ function ChattingRoom() {
     }
     userJoin();
   };
-  // console.log(userData);
-
-  const onError = (err) => {
-    console.log("Test ", err);
-  };
+  console.log(userData);
 
   const userJoin = () => {
     console.log("Test user Join");
@@ -177,18 +186,54 @@ function ChattingRoom() {
 
   const onMessageReceived = (payload) => {
     var payloadData = JSON.parse(payload.body);
-    if (payloadData.type === "TALK") {
+    if (
+      payloadData.type === "TALK" ||
+      payloadData.type === "ENTER" ||
+      payloadData.type === "QUIT"
+    ) {
       console.log("switch Message");
       publicChats.push(payloadData);
+      setNotiChats(() => payloadData);
       setPublicChats([...publicChats]);
     }
   };
 
+  //실시간 채팅 알림
+  // const { fireNotificationWithTimeout } = usePushNotification();
+  // useEffect(() => {
+  //   fireNotificationWithTimeout("Babble 채팅 메시지", 5000, {
+  //     body: `${notiChats.sender}: ${notiChats.message}`,
+  //   });
+  // }, [notiChats]);
+
+  // const realTimeChat = () => {
+  //   setRealTimeChat(notiChats);
+  //   console.log("됐다!!!");
+  // };
+  // useState(() => {
+  //   realTimeChat();
+  // }, [notiChats]);
+
+  // console.log(
+  //   "닉네임 : ",
+  //   notiChats.sender,
+  //   "//",
+  //   "메세지: ",
+  //   notiChats.message
+  // );
+  //Notification Hook
+  // const { fireNotificationWithTimeout } = usePushNotification();
+  // fireNotificationWithTimeout("Bungle 채팅 메시지", 5000, {
+  //   body: `${notiChats.sender}: ${notiChats.message}`,
+  // });
+
   //날짜 커스텀
   let chattingDate = [];
+
   let ampm = "";
   let hour;
   let minutes;
+
   for (let i = 0; i < publicChats.length; i++) {
     hour = publicChats[i].createdAt.split(",")[3];
     minutes = publicChats[i].createdAt.split(",")[4];
@@ -202,7 +247,7 @@ function ChattingRoom() {
       chattingDate.push(ampm + " " + hour + ":" + minutes);
     }
   }
-  console.log(publicChats);
+  console.log("publicChats: ", publicChats);
 
   //Disconnect
   const chatDisconnect = () => {
@@ -222,6 +267,25 @@ function ChattingRoom() {
       alert("See you next time!");
     });
   };
+
+  //unsub
+  // const chatUnsubscribe = () => {
+  //   if (Bungle) {
+  //     let subscription = client.subscribe(
+  //       `/sub/chat/room/${postId}`,
+  //       onMessageReceived
+  //     );
+  //     subscription.unsubscribe();
+  //     navigate("/main");
+  //   } else if (Guest) {
+  //     let subscription = client.subscribe(
+  //       `/sub/chat/room/${postId}`,
+  //       onMessageReceived
+  //     );
+  //     subscription.unsubscribe();
+  //     navigate("/main");
+  //   }
+  // };
 
   //엔터키
   const onKeyPress = (e) => {
@@ -268,7 +332,7 @@ function ChattingRoom() {
   };
   console.log(fileUrl);
 
-  React.useEffect(() => {
+  useEffect(() => {
     chatImg();
   }, [isFile]);
 
@@ -345,17 +409,21 @@ function ChattingRoom() {
   const [isModal, setIsModal] = useState(false);
   //신고 모달에서 해당 사항클릭 후 버튼 state
   const [isBtn, setIsBtn] = useState(false);
-  //유저ID 값 담을 배열
-  const [userId, setUserId] = useState();
+  //유저 상세 프로필 모달 state
+  const [profileModal, setProfileModal] = useState(false);
 
   //신고하기 모달 state 관리
   const ModalOnClickHandler = () => {
     setIsModal(true);
   };
-  //신고 모달에서 해당 사항클릭 후 버튼 state 관래
-  const BtnOnClickHandler = () => {
-    setIsBtn(!isBtn);
+  //상세 프로필 모달 state 관리
+  const ModalProfileOnClickHandler = () => {
+    setProfileModal(() => true);
   };
+  //신고 모달에서 해당 사항클릭 후 버튼 state 관리
+  // const BtnOnClickHandler = () => {
+  //   setIsBtn(!isBtn);
+  // };
 
   //Chatting Detail Modal 밖 영역 클릭 시 닫기
   const handleModal = (e) => {
@@ -363,6 +431,24 @@ function ChattingRoom() {
     if (clicked) return;
     else {
       setChatModal(false);
+    }
+  };
+
+  //Report Modal 밖 영역 클릭 시 닫기
+  const handleReportModal = (e) => {
+    const clicked = e.target.closest(".modal-content-wrap");
+    if (clicked) return;
+    else {
+      setIsModal(false);
+    }
+  };
+
+  //Detail Profile Modal 밖 영역 클릭 시 닫기
+  const handleDetailProfile = (e) => {
+    const clicked = e.target.closest(".modal-content-wrap-profile");
+    if (clicked) return;
+    else {
+      setProfileModal(false);
     }
   };
 
@@ -380,7 +466,6 @@ function ChattingRoom() {
   const [reportUserId, setReportUserId] = useState();
   console.log(report);
   const chatReportPerson = () => {
-    setUserId();
     axios({
       method: "post",
       url: `${SERVER_URL}/user/report/${reportUserId}`,
@@ -398,17 +483,62 @@ function ChattingRoom() {
         console.log(error);
       });
   };
+  //유저 아이디 바로 가져오는 변수
+
   //userId 가져오는 함수
   function getInnerHTML(id) {
-    const element = document.getElementById("userId");
-    setReportUserId(id);
+    setReportUserId(() => id);
     console.log(id);
   }
-  console.log("유저 Id: ", reportUserId);
+  console.log("유저 신고 Id: ", reportUserId);
 
-  console.log(publicChats);
+  //프로필 상세 정보
+  const [chatProfile, setChatProfile] = useState({});
+  const detailProfile = () => {
+    axios({
+      method: "get",
+      url: `${SERVER_URL}/chat/details/${reportUserId}`,
+      headers: {
+        Authorization: token,
+      },
+    })
+      .then((response) => {
+        setChatProfile(() => response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  useEffect(() => {
+    detailProfile();
+  }, [reportUserId]);
 
   //이전 메세지 불러오기
+  const [beforeChat, setBeforeChat] = useState([]);
+
+  //이전 메세지 시간
+  let beforeChattingDate = [];
+  let beforeAmpm = "";
+  let beforeHour;
+  let beforeMinutes;
+  for (let i = 0; i < beforeChat.length; i++) {
+    beforeHour = beforeChat[i].createdAt.split(",")[3];
+    beforeMinutes = beforeChat[i].createdAt.split(",")[4];
+    if (beforeHour > 12) {
+      beforeAmpm = "오후";
+      beforeHour = beforeHour - 12;
+      beforeChattingDate.push(
+        beforeAmpm + " " + beforeHour + ":" + beforeMinutes
+      );
+    } else {
+      beforeAmpm = "오전";
+      beforeHour = beforeHour;
+      beforeChattingDate.push(
+        beforeAmpm + " " + beforeHour + ":" + beforeMinutes
+      );
+    }
+  }
+
   const getMessage = () => {
     axios({
       method: "get",
@@ -419,15 +549,38 @@ function ChattingRoom() {
     })
       .then((response) => {
         console.log(response);
+        for (let i = 0; i < response.data.length; i++) {
+          if (response.data[i].type === "TALK") {
+            setBeforeChat(response.data);
+          }
+        }
       })
       .catch((error) => {
         console.log(error);
       });
   };
+  console.log("이전: ", beforeChat);
 
-  React.useEffect(() => {
+  useEffect(() => {
     getMessage();
   }, []);
+
+  //방장 나가는 지 확인
+  const [outOwner, setOutOwner] = useState(false);
+
+  const handleOutOwner = () => {
+    for (let i = 0; i < publicChats.length; i++) {
+      if (publicChats[i].quitOwner === true) {
+        console.log("안에서 찍는거: ", publicChats[i].quitOwner);
+        setOutOwner(() => true);
+      }
+    }
+  };
+  console.log("방장 나갔냐? : ", outOwner);
+
+  useEffect(() => {
+    handleOutOwner();
+  }, [publicChats]);
 
   //채팅 자동 스크롤
   const messagesEndRef = React.useRef(null);
@@ -438,9 +591,13 @@ function ChattingRoom() {
     console.log(messagesEndRef);
   };
 
-  React.useEffect(() => {
-    scrollToBottom();
-  }, [publicChats]);
+  useEffect(
+    () => {
+      scrollToBottom();
+    },
+    [publicChats],
+    [beforeChat]
+  );
 
   return (
     <>
@@ -452,6 +609,7 @@ function ChattingRoom() {
               src={IconBackKey}
               onClick={() => {
                 navigate("/main");
+                setOutOwner(() => false);
               }}
             />
             <PageTitle style={{ visibility: "hidden" }}></PageTitle>
@@ -533,21 +691,31 @@ function ChattingRoom() {
                       <p>번개 멤버</p>
                       {chatPeople.map((item, index) => {
                         return (
-                          <div className="modal-member" key={index}>
+                          <div
+                            className="modal-member"
+                            key={index}
+                            onClick={() => {
+                              getInnerHTML(item.userId);
+                            }}
+                          >
                             <div className="modal-member-profile-img">
                               <img
                                 className="modal-member-img"
                                 src={item.profileUrl}
                                 alt=""
+                                onClick={() => {
+                                  ModalProfileOnClickHandler();
+                                }}
                               />
                             </div>
-                            <div
-                              className="modal-member-profile-content"
-                              onClick={() => {
-                                getInnerHTML(item.userId);
-                              }}
-                            >
-                              <p>{item.nickname}</p>
+                            <div className="modal-member-profile-content">
+                              <p
+                                onClick={() => {
+                                  ModalProfileOnClickHandler();
+                                }}
+                              >
+                                {item.nickname}
+                              </p>
                               <img
                                 className="modal-member-siren"
                                 src={IconSiren}
@@ -587,9 +755,55 @@ function ChattingRoom() {
                         />
                       </div>
                     </div>
+                    {profileModal && (
+                      <div className="modal-wrapper-profile">
+                        <div
+                          className="modal-overlay-profile"
+                          onClick={(e) => {
+                            handleDetailProfile(e);
+                          }}
+                        >
+                          <div className="modal-inner-profile">
+                            <div className="modal-content-wrap-profile">
+                              <div className="modal-content-title-profile">
+                                <img src={chatProfile.profileUrl} alt="" />
+                                <p>{chatProfile.nickname}</p>
+                                <div className="modal-content-profile-detail">
+                                  <img
+                                    src={IconLightening}
+                                    alt=""
+                                    className="icon-ligtening"
+                                  ></img>
+                                  <span>{chatProfile.bungCount} 참여</span>
+                                  <img
+                                    src={
+                                      chatProfile.mannerTemp >= 50
+                                        ? IconHighTemp
+                                        : chatProfile.mannerTemp >= 25
+                                        ? IconMiddleTemp
+                                        : IconLowTemp
+                                    }
+                                    alt=""
+                                  ></img>
+                                  <span>{chatProfile.mannerTemp}°C</span>
+                                </div>
+                                <div className="modal-content-profile-intro">
+                                  <p>{chatProfile.intro}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     {isModal && (
                       <div className="modal-wrapper">
-                        <div className="modal-overlay">
+                        <div
+                          className="modal-overlay"
+                          onClick={(e) => {
+                            handleReportModal(e);
+                          }}
+                        >
                           <div className="modal-inner">
                             <div className="modal-content-wrap">
                               <div className="modal-content-title">
@@ -604,7 +818,7 @@ function ChattingRoom() {
                                       key={index}
                                       onClick={() => {
                                         setReport(() => item.value);
-                                        BtnOnClickHandler();
+                                        setIsBtn(true);
                                       }}
                                     >
                                       {item.value}
@@ -613,44 +827,22 @@ function ChattingRoom() {
                                 );
                               })}
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    {isBtn && (
-                      <div className="modal-wrapper-btn">
-                        <div className="modal-inner-btn">
-                          <div className="modal-content-wrap-btn">
-                            <div
-                              className="modal-content-wrap-report"
-                              onClick={() => {
-                                chatReportPerson();
-                                setIsModal(!isModal);
-                                setIsBtn(!isBtn);
-                              }}
-                            >
-                              신고하기
-                            </div>
-                            <div className="modal-content-divider"></div>
-                            <div
-                              className="modal-content-wrap-exit"
-                              onClick={() => {
-                                setIsModal(!isModal);
-                                setIsBtn(!isBtn);
-                              }}
-                            >
-                              신고 닫기
-                            </div>
-                            <div className="modal-content-divider"></div>
-                            {report && (
-                              <div
-                                className="modal-content-wrap-reselect"
-                                onClick={() => {
-                                  setIsBtn(!isBtn);
-                                  setReport(undefined);
-                                }}
-                              >
-                                다른 항목으로 신고하기
+                            {isBtn && (
+                              <div className="modal-wrapper-btn">
+                                <div className="modal-inner-btn">
+                                  <div className="modal-content-wrap-btn">
+                                    <div
+                                      className="modal-content-wrap-report"
+                                      onClick={() => {
+                                        chatReportPerson();
+                                        setIsModal(!isModal);
+                                        setIsBtn(!isBtn);
+                                      }}
+                                    >
+                                      신고하기
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             )}
                           </div>
@@ -663,148 +855,278 @@ function ChattingRoom() {
             </div>
           )}
           <div className="chat-wrap" ref={messagesEndRef}>
+            {beforeChat.map((chat, index) => (
+              <div key={index}>
+                {/* {console.log(chat)} */}
+                {/* {chat.type === "ENTER" && <div>{chat.message}</div>} */}
+                {chat.type === "TALK" ? (
+                  <>
+                    {userPersonalId !== chat.userId ? (
+                      <>
+                        <div className="item">
+                          <div className="profile">
+                            <img src={chat.profileUrl} alt="" />
+                          </div>
+                          <div className="box">
+                            <span className="nickname">{chat.sender}</span>
+                            {chat.message && chat.message !== "" ? (
+                              <>
+                                <p className="msg">{chat.message}</p>
+                              </>
+                            ) : (
+                              <>
+                                {console.log(chat.fileUrl.data)}
+                                {chat.fileUrl.slice(-3) === "jpg" ||
+                                chat.fileUrl.slice(-3) === "png" ||
+                                chat.fileUrl.slice(-4) === "jpeg" ||
+                                chat.fileUrl.slice(-4) === "jfif" ||
+                                chat.fileUrl.slice(-3) === "gif" ||
+                                chat.fileUrl.slice(-3) === "bmp" ||
+                                chat.fileUrl.slice(-3) === "img" ||
+                                chat.fileUrl.slice(-3) === "JPG" ||
+                                chat.fileUrl.slice(-3) === "PNG" ||
+                                chat.fileUrl.slice(-4) === "JPEG" ||
+                                chat.fileUrl.slice(-3) === "GIF" ||
+                                chat.fileUrl.slice(-3) === "BMP" ||
+                                chat.fileUrl.slice(-3) === "IMG" ? (
+                                  <>
+                                    <p className="mymsg-file">
+                                      <img src={chat.fileUrl} alt="" />
+                                    </p>
+                                  </>
+                                ) : (
+                                  <>
+                                    <p className="mymsg-file">
+                                      <video controls name="media">
+                                        <source
+                                          src={chat.fileUrl}
+                                          type="video/mp4"
+                                        />
+                                      </video>
+                                    </p>
+                                  </>
+                                )}
+                              </>
+                            )}
+                            <span className="time" key={index}>
+                              {beforeChattingDate[index]}
+                            </span>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="myitem">
+                          {/* <div className="profile">
+                    <img src={defaultProfile} alt="" />
+                  </div> */}
+                          <div className="mybox">
+                            {/* <span className="mynickname">{chat.sender}</span> */}
+                            {chat.message && chat.message !== "" ? (
+                              <>
+                                <p className="mymsg">{chat.message}</p>
+                              </>
+                            ) : (
+                              <>
+                                {console.log(chat.fileUrl.slice(-3))}
+                                {chat.fileUrl.slice(-3) === "jpg" ||
+                                chat.fileUrl.slice(-3) === "png" ||
+                                chat.fileUrl.slice(-4) === "jpeg" ||
+                                chat.fileUrl.slice(-4) === "jfif" ||
+                                chat.fileUrl.slice(-3) === "gif" ||
+                                chat.fileUrl.slice(-3) === "bmp" ||
+                                chat.fileUrl.slice(-3) === "img" ||
+                                chat.fileUrl.slice(-3) === "JPG" ||
+                                chat.fileUrl.slice(-3) === "PNG" ||
+                                chat.fileUrl.slice(-4) === "JPEG" ||
+                                chat.fileUrl.slice(-3) === "GIF" ||
+                                chat.fileUrl.slice(-3) === "BMP" ||
+                                chat.fileUrl.slice(-3) === "IMG" ? (
+                                  <>
+                                    <p className="mymsg-file">
+                                      <img src={chat.fileUrl} alt="" />
+                                    </p>
+                                  </>
+                                ) : (
+                                  <>
+                                    <p className="mymsg-file">
+                                      <video controls name="media">
+                                        <source
+                                          src={chat.fileUrl}
+                                          type="video/mp4"
+                                        />
+                                      </video>
+                                    </p>
+                                  </>
+                                )}
+                              </>
+                            )}
+                            <span className="time" key={index}>
+                              {beforeChattingDate[index]}
+                            </span>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </>
+                ) : null}
+              </div>
+            ))}
             {publicChats.map((chat, index) => (
               <div key={index}>
                 {/* {console.log(chat)} */}
-                {username !== chat.username ? (
+                {/* {chat.type === "ENTER" && <div>{chat.message}</div>} */}
+                {chat.type === "TALK" ? (
                   <>
-                    <div className="item">
-                      <div className="profile">
-                        <img src={chat.profileUrl} alt="" />
-                      </div>
-                      <div className="box">
-                        <span className="nickname">{chat.sender}</span>
-                        {chat.message && chat.message !== "" ? (
-                          <>
-                            <p className="msg">{chat.message}</p>
-                          </>
-                        ) : (
-                          <>
-                            {console.log(chat.fileUrl.data)}
-                            {chat.fileUrl.slice(-3) === "jpg" ||
-                            chat.fileUrl.slice(-3) === "png" ||
-                            chat.fileUrl.slice(-4) === "jpeg" ||
-                            chat.fileUrl.slice(-4) === "jfif" ||
-                            chat.fileUrl.slice(-3) === "gif" ||
-                            chat.fileUrl.slice(-3) === "bmp" ||
-                            chat.fileUrl.slice(-3) === "img" ||
-                            chat.fileUrl.slice(-3) === "JPG" ||
-                            chat.fileUrl.slice(-3) === "PNG" ||
-                            chat.fileUrl.slice(-4) === "JPEG" ||
-                            chat.fileUrl.slice(-3) === "GIF" ||
-                            chat.fileUrl.slice(-3) === "BMP" ||
-                            chat.fileUrl.slice(-3) === "IMG" ? (
+                    {userPersonalId !== chat.userId ? (
+                      <>
+                        <div className="item">
+                          <div className="profile">
+                            <img src={chat.profileUrl} alt="" />
+                          </div>
+                          <div className="box">
+                            <span className="nickname">{chat.sender}</span>
+                            {chat.message && chat.message !== "" ? (
                               <>
-                                <p className="mymsg-file">
-                                  <img src={chat.fileUrl} alt="" />
-                                </p>
+                                <p className="msg">{chat.message}</p>
                               </>
                             ) : (
                               <>
-                                <p className="mymsg-file">
-                                  <video controls name="media">
-                                    <source
-                                      src={chat.fileUrl}
-                                      type="video/mp4"
-                                    />
-                                  </video>
-                                </p>
+                                {console.log(chat.fileUrl.data)}
+                                {chat.fileUrl.slice(-3) === "jpg" ||
+                                chat.fileUrl.slice(-3) === "png" ||
+                                chat.fileUrl.slice(-4) === "jpeg" ||
+                                chat.fileUrl.slice(-4) === "jfif" ||
+                                chat.fileUrl.slice(-3) === "gif" ||
+                                chat.fileUrl.slice(-3) === "bmp" ||
+                                chat.fileUrl.slice(-3) === "img" ||
+                                chat.fileUrl.slice(-3) === "JPG" ||
+                                chat.fileUrl.slice(-3) === "PNG" ||
+                                chat.fileUrl.slice(-4) === "JPEG" ||
+                                chat.fileUrl.slice(-3) === "GIF" ||
+                                chat.fileUrl.slice(-3) === "BMP" ||
+                                chat.fileUrl.slice(-3) === "IMG" ? (
+                                  <>
+                                    <p className="mymsg-file">
+                                      <img src={chat.fileUrl} alt="" />
+                                    </p>
+                                  </>
+                                ) : (
+                                  <>
+                                    <p className="mymsg-file">
+                                      <video controls name="media">
+                                        <source
+                                          src={chat.fileUrl}
+                                          type="video/mp4"
+                                        />
+                                      </video>
+                                    </p>
+                                  </>
+                                )}
                               </>
                             )}
-                          </>
-                        )}
-                        <span className="time" key={index}>
-                          {chattingDate[index]}
-                        </span>
-                      </div>
-                    </div>
+                            <span className="time" key={index}>
+                              {chattingDate[index]}
+                            </span>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="myitem">
+                          {/* <div className="profile">
+                    <img src={defaultProfile} alt="" />
+                  </div> */}
+                          <div className="mybox">
+                            {/* <span className="mynickname">{chat.sender}</span> */}
+                            {chat.message && chat.message !== "" ? (
+                              <>
+                                <p className="mymsg">{chat.message}</p>
+                              </>
+                            ) : (
+                              <>
+                                {console.log(chat.fileUrl.slice(-3))}
+                                {chat.fileUrl.slice(-3) === "jpg" ||
+                                chat.fileUrl.slice(-3) === "png" ||
+                                chat.fileUrl.slice(-4) === "jpeg" ||
+                                chat.fileUrl.slice(-4) === "jfif" ||
+                                chat.fileUrl.slice(-3) === "gif" ||
+                                chat.fileUrl.slice(-3) === "bmp" ||
+                                chat.fileUrl.slice(-3) === "img" ||
+                                chat.fileUrl.slice(-3) === "JPG" ||
+                                chat.fileUrl.slice(-3) === "PNG" ||
+                                chat.fileUrl.slice(-4) === "JPEG" ||
+                                chat.fileUrl.slice(-3) === "GIF" ||
+                                chat.fileUrl.slice(-3) === "BMP" ||
+                                chat.fileUrl.slice(-3) === "IMG" ? (
+                                  <>
+                                    <p className="mymsg-file">
+                                      <img src={chat.fileUrl} alt="" />
+                                    </p>
+                                  </>
+                                ) : (
+                                  <>
+                                    <p className="mymsg-file">
+                                      <video controls name="media">
+                                        <source
+                                          src={chat.fileUrl}
+                                          type="video/mp4"
+                                        />
+                                      </video>
+                                    </p>
+                                  </>
+                                )}
+                              </>
+                            )}
+                            <span className="mytime" key={index}>
+                              {chattingDate[index]}
+                            </span>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </>
                 ) : (
                   <>
-                    <div className="myitem">
-                      {/* <div className="profile">
-                    <img src={defaultProfile} alt="" />
-                  </div> */}
-                      <div className="mybox">
-                        <span className="mynickname">{chat.sender}</span>
-                        {chat.message && chat.message !== "" ? (
-                          <>
-                            <p className="mymsg">{chat.message}</p>
-                          </>
-                        ) : (
-                          <>
-                            {console.log(chat.fileUrl.slice(-3))}
-                            {chat.fileUrl.slice(-3) === "jpg" ||
-                            chat.fileUrl.slice(-3) === "png" ||
-                            chat.fileUrl.slice(-4) === "jpeg" ||
-                            chat.fileUrl.slice(-4) === "jfif" ||
-                            chat.fileUrl.slice(-3) === "gif" ||
-                            chat.fileUrl.slice(-3) === "bmp" ||
-                            chat.fileUrl.slice(-3) === "img" ||
-                            chat.fileUrl.slice(-3) === "JPG" ||
-                            chat.fileUrl.slice(-3) === "PNG" ||
-                            chat.fileUrl.slice(-4) === "JPEG" ||
-                            chat.fileUrl.slice(-3) === "GIF" ||
-                            chat.fileUrl.slice(-3) === "BMP" ||
-                            chat.fileUrl.slice(-3) === "IMG" ? (
-                              <>
-                                <p className="mymsg-file">
-                                  <img src={chat.fileUrl} alt="" />
-                                </p>
-                              </>
-                            ) : (
-                              <>
-                                <p className="mymsg-file">
-                                  <video controls name="media">
-                                    <source
-                                      src={chat.fileUrl}
-                                      type="video/mp4"
-                                    />
-                                  </video>
-                                </p>
-                              </>
-                            )}
-                          </>
-                        )}
-                        <span className="mytime" key={index}>
-                          {chattingDate[index]}
-                        </span>
-                      </div>
-                    </div>
+                    <p className="msg-noti">{chat.message}</p>
                   </>
                 )}
               </div>
             ))}
           </div>
           <div className="chatting-footer-wrap">
-            <div className="chatting-footer">
-              <div className="chatting-footer-icon">
-                <label className="input-file-button" for="fileUpload">
-                  <img src={IconCamera} alt="" />
-                </label>
-                <input
-                  type="file"
-                  id="fileUpload"
-                  accept="image/*, video/*"
-                  name="chat_img"
-                  onChange={imageUpload}
-                />
-                {/* <img src={IconCamera} alt="" /> */}
-              </div>
-              <div className="chatting-footer-input">
-                <input
-                  type="text"
-                  placeholder={"체크할 항목"}
-                  value={userData.message}
-                  onChange={handleMessage}
-                  onKeyPress={onKeyPress}
-                />
-                <button onClick={sendValue}>
-                  <img src={SendBtn} alt="" />
-                </button>
-                {/* <button onClick={chatImg}>img</button> */}
-              </div>
-            </div>
+            {outOwner === true ? null : (
+              <>
+                <div className="chatting-footer">
+                  <div className="chatting-footer-icon">
+                    <label className="input-file-button" for="fileUpload">
+                      <img src={IconCamera} alt="" />
+                    </label>
+                    <input
+                      type="file"
+                      id="fileUpload"
+                      accept="image/*, video/*"
+                      name="chat_img"
+                      onChange={imageUpload}
+                    />
+                    {/* <img src={IconCamera} alt="" /> */}
+                  </div>
+                  <div className="chatting-footer-input">
+                    <input
+                      type="text"
+                      placeholder={"체크할 항목"}
+                      value={userData.message}
+                      onChange={handleMessage}
+                      onKeyPress={onKeyPress}
+                    />
+                    <button onClick={sendValue}>
+                      <img src={SendBtn} alt="" />
+                    </button>
+                    {/* <button onClick={chatImg}>img</button> */}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

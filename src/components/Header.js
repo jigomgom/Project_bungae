@@ -75,8 +75,13 @@ function Header() {
   ) {
     return (
       <HeaderWrap>
-        <Logo style={{ visibility:"hidden"}} src={IconMainLogo} />
-        <BackKey src={IconBackKey} onClick={()=>{ navigate("/main")}}/>
+        <Logo style={{ visibility: "hidden" }} src={IconMainLogo} />
+        <BackKey
+          src={IconBackKey}
+          onClick={() => {
+            navigate("/main");
+          }}
+        />
         <PageTitle style={{ visibility: "hidden" }}></PageTitle>
 
         <HeadrIconsWrap>
@@ -175,10 +180,10 @@ function Header() {
   // 번개 지도 헤더
   else if (window.location.pathname === "/map") {
     return (
-      <HeaderWrap>
+      <HeaderWrap style={{ margin: "0" }}>
         <Logo style={{ visibility: "hidden" }} src={IconMainLogo} />
         <BackKey style={{ visibility: "hidden" }} src={IconBackKey} />
-        <PageTitle>번개 지도</PageTitle>
+        <PageTitle>벙글 지도</PageTitle>
 
         <HeadrIconsWrap>
           <IconMyLocation style={{ visibility: "hidden" }} src={IconMyPoint} />

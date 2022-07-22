@@ -2,7 +2,8 @@ import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // const SERVER_URL = "http://3.37.61.25";
-const SERVER_URL = "http://52.79.214.48";
+const SERVER_URL = "https://gutner.shop";
+// const SERVER_URL = "https://meeting-platform.shop";
 const token = localStorage.getItem("login-token");
 
 // 벙글 생성하기
@@ -11,6 +12,7 @@ export const createBungleList = createAsyncThunk(
   async (formData) => {
     // console.log( JSON.stringify(formData));
     // console.log( token );
+    // console.log("들어오나?????????????");
     try {
       const response = await axios.post(`${SERVER_URL}/posts`, formData, {
         headers: {
