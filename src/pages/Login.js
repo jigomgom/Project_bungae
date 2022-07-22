@@ -35,7 +35,6 @@ import {
   ModalButton,
 } from "../styles/StyledLogin";
 
-
 // icon
 import IconLoginLogo from "../assets/icon-login-main.svg";
 import IconTextClear from "../assets/icon-login-clear.svg";
@@ -65,7 +64,7 @@ function Login() {
   // 네이버 소셜 로그인 시작
   // 네이버 소셜 로그인 시도 후, JWT 토큰 획득
   const getNaverLoginJWTtoken = async () => {
-    console.log(SERVER_URL);
+    // console.log(SERVER_URL);
     console.log(code);
 
     try {
