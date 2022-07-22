@@ -5,6 +5,10 @@ import SockJS from "sockjs-client";
 import { useNavigate, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useSelector } from "react-redux";
+
+import { useDispatch } from "react-redux"; 
+import { getChatClient } from "../redux/modules/BungleSlice";
+
 import "swiper/css";
 import "swiper/css/pagination";
 
@@ -58,7 +62,7 @@ function ChattingRoom({ setRealTimeChat }) {
   // const SERVER_URL = "http://3.37.61.25";
   const SERVER_URL = "https://gutner.shop"; //현구님
   // const SERVER_URL = "https://meeting-platform.shop"; //현욱님
-
+  const dispatch = useDispatch();
   // navigate
   const navigate = useNavigate();
 
@@ -128,6 +132,7 @@ function ChattingRoom({ setRealTimeChat }) {
   };
 
   const onConnected = () => {
+    dispatch( getChatClient( { client, Guest } ) );
     setUserData({ ...userData, connected: true });
     if (Bungle) {
       client.subscribe(`/sub/chat/room/${postId}`, onMessageReceived);

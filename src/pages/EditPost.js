@@ -5,6 +5,8 @@ import Divider from "../components/Divider";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+// 삭제시 client disconnect test
+
 // import redux slice
 import {
   getMyBungleList,
@@ -108,6 +110,11 @@ const CategoriesArray = [
 ];
 
 function EditPost() {
+  // chat test
+  const client = useSelector( state => state.Bungle.ChatClient.client );
+  const guest = useSelector( state => state.Bungle.ChatClient.guest );
+  const Owner = useSelector((state) => state.Bungle.OnwerPostId);
+  console.log( client, guest, Owner );
   // dispatch
   const dispatch = useDispatch();
   // navigate
@@ -845,7 +852,28 @@ function EditPost() {
   };
   // 벙글 삭제
   const deleteBunggleOnClickHandler = (postId) => {
+    chatDisconnect();
     dispatch(deleteMyBungleList(postId));
+  };
+
+  //Disconnect
+  const chatDisconnect = () => {
+    if (Owner) {
+      var chatMessage = {
+        type: "QUIT",
+        roomId: `${Owner}`,
+      };
+    } else if (guest) {
+      var chatMessage = {
+        type: "QUIT",
+        roomId: `${parseInt(guest)}`,
+      };
+    }
+    const token = localStorage.getItem("login-token");
+    client.send("/pub/chat/message", { token }, JSON.stringify(chatMessage));
+    client.disconnect(function () {
+      alert("See you next time!");
+    });
   };
 
   return (
@@ -1028,7 +1056,7 @@ function EditPost() {
               오늘
             </TimeSelectToday>
             <TimeSelectTommrow
-              isTommorow={isTommorow}
+              isToday={isToday}
               onClick={() => {
                 selectTodayOrTommorowClickHanlder("tommorow");
               }}

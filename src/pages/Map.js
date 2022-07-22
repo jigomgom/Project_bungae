@@ -86,7 +86,7 @@ function Map() {
     */
     enableHighAccuracy: true,
     // timeout
-    timeout: 5000,
+    timeout: 10000,
     maximumAge: 0,
   };
 

@@ -26,7 +26,7 @@ const Footer = () => {
   const ownerCheck = useSelector((state) => state.Bungle.isOwner);
   const postId = useSelector((state) => state.Bungle.detailBungle.postId);
   const chatListPostId = useSelector((state) => state.Bungle.myChatting);
-
+  console.log("Onwer ", ownerCheck );
   const [listPostId, setListPostId] = useState(0);
   const getChatListPostId = () => {
     for (let i = 0; i < chatListPostId.length; i++) {
