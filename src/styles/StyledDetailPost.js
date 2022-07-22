@@ -24,6 +24,7 @@ export const PostIconShared = styled.img`
   height: 24px;
   right: 22.3px;
   top: 22.3px;
+  z-index: 2;
   cursor: not-allowed;
 `;
 
@@ -33,6 +34,7 @@ export const PostLike = styled.img`
   height: 20px;
   top: 58px;
   right: 24.3px;
+  z-index: 2;
   cursor: pointer;
 `;
 
@@ -49,6 +51,7 @@ export const PostUserBox = styled.div`
   top: 170px;
   left: 20px;
   padding: 10px;
+  z-index: 2;
   display: flex;
 `;
 
@@ -57,6 +60,7 @@ export const PostUserBoxProfile = styled.img`
   height: 92px;
   background: #d9d9d9;
   border-radius: 10px;
+  object-fit: cover;
 `;
 
 export const PostUserTexts = styled.div`
@@ -129,7 +133,7 @@ export const PostBodyContent = styled.div`
 `;
 
 export const PostInfoTextWrap = styled.h3`
-  width: 187px;
+  width: 240px;
   height: 17px;
   margin-left: 11px;
   margin-top: 24px;
@@ -137,7 +141,7 @@ export const PostInfoTextWrap = styled.h3`
   font-size: 12px;
   line-height: 17px;
   color: #9a9a9a;
-
+  
   margin-bottom: 10px;
 `;
 

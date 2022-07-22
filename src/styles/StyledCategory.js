@@ -17,11 +17,26 @@ export const CategoryItem = styled.div`
     cursor: pointer;
 `;
 
-export const CategoryImg = styled.img`
+export const CategoryImgWrap = styled.div`
     width: 51px;
     height: 51px;
-    background: #D9D9D9;
+    /* background: #D9D9D9; */
     border-radius: 10px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
+export const CategoryImg = styled.img`
+    width: 34px;
+    height: 34px;
+    /* background: #D9D9D9; */
+    /* border-radius: 50%; */
+    /* background: black; */
+    /* box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25); */
 `;
 
 export const CatogoryName = styled.span`

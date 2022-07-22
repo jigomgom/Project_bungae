@@ -18,9 +18,9 @@ export const SearchDiv = styled.div`
 export const SeachInput = styled.input`
     width: 89%;
     height: 34px;
-    background: #D9D9D9;
+    /* background-color: #D9D9D9; */
     border-radius: 17px;
-    border: none;
+    border: 1px solid #D9D9D9;
     padding-left: 50px;
     &:focus{
         outline: none;

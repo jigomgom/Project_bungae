@@ -114,8 +114,13 @@ function CreatePost() {
   ]);
   // 인원 설정 숫자만
   const [onlyNumber, setOnlyNumber] = useState("2");
+  // 현재 시간
+  const getCurrentHour = new Date().getHours();
+  const currentHour = ("0" + getCurrentHour).slice(-2);
+  const getCurrentMinute = new Date().getMinutes();
+  const currentMinute = ("0" + getCurrentMinute).slice(-2);
   // 문자, 화상 여부 판별
-  const [isLetter, setIsLetter] = useState(false);
+  const [isLetter, setIsLetter] = useState(true);
   const [isVideo, setIsVideo] = useState(false);
   // 채팅 버튼 클릭 여부 판별
   const [chatBtnState, setChatBtnState] = useState(false);
@@ -198,6 +203,7 @@ function CreatePost() {
     if (e.target.files[0]) {
       setFirstFile(e.target.files[0]);
       uploadFiles(e, 0);
+      
     } else {
       //업로드 취소할 시
       setIsFirstFile(IconUpload);
@@ -348,18 +354,26 @@ function CreatePost() {
   };
   // 인원 수 설정 숫자만 들어가도록 하는 함수
   const InputTextOnChangeNumberHandler = (event) => {
+    // console.log( event );
+    if( event.nativeEvent.data === "-" || event.nativeEvent.data === "e" || event.nativeEvent.data === "E" ){
+      event.preventDefault();
+      return null;
+    }
+
     let onlyNumber = event.target.value
       .replace(/[^0-9.]/g, "")
       .replace(/(\..*)\./g, "$1");
     if (Number(onlyNumber) >= 50) {
       onlyNumber = "50";
     }
-    if (onlyNumber !== "") {
-      if (Number(onlyNumber) < 3) {
-        onlyNumber = "2";
-      }
-    }
     setOnlyNumber(onlyNumber);
+  };
+
+  const peopleOnBlur = ( event ) => {
+    if( Number( event.target.value ) < 2 ){
+      alert(`인원 설정은 최소 2명입니다.`);
+      setOnlyNumber( 2 )
+    }
   };
   // 글자수 제한, 10자 넘으면 10자만 남겨두기
   const onInput = (e) => {
@@ -373,46 +387,106 @@ function CreatePost() {
   const [hour, setHour] = useState();
   const [minute, setMinute] = useState();
   // 오늘 내일 여부 판별 state
-  const [isToday, setIsToday] = useState(false);
-  const [isTommorow, setIsTommorow] = useState(false);
-  const [dates, setDates] = useState("");
+  const [isToday, setIsToday] = useState(true);
+
+  const isNotNumber = ( value ) => {
+    const regExp = /[a-z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g;
+    return regExp.test(value);
+  }
 
   // 시간 숫자만 입력 ( 시 )
   const InputHourNumberChangeHandler = (event) => {
-    let onlyNumber = event.target.value.replace(/[^0-9.]/g, "");
-    // .replace(/(\..*)\./g, "$1");
-    setHour(onlyNumber);
+    if( event.nativeEvent.data === "-" || event.nativeEvent.data === "e" || event.nativeEvent.data === "E" ){
+      event.preventDefault();
+      return null;
+    }
+
+    if( event.nativeEvent.data && isNotNumber( event.nativeEvent.data )){
+      event.preventDefault();
+      return null;
+    }else{
+      setHour( ("0"+event.target.value).slice(-2) );  
+    }
   };
 
   // 시간 숫자만 입력 ( 분 )
   const InputMinuteNumberChangeHandler = (event) => {
-    let onlyNumber = event.target.value.replace(/[^0-9.]/g, "");
+    if( event.nativeEvent.data === "-" || event.nativeEvent.data === "e" || event.nativeEvent.data === "E" ){
+      event.preventDefault();
+      return null;
+    }
 
-    setMinute(onlyNumber);
+    if (event.nativeEvent.data && isNotNumber(event.nativeEvent.data)) {
+      event.preventDefault();
+      return null;
+    } else {
+      setMinute(("0"+event.target.value).slice(-2));
+    }
   };
   // 오늘인지 내일인지 체크
   const selectTodayOrTommorowClickHanlder = (text) => {
-    const today = new Date();
-
-    const year = today.getFullYear();
-    const month = ("0" + (today.getMonth() + 1)).slice(-2);
-    let day = ("0" + today.getDate()).slice(-2);
-
-    let dateString = "";
-
-    if (text === "today") {
-      console.log("Today");
+    if( text === "today" ){
       setIsToday(true);
-      setIsTommorow(false);
-      dateString = year + "-" + month + "-" + day;
-      setDates(dateString);
-    } else {
-      console.log("Tommorow");
+      setHour( currentHour );
+      setMinute( currentMinute );
+    }else{
       setIsToday(false);
-      setIsTommorow(true);
-      day = ("0" + (today.getDate() + 1)).slice(-2);
-      dateString = year + "-" + month + "-" + day;
-      setDates(dateString);
+      setHour( currentHour );
+      setMinute( currentMinute );
+    }
+  };
+
+  // 시간 focus가 바뀌었을 떄
+  const hourOnBlur = ( event ) => {
+    if( isToday ){
+      if( Number( event.target.value ) < Number( currentHour ) ){
+        console.log("설마")
+        alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        const limitHour = Math.max(currentHour, Math.min(24, Number(event.target.value)));
+        setHour( limitHour );     
+        setMinute( currentMinute );
+      }else if( Number( event.target.value ) >=  24 ){
+        setIsToday( false );
+        // alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        event.target.value -= 24;
+        const limitHour = Math.max(0, Math.min(currentHour, Number(event.target.value)));
+        
+        setHour( ( "0"+ limitHour ).slice(-2) );    
+      }
+    }else{
+      if( Number( event.target.value ) > ( currentHour ) ){
+        alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        const limitHour = Math.max(0, Math.min(currentHour, Number(event.target.value)));
+        setHour( limitHour );     
+      }
+      if( event.target.value.length === 1 ){
+        setHour( ("0" + event.target.value).slice(-2) );
+      }
+    }
+  };
+  // 분 focus가 바뀌었을 떄
+  const minuteOnBlur = ( event ) => {
+    // console.log( Number( currentHour + currentMinute ));
+    // console.log( Number( hour + event.target.value ) );
+    if( Number( event.target.value ) >= 60 ){
+      alert(`분은 60분을 넘길 수 없습니다.`);
+      setMinute(( "0" + currentMinute ).slice(-2));
+    }
+
+    if( !isToday ){
+      if( Number( currentHour + currentMinute ) < Number( hour + event.target.value) ){
+        // console.log("??");
+        alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        const limitMinute = Math.max(0, Math.min(currentMinute, Number(event.target.value)));
+        setMinute( limitMinute );
+      }
+    }else{
+      if( Number( currentHour + currentMinute ) > Number( hour + event.target.value )){
+        alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        const limitMinute = Math.max(currentMinute, Math.min(currentMinute, Number(event.target.value)));
+        console.log("limit ", limitMinute );
+        setMinute( limitMinute );
+      }
     }
   };
   // 다음 주소 검색
@@ -429,15 +503,16 @@ function CreatePost() {
   // };
   // 웹용
   const addressStyle = {
-    // display: "flex",
+    display: "block",
     position: "absolute",
-    top: "1280px",
-    left: "650px",
+    top: "150%",
+    left: "50%",
     width: "375px",
     height: "470px",
     padding: "7px",
-    // margin:"auto",
-    zIndex: 1,
+    marginLeft:"-195px",
+    // marginTop:"-50px",
+    zIndex: 5,
   };
   const handleComplete = (data) => {
     let fullAddress = data.address;
@@ -489,6 +564,13 @@ function CreatePost() {
       handleError,
       options
     );
+    window.scrollTo(0,0);
+    // const today = new Date();
+    // const currentHour = ("0" + today.getHours()).slice(-2);
+    // const currentMinute = ("0" + today.getMinutes()).slice(-2);
+    
+    setHour( currentHour );
+    setMinute( currentMinute );
   }, []);
 
   useEffect(() => {
@@ -500,7 +582,7 @@ function CreatePost() {
       let callback = function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
           const arr = { ...result };
-          console.log(arr[0]);
+          // console.log(arr[0]);
           const _arr = arr[0].address.address_name;
           const _arrLoad = arr[0].address.road_address;
           setCurrentRoadAddress(_arrLoad);
@@ -512,12 +594,14 @@ function CreatePost() {
     }
   }, [location]);
 
+  
+
   // 등록하기 버튼 클릭
 
   const Title_ref = useRef();
   const Content_ref = useRef();
-  const currentHour = useRef();
-  const currentMinute = useRef();
+  const hour_ref = useRef();
+  const minute_ref = useRef();
 
   const CreateBunggleOnClickHandler = () => {
     const SeelectedCategories = CategoriesArray.filter((item, index) => {
@@ -525,10 +609,37 @@ function CreatePost() {
         return item;
       }
     });
+    let dates = "";
+    if( isToday ){
+      const today = new Date();
+
+      const year = today.getFullYear();
+      const month = ("0" + (today.getMonth() + 1)).slice(-2);
+      const day = ("0" + today.getDate()).slice(-2);
+
+      dates = year + "-" + month + "-" + day;
+    }else{
+      const today = new Date();
+
+      const year = today.getFullYear();
+      const month = ("0" + (today.getMonth() + 1)).slice(-2);
+      const day = ("0" + ( today.getDate() + 1 ) ).slice(-2);
+
+      dates = year + "-" + month + "-" + day;
+    }
+
     const title = Title_ref.current.value;
-    const content = Content_ref.current.value;
-    const hour = ("0" + currentHour.current.value).slice(-2);
-    const minute = ("0" + currentMinute.current.value).slice(-2);
+    let content = "";
+    
+    if (Content_ref.current.value.length <= 100 && Content_ref.current.value.length === 0 ) {
+      alert("소개글은 0자 이상 100자 이하여야 합니다.")
+      return null;
+    } else {
+      content = Content_ref.current.value;
+    }
+    const hour = ("0" + hour_ref.current.value).slice(-2);
+    const minute = ("0" + minute_ref.current.value).slice(-2);
+    
     // 타이틀은 필수
     if (title !== "") {
       let address = "";
@@ -550,14 +661,17 @@ function CreatePost() {
         place: address,
         tags: tagList,
         categories: SeelectedCategories,
-        isLetter: true,
+        isLetter: isLetter,
       };
+      console.log( postDto );
+
       const appendFile = isFile.filter((item) => {
         if (item !== "") {
           return item;
         }
       });
-      console.log(postDto);
+
+      // console.log(postDto);
       const formData = new FormData();
 
       formData.append(
@@ -575,16 +689,15 @@ function CreatePost() {
         formData.append("postImg", "");
       } else {
         appendFile.forEach((item) => {
-          // console.log(item);
           formData.append("postImg", item);
-          // console.log( JSON.stringify( formData ));
         });
       }
 
-      // const ReturnCategories = SeelectedCategories.join(",");
-      // console.log(ReturnCategories);
       dispatch(createBungleList(formData));
       navigate("/chat");
+    }else{
+      alert("벙글 제목은 필수 사항입니다.");
+      window.scrollTo(0,0);
     }
   };
 
@@ -625,7 +738,8 @@ function CreatePost() {
               type="file"
               accept="image/*"
               onChange={onFistFileChange}
-              disabled={isFirstFileClear ? true : false}
+              onClick={(event)=>event.target.value = null}
+              // disabled={isFirstFileClear ? true : false}
             />
           </UploadPictureWrap>
           <UploadPictureWrap>
@@ -643,6 +757,7 @@ function CreatePost() {
               type="file"
               accept="image/*"
               onChange={onSecondFileChange}
+              onClick={(event)=>event.target.value = null}
             />
           </UploadPictureWrap>
           <UploadPictureWrap>
@@ -652,6 +767,7 @@ function CreatePost() {
                 <FileClearIcon
                   src={IconClear}
                   onClick={thirdFileClearOnClickHandler}
+                  
                 />
               )}
             </FileInputLabel>
@@ -660,6 +776,7 @@ function CreatePost() {
               type="file"
               accept="image/*"
               onChange={onThirdFileChange}
+              onClick={(event)=>event.target.value = null}
             />
           </UploadPictureWrap>
         </FileUploadWrap>
@@ -734,7 +851,7 @@ function CreatePost() {
             오늘
           </TimeSelectToday>
           <TimeSelectTommrow
-            isTommorow={isTommorow}
+            isToday={isToday}
             onClick={() => {
               selectTodayOrTommorowClickHanlder("tommorow");
             }}
@@ -754,11 +871,12 @@ function CreatePost() {
         </TimeItemWapper>
         <TimeInputWrapper>
           <TimeInputHour
-            ref={currentHour}
-            type="text"
+            ref={hour_ref}
+            type="number"
             maxLength={2}
             value={hour || ""}
             onChange={InputHourNumberChangeHandler}
+            onBlur={hourOnBlur}
           />
 
           <span
@@ -773,12 +891,12 @@ function CreatePost() {
             시
           </span>
           <TimeInputMinute
-            ref={currentMinute}
-            type="text"
+            ref={minute_ref}
+            type="number"
             value={minute || ""}
-            max={59}
             maxLength={2}
             onChange={InputMinuteNumberChangeHandler}
+            onBlur={minuteOnBlur}
           />
           <span
             style={{
@@ -802,7 +920,9 @@ function CreatePost() {
             value={isAddress}
             placeholder="기본 주소"
           />
-          <SearhAddressBtn onClick={() => setVisible(!visible)}>
+          <SearhAddressBtn onClick={() => {setVisible(!visible)
+          // console.log("주소")
+          }}>
             {visible ? "취소" : "주소찾기"}
           </SearhAddressBtn>
 
@@ -879,10 +999,10 @@ function CreatePost() {
           >
             <PostPeopleCountTitle
               style={{ textAlign: "right", paddingRight: "5px" }}
-              type="text"
+              type="number"
               value={onlyNumber}
               onChange={InputTextOnChangeNumberHandler}
-              maxLength={2}
+              onBlur={peopleOnBlur}
             />
             명
           </div>

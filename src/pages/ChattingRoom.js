@@ -56,8 +56,9 @@ let client = null;
 function ChattingRoom({ setRealTimeChat }) {
   // SERVER URL
   // const SERVER_URL = "http://3.37.61.25";
-  const SERVER_URL = "https://gutner.shop";
-  // const SERVER_URL = "https://meeting-platform.shop";
+  const SERVER_URL = "https://gutner.shop"; //현구님
+  // const SERVER_URL = "https://meeting-platform.shop"; //현욱님
+
   // navigate
   const navigate = useNavigate();
 
@@ -88,6 +89,11 @@ function ChattingRoom({ setRealTimeChat }) {
     // console.log(parseInt(postId));
   }
 
+  if (Bungle) {
+    postId = Bungle;
+  } else {
+    postId = String(Guest);
+  } // console.log(parseInt(postId)); }
   console.log(Bungle, Guest, postId);
   // const { postID } = useParams();
 

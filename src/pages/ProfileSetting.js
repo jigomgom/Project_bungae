@@ -26,12 +26,14 @@ function MyPageSetting() {
 
   useEffect(()=>{
     if( isLoad ){
+      window.scrollTo(0,0);
       setTimeout(()=>{ setIsLoad( false )}, 200 );
     }
   },[]);
 
   useEffect(()=>{
     if( !isLoad ){
+      
       setReceiveProfileUrl( userProfileInfo.profileUrl );
     }
   }, [isLoad]);

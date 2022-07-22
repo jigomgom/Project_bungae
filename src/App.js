@@ -43,6 +43,8 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Login />} />
+        {/* social login redirection URL */}
+        <Route path="/oauth" element={<Login />} />
         <Route path="/main" element={<Main />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/tagsearch" element={<TagSearch />} />

@@ -28,7 +28,7 @@ function CategorySearchCard(props) {
   const { categoryList } = props;
   const dispatch = useDispatch();
   // console.log(moreList);
-  console.log(categoryList);
+  // console.log(categoryList);
   const navigate = useNavigate();
 
   const categoryListLikeClick = (postId) => {
