@@ -1,6 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
+import AxiosAPI from "../customapi/CustomAxios";
+import { setCookie } from "../customapi/CustomCookie";
+import moment from "moment";
+
 // styles
 import "../styles/Login.css";
 // jiyong css
@@ -30,9 +35,6 @@ import {
   ModalButton,
 } from "../styles/StyledLogin";
 
-//image
-import Pikka from "../images/Pikka.png";
-import { BsChevronLeft } from "react-icons/bs";
 
 // icon
 import IconLoginLogo from "../assets/icon-login-main.svg";
@@ -50,7 +52,7 @@ const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 function Login() {
   //http://52.79.214.48
   //http://3.37.61.25
-  const SERVER_URL = "https://gutner.shop";
+  // const SERVER_URL = "https://gutner.shop";
   // const SERVER_URL = "https://meeting-platform.shop";
 
   // navigate
@@ -67,7 +69,7 @@ function Login() {
     console.log(code);
 
     try {
-      const response = await axios.get(`${SERVER_URL}/user/signin/naver`, {
+      const response = await AxiosAPI.get(`/user/signin/naver`, {
         params: {
           code: code,
           state: createStateToken(code),
@@ -76,9 +78,16 @@ function Login() {
       console.log(response);
       if (response.data.response) {
         localStorage.setItem("login-token", response.headers.authorization);
-        localStorage.setItem("user-name", response.data.username);
+        localStorage.setItem("userId", response.data.userId);
+        localStorage.setItem(
+          "expireAt",
+          moment().add(5, "minute").format("yyyy-MM-DD HH:mm:ss")
+        );
+        setCookie("refresh_token", response.headers.refreshtoken, {
+          path: "/",
+          secure: true,
+        });
         console.log(localStorage.getItem("login-token"));
-        // navigate("/main");
         window.location.href = "/main";
       }
     } catch (error) {
@@ -100,7 +109,7 @@ function Login() {
   // 카카오 소셜 로그인 시도 후, JWT 토큰 획득
   const getKakaoLoginJWTtoken = async () => {
     try {
-      const response = await axios.get(`${SERVER_URL}/user/signin/kakao`, {
+      const response = await AxiosAPI.get(`/user/signin/kakao`, {
         params: {
           code: code,
         },
@@ -108,9 +117,17 @@ function Login() {
       console.log(response);
       if (response.data.response) {
         localStorage.setItem("login-token", response.headers.authorization);
-        localStorage.setItem("user-name", response.data.username);
+        localStorage.setItem("userId", response.data.userId);
+        localStorage.setItem(
+          "expireAt",
+          moment().add(5, "minute").format("yyyy-MM-DD HH:mm:ss")
+        );
+        setCookie("refresh_token", response.headers.refreshtoken, {
+          path: "/",
+          secure: true,
+        });
         console.log(localStorage.getItem("login-token"));
-        navigate("/main");
+        window.location.href = "/main";
       }
     } catch (error) {
       console.log(error);
@@ -126,7 +143,7 @@ function Login() {
   // 구글 소셜 로그인 시도 후, JWT 토큰 획득
   const getGoogleLoginJWTtoken = async () => {
     try {
-      const response = await axios.get(`${SERVER_URL}/user/signin/google`, {
+      const response = await AxiosAPI.get(`/user/signin/google`, {
         params: {
           code: code,
         },
@@ -134,9 +151,17 @@ function Login() {
       console.log(response);
       if (response.data.response) {
         localStorage.setItem("login-token", response.headers.authorization);
-        localStorage.setItem("user-name", response.data.username);
+        localStorage.setItem("userId", response.data.userId);
+        localStorage.setItem(
+          "expireAt",
+          moment().add(5, "minute").format("yyyy-MM-DD HH:mm:ss")
+        );
+        setCookie("refresh_token", response.headers.refreshtoken, {
+          path: "/",
+          secure: true,
+        });
         console.log(localStorage.getItem("login-token"));
-        navigate("/main");
+        window.location.href = "/main";
       }
     } catch (error) {
       console.log(error);
@@ -188,12 +213,21 @@ function Login() {
   // 로그인
   const LoginEnterKeyPressHanlder = async (LoginUser) => {
     try {
-      const response = await axios.post(`${SERVER_URL}/user/login`, LoginUser);
+      const response = await AxiosAPI.post(`/user/login`, LoginUser);
       // localStorage.setItem("login-token", response.headers.authorization );
       console.log(response);
       if (response.data.response) {
         localStorage.setItem("login-token", response.headers.authorization);
         localStorage.setItem("userId", response.data.userId);
+        localStorage.setItem(
+          "expireAt",
+          moment().add(5, "minute").format("yyyy-MM-DD HH:mm:ss")
+        );
+        setCookie("refresh_token", response.headers.refreshtoken, {
+          path: "/",
+          secure: true,
+        });
+        console.log(localStorage.getItem("login-token"));
 
         navigate("/main");
       } else {

@@ -319,12 +319,12 @@ export const TimeSelectToday = styled.div`
 export const TimeSelectTommrow = styled.div`
   width: 68px;
   height: 26px;
-  background-color: ${( props ) => props.isTommorow ? "#FFC632" : "#d9d9d9"};//#ffc632;
+  background-color: ${( props ) => props.isToday ? "#d9d9d9":"#FFC632"};//#ffc632;
   border-radius: 5px;
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;
-  color: ${( props ) => props.isTommorow ? "#FFFFFF" : "#898989"};;
+  color: ${( props ) => props.isToday ? "#898989" :"#FFFFFF" };
   display: flex;
   justify-content: center;
   align-items: center;
