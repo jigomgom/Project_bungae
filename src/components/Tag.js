@@ -9,7 +9,7 @@ function Tag() {
     <TagWrap>
       <TagTitle>인기 태그</TagTitle>
       {TagArray.map((item, index) => {
-        return <TagItem>#{item}</TagItem>;
+        return <TagItem key={index}>#{item}</TagItem>;
       })}
     </TagWrap>
   );

@@ -108,7 +108,12 @@ function Main() {
   // Geolocation의 `getCurrentPosition` 메소드에 대한 실패 callback 핸들러
   const handleError = (error) => {
     setError(error.message);
-    console.log(error);
+    console.log( error.code );
+    console.log(error.message);
+    if( error.message === "User denied Geolocation"){
+      alert("사이트 설정에서 GPS 설정을 켜주세요");
+    }
+        // if( error.message );
   };
 
   // GPS 아이콘 클릭, update position
@@ -121,16 +126,9 @@ function Main() {
   };
 
   useEffect(() => {
-    // if (isLoad) {
-    //   navigator.geolocation.getCurrentPosition(
-    //     handleSuccess,
-    //     handleError,
-    //     options
-    //   );
-    //   setTimeout(() => {
-    //     setIsLoad(false);
-    //   }, 400);
-    // }
+    // const response = navigator.geolocation;
+    // console.log( response );
+    
     navigator.geolocation.getCurrentPosition(
       handleSuccess,
       handleError,
@@ -139,9 +137,9 @@ function Main() {
   }, []);
 
   useEffect(() => {
-    // if (location) {
-    dispatch(getMainBungleList(location));
-    // }
+    if (location) {
+      dispatch(getMainBungleList(location));
+    }
   }, [location]);
 
   // 실시간 벙글 하트 state
@@ -211,15 +209,15 @@ function Main() {
   const MoreBtnClickHandler = (status) => {
     if (status === "realTime") {
       console.log("More real time");
-      dispatch(moreBungleList({ status, location }));
-      navigate("/tagsearch");
+      dispatch(moreBungleList({ status, location, navigate }));
+      // navigate("/tagsearch");
     } else if (status === "manner") {
       console.log("More manner");
-      navigate("/tagsearch");
+      // navigate("/tagsearch");
     } else {
       console.log("More endTime");
-      dispatch(moreBungleList({ status, location }));
-      navigate("/tagsearch");
+      dispatch(moreBungleList({ status, location, navigate }));
+      // navigate("/tagsearch");
     }
   };
 
