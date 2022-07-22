@@ -144,15 +144,10 @@ export const moreBungleList = createAsyncThunk(
       });
       console.log(response);
       if (response.data.response) {
-        // if( data.status === "realTime" ){
-        //   // navigate("/tagsearch");
-        //   // console.log( data.status )
-        // }else if( data.status === "endTime" ){
-        //   console.log( data.status );
-        // }else{
-        //   console.log( data.status );
-        // }
+        data.navigate("/tagsearch");// window.location.href = "/tagsearch";
         return response.data.list;
+      }else{
+        alert(response.data.message);
       }
     } catch (e) {
       console.log(e);
@@ -252,6 +247,7 @@ export const categoryBungleList = createAsyncThunk(
       });
       console.log(response);
       if (response.data.response) {
+        window.location.herf = `/categorysearch/${item.category}`
         return response.data.list;
       } else {
         alert(`${response.data.message}`);
@@ -412,7 +408,7 @@ const BungleSlice = createSlice({
   reducers: {
     // 클라이언트 값 가져오기
     getChatClient : ( state, action ) => {
-      console.log( "Chat client ", action.payload );
+      // console.log( "Chat client ", action.payload );
       state.ChatClient.client = action.payload.client;
       state.ChatClient.guest = action.payload.Guest;
     }
@@ -432,12 +428,14 @@ const BungleSlice = createSlice({
     // Main 전체 게시글 조회
     [getMainBungleList.fulfilled]: (state, action) => {
       console.log("Main get");
-      console.log( action.payload )
-      state.isOwner = action.payload?.isOwner;
+      // console.log( action.payload )
+      if (action.payload) {
+        state.isOwner = action.payload?.isOwner;
 
-      state.endTime = action.payload.postListEndTime;
-      state.realTime = action.payload.postListRealTime;
-      // console.log( current( state.endTime ), current( state.realTime ) );
+        state.endTime = action.payload.postListEndTime;
+        state.realTime = action.payload.postListRealTime;
+        // console.log( current( state.endTime ), current( state.realTime ) );
+      }
     },
     [getMainBungleList.rejected]: (state, action) => {
       console.log("Main reject");
@@ -516,6 +514,7 @@ const BungleSlice = createSlice({
     },
     // 더보기, 태그 검색 결과
     [moreBungleList.fulfilled]: (state, action) => {
+      console.log( action.payload );
       state.moreList = action.payload;
     },
     [moreBungleList.rejected]: (state, action) => {},

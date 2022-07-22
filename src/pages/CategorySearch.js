@@ -21,7 +21,7 @@ function CategorySearch() {
   const [ isLoad, setIsLaod ] = useState( true );
   //
   const categoryList = useSelector( state => state.Bungle.categoriesList );
-  console.log( categoryList );
+  // console.log( categoryList );
 
   const navigate = useNavigate();
   const { category } = useParams();

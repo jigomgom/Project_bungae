@@ -42,7 +42,7 @@ function App() {
   const [getPostId, setGetPostId] = useState();
   function getInnerHTML(id) {
     setGetPostId(() => id);
-    console.log(id);
+    // console.log(id);
     enterChat(id);
   }
   console.log("post Id: ", getPostId);

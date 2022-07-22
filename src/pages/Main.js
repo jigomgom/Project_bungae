@@ -137,9 +137,9 @@ function Main() {
   }, []);
 
   useEffect(() => {
-    // if (location) {
-    dispatch(getMainBungleList(location));
-    // }
+    if (location) {
+      dispatch(getMainBungleList(location));
+    }
   }, [location]);
 
   // 실시간 벙글 하트 state
@@ -209,15 +209,15 @@ function Main() {
   const MoreBtnClickHandler = (status) => {
     if (status === "realTime") {
       console.log("More real time");
-      dispatch(moreBungleList({ status, location }));
-      navigate("/tagsearch");
+      dispatch(moreBungleList({ status, location, navigate }));
+      // navigate("/tagsearch");
     } else if (status === "manner") {
       console.log("More manner");
-      navigate("/tagsearch");
+      // navigate("/tagsearch");
     } else {
       console.log("More endTime");
-      dispatch(moreBungleList({ status, location }));
-      navigate("/tagsearch");
+      dispatch(moreBungleList({ status, location, navigate }));
+      // navigate("/tagsearch");
     }
   };
 

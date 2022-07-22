@@ -26,7 +26,7 @@ const Footer = () => {
   const ownerCheck = useSelector((state) => state.Bungle.isOwner);
   const postId = useSelector((state) => state.Bungle.detailBungle.postId);
   const chatListPostId = useSelector((state) => state.Bungle.myChatting);
-  console.log("Onwer ", ownerCheck );
+  // console.log("Onwer ", ownerCheck );
   const [listPostId, setListPostId] = useState(0);
   const getChatListPostId = () => {
     for (let i = 0; i < chatListPostId.length; i++) {
@@ -36,7 +36,7 @@ const Footer = () => {
   useEffect(() => {
     getChatListPostId();
   }, [chatListPostId]);
-  console.log(listPostId);
+  // console.log(listPostId);
 
   // root path, siginup 일 때 렌더링 안되도록 방지
   const [isLoad, setIsLoad] = useState(true);

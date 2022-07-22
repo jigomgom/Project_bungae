@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux"; 
 import { getChatClient } from "../redux/modules/BungleSlice";
 
+import AxiosAPI from "../customapi/CustomAxios";
+
 import "swiper/css";
 import "swiper/css/pagination";
 
@@ -73,7 +75,7 @@ function ChattingRoom({ setRealTimeChat }) {
   // 참여자 채팅 룸 ID
   // const Guest = useSelector((state) => state.Bungle.detailBungle.postId);
   const userProfileInfo = useSelector((state) => state.Bungle.userProfile);
-  console.log(userProfileInfo);
+  // console.log(userProfileInfo);
   const params = useParams();
   // if (Bungle) {
   //   console.log("PostID ", Bungle);
@@ -83,8 +85,8 @@ function ChattingRoom({ setRealTimeChat }) {
   let postId;
   const Guest = params.postId;
 
-  console.log(Bungle);
-  console.log(Guest);
+  // console.log(Bungle);
+  // console.log(Guest);
 
   if (Bungle) {
     postId = Bungle;
@@ -98,7 +100,7 @@ function ChattingRoom({ setRealTimeChat }) {
   } else {
     postId = String(Guest);
   } // console.log(parseInt(postId)); }
-  console.log(Bungle, Guest, postId);
+  console.log("OnwerPostId ", Bungle, "Guest( params.postId ) ", Guest, "Change Post ID ", postId);
   // const { postID } = useParams();
 
   const userPersonalId = Number(localStorage.getItem("userId"));
@@ -119,7 +121,7 @@ function ChattingRoom({ setRealTimeChat }) {
     if (postId > 0 || Number(postId) > 0) {
       connect();
     }
-  }, [postId]);
+  }, []); // postId defendency 삭제
 
   const connect = () => {
     let sock = new SockJS(`${SERVER_URL}/wss/chat`);
@@ -141,7 +143,7 @@ function ChattingRoom({ setRealTimeChat }) {
     }
     userJoin();
   };
-  console.log(userData);
+  // console.log(userData);
 
   const userJoin = () => {
     console.log("Test user Join");
@@ -188,7 +190,7 @@ function ChattingRoom({ setRealTimeChat }) {
           fileUrl: fileUrl,
         };
       }
-      console.log(chatMessage);
+      // console.log(chatMessage);
       client.send("/pub/chat/message", { token }, JSON.stringify(chatMessage));
       setUserData({ ...userData, message: "" });
       setFileUrl(null);
@@ -258,10 +260,11 @@ function ChattingRoom({ setRealTimeChat }) {
       chattingDate.push(ampm + " " + hour + ":" + minutes);
     }
   }
-  console.log("publicChats: ", publicChats);
+  // console.log("publicChats: ", publicChats);
 
   //Disconnect
   const chatDisconnect = () => {
+    console.log("Chat disconnect");
     if (Bungle) {
       var chatMessage = {
         type: "QUIT",
@@ -318,7 +321,7 @@ function ChattingRoom({ setRealTimeChat }) {
       return;
     }
   };
-  console.log(isFile);
+  // console.log(isFile);
 
   const chatImg = async () => {
     if (fileUrl) {
@@ -327,13 +330,13 @@ function ChattingRoom({ setRealTimeChat }) {
     } else {
       const formData = new FormData();
       formData.append("file ", isFile);
-      const response = await axios.post(
-        `${SERVER_URL}/chat/message/file`,
+      const response = await AxiosAPI.post(
+        `/chat/message/file`,
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: token,
+            // Authorization: token,
           },
         }
       );
@@ -341,10 +344,13 @@ function ChattingRoom({ setRealTimeChat }) {
     }
     console.log(fileUrl);
   };
-  console.log(fileUrl);
+  // console.log(fileUrl);
 
   useEffect(() => {
-    chatImg();
+    // console.log( isFile );
+    if (isFile) {
+      chatImg();
+    }
   }, [isFile]);
 
   //채팅 상세 Modal Files Array
@@ -375,12 +381,12 @@ function ChattingRoom({ setRealTimeChat }) {
   const [chatFiles, setChatFiles] = useState([]);
 
   const chatPerson = () => {
-    axios({
+    AxiosAPI({
       method: "get",
-      url: `${SERVER_URL}/chat/message/userinfo/${postId}`,
-      headers: {
-        Authorization: token,
-      },
+      url: `/chat/message/userinfo/${postId}`,
+      // headers: {
+      //   Authorization: token,
+      // },
     })
       .then((response) => {
         console.log(response.data);
@@ -394,12 +400,12 @@ function ChattingRoom({ setRealTimeChat }) {
 
   // const [fileData, setFileData] = () => {};
   const chatFile = () => {
-    axios({
+    AxiosAPI({
       method: "get",
-      url: `${SERVER_URL}/chat/message/files/${postId}`,
-      headers: {
-        Authorization: token,
-      },
+      url: `/chat/message/files/${postId}`,
+      // headers: {
+      //   Authorization: token,
+      // },
     })
       .then((response) => {
         console.log(response.data);
@@ -409,8 +415,8 @@ function ChattingRoom({ setRealTimeChat }) {
         console.log(error);
       });
   };
-  console.log("사람 : ", chatPeople);
-  console.log("파일 : ", chatFiles);
+  // console.log("사람 : ", chatPeople);
+  // console.log("파일 : ", chatFiles);
 
   // Modal state
 
@@ -463,26 +469,26 @@ function ChattingRoom({ setRealTimeChat }) {
     }
   };
 
-  console.log(
-    "신고모달 : ",
-    isModal,
-    "신고하기 버튼: ",
-    isBtn,
-    "채팅 상세: ",
-    chatModal
-  );
+  // console.log(
+  //   "신고모달 : ",
+  //   isModal,
+  //   "신고하기 버튼: ",
+  //   isBtn,
+  //   "채팅 상세: ",
+  //   chatModal
+  // );
 
   //신고하기
   const [report, setReport] = useState("");
   const [reportUserId, setReportUserId] = useState();
   console.log(report);
   const chatReportPerson = () => {
-    axios({
+    AxiosAPI({
       method: "post",
-      url: `${SERVER_URL}/user/report/${reportUserId}`,
-      headers: {
-        Authorization: token,
-      },
+      url: `/user/report/${reportUserId}`,
+      // headers: {
+      //   Authorization: token,
+      // },
       data: {
         history: report,
       },
@@ -506,12 +512,12 @@ function ChattingRoom({ setRealTimeChat }) {
   //프로필 상세 정보
   const [chatProfile, setChatProfile] = useState({});
   const detailProfile = () => {
-    axios({
+    AxiosAPI({
       method: "get",
-      url: `${SERVER_URL}/chat/details/${reportUserId}`,
-      headers: {
-        Authorization: token,
-      },
+      url: `/chat/details/${reportUserId}`,
+      // headers: {
+      //   Authorization: token,
+      // },
     })
       .then((response) => {
         setChatProfile(() => response.data);
@@ -521,7 +527,10 @@ function ChattingRoom({ setRealTimeChat }) {
       });
   };
   useEffect(() => {
-    detailProfile();
+    console.log( "reportUser ", reportUserId );
+    if (reportUserId) {
+      detailProfile();
+    }
   }, [reportUserId]);
 
   //이전 메세지 불러오기
@@ -551,12 +560,12 @@ function ChattingRoom({ setRealTimeChat }) {
   }
 
   const getMessage = () => {
-    axios({
+    AxiosAPI({
       method: "get",
       url: `${SERVER_URL}/chat/message/${postId}`,
-      headers: {
-        Authorization: token,
-      },
+      // headers: {
+      //   Authorization: token,
+      // },
     })
       .then((response) => {
         console.log(response);
@@ -570,7 +579,7 @@ function ChattingRoom({ setRealTimeChat }) {
         console.log(error);
       });
   };
-  console.log("이전: ", beforeChat);
+  // console.log("이전: ", beforeChat);
 
   useEffect(() => {
     getMessage();
@@ -599,7 +608,7 @@ function ChattingRoom({ setRealTimeChat }) {
   const scrollToBottom = () => {
     const { scrollHeight, clientHeight } = messagesEndRef.current;
     messagesEndRef.current.scrollTop = scrollHeight - clientHeight;
-    console.log(messagesEndRef);
+    // console.log(messagesEndRef);
   };
 
   useEffect(
@@ -886,7 +895,7 @@ function ChattingRoom({ setRealTimeChat }) {
                               </>
                             ) : (
                               <>
-                                {console.log(chat.fileUrl.data)}
+                                {/* {console.log(chat.fileUrl.data)} */}
                                 {chat.fileUrl.slice(-3) === "jpg" ||
                                 chat.fileUrl.slice(-3) === "png" ||
                                 chat.fileUrl.slice(-4) === "jpeg" ||
@@ -1110,7 +1119,7 @@ function ChattingRoom({ setRealTimeChat }) {
               <>
                 <div className="chatting-footer">
                   <div className="chatting-footer-icon">
-                    <label className="input-file-button" for="fileUpload">
+                    <label className="input-file-button" htmlFor="fileUpload">
                       <img src={IconCamera} alt="" />
                     </label>
                     <input
