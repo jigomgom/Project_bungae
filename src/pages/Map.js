@@ -48,24 +48,26 @@ function Map() {
 
   //지도 화면 axios
   const getMapLocation = () => {
-    axios({
-      method: "get",
-      url: `${SERVER_URL}/map`,
-      headers: {
-        Authorization: token,
-      },
-      params: {
-        latitude: location?.latitude,
-        longitude: location?.longitude,
-      },
-    })
-      .then((response) => {
-        console.log(response.data.mapListDtos);
-        setAroundLocation(response.data.mapListDtos);
+    if (location) {
+      axios({
+        method: "get",
+        url: `${SERVER_URL}/map`,
+        headers: {
+          Authorization: token,
+        },
+        params: {
+          latitude: location?.latitude,
+          longitude: location?.longitude,
+        },
       })
-      .catch((error) => {
-        console.log(error);
-      });
+        .then((response) => {
+          console.log(response.data.mapListDtos);
+          setAroundLocation(response.data.mapListDtos);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   useEffect(() => {
