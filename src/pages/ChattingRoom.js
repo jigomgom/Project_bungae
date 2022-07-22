@@ -10,6 +10,8 @@ import { useDispatch } from "react-redux";
 import { getChatClient } from "../redux/modules/BungleSlice";
 
 import AxiosAPI from "../customapi/CustomAxios";
+import moment from "moment";
+import { getCookie, setCookie } from "../customapi/CustomCookie";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -81,26 +83,16 @@ function ChattingRoom({ setRealTimeChat }) {
   //   console.log("PostID ", Bungle);
   // }
   const token = localStorage.getItem("login-token");
-
+  const PK = Number( localStorage.getItem("userId") );
   let postId;
   const Guest = params.postId;
-
-  // console.log(Bungle);
-  // console.log(Guest);
-
-  if (Bungle) {
-    postId = Bungle;
-  } else {
-    postId = String(Guest);
-    // console.log(parseInt(postId));
-  }
 
   if (Bungle) {
     postId = Bungle;
   } else {
     postId = String(Guest);
   } // console.log(parseInt(postId)); }
-  console.log("OnwerPostId ", Bungle, "Guest( params.postId ) ", Guest, "Change Post ID ", postId);
+  console.log("OnwerPostId ", Bungle, "userId ", PK, "Guest( params.postId ) ", Guest, "Change Post ID ", postId);
   // const { postID } = useParams();
 
   const userPersonalId = Number(localStorage.getItem("userId"));
@@ -121,9 +113,10 @@ function ChattingRoom({ setRealTimeChat }) {
     if (postId > 0 || Number(postId) > 0) {
       connect();
     }
-  }, []); // postId defendency 삭제
+  }, [postId]); // postId defendency 삭제
 
   const connect = () => {
+    console.log("Connect 시작");
     let sock = new SockJS(`${SERVER_URL}/wss/chat`);
     client = over(sock);
     client.connect({ token }, onConnected, onError);
@@ -137,8 +130,10 @@ function ChattingRoom({ setRealTimeChat }) {
     dispatch( getChatClient( { client, Guest } ) );
     setUserData({ ...userData, connected: true });
     if (Bungle) {
+      console.log("방장 connect");
       client.subscribe(`/sub/chat/room/${postId}`, onMessageReceived);
     } else if (Guest) {
+      console.log("게스트 connect");
       client.subscribe(`/sub/chat/room/${parseInt(postId)}`, onMessageReceived);
     }
     userJoin();
@@ -162,8 +157,8 @@ function ChattingRoom({ setRealTimeChat }) {
         status: "JOIN",
       };
     }
-
-    client.send("/pub/chat/message", { token }, JSON.stringify(chatMessage));
+    
+    client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
     console.log("Test user Subscribe");
   };
 
@@ -172,8 +167,10 @@ function ChattingRoom({ setRealTimeChat }) {
     setUserData({ ...userData, message: value });
   };
 
-  const sendValue = () => {
+  const sendValue = async () => {
     console.log("Test user send");
+    
+    
     if ((client && userData.message) || (client && fileUrl)) {
       if (Bungle) {
         var chatMessage = {
@@ -191,14 +188,16 @@ function ChattingRoom({ setRealTimeChat }) {
         };
       }
       // console.log(chatMessage);
-      client.send("/pub/chat/message", { token }, JSON.stringify(chatMessage));
+      client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
       setUserData({ ...userData, message: "" });
       setFileUrl(null);
     }
   };
 
   const onMessageReceived = (payload) => {
+    
     var payloadData = JSON.parse(payload.body);
+    console.log( payloadData );
     if (
       payloadData.type === "TALK" ||
       payloadData.type === "ENTER" ||
@@ -276,7 +275,7 @@ function ChattingRoom({ setRealTimeChat }) {
         roomId: `${parseInt(postId)}`,
       };
     }
-    client.send("/pub/chat/message", { token }, JSON.stringify(chatMessage));
+    client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
     client.disconnect(function () {
       alert("See you next time!");
     });
@@ -562,7 +561,7 @@ function ChattingRoom({ setRealTimeChat }) {
   const getMessage = () => {
     AxiosAPI({
       method: "get",
-      url: `${SERVER_URL}/chat/message/${postId}`,
+      url: `/chat/message/${postId}`,
       // headers: {
       //   Authorization: token,
       // },
@@ -582,8 +581,11 @@ function ChattingRoom({ setRealTimeChat }) {
   // console.log("이전: ", beforeChat);
 
   useEffect(() => {
-    getMessage();
-  }, []);
+    // getMessage undefined 수정 중
+    if (postId > 0) {
+      getMessage();
+    }
+  }, [postId]);
 
   //방장 나가는 지 확인
   const [outOwner, setOutOwner] = useState(false);
