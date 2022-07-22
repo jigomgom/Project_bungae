@@ -1,6 +1,10 @@
 .search-result-card-wrap{
     margin-bottom: 70px;
 }
+.search-result-card-wrap-map{
+    margin-bottom: 70px;
+    padding-top: 55px;
+}
 .search-result-header{
     display: flex;
     flex-direction: row;

@@ -54,6 +54,7 @@ function App() {
 
         <Route path="/chatlist" element={<ChatList />} />
         <Route path="/detailpost/:postId" element={<DetailPost />} />
+        <Route path="/map/detailpost/:postId" element={<DetailPost />} />
         <Route path="/createpost" element={<CreatePost />} />
         <Route path="/editpost" element={<EditPost />} />
         <Route path="/profilesetting" element={<ProfileSetting />} />

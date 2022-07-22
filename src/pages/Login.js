@@ -45,7 +45,7 @@ const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${p
 // 소셜 로그인 URL - Kakao
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_LOGIN_CLIENT_KEY}&redirect_uri=${process.env.REACT_APP_SOCIAL_LOGIN_REDIRECTION_URL}&response_type=code`;
 
-const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+// const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 function Login() {
   //http://52.79.214.48

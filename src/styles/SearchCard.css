@@ -6,6 +6,15 @@
     gap: 15px;
     cursor: pointer;
 }
+.search-card-wrap-map{
+    /* background: green; */
+    padding: 25px 20px 0px 20px;
+    display: flex;
+    /* flex-direction: row; */
+    gap: 15px;
+    cursor: pointer;
+    border-bottom: 1.2px solid #D9D9D9;;
+}
 .search-card-img-thumbnail{
     width: 128px;
     height: 134px;
