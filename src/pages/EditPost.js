@@ -869,8 +869,9 @@ function EditPost() {
         roomId: `${parseInt(guest)}`,
       };
     }
-    const token = localStorage.getItem("login-token");
-    client.send("/pub/chat/message", { token }, JSON.stringify(chatMessage));
+    // const token = localStorage.getItem("login-token");
+    const PK = Number( localStorage.getItem("userId") );
+    client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
     client.disconnect(function () {
       alert("See you next time!");
     });

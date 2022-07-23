@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { getMapBungle } from "../redux/modules/BungleSlice";
 
 //Icons
 import MarkerLightening from "../assets/icon-map-lightening.svg";
@@ -32,8 +33,9 @@ function Map() {
   const [location, setLocation] = useState();
   //에러 코드 담는 state
   const [error, setError] = useState();
-  //주변 위치 벙글 담는 배열
-  const [aroundLocation, setAroundLocation] = useState([]);
+  //주변 지도 리스트
+  const getAroundBungle = useSelector((state) => state.Bungle.mapList);
+  console.log(getAroundBungle);
 
   //현재 위치 state에 현재 위치 담기
   const handleSuccess = (pos) => {
@@ -46,33 +48,10 @@ function Map() {
   };
   console.log(location);
 
-  //지도 화면 axios
-  const getMapLocation = () => {
-    if (location) {
-      axios({
-        method: "get",
-        url: `${SERVER_URL}/map`,
-        headers: {
-          Authorization: token,
-        },
-        params: {
-          latitude: location?.latitude,
-          longitude: location?.longitude,
-        },
-      })
-        .then((response) => {
-          console.log(response.data.mapListDtos);
-          setAroundLocation(response.data.mapListDtos);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  };
-
   useEffect(() => {
     if (location) {
-      getMapLocation();
+      dispatch(getMapBungle(location));
+      // getMapLocation();
     }
   }, [location]);
 
@@ -115,7 +94,7 @@ function Map() {
   useEffect(() => {
     // const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
     // if (detailBungleInfo !== "") {
-    if (!isLoad && aroundLocation) {
+    if (!isLoad && getAroundBungle) {
       const options = {
         //지도를 생성할 때 필요한 기본 옵션
         // center: new kakao.maps.LatLng(location.latitude, location.longitude), //지도의 중심좌표.
@@ -150,8 +129,8 @@ function Map() {
         //   latlng: new kakao.maps.LatLng(33.451393, 126.570738),
         // },
       ];
-      aroundLocation.map((location, index) => {
-        console.log(location);
+      getAroundBungle.map((location, index) => {
+        // console.log(location);
         positions = [
           ...positions,
           {
@@ -221,7 +200,7 @@ function Map() {
         ref={container}
         style={{ width: "100%", height: "84vh" }}
       ></div>
-      <BottomSheet aroundLocation={aroundLocation} />
+      <BottomSheet aroundLocation={getAroundBungle} />
     </div>
   );
 }

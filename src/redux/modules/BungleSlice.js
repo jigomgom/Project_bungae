@@ -32,12 +32,13 @@ export const getMyBungleList = createAsyncThunk(
     // console.log( token );
     try {
       // const response = await axios.get(`${SERVER_URL}/posts/posts/mypost`, {
-      const response = await AxiosAPI.get(`/posts/mypost`, 
-      // {
-      //   headers: {
-      //     Authorization: localStorage.getItem("login-token"),
-      //   },
-      // }
+      const response = await AxiosAPI.get(
+        `/posts/mypost`
+        // {
+        //   headers: {
+        //     Authorization: localStorage.getItem("login-token"),
+        //   },
+        // }
       );
       // console.log(response);
       if (response.data.response) {
@@ -80,12 +81,13 @@ export const deleteMyBungleList = createAsyncThunk(
   async (postId) => {
     try {
       //axios.delete(URL, {params: payload}, header);
-      const response = await AxiosAPI.delete(`/posts/${postId}`, 
-      // {
-      //   headers: {
-      //     Authorization: localStorage.getItem("login-token"),
-      //   },
-      // }
+      const response = await AxiosAPI.delete(
+        `/posts/${postId}`
+        // {
+        //   headers: {
+        //     Authorization: localStorage.getItem("login-token"),
+        //   },
+        // }
       );
       console.log(response);
       if (response.data.response) {
@@ -144,9 +146,37 @@ export const moreBungleList = createAsyncThunk(
       });
       console.log(response);
       if (response.data.response) {
-        data.navigate("/tagsearch");// window.location.href = "/tagsearch";
+        data.navigate("/tagsearch"); // window.location.href = "/tagsearch";
         return response.data.list;
-      }else{
+      } else {
+        alert(response.data.message);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
+
+// 지도 주변 벙글
+export const getMapBungle = createAsyncThunk(
+  "GET/getMapBungle",
+  async (data) => {
+    console.log(data);
+    // const navigate = useNavigate();
+    try {
+      const response = await AxiosAPI.get(`/map`, {
+        // headers: {
+        //   Authorization: localStorage.getItem("login-token"),
+        // },
+        params: {
+          latitude: data.latitude,
+          longitude: data.longitude,
+        },
+      });
+      console.log(response);
+      if (response.data.response) {
+        return response.data.mapListDtos;
+      } else {
         alert(response.data.message);
       }
     } catch (e) {
@@ -163,7 +193,7 @@ export const likeBungleList = createAsyncThunk(
     try {
       const response = await AxiosAPI.post(
         `/posts/like/${postId}`,
-        {},
+        {}
         // {
         //   headers: {
         //     Authorization: localStorage.getItem("login-token"),
@@ -186,12 +216,13 @@ export const detailBungleList = createAsyncThunk(
   async (postId) => {
     console.log(postId);
     try {
-      const response = await AxiosAPI.get(`/posts/${postId}`, 
-      // {
-      //   headers: {
-      //     Authorization: localStorage.getItem("login-token"),
-      //   },
-      // }
+      const response = await AxiosAPI.get(
+        `/posts/${postId}`
+        // {
+        //   headers: {
+        //     Authorization: localStorage.getItem("login-token"),
+        //   },
+        // }
       );
       console.log(response);
       if (response.data.response) {
@@ -211,7 +242,7 @@ export const detailLikeBungleList = createAsyncThunk(
     try {
       const response = await AxiosAPI.post(
         `${SERVER_URL}/posts/like/${postId}`,
-        {},
+        {}
         // {
         //   headers: {
         //     Authorization: localStorage.getItem("login-token"),
@@ -247,7 +278,7 @@ export const categoryBungleList = createAsyncThunk(
       });
       console.log(response);
       if (response.data.response) {
-        window.location.herf = `/categorysearch/${item.category}`
+        window.location.herf = `/categorysearch/${item.category}`;
         return response.data.list;
       } else {
         alert(`${response.data.message}`);
@@ -307,16 +338,12 @@ export const editUserProfile = createAsyncThunk(
   "EDIT/editUserProfile",
   async (formData) => {
     try {
-      const response = await AxiosAPI.post(
-        `/user/profile`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            // Authorization: localStorage.getItem("login-token"),
-          },
-        }
-      );
+      const response = await AxiosAPI.post(`/user/profile`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          // Authorization: localStorage.getItem("login-token"),
+        },
+      });
       console.log(response);
       if (response.data.response) {
         return response.data.profileResponseDto;
@@ -332,12 +359,13 @@ export const myLikeBungleList = createAsyncThunk(
   "GET/myLikeBungleList",
   async () => {
     try {
-      const response = await AxiosAPI.get(`/posts/like/`, 
-      // {
-      //   headers: {
-      //     Authorization: localStorage.getItem("login-token"),
-      //   },
-      // }
+      const response = await AxiosAPI.get(
+        `/posts/like/`
+        // {
+        //   headers: {
+        //     Authorization: localStorage.getItem("login-token"),
+        //   },
+        // }
       );
       console.log(response);
       if (response.data.response) {
@@ -355,12 +383,13 @@ export const myChattingList = createAsyncThunk(
   async () => {
     // console.log(1);
     try {
-      const response = await AxiosAPI.get(`/chat/rooms`, 
-      // {
-      //   headers: {
-      //     Authorization: localStorage.getItem("login-token"),
-      //   },
-      // }
+      const response = await AxiosAPI.get(
+        `/chat/rooms`
+        // {
+        //   headers: {
+        //     Authorization: localStorage.getItem("login-token"),
+        //   },
+        // }
       );
       console.log(response);
       if (response.data) {
@@ -400,25 +429,26 @@ const BungleSlice = createSlice({
     list: [{}],
     // 내 채팅 목록
     myChatting: [],
-    ChatClient : {
-      client : null,
-      guest : 0,
-    }
+    ChatClient: {
+      client: null,
+      guest: 0,
+    },
+    mapList: [{}],
   },
   reducers: {
     // 클라이언트 값 가져오기
-    getChatClient : ( state, action ) => {
+    getChatClient: (state, action) => {
       // console.log( "Chat client ", action.payload );
       state.ChatClient.client = action.payload.client;
       state.ChatClient.guest = action.payload.Guest;
-    }
+    },
   },
   extraReducers: {
     // 벙글 생성, post ID 전달
     [createBungleList.fulfilled]: (state, action) => {
       console.log("create fullfill");
       // console.log( action.payload );
-      console.log( action.payload );
+      console.log(action.payload);
       state.OnwerPostId = action.payload;
     },
     [createBungleList.rejected]: (state, action) => {
@@ -477,7 +507,7 @@ const BungleSlice = createSlice({
 
       // more or Tag search Update
       const moreTempUpdate = current(state.moreList).map((item) => {
-        // console.log( item )
+        console.log(item);
         if (item.postId === action.payload) {
           // console.log( item.isLike );
           if (item.isLike) {
@@ -508,16 +538,41 @@ const BungleSlice = createSlice({
       });
 
       state.categoriesList = CategoryUpdate;
+
+      // 지도 벙글 update
+      const MapBungleUpdate = current(state.mapList).map((item) => {
+        // console.log(item);
+        if (item.id === action.payload) {
+          // console.log( item.isLike );
+          // console.log(action.payload);
+          if (item.isLike) {
+            return { ...item, isLike: false };
+          } else {
+            return { ...item, isLike: true };
+          }
+        } else {
+          return item;
+        }
+      });
+      console.log(MapBungleUpdate);
+      state.maplist = MapBungleUpdate;
     },
     [likeBungleList.rejected]: (state, action) => {
       console.log("Like reject");
     },
     // 더보기, 태그 검색 결과
     [moreBungleList.fulfilled]: (state, action) => {
-      console.log( action.payload );
+      console.log(action.payload);
       state.moreList = action.payload;
     },
     [moreBungleList.rejected]: (state, action) => {},
+
+    // 지도 리스트
+    [getMapBungle.fulfilled]: (state, action) => {
+      // console.log(action.payload);
+      state.mapList = action.payload;
+    },
+    [getMapBungle.rejected]: (state, action) => {},
 
     // 상세 조회
     [detailBungleList.fulfilled]: (state, action) => {
@@ -620,7 +675,6 @@ const BungleSlice = createSlice({
     [deleteMyBungleList.rejected]: (state, action) => {},
   },
 });
-
 
 export const { getChatClient } = BungleSlice.actions;
 export default BungleSlice.reducer;

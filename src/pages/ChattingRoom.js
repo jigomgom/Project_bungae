@@ -10,6 +10,8 @@ import { useDispatch } from "react-redux";
 import { getChatClient } from "../redux/modules/BungleSlice";
 
 import AxiosAPI from "../customapi/CustomAxios";
+import moment from "moment";
+import { getCookie, setCookie } from "../customapi/CustomCookie";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -81,26 +83,27 @@ function ChattingRoom({ setRealTimeChat }) {
   //   console.log("PostID ", Bungle);
   // }
   const token = localStorage.getItem("login-token");
-
+  const PK = Number(localStorage.getItem("userId"));
   let postId;
   const Guest = params.postId;
-
-  // console.log(Bungle);
-  // console.log(Guest);
 
   if (Bungle) {
     postId = Bungle;
   } else {
     postId = String(Guest);
   } // console.log(parseInt(postId)); }
+
   console.log(
     "OnwerPostId ",
     Bungle,
+    "userId ",
+    PK,
     "Guest( params.postId ) ",
     Guest,
     "Change Post ID ",
     postId
   );
+
   // const { postID } = useParams();
 
   const userPersonalId = Number(localStorage.getItem("userId"));
@@ -124,6 +127,7 @@ function ChattingRoom({ setRealTimeChat }) {
   }, [postId]);
 
   const connect = () => {
+    console.log("Connect 시작");
     let sock = new SockJS(`${SERVER_URL}/wss/chat`);
     client = over(sock);
     client.connect({ token }, onConnected, onError);
@@ -137,8 +141,10 @@ function ChattingRoom({ setRealTimeChat }) {
     dispatch(getChatClient({ client, Guest }));
     setUserData({ ...userData, connected: true });
     if (Bungle) {
+      console.log("방장 connect");
       client.subscribe(`/sub/chat/room/${postId}`, onMessageReceived);
     } else if (Guest) {
+      console.log("게스트 connect");
       client.subscribe(`/sub/chat/room/${parseInt(postId)}`, onMessageReceived);
     }
     userJoin();
@@ -163,7 +169,7 @@ function ChattingRoom({ setRealTimeChat }) {
       };
     }
 
-    client.send("/pub/chat/message", { token }, JSON.stringify(chatMessage));
+    client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
     console.log("Test user Subscribe");
   };
 
@@ -172,8 +178,9 @@ function ChattingRoom({ setRealTimeChat }) {
     setUserData({ ...userData, message: value });
   };
 
-  const sendValue = () => {
+  const sendValue = async () => {
     console.log("Test user send");
+
     if ((client && userData.message) || (client && fileUrl)) {
       if (Bungle) {
         var chatMessage = {
@@ -191,7 +198,7 @@ function ChattingRoom({ setRealTimeChat }) {
         };
       }
       // console.log(chatMessage);
-      client.send("/pub/chat/message", { token }, JSON.stringify(chatMessage));
+      client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
       setUserData({ ...userData, message: "" });
       setFileUrl(null);
     }
@@ -199,6 +206,7 @@ function ChattingRoom({ setRealTimeChat }) {
 
   const onMessageReceived = (payload) => {
     var payloadData = JSON.parse(payload.body);
+    console.log(payloadData);
     if (
       payloadData.type === "TALK" ||
       payloadData.type === "ENTER" ||
@@ -276,7 +284,7 @@ function ChattingRoom({ setRealTimeChat }) {
         roomId: `${parseInt(postId)}`,
       };
     }
-    client.send("/pub/chat/message", { token }, JSON.stringify(chatMessage));
+    client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
     client.disconnect(function () {
       alert("See you next time!");
     });
@@ -918,7 +926,7 @@ function ChattingRoom({ setRealTimeChat }) {
                                       <video controls name="media">
                                         <source
                                           src={chat.fileUrl}
-                                          type="video/mp4"
+                                          type="video/*"
                                         />
                                       </video>
                                     </p>
