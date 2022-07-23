@@ -6,7 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useSelector } from "react-redux";
 
-import { useDispatch } from "react-redux"; 
+import { useDispatch } from "react-redux";
 import { getChatClient } from "../redux/modules/BungleSlice";
 
 import AxiosAPI from "../customapi/CustomAxios";
@@ -83,7 +83,7 @@ function ChattingRoom({ setRealTimeChat }) {
   //   console.log("PostID ", Bungle);
   // }
   const token = localStorage.getItem("login-token");
-  const PK = Number( localStorage.getItem("userId") );
+  const PK = Number(localStorage.getItem("userId"));
   let postId;
   const Guest = params.postId;
 
@@ -92,7 +92,18 @@ function ChattingRoom({ setRealTimeChat }) {
   } else {
     postId = String(Guest);
   } // console.log(parseInt(postId)); }
-  console.log("OnwerPostId ", Bungle, "userId ", PK, "Guest( params.postId ) ", Guest, "Change Post ID ", postId);
+
+  console.log(
+    "OnwerPostId ",
+    Bungle,
+    "userId ",
+    PK,
+    "Guest( params.postId ) ",
+    Guest,
+    "Change Post ID ",
+    postId
+  );
+
   // const { postID } = useParams();
 
   const userPersonalId = Number(localStorage.getItem("userId"));
@@ -113,7 +124,7 @@ function ChattingRoom({ setRealTimeChat }) {
     if (postId > 0 || Number(postId) > 0) {
       connect();
     }
-  }, [postId]); // postId defendency 삭제
+  }, [postId]);
 
   const connect = () => {
     console.log("Connect 시작");
@@ -127,7 +138,7 @@ function ChattingRoom({ setRealTimeChat }) {
   };
 
   const onConnected = () => {
-    dispatch( getChatClient( { client, Guest } ) );
+    dispatch(getChatClient({ client, Guest }));
     setUserData({ ...userData, connected: true });
     if (Bungle) {
       console.log("방장 connect");
@@ -157,7 +168,7 @@ function ChattingRoom({ setRealTimeChat }) {
         status: "JOIN",
       };
     }
-    
+
     client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
     console.log("Test user Subscribe");
   };
@@ -169,8 +180,7 @@ function ChattingRoom({ setRealTimeChat }) {
 
   const sendValue = async () => {
     console.log("Test user send");
-    
-    
+
     if ((client && userData.message) || (client && fileUrl)) {
       if (Bungle) {
         var chatMessage = {
@@ -195,9 +205,8 @@ function ChattingRoom({ setRealTimeChat }) {
   };
 
   const onMessageReceived = (payload) => {
-    
     var payloadData = JSON.parse(payload.body);
-    console.log( payloadData );
+    console.log(payloadData);
     if (
       payloadData.type === "TALK" ||
       payloadData.type === "ENTER" ||
@@ -329,16 +338,12 @@ function ChattingRoom({ setRealTimeChat }) {
     } else {
       const formData = new FormData();
       formData.append("file ", isFile);
-      const response = await AxiosAPI.post(
-        `/chat/message/file`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            // Authorization: token,
-          },
-        }
-      );
+      const response = await AxiosAPI.post(`/chat/message/file`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          // Authorization: token,
+        },
+      });
       setFileUrl(response.data);
     }
     console.log(fileUrl);
@@ -526,7 +531,7 @@ function ChattingRoom({ setRealTimeChat }) {
       });
   };
   useEffect(() => {
-    console.log( "reportUser ", reportUserId );
+    console.log("reportUser ", reportUserId);
     if (reportUserId) {
       detailProfile();
     }
@@ -581,7 +586,6 @@ function ChattingRoom({ setRealTimeChat }) {
   // console.log("이전: ", beforeChat);
 
   useEffect(() => {
-    // getMessage undefined 수정 중
     if (postId > 0) {
       getMessage();
     }
@@ -922,7 +926,7 @@ function ChattingRoom({ setRealTimeChat }) {
                                       <video controls name="media">
                                         <source
                                           src={chat.fileUrl}
-                                          type="video/mp4"
+                                          type="video/*"
                                         />
                                       </video>
                                     </p>

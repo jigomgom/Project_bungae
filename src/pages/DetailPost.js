@@ -1,7 +1,10 @@
 /* global kakao */
 import React, { useEffect, useRef, useState } from "react";
 
-import { detailBungleList, detailLikeBungleList } from "../redux/modules/BungleSlice";
+import {
+  detailBungleList,
+  detailLikeBungleList,
+} from "../redux/modules/BungleSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
@@ -97,14 +100,14 @@ const Post = () => {
   const [isLoaded, setIsLoaded] = useState(true);
   useEffect(() => {
     // postId가 있을 경우, dispatch 실행
-      dispatch(detailBungleList(postId));
-      console.log("Detail mount");
-      window.scrollTo(0,0);
+    dispatch(detailBungleList(postId));
+    console.log("Detail mount");
+    window.scrollTo(0, 0);
   }, [postId]);
 
   useEffect(() => {
-      if( detailBungleInfo.latitude ){
-        // latitude 값이 들어왔을 경우 실행
+    if (detailBungleInfo.latitude) {
+      // latitude 값이 들어왔을 경우 실행
       const options = {
         //지도를 생성할 때 필요한 기본 옵션
         // center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
@@ -114,17 +117,24 @@ const Post = () => {
         ), //지도의 중심좌표.
         level: 3, //지도의 레벨(확대, 축소 정도)
       };
-      
+
       const map = new kakao.maps.Map(container.current, options); //지도 생성 및 객체 리턴
       // 마커 생성
       const imageSrc = IconCurrentMarker;
-      const imageSize = new kakao.maps.Size( 10, 10 );
-      const imageOption = '';
-      const markerImage = new kakao.maps.MarkerImage( imageSrc, imageSize, imageOption );
-      const markerPosition = new kakao.maps.LatLng( detailBungleInfo.latitude,detailBungleInfo.longitude );
+      const imageSize = new kakao.maps.Size(10, 10);
+      const imageOption = "";
+      const markerImage = new kakao.maps.MarkerImage(
+        imageSrc,
+        imageSize,
+        imageOption
+      );
+      const markerPosition = new kakao.maps.LatLng(
+        detailBungleInfo.latitude,
+        detailBungleInfo.longitude
+      );
       const marker = new kakao.maps.Marker({
         position: markerPosition,
-        image: markerImage
+        image: markerImage,
       });
 
       marker.setMap(map);
@@ -138,8 +148,8 @@ const Post = () => {
 
   // 좋아요 클릭
 
-  const isLikeClick = ( postId ) => {
-    dispatch( detailLikeBungleList( postId ) );
+  const isLikeClick = (postId) => {
+    dispatch(detailLikeBungleList(postId));
     console.log("like ", postId);
   };
 
@@ -167,17 +177,26 @@ const Post = () => {
           <PostWrap>
             <PostContent>
               <PostIconShared src={IconShared} />
-              <PostLike src={detailBungleInfo.isLike ? IconLike : IconUnlike} onClick={()=>{ isLikeClick( detailBungleInfo.postId ) }}/>
+              <PostLike
+                src={detailBungleInfo.isLike ? IconLike : IconUnlike}
+                onClick={() => {
+                  isLikeClick(detailBungleInfo.postId);
+                }}
+              />
               {detailBungleInfo.postUrls.length > 1 ? (
                 <Swiper
-                style={{ position: "relative", width: "100%", height:"207px"}}
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    height: "207px",
+                  }}
                 >
-                  {detailBungleInfo.postUrls.map( ( item, index ) =>{
-                    return(
+                  {detailBungleInfo.postUrls.map((item, index) => {
+                    return (
                       <SwiperSlide key={index}>
-                       <PostImg src={item} />
-                     </SwiperSlide>
-                    )
+                        <PostImg src={item} />
+                      </SwiperSlide>
+                    );
                   })}
                 </Swiper>
               ) : (
@@ -197,7 +216,9 @@ const Post = () => {
                   <PostUserName>
                     {detailBungleInfo.joinPeopleNickname[0]}
                   </PostUserName>
-                  <PostUserIntro>{detailBungleInfo.joinPeopleIntro[0]}</PostUserIntro>
+                  <PostUserIntro>
+                    {detailBungleInfo.joinPeopleIntro[0]}
+                  </PostUserIntro>
                   <PostUserIcon>
                     <PostUserIconImg src={IconLightening} />
                     <PostUserIconText>
@@ -255,7 +276,7 @@ const Post = () => {
                 {detailBungleInfo.joinPeopleUrl.map((item, index) => {
                   return (
                     <SwiperSlide key={index}>
-                      <PostMemberCard >
+                      <PostMemberCard>
                         <PostMemberPicture src={item} />
                         <PostMemberName>
                           {detailBungleInfo.joinPeopleNickname[index]}
