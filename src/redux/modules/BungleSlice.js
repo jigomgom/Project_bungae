@@ -247,7 +247,7 @@ export const categoryBungleList = createAsyncThunk(
       });
       console.log(response);
       if (response.data.response) {
-        window.location.herf = `/categorysearch/${item.category}`
+        item.navigate(`/categorysearch/${item.category}`)
         return response.data.list;
       } else {
         alert(`${response.data.message}`);
