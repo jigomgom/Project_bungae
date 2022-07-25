@@ -41,7 +41,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
+      {/* <Header /> */}
       <Routes>
         <Route path="/" element={<Login />} />
         {/* social login redirection URL */}
@@ -65,7 +65,6 @@ function App() {
         <Route path="/map" element={<Map />} />
         {/* Test */}
         <Route path="/videochat" element={<OpenViduSettings />} />
-        {/* <Route path="/test" element={<Test />} /> */}
       </Routes>
       {/* <Footer /> */}
     </div>

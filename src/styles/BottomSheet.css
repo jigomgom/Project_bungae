@@ -1,10 +1,9 @@
 #bottomSheetController{
-    /* background-color: red; */
     background-color: #fff;
     z-index: 1000;
-    height: 43px;
-    position: relative;
-    bottom: 55px;
+    height: 3rem;
+    position: sticky;
+    bottom: 9vh;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     padding-top: 10px;
@@ -62,3 +61,60 @@
     background-color: #d0d0d0;
     margin: 0 auto;
 }
+.map-bungle-modal-header{
+    width: 100%;
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+    position: relative;
+}
+.map-bungle-modal-header-divider{
+    background-color: #d0d0d0;
+    width: 10%;
+    height: 2px;
+}
+/* Map bungle Modal */
+.map-bungle-modal-wrapper{
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+    max-width: 375px;
+    height: 80vh;
+}
+.map-bungle-modal-overlay{
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    /* background-color: rgba(0, 0, 0, 0.6); */
+    z-index: 999;
+    width: 100%;
+    max-width: 375px;
+    height: 80vh;
+    margin: auto;
+}
+.map-bungle-modal-inner{
+    box-sizing: border-box;
+    position: absolute;
+    background-color: #fff;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    margin: auto;
+    width: 100%;
+    height: 90%;
+    overflow: auto;
+    bottom: 0;
+}
+/* 스크롤 바 숨기기 */
+.map-bungle-modal-inner{
+	-ms-overflow-style:none; /* IE and Edge */
+    scrollbar-width:none; /* Firefox */
+}
+
+.map-bungle-modal-inner::-webkit-scrollbar {
+	display:none; /* Chrome , Safari , Opera */
+}
+/* 스크롤 숨기기 */

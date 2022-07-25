@@ -1,4 +1,9 @@
 import React, { createRef, useEffect, useState } from 'react'
+import { NoneVideoChat, NoneVideoChatImg, VideoChatUserIcon } from "../../styles/StyledVideo";
+
+// icon
+
+import Logo from "../../assets/icon-main-logo.svg";
 
 function StreamComponentSub(props) {
   const [ videoRef, setVideoRef ] = useState(createRef());
@@ -6,28 +11,21 @@ function StreamComponentSub(props) {
   
   useEffect(() => {
     if(props.streamManager){
-    console.log("sub222222222222")
     setStreamManager(props.streamManager.addVideoElement(videoRef.current));
     }
   }, [ props.streamManager ]);
 
   if(!props.streamManager){
-    console.log("sub")
-    return <div>???</div>
+    return (<NoneVideoChat>
+      <NoneVideoChatImg src={Logo}/>
+    </NoneVideoChat>)
   }else{
-    console.log(props.speaker);
-    console.log("왜 안뜨냐", props.streamManager.stream.connection?.connectionId);
-    console.log("sub;;;;;;;;;;;;")
     return (
-      <div>
-        <div style={{ border: props.speaking && ( props.speaker === props.streamManager.stream.connection?.connectionId ) ? "5px solid black" : "5px solid purple" }}>subscribe</div>
-        <div>{props.speaker}</div>
-          <video width="187.5px" height="361px"
-            autoPlay={true}
-            ref={videoRef}
-          />
-          </div>
-    )
+      <div style={{ position:"relative"}}>
+        <VideoChatUserIcon />
+        <video width="187.5px" height="330px" autoPlay={true} ref={videoRef} />
+      </div>
+    );
     
   }
 }

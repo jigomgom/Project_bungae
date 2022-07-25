@@ -283,28 +283,63 @@ function Login() {
 
   // 비밀번호 enter event
   const onKeyPress = (event) => {
-    // console.log( event.code );
+    // setPos( true );
+    // console.log( event.charCode, event.code, event.key );
+    // // setKeyCode( event );
+    // // setKeyCode( event.code );
+    // setKeyChar( event.charCode );
+    // SetKey( event.key );
+    // if (
+    //   email_Ref.current.value.length > 0 &&
+    //   password_Ref.current.value.length > 0 &&
+    //   event.code === "Enter"
+    // ) {
+    //   const LoginUser = {
+    //     username: email_Ref.current.value,
+    //     password: password_Ref.current.value,
+    //   };
+    //   // LoginEnterKeyPressHanlder(LoginUser);
+    // } else if (email_Ref.current.value.length <= 0 && event.code === "Enter") {
+    //   setIsModal(true);
+    //   setIsError("이메일을 입력해주세요.");
+    // } else if (
+    //   password_Ref.current.value.length <= 0 &&
+    //   event.code === "Enter"
+    // ) {
+    //   setIsModal(true);
+    //   setIsError("비밀번호를 입력해주세요.");
+    // }
+  };
+
+  // 안드로이드 아이폰 둘다 enter는 event.key로 확인 가능
+  // 아이폰은 enter가 event.code도 가능
+  const onKeyDown = (event) => {
     if (
       email_Ref.current.value.length > 0 &&
       password_Ref.current.value.length > 0 &&
-      event.code === "Enter"
+      event.key === "Enter"
     ) {
       const LoginUser = {
         username: email_Ref.current.value,
         password: password_Ref.current.value,
       };
       LoginEnterKeyPressHanlder(LoginUser);
-    } else if (email_Ref.current.value.length <= 0 && event.code === "Enter") {
+      // alert("로그인 성공");
+    } else if (email_Ref.current.value.length <= 0 && event.key === "Enter") {
       setIsModal(true);
       setIsError("이메일을 입력해주세요.");
     } else if (
       password_Ref.current.value.length <= 0 &&
-      event.code === "Enter"
+      event.key === "Enter"
     ) {
       setIsModal(true);
       setIsError("비밀번호를 입력해주세요.");
     }
-  };
+  }
+
+  const onKeyUp = ( event ) => {
+    // setKeyCode( "Up " );/
+  }
 
   return (
     <LoginWrap>
@@ -337,6 +372,8 @@ function Login() {
           maxLength={20}
           onChange={appearPasswordClearBtnHandler}
           onKeyPress={onKeyPress}
+          onKeyDown={onKeyDown}
+          onKeyUp={onKeyUp}
         />
         {isPasswordClear && (
           <LoginPasswordClearBtn
@@ -350,6 +387,7 @@ function Login() {
         <p>소셜 로그인</p>
         <span></span>
       </LoginSns>
+
       <LoginSnsIconWarp>
         <img
           src="https://member.brandi.co.kr/images/ic_kakao.svg"

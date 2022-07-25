@@ -72,6 +72,17 @@ import {
   // 게시글 작성 버튼
   PostCreateButton,
 } from "../styles/StyledCreatePost";
+import {
+  PostHeaderWrap,
+  BackKey,
+  Logo,
+  PageTitle,
+  HeadrIconsWrap,
+  IconMyLocation,
+  IconNotification,
+  IconSetting
+} from "../styles/StyledHeader.js";
+
 //icon
 
 import IconClear from "../assets/icon-clear.svg";
@@ -80,6 +91,13 @@ import IconChatLetter from "../assets/icon-chat-gray.svg";
 import IconChatVideo from "../assets/icon-chat-video.svg";
 import IconMylocation from "../assets/icon-mylocation-gray.svg";
 import IconAddressClose from "../assets/icon-input-xbtn.svg";
+
+// header icon
+import Notification from "../assets/icon-notification.svg";
+import Setting from "../assets/icon-setting.svg";
+import IconBackKey from "../assets/icon-left-arrow.svg";
+import IconMyPoint from "../assets/icon-mylocation.svg";
+import IconMainLogo from "../assets/icon-main-logo.svg";
 
 const CategoriesArray = [
   "맛집",
@@ -702,7 +720,24 @@ function CreatePost() {
   };
 
   return (
+    <>
+    <PostHeaderWrap>
+        <BackKey
+          src={IconBackKey}
+          onClick={() => {
+            navigate("/main");
+          }}
+        />
+        <PageTitle>번개 생성</PageTitle>
+        <HeadrIconsWrap>
+          <IconMyLocation style={{ visibility: "hidden" }} src={IconMyPoint} />
+          <IconNotification src={Notification} />
+          <IconSetting src={Setting} />
+        </HeadrIconsWrap>
+      </PostHeaderWrap>
     <CreatePostWrap>
+      {/* Header */}
+      
       {/* Title 부분 */}
       <PostTilteDiv>
         <PostTitle
@@ -1045,6 +1080,7 @@ function CreatePost() {
         등록하기
       </PostCreateButton>
     </CreatePostWrap>
+    </>
   );
 }
 

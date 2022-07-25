@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const LoginWrap = styled.div`
     width: 100%; // 100% -> 375px
+    max-height: 780px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -31,7 +32,7 @@ export const LoginTitle = styled.div`
 
   color: #000000;
 
-  margin-top:66px;
+  margin-top:46px;
 `;
 
 export const LoginExplain = styled.div`
