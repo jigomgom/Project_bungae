@@ -34,6 +34,8 @@ import IconStudy from "../assets/icon-category-study.svg";
 import IconShopping from "../assets/icon-category-shoppin.svg";
 import IconExhibit from "../assets/icon-category-exhibit.svg";
 
+import IconLocationCurrent from "../assets/icon-location-current.svg";
+
 //Components
 import BottomSheet from "./BottomSheet";
 import Divide from "../components/Divider";
@@ -42,7 +44,7 @@ import Divide from "../components/Divider";
 import {
   MapHeaderWrap,
   MapPageTitle,
-  HeadrIconsWrap,
+  MapIconsWrap,
   IconNotification,
   IconSetting,
   MapDetailHeaderWrap,
@@ -78,8 +80,6 @@ import Slider from "rc-slider";
 import "../styles/rc-slider/index.css";
 
 function Map() {
-  const SERVER_URL = "https://gutner.shop";
-  // const SERVER_URL = "https://meeting-platform.shop";
   const token = localStorage.getItem("login-token");
   const isOwner = useSelector( state => state.Bungle.isOwner );
   console.log( isOwner );
@@ -407,12 +407,17 @@ function Map() {
 
   return (
     <>
+    <div className="top-map-wrapper">
       <MapHeaderWrap>
+      <MapIconsWrap>
+          <IconNotification style={{ visibility:"hidden" }} src={Notification} />
+          <IconSetting style={{ visibility:"hidden" }} src={Setting} />
+        </MapIconsWrap>
         <MapPageTitle>벙글 지도</MapPageTitle>
-        <HeadrIconsWrap>
+        <MapIconsWrap>
           <IconNotification src={Notification} />
           <IconSetting src={Setting} />
-        </HeadrIconsWrap>
+        </MapIconsWrap>
       </MapHeaderWrap>
       <div className="map-wrapper">
         {isDetail && (
@@ -656,8 +661,8 @@ function Map() {
               navigate("/map");
             }}
           >
-            <FooterIconImg src={IconLocation} />
-            <FooterIconText>벙글지도</FooterIconText>
+            <FooterIconImg src={IconLocationCurrent} />
+            <FooterIconText style={{ color : "#FFC634" }}>벙글지도</FooterIconText>
           </FooterIconWrap>
           {ownerCheck ? (
             <FooterAddBungae
@@ -705,6 +710,7 @@ function Map() {
           </FooterIconWrap>
         </MapFooterWrap>
       )}
+      </div>
     </>
   );
 }

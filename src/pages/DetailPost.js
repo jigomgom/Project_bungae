@@ -50,15 +50,13 @@ import {
 } from "../styles/StyledDetailPost";
 
 import {
-  HeaderWrap,
-  Logo,
-  BackKey,
+  PostHeaderWrap,
+  ChattingBackKey,
   PageTitle,
   HeadrIconsWrap,
-  IconMyLocation,
   IconNotification,
-  IconSetting,
-} from "../styles/StyledHeader";
+  IconSetting
+} from "../styles/StyledHeader.js";
 
 // icons
 import IconShared from "../assets/icon-url-shared.svg";
@@ -158,23 +156,20 @@ const Post = () => {
       {/* Urls가 있으면 렌더링 */}
       {detailBungleInfo.postUrls && (
         <>
-          <HeaderWrap>
-            <Logo style={{ visibility: "hidden" }} />
-            <BackKey
-              src={IconBackKey}
-              onClick={() => {
-                navigate("/main");
-              }}
-            />
-            <PageTitle></PageTitle>
-
-            <HeadrIconsWrap>
-              <IconMyLocation style={{ visibility: "hidden" }} />
-              <IconNotification src={Notification} />
-              <IconSetting src={Setting} />
-            </HeadrIconsWrap>
-          </HeaderWrap>
           <PostWrap>
+            <PostHeaderWrap>
+              <ChattingBackKey
+                src={IconBackKey}
+                onClick={() => {
+                  navigate("/main");
+                }}
+              />
+
+              <HeadrIconsWrap>
+                <IconNotification src={Notification} />
+                <IconSetting src={Setting} />
+              </HeadrIconsWrap>
+            </PostHeaderWrap>
             <PostContent>
               <PostIconShared src={IconShared} />
               <PostLike

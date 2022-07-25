@@ -21,7 +21,7 @@ const refresh = async ( config ) => {
             RefreshToken: refreshToken  
         }
     } );
-    // console.log( response );
+    console.log( response );
     if (response.data.response) {
       setCookie("refresh_token", response.headers.refreshtoken, {
         path: "/",
@@ -30,7 +30,7 @@ const refresh = async ( config ) => {
       localStorage.setItem("login-token", response.headers.authorization);
       localStorage.setItem(
         "expireAt",
-        moment().add(5, "minute").format("yyyy-MM-DD HH:mm:ss")
+        moment().add(30, "minute").format("yyyy-MM-DD HH:mm:ss")
       );
 
       config.headers.Authorization = `${localStorage.getItem("login-token")}`;

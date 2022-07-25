@@ -6,10 +6,9 @@ import { useNavigate } from "react-router-dom";
 //CSS
 import "../styles/TagCategorySearch.css";
 import {
-  SearchHeaderWrap,
-  BackKey,
-  Logo,
-  SearcgHeadrIconsWrap,
+  PostHeaderWrap,
+  ChattingBackKey,
+  HeadrIconsWrap,
   IconNotification,
   IconSetting
 } from "../styles/StyledHeader.js";
@@ -73,18 +72,19 @@ function TagSearch() {
 
   return (
     <div>
-      <SearchHeaderWrap>
-        <BackKey
+      <PostHeaderWrap>
+        <ChattingBackKey
           src={IconBackKey}
           onClick={() => {
             navigate("/main");
           }}
         />
-        <SearcgHeadrIconsWrap>
+
+        <HeadrIconsWrap>
           <IconNotification src={Notification} />
           <IconSetting src={Setting} />
-        </SearcgHeadrIconsWrap>
-      </SearchHeaderWrap>
+        </HeadrIconsWrap>
+      </PostHeaderWrap>
       <Tag />
       <Search />
       <div className="search-result-wrap">

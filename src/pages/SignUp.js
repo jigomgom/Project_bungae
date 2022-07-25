@@ -31,12 +31,11 @@ import {
 import IconInputClear from "../assets/icon-input-xbtn.svg";
 
 const Signup = () => {
-  // const SERVER_URL = "http://3.37.61.25";
+  useEffect(()=>{
+    window.scrollTo(0,0);
+  },[])
 
-  const SERVER_URL = "https://gutner.shop";
-  // const SERVER_URL = "https://meeting-platform.shop";
-
-  // const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
   //비밀번호 유효성 검사
   const checkPassword = (e) => {

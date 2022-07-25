@@ -10,7 +10,7 @@ export const FooterWrap = styled.div`
   align-items: center;
   width: 100%;
   max-width: 375px;
-  height: 60px;
+  height: 8vh;
   background-color: white;
   box-shadow: inset 0px 1px 0px rgba(0, 0, 0, 0.1);
   z-index: 1000; // 안해주면 다른 아이템에 덮히는 경우가 발생
@@ -26,7 +26,7 @@ export const MainFooterWrap = styled.div`
   align-items: center;
   width: 100%;
   max-width: 375px;
-  height: 10vh;
+  height: 8vh;
   background-color: white;
   box-shadow: inset 0px 1px 0px rgba(0, 0, 0, 0.1);
   z-index: 1000;
@@ -40,7 +40,7 @@ export const MapFooterWrap = styled.div`
   align-items: center;
   width: 100%;
   max-width: 375px;
-  height: 10vh;
+  height: 8vh;
   background-color: white;
   box-shadow: inset 0px 1px 0px rgba(0, 0, 0, 0.1);
   z-index: 1000;

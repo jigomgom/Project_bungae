@@ -12,6 +12,7 @@ import "../styles/Login.css";
 import {
   LoginWrap,
   LoginInquiry,
+  LoginImageWrap,
   LoginTitle,
   LoginExplain,
   LoginLogo,
@@ -36,8 +37,9 @@ import {
 } from "../styles/StyledLogin";
 
 // icon
-import IconLoginLogo from "../assets/icon-login-main.svg";
+import IconLoginLogo from "../assets/icon-login-title.svg"
 import IconTextClear from "../assets/icon-login-clear.svg";
+import IconIllustration from "../assets/icon-login-illustration.svg";
 
 // 소셜 로그인 URL - Naver
 const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?client_id=${process.env.REACT_APP_NAVER_LOGIN_CLIENT_KEY}&response_type=code&redirect_uri=${process.env.REACT_APP_SOCIAL_LOGIN_REDIRECTION_URL}`;
@@ -49,14 +51,12 @@ const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${proc
 // const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 function Login() {
-  //http://52.79.214.48
-  //http://3.37.61.25
-  // const SERVER_URL = "https://gutner.shop";
-  // const SERVER_URL = "https://meeting-platform.shop";
-
+  useEffect(()=>{
+    window.scrollTo(0,0);
+  },[])
   // navigate
   const navigate = useNavigate();
-
+  
   // 소셜 로그인 처리
   const code = new URL(window.location.href).searchParams.get("code");
   const url = new URL(window.location.href);
@@ -80,7 +80,7 @@ function Login() {
         localStorage.setItem("userId", response.data.userId);
         localStorage.setItem(
           "expireAt",
-          moment().add(5, "minute").format("yyyy-MM-DD HH:mm:ss")
+          moment().add(30, "minute").format("yyyy-MM-DD HH:mm:ss")
         );
         setCookie("refresh_token", response.headers.refreshtoken, {
           path: "/",
@@ -119,7 +119,7 @@ function Login() {
         localStorage.setItem("userId", response.data.userId);
         localStorage.setItem(
           "expireAt",
-          moment().add(5, "minute").format("yyyy-MM-DD HH:mm:ss")
+          moment().add(30, "minute").format("yyyy-MM-DD HH:mm:ss")
         );
         setCookie("refresh_token", response.headers.refreshtoken, {
           path: "/",
@@ -153,7 +153,7 @@ function Login() {
         localStorage.setItem("userId", response.data.userId);
         localStorage.setItem(
           "expireAt",
-          moment().add(5, "minute").format("yyyy-MM-DD HH:mm:ss")
+          moment().add(30, "minute").format("yyyy-MM-DD HH:mm:ss")
         );
         setCookie("refresh_token", response.headers.refreshtoken, {
           path: "/",
@@ -220,7 +220,7 @@ function Login() {
         localStorage.setItem("userId", response.data.userId);
         localStorage.setItem(
           "expireAt",
-          moment().add(5, "minute").format("yyyy-MM-DD HH:mm:ss")
+          moment().add(30, "minute").format("yyyy-MM-DD HH:mm:ss")
         );
         setCookie("refresh_token", response.headers.refreshtoken, {
           path: "/",
@@ -344,9 +344,11 @@ function Login() {
   return (
     <LoginWrap>
       <LoginInquiry>문의하기</LoginInquiry>
-      <LoginTitle>Lorem ipsum</LoginTitle>
-      <LoginExplain>Lorem ipsum dolor sit amet</LoginExplain>
-      <LoginLogo src={IconLoginLogo} />
+      <LoginImageWrap>
+        <LoginTitle src={IconLoginLogo} />
+        <LoginExplain>너와 나 친구되는 시간</LoginExplain>
+      </LoginImageWrap>
+      <LoginLogo src={IconIllustration} />
       {/* 로그인 회원가입 창 */}
       <LoginContentWrap>
         <LoginEmailText>이메일</LoginEmailText>

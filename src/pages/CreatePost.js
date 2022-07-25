@@ -74,11 +74,9 @@ import {
 } from "../styles/StyledCreatePost";
 import {
   PostHeaderWrap,
-  BackKey,
-  Logo,
+  ChattingBackKey,
   PageTitle,
   HeadrIconsWrap,
-  IconMyLocation,
   IconNotification,
   IconSetting
 } from "../styles/StyledHeader.js";
@@ -721,22 +719,22 @@ function CreatePost() {
 
   return (
     <>
-    <PostHeaderWrap>
-        <BackKey
+    
+    <CreatePostWrap>
+      {/* Header */}
+      <PostHeaderWrap>
+        <ChattingBackKey
           src={IconBackKey}
           onClick={() => {
             navigate("/main");
           }}
         />
-        <PageTitle>번개 생성</PageTitle>
+        <PageTitle>벙글 생성</PageTitle>
         <HeadrIconsWrap>
-          <IconMyLocation style={{ visibility: "hidden" }} src={IconMyPoint} />
           <IconNotification src={Notification} />
           <IconSetting src={Setting} />
         </HeadrIconsWrap>
       </PostHeaderWrap>
-    <CreatePostWrap>
-      {/* Header */}
       
       {/* Title 부분 */}
       <PostTilteDiv>

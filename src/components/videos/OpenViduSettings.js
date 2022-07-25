@@ -7,7 +7,12 @@ import styled from "styled-components";
 
 // css
 import { VideoHeaderWrap, VideoChatBackKey } from "../../styles/StyledHeader";
-import { VideoWrapper, VideoButtonWrap, ButtonImageWrap, ButtonImage } from  "../../styles/StyledVideo";
+import {
+  VideoWrapper,
+  VideoButtonWrap,
+  ButtonImageWrap,
+  ButtonImage,
+} from "../../styles/StyledVideo";
 
 // icon
 import IconBackKey from "../../assets/icon-left-arrow.svg";
@@ -21,33 +26,34 @@ let newUser = new UserModel();
 let newPublisher = null;
 // 나중에 우리 서버가 되야할 URL
 // const OPENVIDU_SERVER_URL = "https://localhost:4443";
-const OPENVIDU_SERVER_URL = "https://real-minsu.shop";
+const OPENVIDU_SERVER_URL = process.env.REACT_APP_OPENVIDU_SERVER_URL;
+// const OPENVIDU_SERVER_URL = "https://real-minsu.shop";
 // 서버와 같이 맞춰야할 시크릿 키로 보임
 // const OPENVIDU_SERVER_SECRET = "MY_SECRET";
-const OPENVIDU_SERVER_SECRET = "qjdrmf11";
+const OPENVIDU_SERVER_SECRET = process.env.REACT_APP_OPENVIDU_SECRET_KEY;
 
 function OpenViduSettings() {
-  let OV = new OpenVidu();  
+  let OV = new OpenVidu();
   OV.setAdvancedConfiguration({
-    publisherSpeakingEventsOptions:{
-      interval:5,
-      threshold:-800
-    }
-  })
-  const [ session, setSession ] = useState();
-  const [ openViduToken, setOpenViduToken ] = useState(null);
-  const [ initialState, setInitialState ] = useState({});
-  const [ publisher, setPublisher ] = useState();
-  const [ subscribers, setSubscribers ] = useState([]);
-  const [ speakerId, setSpeakerId ] = useState("");
-  const [ stopSpeakerId, setStopSpeakerId ] = useState("");
-  const [ Speaking, setSpeaking ] = useState( false );
-  const [ deviceID, setDeviceId ] = useState(null);
-  const [ islocalUser, setIslocalUser] = useState(null);
+    publisherSpeakingEventsOptions: {
+      interval: 5,
+      threshold: -800,
+    },
+  });
+  const [session, setSession] = useState();
+  const [openViduToken, setOpenViduToken] = useState(null);
+  const [initialState, setInitialState] = useState({});
+  const [publisher, setPublisher] = useState();
+  const [subscribers, setSubscribers] = useState([]);
+  const [speakerId, setSpeakerId] = useState("");
+  const [stopSpeakerId, setStopSpeakerId] = useState("");
+  const [Speaking, setSpeaking] = useState(false);
+  const [deviceID, setDeviceId] = useState(null);
+  const [islocalUser, setIslocalUser] = useState(null);
 
-  const [ stateSpeaker, setStateSpeaker ] = useState( false );
-  const [ stateCall, setStateCall ] = useState( false );
-  
+  const [stateSpeaker, setStateSpeaker] = useState(false);
+  const [stateCall, setStateCall] = useState(false);
+
   let all_Subscribers = [];
   let localUserPublish = null;
   useEffect(() => {
@@ -100,27 +106,28 @@ function OpenViduSettings() {
           console.log(error.name);
         }
       });
-      return () => {leaveSession()}
+    return () => {
+      leaveSession();
+    };
   }, []);
   // 2. OV 객체를 만들고 초기화한다.
   const joinSession = () => {
     // let OV = new OpenVidu();
     console.log("1. joinSession ", OV);
-    // OV log 가리기 
+    // OV log 가리기
     //Disable all logging except error level / Returns void
     OV.enableProdMode();
     setSession(OV.initSession());
   };
   useEffect(() => {
-    if ( session ) {
-        console.log( "2. 세션에 연결한다." );
+    if (session) {
+      console.log("2. 세션에 연결한다.");
       connectToSession();
-      subscribeStateComfirm( session );
+      subscribeStateComfirm(session);
     }
-    
   }, [session]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (session && openViduToken) {
       console.log("4. token과 session을 이용해 connect를 실행한다.");
       console.log(
@@ -141,18 +148,17 @@ function OpenViduSettings() {
       // connect(openViduToken, session);
       console.log("여기는 언제 들어와");
     }
-  },[openViduToken])
+  }, [openViduToken]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (publisher) {
       session.publish(publisher).then(() => {
         // console.log("7. session publish를 성공하면 subscriber를 등록한다.");
         // setSubscribers( [...remotes] );
       });
     }
-  },[publisher])
+  }, [publisher]);
 
-  
   // 3. 토큰을 획득하기 위해선 먼저 session을 만들고
   // 그 세션의 ID를 받아와서
   // token을 생성한다.
@@ -183,15 +189,14 @@ function OpenViduSettings() {
         }
       );
       console.log(response);
-      if (response.status === 200 ) {
+      if (response.status === 200) {
         // Session을 성공적으로 만들었다면 id를 전달한다.
         // console.log("3-3. 세션을 성공적으로 만들었다면 token을 만들러 간다..")
         createToken(response.data.id);
       }
     } catch (error) {
       console.log(error);
-      if( error.response.status === 409 )
-        createToken(sessionId);
+      if (error.response.status === 409) createToken(sessionId);
     }
   };
 
@@ -225,13 +230,13 @@ function OpenViduSettings() {
 
   const connect = (token, session) => {
     // console.log("4. token과 session을 이용해 connect를 실행한다.")
-    console.log("connect 실행", token, session, initialState.myUserName );
+    console.log("connect 실행", token, session, initialState.myUserName);
     session
       .connect(token, { clientData: initialState.myUserName })
-      .then(() => { 
+      .then(() => {
         // console.log("4-1. connect가 성공적이라면 캠을 연결하러 간다.");
-        connectWebCam()
-      } )
+        connectWebCam();
+      })
       .catch((error) => {
         console.log(error);
       });
@@ -240,11 +245,11 @@ function OpenViduSettings() {
   const connectWebCam = async () => {
     // console.log("5. 캠을 연결한다");
     const devices = await OV.getDevices();
-    
+
     const videoDevices = devices.filter(
       (device) => device.kind === "videoinput"
     );
-    
+
     // console.log("6. 디바이스 설정을 가져오면 publisher를 setting한다");
     localUserPublish = OV.initPublisher(undefined, {
       audioSource: undefined, // The source of audio. If undefined default microphone
@@ -258,83 +263,83 @@ function OpenViduSettings() {
     });
 
     // console.log( localUserPublish );
-    setPublisher( localUserPublish );
-    
+    setPublisher(localUserPublish);
+
     localUser.setStreamManager(localUserPublish);
-    localUser.setConnectionId( session.connection.connectionId );
-    setDeviceId( videoDevices[0] );
-    setIslocalUser( localUser );
+    localUser.setConnectionId(session.connection.connectionId);
+    setDeviceId(videoDevices[0]);
+    setIslocalUser(localUser);
     // initialState({currentVideoDevice: videoDevices[0], localUser : localUser })
     // subscribeToUserChanged();
   };
-  
-  const subscribeStateComfirm = ( session ) => {
-    session.on("streamCreated", event => {
+
+  const subscribeStateComfirm = (session) => {
+    session.on("streamCreated", (event) => {
       // console.log("5-1. streamCreate라면 여기");
-      const subscriber = session.subscribe( event.stream, undefined );
-      
-      newUser.setStreamManager( subscriber );
+      const subscriber = session.subscribe(event.stream, undefined);
+
+      newUser.setStreamManager(subscriber);
       // console.log("newUser", event.stream.connection.connectionId);
-      newUser.setConnectionId( event.stream.connection.connectionId );
-      let tmp = [ ...all_Subscribers ];
-      tmp.push( subscriber );
-      setSubscribers( tmp );
+      newUser.setConnectionId(event.stream.connection.connectionId);
+      let tmp = [...all_Subscribers];
+      tmp.push(subscriber);
+      setSubscribers(tmp);
       all_Subscribers = tmp;
-      
-      // updateSubscribers( subscriber );  
+
+      // updateSubscribers( subscriber );
     });
 
-    session.on("streamDestroyed", event => {
+    session.on("streamDestroyed", (event) => {
       // console.log("5-2. streamDestroyed라면 여기");
       const index = all_Subscribers.indexOf(event.stream.streamManager, 0);
-      let tmp = [ ...all_Subscribers ];
+      let tmp = [...all_Subscribers];
       if (index > -1) {
-        tmp.splice( index, 1 );
+        tmp.splice(index, 1);
       }
-      setSubscribers( tmp );
+      setSubscribers(tmp);
       all_Subscribers = tmp;
     });
 
-    session.on("sessionDisconnected", event => {
-      console.log( event );
+    session.on("sessionDisconnected", (event) => {
+      console.log(event);
     });
 
-    session.on("connectionDestroyed", event => {
-      console.log( event );
-    })
+    session.on("connectionDestroyed", (event) => {
+      console.log(event);
+    });
 
     session.on("publisherStartSpeaking", (event) => {
       // console.log("Use speaking");
-      setSpeakerId( event.connection.connectionId );
-      setSpeaking( true );
+      setSpeakerId(event.connection.connectionId);
+      setSpeaking(true);
       // console.log("User " + event.connection.connectionId + " start speaking");
     });
 
     session.on("publisherStopSpeaking", (event) => {
-      setStopSpeakerId( event.connection.connectionId );
-      setSpeaking( false );
+      setStopSpeakerId(event.connection.connectionId);
+      setSpeaking(false);
       // console.log("User " + event.connection.connectionId + " stop speaking");
     });
-  }
-    // 캠 끄고 켜기
+  };
+  // 캠 끄고 켜기
   const camStatusChanged = () => {
-      // console.log("camStatusChanged");
-      setStateCall( !stateCall );
-      localUser.setVideoActive(!localUser.isVideoActive());
-      console.log( localUser );
-      localUser.getStreamManager().publishVideo(localUser.isVideoActive());
-  }
+    // console.log("camStatusChanged");
+    setStateCall(!stateCall);
+    localUser.setVideoActive(!localUser.isVideoActive());
+    console.log(localUser);
+    localUser.getStreamManager().publishVideo(localUser.isVideoActive());
+  };
   // 마이크 끄고 켜기
   const micStatusChanged = () => {
-      // console.log("micStatusChanged");
-      
-      setStateSpeaker( !stateSpeaker );
-      localUser.setAudioActive(!localUser.isAudioActive());
-      localUser.getStreamManager().publishAudio(localUser.isAudioActive());
-  }
+    // console.log("micStatusChanged");
+
+    setStateSpeaker(!stateSpeaker);
+    localUser.setAudioActive(!localUser.isAudioActive());
+    localUser.getStreamManager().publishAudio(localUser.isAudioActive());
+  };
 
   // 카메라 스위칭
- 
+
   const leaveSession = () => {
     OV = null;
     console.log("leaveSession");
@@ -346,13 +351,13 @@ function OpenViduSettings() {
       session: undefined,
       subscribers: [],
       mySessionId: "SeesionA",
-      myUserName: "Tester2"+ Math.floor(Math.random() * 100),
+      myUserName: "Tester2" + Math.floor(Math.random() * 100),
     });
     setPublisher(null);
     setSubscribers([]);
     all_Subscribers = [];
     localUserPublish = null;
-    newUser = null;    
+    newUser = null;
   };
   return (
     <VideoWrapper>
@@ -361,11 +366,11 @@ function OpenViduSettings() {
       </VideoHeaderWrap>
       <div>
         <TestDiv>
-            <StreamComponent
-              speaking={Speaking}
-              speaker={speakerId}
-              streamManager={publisher}
-            />
+          <StreamComponent
+            speaking={Speaking}
+            speaker={speakerId}
+            streamManager={publisher}
+          />
           {Array.from({ length: 3 }, (_, index) => {
             return (
               <StreamComponent
@@ -377,11 +382,11 @@ function OpenViduSettings() {
           })}
         </TestDiv>
         <VideoButtonWrap>
-          <ButtonImageWrap onClick={() => micStatusChanged()} >
-            <ButtonImage src={ stateSpeaker ? IconSpeaker : IconSpeakerNone} />
+          <ButtonImageWrap onClick={() => micStatusChanged()}>
+            <ButtonImage src={stateSpeaker ? IconSpeaker : IconSpeakerNone} />
           </ButtonImageWrap>
           <ButtonImageWrap onClick={() => camStatusChanged()}>
-            <ButtonImage src={ stateCall ? IconCall : IconCallNone} />
+            <ButtonImage src={stateCall ? IconCall : IconCallNone} />
           </ButtonImageWrap>
           {/* { console.log( stateSpeaker, stateCall )} */}
         </VideoButtonWrap>
