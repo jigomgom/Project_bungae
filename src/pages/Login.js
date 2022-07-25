@@ -119,7 +119,7 @@ function Login() {
         localStorage.setItem("userId", response.data.userId);
         localStorage.setItem(
           "expireAt",
-          moment().add(5, "minute").format("yyyy-MM-DD HH:mm:ss")
+          moment().add(30, "minute").format("yyyy-MM-DD HH:mm:ss")
         );
         setCookie("refresh_token", response.headers.refreshtoken, {
           path: "/",
@@ -335,11 +335,11 @@ function Login() {
       setIsModal(true);
       setIsError("비밀번호를 입력해주세요.");
     }
-  }
+  };
 
-  const onKeyUp = ( event ) => {
+  const onKeyUp = (event) => {
     // setKeyCode( "Up " );/
-  }
+  };
 
   return (
     <LoginWrap>
