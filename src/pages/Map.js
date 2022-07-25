@@ -111,9 +111,9 @@ function Map() {
     false,
   ]);
   // 인원 설정 숫자만
-  const [onlyNumber, setOnlyNumber] = useState(2);
+  const [onlyNumber, setOnlyNumber] = useState(25);
   // 거리 설정 숫자만
-  const [onlyDistance, setOnlyDistance] = useState(10);
+  const [onlyDistance, setOnlyDistance] = useState(100);
   // redux getDetailMap 으로 보낼 data
   const [sendData, setSendData] = useState({
     location: {},
@@ -121,20 +121,27 @@ function Map() {
     onlyDistance: 10,
     selectCategory: "",
   });
+  //태그 검색, 상세 조회, 주변 지도 리스트 담을 배열 state
+  const [mapBungleData, setMapBungleData] = useState([]);
   //주변 지도 리스트
   const getAroundBungle = useSelector((state) => state.Bungle.mapList);
-  console.log(getAroundBungle);
+  console.log("전체 지도 벙글 조회: ", getAroundBungle);
   //상세 검색 후 리스트
   const getDetailMapBungle = useSelector(
     (state) => state.Bungle.detailMapBungle
   );
-  console.log(
-    "detailMapBungle: ",
-    getDetailMapBungle,
-    getDetailMapBungle.length
-  );
+  //태그 검색 후 리스트
+  const getTagSearchBungle = useSelector((state) => state.Bungle.moreList);
+  console.log("태그 검색 리스트: ", getTagSearchBungle);
+  console.log("상세 조회 리스트: ", getDetailMapBungle);
   //Footer 작성, 삭제 구분
   const ownerCheck = useSelector((state) => state.Bungle.isOwner);
+
+  //Map 화면 렌더링 되자마자 지도 전체 리스트 담기
+  useEffect(() => {
+    setMapBungleData(() => getAroundBungle);
+  }, [getAroundBungle]);
+  console.log("state 배열: ", mapBungleData);
 
   //Detail Modal 밖 영역 클릭 시 닫기
   // const handleDetailModal = (e) => {
@@ -184,6 +191,11 @@ function Map() {
       dispatch(tagBungleList({ tag: e.target.value, location }));
     }
   };
+  useEffect(() => {
+    setMapBungleData(() => getTagSearchBungle);
+  }, [getTagSearchBungle]);
+
+  //태그 검색 시 배열에 태그 검색 리스트 담기
 
   const CategoryImgArray = [
     IconRestarunt,
@@ -209,18 +221,6 @@ function Map() {
     "스터디",
     "게임",
   ];
-
-  // const getCategoryArray = () => {
-  //   for (let i = 0; i <= selectCategory.length; i++) {
-  //     if (CategoryArray.includes(selectCategory[i])) {
-  //       setSelectCategory(
-  //         selectCategory.filter((element) => element !== selectCategory[i])
-  //       );
-  //     } else {
-  //       setSelectCategory([...selectCategory, CategoryArray[i]]);
-  //     }
-  //   }
-  // };
 
   console.log("인원: ", onlyNumber);
   console.log("거리: ", onlyDistance);
@@ -260,6 +260,9 @@ function Map() {
       setIsDetail(false);
     }
   };
+  useEffect(() => {
+    setMapBungleData(() => getDetailMapBungle);
+  }, [getDetailMapBungle]);
 
   //지도 옵션
   const options = {
@@ -282,6 +285,7 @@ function Map() {
     setError(error.message);
     console.log(error);
   };
+
   //현재 위치 불러오기
   useEffect(() => {
     if (isLoad) {
@@ -296,15 +300,20 @@ function Map() {
     }
   }, []);
 
+  //GPS 클릭 시 현재 위치 불러오기
+  const getNowLocation = () => {
+    navigator.geolocation.getCurrentPosition(
+      handleSuccess,
+      handleError,
+      options
+    );
+  };
+
   //지도 생성
   useEffect(() => {
     // const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
     // if (detailBungleInfo !== "") {
-    if (
-      !isLoad &&
-      getAroundBungle &&
-      getAroundBungle.length >= getDetailMapBungle.length
-    ) {
+    if (!isLoad && mapBungleData) {
       const options = {
         //지도를 생성할 때 필요한 기본 옵션
         // center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
@@ -313,6 +322,7 @@ function Map() {
       };
 
       const map = new kakao.maps.Map(container.current, options); //지도 생성 및 객체 리턴
+
       // 마커를 표시할 위치와 title 객체 배열입니다
       var nowPosition = [
         // {
@@ -338,11 +348,13 @@ function Map() {
         //   latlng: new kakao.maps.LatLng(33.451393, 126.570738),
         // },
       ];
-      getAroundBungle.map((location, index) => {
+      console.log("왜 안돼 이거");
+      mapBungleData.map((location, index) => {
         // console.log(location);
         positions = [
           ...positions,
           {
+            title: location.title,
             latlng: new kakao.maps.LatLng(
               location.latitude,
               location.longitude
@@ -390,7 +402,7 @@ function Map() {
       }
     }
     // 상세 검색 후 지도 표시
-  }, [isLoad]);
+  }, [isLoad, mapBungleData]);
 
   return (
     <>
@@ -514,7 +526,7 @@ function Map() {
                       className="testName"
                       style={{ marginTop: "15px" }}
                       min={10}
-                      max={50}
+                      max={200}
                       value={onlyDistance}
                       trackStyle={{
                         backgroundColor: "#FFC634",
@@ -602,7 +614,13 @@ function Map() {
         <div className="map-content-button">
           <div className="map-content-buttons">
             <div className="map-content-button-1">
-              <img src={IconMyPoint} alt="" />
+              <img
+                src={IconMyPoint}
+                alt=""
+                onClick={() => {
+                  getNowLocation();
+                }}
+              />
             </div>
             <div className="map-content-button-2">
               <img
@@ -620,7 +638,7 @@ function Map() {
           ref={container}
           style={{ width: "100%", height: "100%" }}
         ></div>
-        <BottomSheet aroundLocation={getAroundBungle} />
+        <BottomSheet aroundLocation={mapBungleData} />
       </div>
       {!isLoad && (
         <MapFooterWrap>

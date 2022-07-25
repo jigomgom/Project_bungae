@@ -308,7 +308,7 @@ export const categoryBungleList = createAsyncThunk(
       });
       console.log(response);
       if (response.data.response) {
-        item.navigate(`/categorysearch/${item.category}`)
+        item.navigate(`/categorysearch/${item.category}`);
         return response.data.list;
       } else {
         alert(`${response.data.message}`);
@@ -336,7 +336,7 @@ export const tagBungleList = createAsyncThunk(
         },
       });
       if (response.data.response) {
-        // console.log(response.data.list);
+        console.log(response.data.list);
         return response.data.list;
       }
     } catch (e) {
