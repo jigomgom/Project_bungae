@@ -14,7 +14,37 @@ import defaultImg from "../assets/defaultImg.jpg";
 import lighteningImg from "../assets/icon-lightening.jpg";
 import tempImg from "../assets/icon-temp.svg";
 
+// Header css
+import {
+  MapHeaderWrap,
+  MapPageTitle,
+  MapIconsWrap,
+  IconNotification,
+  IconSetting,
+  MapDetailHeaderWrap,
+  ChattingBackKey,
+} from "../styles/StyledHeader.js";
+// Footer css
+import {
+  MapFooterWrap,
+  FooterIconWrap,
+  FooterIconImg,
+  FooterIconText,
+  FooterAddBungae,
+} from "../styles/StyledFooter.js";
+
+import Setting from "../assets/icon-setting.svg";
+import Notification from "../assets/icon-notification.svg";
+import IconHome from "../assets/icon-home.svg";
+import IconLocation from "../assets/icon-location.svg";
+import IconChat from "../assets/icon-chat.svg";
+import IconMyBungleCurrent from "../assets/icon-mybungle-current.svg";
+import IconCreate from "../assets/icon-create-post.svg";
+import IconEdit from "../assets/icon-edit-footer.svg";
+
+
 function MyPage() {
+  const isOwner = useSelector( state => state.Bungle.isOwner );
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [ isLoad, setIsLoad ] = useState( true );
@@ -36,15 +66,22 @@ function MyPage() {
     }
   }, []);
 
-  // useEffect(()=>{
-  //   if( !isLoad ){
-  //     setReceiveUrl( userProfileInfo.profileUrl );
-  //   }
-  // },[isLoad]);
-
+  
   return (
     <>
-    {!isLoad && <div>
+    {!isLoad && 
+    <div className="top-mypage-wrap">
+      <MapHeaderWrap>
+      <MapIconsWrap>
+          <IconNotification style={{ visibility:"hidden" }} src={Notification} />
+          <IconSetting style={{ visibility:"hidden" }} src={Setting} />
+        </MapIconsWrap>
+        <MapPageTitle>나의 벙글</MapPageTitle>
+        <MapIconsWrap>
+          <IconNotification src={Notification} />
+          <IconSetting src={Setting} />
+        </MapIconsWrap>
+      </MapHeaderWrap>
       <div className="mypage-content-wrap">
         <div className="mypage-profile-main">
           <div className="mypage-profile-img">
@@ -63,8 +100,10 @@ function MyPage() {
         </div>
         <button className="mypage-profile-btn" onClick={()=>{navigate("/profilesetting")}}>프로필 수정</button>
       </div>
-      <Divider />
+      
       {/* 지용 리스트들 변경 */}
+      <div style={{width:"89%", display:"flex", flexDirection:"column", margin:"auto"}}>
+      <Divider />
       <div className="mypage-selectbar-list">
         <div className="mypage-selectbar" onClick={myLikeBungleClickHandler}>내가 찜한 벙글</div>
         <div className="mypage-selectbar">내가 작성한 벙글</div>
@@ -75,6 +114,69 @@ function MyPage() {
         <div className="mypage-selectbar">나의 신고 내역</div>
         {/* <div className="mypage-selectbar">Lorem ipsum</div> */}
       </div>
+      </div>
+      <MapFooterWrap>
+          <FooterIconWrap
+            onClick={() => {
+              navigate("/main");
+            }}
+          >
+            <FooterIconImg src={IconHome} />
+            <FooterIconText>홈</FooterIconText>
+          </FooterIconWrap>
+          <FooterIconWrap
+            onClick={() => {
+              navigate("/map");
+            }}
+          >
+            <FooterIconImg src={IconLocation} />
+            <FooterIconText >벙글지도</FooterIconText>
+          </FooterIconWrap>
+          {isOwner ? (
+            <FooterAddBungae
+              src={IconEdit}
+              onClick={() => {
+                navigate("/editpost");
+              }}
+            />
+          ) : (
+            <FooterAddBungae
+              src={IconCreate}
+              onClick={() => {
+                navigate("/createpost");
+              }}
+            />
+          )}
+          <FooterIconWrap>
+            <FooterIconImg
+              src={IconChat}
+              onClick={() => {
+                navigate("/chatlist");
+              }}
+            />
+            <FooterIconText>채팅</FooterIconText>
+          </FooterIconWrap>
+          <FooterIconWrap
+            onClick={() => {
+              navigate("/mypage");
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={() => {
+                navigate("/mypage");
+              }}
+            >
+              <FooterIconImg src={IconMyBungleCurrent} />
+              <FooterIconText style={{ color : "#FFC634" }}>나의 벙글</FooterIconText>
+            </div>
+          </FooterIconWrap>
+        </MapFooterWrap>
     </div>}
     </>
   );

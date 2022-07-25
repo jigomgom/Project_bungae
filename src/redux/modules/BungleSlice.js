@@ -149,7 +149,7 @@ export const moreBungleList = createAsyncThunk(
         data.navigate("/tagsearch"); // window.location.href = "/tagsearch";
         return response.data.list;
       } else {
-        alert(response.data.message);
+        // alert(response.data.message);
       }
     } catch (e) {
       console.log(e);
@@ -177,7 +177,7 @@ export const getMapBungle = createAsyncThunk(
       if (response.data.response) {
         return response.data;
       } else {
-        alert(response.data.message);
+        // alert(response.data.message);
       }
     } catch (e) {
       console.log(e);
@@ -207,7 +207,7 @@ export const getDetailMap = createAsyncThunk(
       if (response.data.response) {
         return response.data.mapListDtos;
       } else {
-        alert(response.data.message);
+        // alert(response.data.message);
       }
     } catch (e) {
       console.log(e);
@@ -311,7 +311,8 @@ export const categoryBungleList = createAsyncThunk(
         item.navigate(`/categorysearch/${item.category}`);
         return response.data.list;
       } else {
-        alert(`${response.data.message}`);
+        // alert(`${response.data.message}`);
+        item.navigate(`/categorysearch/${item.category}`);
       }
     } catch (e) {
       console.log(e);

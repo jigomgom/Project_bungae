@@ -25,7 +25,7 @@ const refresh = async (config) => {
         },
       }
     );
-    // console.log( response );
+    console.log(response);
     if (response.data.response) {
       setCookie("refresh_token", response.headers.refreshtoken, {
         path: "/",

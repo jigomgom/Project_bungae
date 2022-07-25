@@ -13,9 +13,16 @@ import {
   ButtonImageWrap,
   ButtonImage,
 } from "../../styles/StyledVideo";
+import {
+  ChattingHeaderWrap,
+  ChattingBackKey,
+  HeadrIconsWrap,
+  IconHamburger,
+} from "../../styles/StyledHeader.js";
 
 // icon
 import IconBackKey from "../../assets/icon-left-arrow.svg";
+import Hamburger from "../../assets/icon-hamburger.svg";
 import IconCall from "../../assets/icon-calling.svg";
 import IconCallNone from "../../assets/icon-calling-none.svg";
 import IconSpeaker from "../../assets/icon-speaker.svg";
@@ -361,9 +368,14 @@ function OpenViduSettings() {
   };
   return (
     <VideoWrapper>
-      <VideoHeaderWrap>
-        <VideoChatBackKey src={IconBackKey} onClick={() => {}} />
-      </VideoHeaderWrap>
+      <ChattingHeaderWrap>
+        <ChattingBackKey
+          src={IconBackKey}
+          onClick={() => {
+            leaveSession();
+          }}
+        />
+      </ChattingHeaderWrap>
       <div>
         <TestDiv>
           <StreamComponent

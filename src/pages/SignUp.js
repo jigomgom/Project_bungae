@@ -31,10 +31,9 @@ import {
 import IconInputClear from "../assets/icon-input-xbtn.svg";
 
 const Signup = () => {
-  // const SERVER_URL = "http://3.37.61.25";
-
-  // const SERVER_URL = "https://gutner.shop";
-  // const SERVER_URL = "https://meeting-platform.shop";
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 

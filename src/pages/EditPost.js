@@ -80,15 +80,11 @@ import {
   PostCreateButton,
 } from "../styles/StyledEditPost";
 import {
-  HeaderWrap,
-  Logo,
-  BackKey,
+  PostHeaderWrap,
+  ChattingBackKey,
   PageTitle,
-  HeadrIconsWrap,
-  IconMyLocation,
-  IconNotification,
-  IconSetting,
-} from "../styles/StyledHeader";
+  EditHeadrIconsWrap
+} from "../styles/StyledHeader.js";
 
 //icon
 import IconClear from "../assets/icon-clear.svg";
@@ -880,32 +876,21 @@ function EditPost() {
   return (
     <>
       {/* { !isLoad && <> */}
-      <HeaderWrap>
-        <Logo style={{ visibility: "hidden" }} />
-        <BackKey
+      <CreatePostWrap>
+        {/* Title 부분 */}
+        <PostTilteDiv>
+        <PostHeaderWrap>
+        <ChattingBackKey
           src={IconBackKey}
           onClick={() => {
             navigate("/main");
           }}
         />
-        <PageTitle>벙글수정</PageTitle>
-        <HeadrIconsWrap>
-          <IconMyLocation style={{ visibility: "hidden" }} />
-
-          <IconSetting style={{ visibility: "hidden" }} />
-          <div
-            style={{ fontWeight: "400", fontSize: "14px", lineHeight: "20px" }}
-            onClick={() => {
-              editBungleOnClickHandler(myBungle.postId);
-            }}
-          >
-            완료
-          </div>
-        </HeadrIconsWrap>
-      </HeaderWrap>
-      <CreatePostWrap>
-        {/* Title 부분 */}
-        <PostTilteDiv>
+        <PageTitle>벙글 수정</PageTitle>
+        <EditHeadrIconsWrap>
+          완료
+        </EditHeadrIconsWrap>
+      </PostHeaderWrap>
           <PostTitle
             type="search"
             placeholder="번개 이름을 입력해주세요!."

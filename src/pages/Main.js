@@ -163,6 +163,7 @@ function Main() {
       handleError,
       options
     );
+    window.scrollTo(0,0);
   }, []);
 
   useEffect(() => {

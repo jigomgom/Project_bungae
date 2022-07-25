@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const HeaderWrap = styled.div`
   width: 100%;
   /* max-width: 375px; */
-  height: 50px;
+  height: 8vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -16,7 +16,7 @@ export const HeaderWrap = styled.div`
 export const MainHeaderWrap = styled.div`
   width: 100%;
   /* max-width: 375px; */
-  height: 10vh;
+  height: 8vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -48,7 +48,7 @@ export const MainHeaderIconsWrap = styled.div`
 export const SearchHeaderWrap = styled.div`
   width: 100%;
   /* max-width: 375px; */
-  height: 10vh;
+  height: 8vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -69,7 +69,7 @@ export const SearcgHeadrIconsWrap = styled.div`
 export const PostHeaderWrap = styled.div`
   width: 100%;
   /* max-width: 375px; */
-  height: 10vh;
+  height: 8vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -81,7 +81,7 @@ export const PostHeaderWrap = styled.div`
 export const ChattingHeaderWrap = styled.div`
   width: 100%;
   /* max-width: 375px; */
-  height: 10vh;
+  height: 8vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -91,7 +91,7 @@ export const ChattingHeaderWrap = styled.div`
 export const MapHeaderWrap = styled.div`
   width: 100%;
   /* max-width: 375px; */
-  height: 10vh;
+  height: 8vh;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -126,7 +126,7 @@ export const PageTitle = styled.h3`
 export const MapPageTitle = styled.h3`
   font-size: 24px;
   font-weight: 700;
-  margin-left: 9rem;
+  /* margin-left: 9rem; */
 `;
 
 export const BackKey = styled.img`
@@ -146,6 +146,18 @@ export const ChattingBackKey = styled.img`
   margin-left: 20px;
 `;
 
+export const MapIconsWrap = styled.div`
+  display: flex;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  /* position: absolute; */
+  /* right: 22px;
+    top: 5px; */
+  gap: 10px;
+  margin-right: 12px;
+`;
+
 export const HeadrIconsWrap = styled.div`
   display: flex;
   height: 50px;
@@ -154,6 +166,24 @@ export const HeadrIconsWrap = styled.div`
   /* right: 22px;
     top: 5px; */
   gap: 10px;
+  margin-right: 22px;
+`;
+// 완료, 적용 등 헤더 글씨
+export const EditHeadrIconsWrap = styled.div`
+  display: flex;
+  height: 50px;
+  align-items: center;
+  /* position: absolute; */
+  /* right: 22px;
+    top: 5px; */
+    font-weight: 400;
+font-size: 14px;
+line-height: 20px;
+text-align: center;
+
+/* Dark Gray */
+
+color: #000000;
   margin-right: 22px;
 `;
 

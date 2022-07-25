@@ -2,6 +2,13 @@
   margin: 20px 10px 0px 10px;
   border-bottom: 3px solid rgb(242, 243, 245);
 } */
+.top-chatlist-wrap{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 90px;
+}
+
 .first_swiper_main{
     display: flex;
     flex-direction: row;

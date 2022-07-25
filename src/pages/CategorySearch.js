@@ -7,8 +7,22 @@ import CategorySearchCard from "../components/CategorySearchCard";
 //CSS
 import "../styles/TagCategorySearch.css";
 //Components
-import SearchCard from "../components/SearchCard";
-import { HeaderWrap, Logo, BackKey, PageTitle, HeadrIconsWrap, IconMyLocation, IconNotification, IconSetting} from "../styles/StyledHeader";
+
+import {
+  PostHeaderWrap,
+  ChattingBackKey,
+  HeadrIconsWrap,
+  IconNotification,
+  IconSetting
+} from "../styles/StyledHeader.js";
+
+import {
+  FooterWrap,
+  FooterIconWrap,
+  FooterIconImg,
+  FooterIconText,
+  FooterAddBungae,
+} from "../styles/StyledFooter.js";
 
 import Notification from "../assets/icon-notification.svg";
 import Setting from "../assets/icon-setting.svg";
@@ -16,7 +30,16 @@ import IconBackKey from "../assets/icon-left-arrow.svg";
 import IconMyPoint from "../assets/icon-mylocation.svg";
 import IconMainLogo from "../assets/icon-main-logo.svg";
 
+// Footer Icons
+import IconHomeCurrent from "../assets/icon-home-current.svg";
+import IconLocation from "../assets/icon-location.svg";
+import IconChat from "../assets/icon-chat.svg";
+import IconMyBungae from "../assets/icon-account.svg";
+import IconCreate from "../assets/icon-create-post.svg";
+import IconEdit from "../assets/icon-edit-footer.svg";
+
 function CategorySearch() {
+  const ownerCheck = useSelector((state) => state.Bungle.isOwner);
   // isLoad
   const [ isLoad, setIsLaod ] = useState( true );
   //
@@ -46,14 +69,20 @@ function CategorySearch() {
     { key: 2, value: "인기순" },
   ];
   return (
-    <div>
-      <HeaderWrap>
-        <BackKey src={IconBackKey} onClick={()=>{ navigate("/main")}}/>
+    <div className="top-category-search-wrap">
+      <PostHeaderWrap>
+        <ChattingBackKey
+          src={IconBackKey}
+          onClick={() => {
+            navigate("/main");
+          }}
+        />
+
         <HeadrIconsWrap>
           <IconNotification src={Notification} />
           <IconSetting src={Setting} />
         </HeadrIconsWrap>
-      </HeaderWrap>
+      </PostHeaderWrap>
       <div className="search-result-wrap">
         <div className="search-result-header">
           <p className="search-result-header-title">{category}</p>
@@ -70,9 +99,10 @@ function CategorySearch() {
           </select>
         </div>
         <div className="search-result-card-wrap">
-          { categoryList && categoryList.map( ( item, index ) => {
-            return  <CategorySearchCard categoryList={item}/>
-          })}
+          {categoryList &&
+            categoryList.map((item, index) => {
+              return <CategorySearchCard categoryList={item} />;
+            })}
           {/* <SearchCard />
           <SearchCard />
           <SearchCard />
@@ -82,6 +112,68 @@ function CategorySearch() {
           <SearchCard /> */}
         </div>
       </div>
+      <FooterWrap>
+          <FooterIconWrap
+            onClick={() => {
+              navigate("/main");
+            }}
+          >
+            <FooterIconImg src={IconHomeCurrent} />
+            <FooterIconText style={{ color:"#FFC632" }}>홈</FooterIconText>
+          </FooterIconWrap>
+          <FooterIconWrap
+            onClick={() => {
+              navigate("/map");
+            }}
+          >
+            <FooterIconImg src={IconLocation} />
+            <FooterIconText>벙글지도</FooterIconText>
+          </FooterIconWrap>
+          {ownerCheck ? (
+            <FooterAddBungae
+              src={IconEdit}
+              onClick={() => {
+                navigate("/editpost");
+              }}
+            />
+          ) : (
+            <FooterAddBungae
+              src={IconCreate}
+              onClick={() => {
+                navigate("/createpost");
+              }}
+            />
+          )}
+          <FooterIconWrap>
+            <FooterIconImg
+              src={IconChat}
+              onClick={() => {
+                navigate("/chatlist");
+              }}
+            />
+            <FooterIconText>채팅</FooterIconText>
+          </FooterIconWrap>
+          <FooterIconWrap
+            onClick={() => {
+              navigate("/mypage");
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={() => {
+                navigate("/mypage");
+              }}
+            >
+              <FooterIconImg src={IconMyBungae} />
+              <FooterIconText>나의 벙글</FooterIconText>
+            </div>
+          </FooterIconWrap>
+        </FooterWrap>
     </div>
   );
 }
