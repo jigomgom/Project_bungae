@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { getChatClient } from "../redux/modules/BungleSlice";
 
+import {} from "react-router-dom";
+
 import AxiosAPI from "../customapi/CustomAxios";
 import moment from "moment";
 import { getCookie, setCookie } from "../customapi/CustomCookie";
@@ -22,14 +24,9 @@ import "swiper/css/pagination";
 
 //styled-components
 import {
-  HeaderWrap,
-  BackKey,
-  Logo,
-  PageTitle,
+  ChattingHeaderWrap,
+  ChattingBackKey,
   HeadrIconsWrap,
-  IconMyLocation,
-  IconNotification,
-  IconSetting,
   IconHamburger,
 } from "../styles/StyledHeader.js";
 import {
@@ -629,36 +626,23 @@ function ChattingRoom({ setRealTimeChat }) {
     <>
       <div id="chat-app">
         <div id="page-wrap">
-          <HeaderWrap>
-            <Logo src={IconMainLogo} style={{ visibility: "hidden" }} />
-            <BackKey
+          <ChattingHeaderWrap>
+            <ChattingBackKey
               src={IconBackKey}
               onClick={() => {
                 navigate("/main");
                 setOutOwner(() => false);
               }}
             />
-            <PageTitle style={{ visibility: "hidden" }}></PageTitle>
-            <HeadrIconsWrap>
-              <IconMyLocation
-                style={{ visibility: "hidden" }}
-                src={IconMyPoint}
-              />
-              <IconNotification
-                src={Notification}
-                style={{ visibility: "hidden" }}
-              />
-              <IconSetting src={Setting} style={{ visibility: "hidden" }} />
-              <IconHamburger
-                src={Hamburger}
-                onClick={() => {
-                  setChatModal(!chatModal);
-                  chatPerson();
-                  chatFile();
-                }}
-              />
-            </HeadrIconsWrap>
-          </HeaderWrap>
+            <IconHamburger
+              src={Hamburger}
+              onClick={() => {
+                setChatModal(!chatModal);
+                chatPerson();
+                chatFile();
+              }}
+            />
+          </ChattingHeaderWrap>
           {chatModal && (
             <div className="modal-chat-wrapper">
               <div
@@ -758,6 +742,7 @@ function ChattingRoom({ setRealTimeChat }) {
                         );
                       })}
                     </div>
+                    <div className="modal-divider"></div>
                     <div className="modal-footer">
                       <div
                         className="modal-footer-exit"
@@ -1140,15 +1125,12 @@ function ChattingRoom({ setRealTimeChat }) {
                   <div className="chatting-footer-input">
                     <input
                       type="text"
-                      placeholder={"체크할 항목"}
                       value={userData.message}
                       onChange={handleMessage}
                       onKeyPress={onKeyPress}
                     />
-                    <button onClick={sendValue}>
-                      <img src={SendBtn} alt="" />
-                    </button>
-                    {/* <button onClick={chatImg}>img</button> */}
+
+                    <img src={SendBtn} alt="" onClick={sendValue}></img>
                   </div>
                 </div>
               </>

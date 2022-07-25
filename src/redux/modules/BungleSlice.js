@@ -175,6 +175,36 @@ export const getMapBungle = createAsyncThunk(
       });
       console.log(response);
       if (response.data.response) {
+        return response.data;
+      } else {
+        alert(response.data.message);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
+
+// 지도 상세 적용
+export const getDetailMap = createAsyncThunk(
+  "GET/getDetailMap",
+  async (data) => {
+    console.log(data);
+    // if (data.selectCategory.length === 0) {
+    //   data.selectCategory = "null";
+    // }
+    try {
+      const response = await AxiosAPI.get(`/map/details`, {
+        params: {
+          categories: data.selectCategory,
+          personnel: data.onlyNumber,
+          distance: data.onlyDistance,
+          latitude: data.location.latitude,
+          longitude: data.location.longitude,
+        },
+      });
+      console.log(response);
+      if (response.data.response) {
         return response.data.mapListDtos;
       } else {
         alert(response.data.message);
@@ -306,6 +336,7 @@ export const tagBungleList = createAsyncThunk(
         },
       });
       if (response.data.response) {
+        // console.log(response.data.list);
         return response.data.list;
       }
     } catch (e) {
@@ -433,7 +464,10 @@ const BungleSlice = createSlice({
       client: null,
       guest: 0,
     },
+    //지도 화면 렌더링 되자마자 보여줄 리스트
     mapList: [{}],
+    //지도 화면 상세 검색 후 보여줄 리스트
+    detailMapBungle: [{}],
   },
   reducers: {
     // 클라이언트 값 가져오기
@@ -555,7 +589,7 @@ const BungleSlice = createSlice({
         }
       });
       console.log(MapBungleUpdate);
-      state.maplist = MapBungleUpdate;
+      state.mapList = MapBungleUpdate;
     },
     [likeBungleList.rejected]: (state, action) => {
       console.log("Like reject");
@@ -570,9 +604,17 @@ const BungleSlice = createSlice({
     // 지도 리스트
     [getMapBungle.fulfilled]: (state, action) => {
       // console.log(action.payload);
-      state.mapList = action.payload;
+      state.mapList = action.payload.mapListDtos;
+      state.isOwner = action.payload.owner;
     },
     [getMapBungle.rejected]: (state, action) => {},
+
+    // 지도 상세 검색 후리스트
+    [getDetailMap.fulfilled]: (state, action) => {
+      // console.log(action.payload);
+      state.detailMapBungle = action.payload;
+    },
+    [getDetailMap.rejected]: (state, action) => {},
 
     // 상세 조회
     [detailBungleList.fulfilled]: (state, action) => {

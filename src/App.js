@@ -40,7 +40,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
+      {/* <Header /> */}
       <Routes>
         <Route path="/" element={<Login />} />
         {/* social login redirection URL */}
@@ -65,7 +65,7 @@ function App() {
         {/* Test */}
         {/* <Route path="/test" element={<Test />} /> */}
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

@@ -11,6 +11,36 @@ export const HeaderWrap = styled.div`
   position: relative;
 `;
 
+export const ChattingHeaderWrap = styled.div`
+  width: 100%;
+  /* max-width: 375px; */
+  height: 10vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+`;
+
+export const MapHeaderWrap = styled.div`
+  width: 100%;
+  /* max-width: 375px; */
+  height: 10vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+`;
+
+export const MapDetailHeaderWrap = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  margin-top: 15px;
+  margin-bottom: 20px;
+`;
+
 export const Logo = styled.img`
   width: 78.95px;
   height: 22.19px;
@@ -26,6 +56,12 @@ export const PageTitle = styled.h3`
   margin-left: 20px;
 `;
 
+export const MapPageTitle = styled.h3`
+  font-size: 24px;
+  font-weight: 700;
+  margin-left: 9rem;
+`;
+
 export const BackKey = styled.img`
   position: absolute;
   width: 11.67px;
@@ -33,6 +69,14 @@ export const BackKey = styled.img`
   left: 25px;
   top: 18px;
   cursor: pointer;
+`;
+
+export const ChattingBackKey = styled.img`
+  position: relative;
+  width: 11.67px;
+  height: 19.8px;
+  cursor: pointer;
+  margin-left: 20px;
 `;
 
 export const HeadrIconsWrap = styled.div`
@@ -68,4 +112,5 @@ export const IconHamburger = styled.img`
   width: 19px;
   height: 23px;
   cursor: pointer;
+  margin-right: 20px;
 `;
