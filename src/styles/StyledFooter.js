@@ -16,6 +16,22 @@ export const FooterWrap = styled.div`
   z-index: 1000; // 안해주면 다른 아이템에 덮히는 경우가 발생
 `;
 
+// Main
+
+export const MainFooterWrap = styled.div`
+  position: fixed;
+  bottom: 0px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  max-width: 375px;
+  height: 10vh;
+  background-color: white;
+  box-shadow: inset 0px 1px 0px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+`;
+
 export const MapFooterWrap = styled.div`
   position: fixed;
   bottom: 0px;

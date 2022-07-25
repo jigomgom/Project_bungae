@@ -81,7 +81,8 @@ function Map() {
   const SERVER_URL = "https://gutner.shop";
   // const SERVER_URL = "https://meeting-platform.shop";
   const token = localStorage.getItem("login-token");
-
+  const isOwner = useSelector( state => state.Bungle.isOwner );
+  console.log( isOwner );
   const dispatch = useDispatch();
   // navigate
   const navigate = useNavigate();

@@ -14,6 +14,7 @@
     "md5": "^2.3.0",
     "moment": "^2.29.4",
     "net": "^1.0.2",
+    "openvidu-browser": "^2.22.0",
     "rc-slider": "^10.0.0",
     "react": "^18.2.0",
     "react-cookie": "^4.1.1",
@@ -32,7 +33,7 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "set HTTPS=true&&set SSL_CRT_FILE=C:/Users/Administrator/cert.crt&&set SSL_KEY_FILE=C:/Users/Administrator/cert.key&&react-scripts start",
+    "start": "set HTTPS=true&&set SSL_CRT_FILE=C:/Windows/System32/cert.crt&&set SSL_KEY_FILE=C:/Windows/System32/cert.key&&react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

@@ -1,8 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 
 //CSS
 import "../styles/TagCategorySearch.css";
+import {
+  SearchHeaderWrap,
+  BackKey,
+  Logo,
+  SearcgHeadrIconsWrap,
+  IconNotification,
+  IconSetting
+} from "../styles/StyledHeader.js";
+
+// css
+import {
+  FooterWrap,
+  FooterIconWrap,
+  FooterIconImg,
+  FooterIconText,
+  FooterAddBungae,
+} from "../styles/StyledFooter.js";
+
 //Components
 import SearchCard from "../components/SearchCard";
 import Divider from "../components/Divider";
@@ -10,7 +30,24 @@ import Divider from "../components/Divider";
 import Tag from "../components/Tag";
 import Search from "../components/Search";
 
+// Haeder icon
+import Notification from "../assets/icon-notification.svg";
+import Setting from "../assets/icon-setting.svg";
+import IconBackKey from "../assets/icon-left-arrow.svg";
+
+// Footer Icons
+import IconHome from "../assets/icon-home.svg";
+import IconLocation from "../assets/icon-location.svg";
+import IconChat from "../assets/icon-chat.svg";
+import IconMyBungae from "../assets/icon-account.svg";
+import IconCreate from "../assets/icon-create-post.svg";
+import IconEdit from "../assets/icon-edit-footer.svg";
+
+
 function TagSearch() {
+  const ownerCheck = useSelector((state) => state.Bungle.isOwner);
+  //
+  const navigate = useNavigate();
   // isLoad
   const [ isLoad, setIsLoad ] = useState( true );
   //검색 정렬 드롭박스
@@ -36,6 +73,18 @@ function TagSearch() {
 
   return (
     <div>
+      <SearchHeaderWrap>
+        <BackKey
+          src={IconBackKey}
+          onClick={() => {
+            navigate("/main");
+          }}
+        />
+        <SearcgHeadrIconsWrap>
+          <IconNotification src={Notification} />
+          <IconSetting src={Setting} />
+        </SearcgHeadrIconsWrap>
+      </SearchHeaderWrap>
       <Tag />
       <Search />
       <div className="search-result-wrap">
@@ -65,6 +114,68 @@ function TagSearch() {
           <SearchCard /> */}
         </div>
       </div>
+      <FooterWrap>
+          <FooterIconWrap
+            onClick={() => {
+              navigate("/main");
+            }}
+          >
+            <FooterIconImg src={IconHome} />
+            <FooterIconText >홈</FooterIconText>
+          </FooterIconWrap>
+          <FooterIconWrap
+            onClick={() => {
+              navigate("/map");
+            }}
+          >
+            <FooterIconImg src={IconLocation} />
+            <FooterIconText>벙글지도</FooterIconText>
+          </FooterIconWrap>
+          {ownerCheck ? (
+            <FooterAddBungae
+              src={IconEdit}
+              onClick={() => {
+                navigate("/editpost");
+              }}
+            />
+          ) : (
+            <FooterAddBungae
+              src={IconCreate}
+              onClick={() => {
+                navigate("/createpost");
+              }}
+            />
+          )}
+          <FooterIconWrap>
+            <FooterIconImg
+              src={IconChat}
+              onClick={() => {
+                navigate("/chatlist");
+              }}
+            />
+            <FooterIconText>채팅</FooterIconText>
+          </FooterIconWrap>
+          <FooterIconWrap
+            onClick={() => {
+              navigate("/mypage");
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={() => {
+                navigate("/mypage");
+              }}
+            >
+              <FooterIconImg src={IconMyBungae} />
+              <FooterIconText>나의 벙글</FooterIconText>
+            </div>
+          </FooterIconWrap>
+        </FooterWrap>
     </div>
   );
 }

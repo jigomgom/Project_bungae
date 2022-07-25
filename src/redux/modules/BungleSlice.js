@@ -577,8 +577,7 @@ const BungleSlice = createSlice({
       const MapBungleUpdate = current(state.mapList).map((item) => {
         // console.log(item);
         if (item.id === action.payload) {
-          // console.log( item.isLike );
-          // console.log(action.payload);
+ 
           if (item.isLike) {
             return { ...item, isLike: false };
           } else {
@@ -680,37 +679,7 @@ const BungleSlice = createSlice({
       console.log(action.payload);
       const postId = action.payload.postId;
       const isOwner = action.payload.isOwner;
-      // let deleteSelector = "";
-      //  // 마감 임박
-      // const returnEndList = state.endTime.filter( ( item)=>{
-      //   if( item.postId === postId ){
-      //     deleteSelector = "real";
-      //   }
-      //   return item.postId !== postId;
-      //   // if( item.postId !== postId ){
-      //   //   // console.log( item );
-      //   //   return item;
-      //   // }
-      // });
-      // // 실시간
-      // const returnRealList = state.realTime.filter( ( item ) => {
-      //   if( item.postId === postId ){
-      //     deleteSelector = "end";
-      //   }
-      //   return item.postId !== postId;
-      // })
-
-      // console.log(returnEndList );
-      // console.log( returnRealList);
-      // // state.endTime = [];
-      // if( deleteSelector === "real" ){
-      //   state.realTime = [];
-      // }else if( deleteSelector === "end" ){
-      //   state.endTime = [];
-      // }
-
-      // state.endTime = returnEndList;
-      // state.realTime = returnRealList;
+      
       state.isOwner = isOwner;
       // console.log( state.endTime, state.realTime );
     },

@@ -18,7 +18,7 @@ import { Navigate } from "react-router-dom";
 
 function BottomSheet({ aroundLocation }) {
   console.log(aroundLocation);
-
+  
   const navigate = useNavigate();
 
   const dispatch = useDispatch();

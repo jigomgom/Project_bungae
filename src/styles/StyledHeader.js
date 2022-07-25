@@ -11,6 +11,73 @@ export const HeaderWrap = styled.div`
   position: relative;
 `;
 
+// Main
+
+export const MainHeaderWrap = styled.div`
+  width: 100%;
+  /* max-width: 375px; */
+  height: 10vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+`;
+
+export const MainHeaderLogo = styled.img`
+  width: 78.95px;
+  height: 22.19px;
+  margin-top: 11px;
+  margin-left: 6px;
+  cursor: pointer;
+  /* margin-top: 29px; */
+`;
+
+export const MainHeaderIconsWrap = styled.div`
+  display: flex;
+  height: 50px;
+  align-items: center;
+  /* position: absolute; */
+  /* right: 22px;
+    top: 5px; */
+  gap: 10px;
+  margin-right: 22px;
+`;
+
+// Tag Header
+
+export const SearchHeaderWrap = styled.div`
+  width: 100%;
+  /* max-width: 375px; */
+  height: 10vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+`;
+
+export const SearcgHeadrIconsWrap = styled.div`
+  display: flex;
+  height: 50px;
+  align-items: center;
+  position: absolute;
+  right: 22px;
+  top: 5px;
+  gap: 10px;
+  margin-right: 22px;
+`;
+
+export const PostHeaderWrap = styled.div`
+  width: 100%;
+  /* max-width: 375px; */
+  height: 10vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+`;
+
+// Chatting
+
 export const ChattingHeaderWrap = styled.div`
   width: 100%;
   /* max-width: 375px; */
@@ -113,4 +180,23 @@ export const IconHamburger = styled.img`
   height: 23px;
   cursor: pointer;
   margin-right: 20px;
+`;
+
+// Video Header
+export const VideoHeaderWrap = styled.div`
+  width: 100%;
+  /* max-width: 375px; */
+  height: 10vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+`;
+
+export const VideoChatBackKey = styled.img`
+  position: relative;
+  width: 11.67px;
+  height: 19.8px;
+  cursor: pointer;
+  margin-left: 20px;
 `;

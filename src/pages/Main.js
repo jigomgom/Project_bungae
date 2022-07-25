@@ -35,6 +35,17 @@ import {
   MainContentButton,
 } from "../styles/StyledMain.js";
 
+import { MainHeaderWrap, MainHeaderLogo, MainHeaderIconsWrap, IconMyLocation, IconSetting, IconNotification } from "../styles/StyledHeader";
+
+// css
+import {
+  FooterWrap,
+  FooterIconWrap,
+  FooterIconImg,
+  FooterIconText,
+  FooterAddBungae,
+} from "../styles/StyledFooter.js";
+
 //icons
 import IconTemp from "../assets/icon-temp.svg";
 import IconLike from "../assets/icon-like.svg";
@@ -43,6 +54,20 @@ import defaultCardImg from "../assets/defaultImg.jpg";
 import IconHighTemp from "../assets/icon-manner-high.svg";
 import IconMiddleTemp from "../assets/icon-manner-middle.svg";
 import IconLowTemp from "../assets/icon-manner-low.svg";
+import IconMainLogo from "../assets/icon-main-logo.svg";
+
+import IconMyPoint from "../assets/icon-mylocation.svg";
+import Notification from "../assets/icon-notification.svg";
+import Setting from "../assets/icon-setting.svg";
+
+// Footer Icons
+import IconHomeCurrent from "../assets/icon-home-current.svg";
+import IconLocation from "../assets/icon-location.svg";
+import IconChat from "../assets/icon-chat.svg";
+import IconMyBungae from "../assets/icon-account.svg";
+import IconCreate from "../assets/icon-create-post.svg";
+import IconEdit from "../assets/icon-edit-footer.svg";
+
 import SockJS from "sockjs-client";
 
 function Main() {
@@ -59,6 +84,10 @@ function Main() {
   //     window.removeEventListener("beforeunload", preventClose);
   //   };
   // }, []);
+  
+  // isOwner
+  const ownerCheck = useSelector((state) => state.Bungle.isOwner);
+
   // dispatch
   const dispatch = useDispatch();
   // navigate
@@ -230,6 +259,14 @@ function Main() {
     <>
       {/* {!isLoad && ( */}
       <MainWrap>
+        <MainHeaderWrap>
+          <MainHeaderLogo src={IconMainLogo} />
+          <MainHeaderIconsWrap>
+          <IconMyLocation src={IconMyPoint} />
+          <IconNotification src={Notification}/>
+          <IconSetting src={Setting} />
+        </MainHeaderIconsWrap>
+        </MainHeaderWrap>
         <Tag />
         <Search location={location} />
         <Category location={location} />
@@ -352,6 +389,68 @@ function Main() {
             더보기
           </MainContentButton>
         </MainContentWrap>
+        <FooterWrap>
+          <FooterIconWrap
+            onClick={() => {
+              navigate("/main");
+            }}
+          >
+            <FooterIconImg src={IconHomeCurrent} />
+            <FooterIconText style={{ color:"#FFC632" }}>홈</FooterIconText>
+          </FooterIconWrap>
+          <FooterIconWrap
+            onClick={() => {
+              navigate("/map");
+            }}
+          >
+            <FooterIconImg src={IconLocation} />
+            <FooterIconText>벙글지도</FooterIconText>
+          </FooterIconWrap>
+          {ownerCheck ? (
+            <FooterAddBungae
+              src={IconEdit}
+              onClick={() => {
+                navigate("/editpost");
+              }}
+            />
+          ) : (
+            <FooterAddBungae
+              src={IconCreate}
+              onClick={() => {
+                navigate("/createpost");
+              }}
+            />
+          )}
+          <FooterIconWrap>
+            <FooterIconImg
+              src={IconChat}
+              onClick={() => {
+                navigate("/chatlist");
+              }}
+            />
+            <FooterIconText>채팅</FooterIconText>
+          </FooterIconWrap>
+          <FooterIconWrap
+            onClick={() => {
+              navigate("/mypage");
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={() => {
+                navigate("/mypage");
+              }}
+            >
+              <FooterIconImg src={IconMyBungae} />
+              <FooterIconText>나의 벙글</FooterIconText>
+            </div>
+          </FooterIconWrap>
+        </FooterWrap>
       </MainWrap>
       {/* )} */}
     </>

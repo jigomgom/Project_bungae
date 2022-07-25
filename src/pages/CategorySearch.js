@@ -48,12 +48,8 @@ function CategorySearch() {
   return (
     <div>
       <HeaderWrap>
-        <Logo style={{ visibility:"hidden"}} src={IconMainLogo} />
         <BackKey src={IconBackKey} onClick={()=>{ navigate("/main")}}/>
-        <PageTitle style={{ visibility: "hidden" }}></PageTitle>
-
         <HeadrIconsWrap>
-          <IconMyLocation style={{ visibility: "hidden" }} src={IconMyPoint} />
           <IconNotification src={Notification} />
           <IconSetting src={Setting} />
         </HeadrIconsWrap>
