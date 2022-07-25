@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { likeBungleList } from "../redux/modules/BungleSlice";
@@ -18,7 +18,7 @@ import { Navigate } from "react-router-dom";
 
 function BottomSheet({ aroundLocation }) {
   console.log(aroundLocation);
-
+  
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -74,6 +74,7 @@ function BottomSheet({ aroundLocation }) {
           <div>
             <div className="search-result-card-wrap-map">
               {aroundLocation.map((item, index) => {
+                console.log( item, item.id, item.isLike );
                 return (
                   <div className="search-card-wrap-map" key={index}>
                     <div className="search-card-img">
@@ -88,6 +89,7 @@ function BottomSheet({ aroundLocation }) {
                       <img
                         className="search-card-img-like"
                         src={item.isLike ? likeImg : UnlikeImg}
+                        
                         alt=""
                         onClick={() => {
                           moreTagLikeOnClick(item.id);

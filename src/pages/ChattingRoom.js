@@ -64,8 +64,8 @@ let client = null;
 function ChattingRoom({ setRealTimeChat }) {
   // SERVER URL
   // const SERVER_URL = "http://3.37.61.25";
-  // const SERVER_URL = "https://gutner.shop"; //현구님
-  const SERVER_URL = "https://meeting-platform.shop"; //현욱님
+  const SERVER_URL = "https://gutner.shop"; //현구님
+  // const SERVER_URL = "https://meeting-platform.shop"; //현욱님
   const dispatch = useDispatch();
   // navigate
   const navigate = useNavigate();

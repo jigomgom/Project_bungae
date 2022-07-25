@@ -24,7 +24,8 @@ import Footer from "./components/Footer";
 import ChatList from "./pages/ChatList";
 import ChattingRoom from "./pages/ChattingRoom";
 import Map from "./pages/Map";
-// Test
+
+import OpenViduSettings from "./components/videos/OpenViduSettings";
 
 function App() {
   // 실시간 채팅 state
@@ -63,9 +64,10 @@ function App() {
         <Route path="/chat/:postId" element={<ChattingRoom />} />
         <Route path="/map" element={<Map />} />
         {/* Test */}
+        <Route path="/videochat" element={<OpenViduSettings />} />
         {/* <Route path="/test" element={<Test />} /> */}
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
