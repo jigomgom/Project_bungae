@@ -12,8 +12,6 @@ import { getChatClient } from "../redux/modules/BungleSlice";
 import {} from "react-router-dom";
 
 import AxiosAPI from "../customapi/CustomAxios";
-import moment from "moment";
-import { getCookie, setCookie } from "../customapi/CustomCookie";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -26,7 +24,6 @@ import "swiper/css/pagination";
 import {
   ChattingHeaderWrap,
   ChattingBackKey,
-  HeadrIconsWrap,
   IconHamburger,
 } from "../styles/StyledHeader.js";
 import {

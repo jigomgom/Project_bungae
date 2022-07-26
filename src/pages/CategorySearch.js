@@ -24,6 +24,11 @@ import {
   FooterAddBungae,
 } from "../styles/StyledFooter.js";
 
+import { LoadingWrap, LoadingLogo, LoadingText } from "../styles/StyledLoading";
+
+// icon
+import IconLoadingLogo from "../assets/icon-splash-logo.svg";
+
 import Notification from "../assets/icon-notification.svg";
 import Setting from "../assets/icon-setting.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
@@ -99,17 +104,13 @@ function CategorySearch() {
           </select>
         </div>
         <div className="search-result-card-wrap">
-          {categoryList &&
+          {categoryList ?
             categoryList.map((item, index) => {
               return <CategorySearchCard categoryList={item} />;
-            })}
-          {/* <SearchCard />
-          <SearchCard />
-          <SearchCard />
-          <SearchCard />
-          <SearchCard />
-          <SearchCard />
-          <SearchCard /> */}
+            }) : (<LoadingWrap>
+              <LoadingLogo src={IconLoadingLogo}/>
+              <LoadingText>검색 결과가 없습니다.</LoadingText>
+            </LoadingWrap>)}
         </div>
       </div>
       <FooterWrap>

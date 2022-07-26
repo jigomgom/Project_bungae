@@ -81,21 +81,26 @@ import {
   IconSetting
 } from "../styles/StyledHeader.js";
 
+import {
+  // Moadl
+  ModalWrapper,
+  ModalOverlay,
+  ModalInner,
+  ModalContentWrap,
+  ModalDivider,
+  ModalButton,
+} from "../styles/StyledLogin";
+
 //icon
 
 import IconClear from "../assets/icon-clear.svg";
 import IconUpload from "../assets/icon-upload.svg";
-import IconChatLetter from "../assets/icon-chat-gray.svg";
-import IconChatVideo from "../assets/icon-chat-video.svg";
 import IconMylocation from "../assets/icon-mylocation-gray.svg";
-import IconAddressClose from "../assets/icon-input-xbtn.svg";
 
 // header icon
 import Notification from "../assets/icon-notification.svg";
 import Setting from "../assets/icon-setting.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
-import IconMyPoint from "../assets/icon-mylocation.svg";
-import IconMainLogo from "../assets/icon-main-logo.svg";
 
 const CategoriesArray = [
   "맛집",
@@ -111,6 +116,10 @@ const CategoriesArray = [
 ];
 
 function CreatePost() {
+  // modal state
+  const [ isModal, setIsModal ] = useState(false);
+  // modal message
+  const [ modalMessage, setModalMessage ] = useState("");
   // dispatch
   const dispatch = useDispatch();
   // navigate
@@ -339,7 +348,7 @@ function CreatePost() {
   // 엔터키 태그 입력
   const onKeyPress = (e) => {
     // console.log( e, e.target.value );
-    if (e.target.value.length !== 0 && e.code === "Enter") {
+    if (e.target.value.length !== 0 && e.key === "Enter") {
       addHashTagItemHandler();
       e.target.value = "";
     }
@@ -387,7 +396,9 @@ function CreatePost() {
 
   const peopleOnBlur = ( event ) => {
     if( Number( event.target.value ) < 2 ){
-      alert(`인원 설정은 최소 2명입니다.`);
+      setIsModal( true );
+      setModalMessage(`인원 설정은 최소 2명입니다.`);
+      // alert(`인원 설정은 최소 2명입니다.`);
       setOnlyNumber( 2 )
     }
   };
@@ -456,8 +467,9 @@ function CreatePost() {
   const hourOnBlur = ( event ) => {
     if( isToday ){
       if( Number( event.target.value ) < Number( currentHour ) ){
-        console.log("설마")
-        alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        setIsModal( true );
+        setModalMessage(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        // alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
         const limitHour = Math.max(currentHour, Math.min(24, Number(event.target.value)));
         setHour( limitHour );     
         setMinute( currentMinute );
@@ -471,7 +483,9 @@ function CreatePost() {
       }
     }else{
       if( Number( event.target.value ) > ( currentHour ) ){
-        alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        setIsModal( true );
+        setModalMessage(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        // alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
         const limitHour = Math.max(0, Math.min(currentHour, Number(event.target.value)));
         setHour( limitHour );     
       }
@@ -485,20 +499,26 @@ function CreatePost() {
     // console.log( Number( currentHour + currentMinute ));
     // console.log( Number( hour + event.target.value ) );
     if( Number( event.target.value ) >= 60 ){
-      alert(`분은 60분을 넘길 수 없습니다.`);
+      setIsModal( true );
+      setModalMessage(`분은 60분을 넘길 수 없습니다.`);
+      // alert(`분은 60분을 넘길 수 없습니다.`);
       setMinute(( "0" + currentMinute ).slice(-2));
     }
 
     if( !isToday ){
       if( Number( currentHour + currentMinute ) < Number( hour + event.target.value) ){
+        setIsModal( true );
+        setModalMessage(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
         // console.log("??");
-        alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        // alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
         const limitMinute = Math.max(0, Math.min(currentMinute, Number(event.target.value)));
         setMinute( limitMinute );
       }
     }else{
       if( Number( currentHour + currentMinute ) > Number( hour + event.target.value )){
-        alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        setIsModal( true );
+        setModalMessage(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        // alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
         const limitMinute = Math.max(currentMinute, Math.min(currentMinute, Number(event.target.value)));
         console.log("limit ", limitMinute );
         setMinute( limitMinute );
@@ -646,9 +666,16 @@ function CreatePost() {
 
     const title = Title_ref.current.value;
     let content = "";
-    
+    if( title.length <= 0 ){
+      setIsModal( true );
+      setModalMessage("벙글 제목을 작성해주세요.")
+      window.scrollTo(0,0);
+      return null;
+    }
     if (Content_ref.current.value.length <= 100 && Content_ref.current.value.length === 0 ) {
-      alert("소개글은 0자 이상 100자 이하여야 합니다.")
+      setIsModal( true );
+      setModalMessage("소개글은 0자 이상 100자 이하여야 합니다.");
+      window.scrollTo(0,0);
       return null;
     } else {
       content = Content_ref.current.value;
@@ -708,19 +735,36 @@ function CreatePost() {
           formData.append("postImg", item);
         });
       }
-
-      dispatch(createBungleList(formData));
-      navigate("/chat");
+      dispatch(createBungleList( { formData, navigate, isLetter }));
+      // console.log( postDto.isLetter, postDto.personnel )
     }else{
-      alert("벙글 제목은 필수 사항입니다.");
-      window.scrollTo(0,0);
+      
     }
   };
 
   return (
     <>
-    
     <CreatePostWrap>
+    {isModal && (
+        <ModalWrapper>
+          <ModalOverlay>
+            <ModalInner>
+              <ModalContentWrap>
+                <h3>벙글 생성 실패</h3>
+                <div>{modalMessage}</div>
+              </ModalContentWrap>
+              <ModalDivider />
+              <ModalButton
+                onClick={() => {
+                  setIsModal(false);
+                }}
+              >
+                확인
+              </ModalButton>
+            </ModalInner>
+          </ModalOverlay>
+        </ModalWrapper>
+      )}
       {/* Header */}
       <PostHeaderWrap>
         <ChattingBackKey
@@ -740,7 +784,7 @@ function CreatePost() {
       <PostTilteDiv>
         <PostTitle
           type="search"
-          placeholder="벙글 이름을 입력해주세요!."
+          placeholder="벙글 이름을 입력해주세요!"
           maxLength={36}
           ref={Title_ref}
         />
@@ -1003,12 +1047,12 @@ function CreatePost() {
             <SelectChatVideoBtn
               CheckedState={isVideo}
               onClick={() => {
-                // ChatButtonClickHandler("video");
+                ChatButtonClickHandler("video");
               }}
             >
               {/* <SelectChatBtnImg src={IconChatVideo} /> */}
               <span
-                className="material-icons"
+                className="material-icons-outlined"
                 style={{ marginRight: "7px", marginTop: "2px" }}
               >
                 video_camera_front
@@ -1077,7 +1121,9 @@ function CreatePost() {
       <PostCreateButton onClick={CreateBunggleOnClickHandler}>
         등록하기
       </PostCreateButton>
+      
     </CreatePostWrap>
+    
     </>
   );
 }

@@ -21,8 +21,6 @@ import {
   MapIconsWrap,
   IconNotification,
   IconSetting,
-  MapDetailHeaderWrap,
-  ChattingBackKey,
 } from "../styles/StyledHeader.js";
 // Footer css
 import {

@@ -19,6 +19,8 @@ import {
   FooterAddBungae,
 } from "../styles/StyledFooter.js";
 
+import { LoadingWrap, LoadingLogo, LoadingText } from "../styles/StyledLoading";
+
 import {
   // LeadingActions,
   SwipeableList,
@@ -31,6 +33,7 @@ import "react-swipeable-list/dist/styles.css";
 import "../styles/ChatListSwiper.css";
 
 //icon
+import IconLoadingLogo from "../assets/icon-splash-logo.svg";
 import Setting from "../assets/icon-setting.svg";
 import Notification from "../assets/icon-notification.svg";
 import IconHome from "../assets/icon-home.svg";
@@ -56,13 +59,6 @@ function App() {
       </SwipeAction>
     </TrailingActions>
   );
-  const RoomArray = [
-    "Lorem ipsum1",
-    "Lorem ipsum2",
-    "Lorem ipsum3",
-    "Lorem ipsum4",
-    "Lorem ipsum5",
-  ];
 
   //postId 가져오는 함수
   const [getPostId, setGetPostId] = useState();
@@ -98,7 +94,7 @@ function App() {
             <IconSetting src={Setting} />
           </MapIconsWrap>
         </MapHeaderWrap>
-        {myChattingInfo?.lenght > 0 &&
+        {myChattingInfo?.lenght > 0 ?
           myChattingInfo.map((item, index) => {
             return (
               <SwipeableList key={index}>
@@ -138,7 +134,12 @@ function App() {
                 </SwipeableListItem>
               </SwipeableList>
             );
-          })}
+          }) : (
+            (<LoadingWrap>
+              <LoadingLogo src={IconLoadingLogo}/>
+              <LoadingText>진행 중인 채팅이 없습니다.</LoadingText>
+            </LoadingWrap>)
+          )}
         <MapFooterWrap>
           <FooterIconWrap
             onClick={() => {

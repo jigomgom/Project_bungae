@@ -12,8 +12,9 @@ function Search( props ) {
   const { location } = props;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
   const onKeyDown = ( e ) => {
-    if( e.target.value.length !== 0 && e.code === "Enter"){
+    if( e.target.value.length !== 0 && e.key === "Enter"){
       dispatch( tagBungleList( { tag: e.target.value, location } ) );
       navigate("/tagsearch");
     }

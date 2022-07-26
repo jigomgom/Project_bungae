@@ -307,3 +307,32 @@ export const ModalButton = styled.div`
   margin-top: 10px;
   cursor: pointer;
 `;
+
+export const ModalButtonWrap = styled.div`
+  width:100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+export const ModalCancelButton = styled.div`
+  width: 50%;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid #BEBEBE;;
+  margin-top: 10px;
+  cursor: pointer;
+`;
+
+export const ModalDeleteButton = styled.div`
+  width: 50%;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  color:red;
+  cursor: pointer;
+`;

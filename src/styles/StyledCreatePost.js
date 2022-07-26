@@ -4,6 +4,7 @@ export const CreatePostWrap = styled.div`
   width: 100%; // 100% -> 375px
   display: flex;
   flex-direction: column;
+  position: relative;
 `;
 
 export const PostTilteDiv = styled.div`
@@ -25,6 +26,7 @@ export const PostTitle = styled.input`
   border-bottom: 1.2px solid #d9d9d9;
   padding-right: 5px;
   margin-bottom: 15px;
+  background-color: transparent;
   &::placeholder {
     /* placeholder 글씨 색 변경 */
     color: #d9d9d9;
@@ -211,7 +213,7 @@ export const SelectChatVideoBtn = styled.div`
   line-height: 17px;
   color: ${(props) => (props.CheckedState ? "#FFFFFF" : "#898989")};
 
-  cursor: not-allowed;
+  cursor: pointer;
 `;
 
 export const SelectChatBtnName = styled.span`

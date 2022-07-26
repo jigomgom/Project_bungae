@@ -75,6 +75,7 @@
     line-height: 20px;
 }
 .profile-setting-form-input{
+    background-color: transparent;
     border: none;
     margin-bottom: 15px;
     font-style: normal;
