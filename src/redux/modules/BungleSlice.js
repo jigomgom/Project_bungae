@@ -324,7 +324,7 @@ export const categoryBungleList = createAsyncThunk(
 export const tagBungleList = createAsyncThunk(
   "GET/tagBungleList",
   async (item) => {
-    // console.log( item );
+    // console.log(item);
     try {
       const response = await AxiosAPI.get(`/posts/tags`, {
         // headers: {
@@ -336,6 +336,7 @@ export const tagBungleList = createAsyncThunk(
           tags: item.tag,
         },
       });
+      console.log(response);
       if (response.data.response) {
         console.log(response.data.list);
         return response.data.list;
@@ -577,8 +578,7 @@ const BungleSlice = createSlice({
       // 지도 벙글 update
       const MapBungleUpdate = current(state.mapList).map((item) => {
         // console.log(item);
-        if (item.id === action.payload) {
- 
+        if (item.postId === action.payload) {
           if (item.isLike) {
             return { ...item, isLike: false };
           } else {
@@ -590,6 +590,24 @@ const BungleSlice = createSlice({
       });
       console.log(MapBungleUpdate);
       state.mapList = MapBungleUpdate;
+
+      // 지도 상세 검색 벙글 update
+      const MapDetailBungleUpdate = current(state.detailMapBungle).map(
+        (item) => {
+          // console.log(item);
+          if (item.postId === action.payload) {
+            if (item.isLike) {
+              return { ...item, isLike: false };
+            } else {
+              return { ...item, isLike: true };
+            }
+          } else {
+            return item;
+          }
+        }
+      );
+      console.log(MapDetailBungleUpdate);
+      state.detailMapBungle = MapDetailBungleUpdate;
     },
     [likeBungleList.rejected]: (state, action) => {
       console.log("Like reject");
@@ -680,7 +698,7 @@ const BungleSlice = createSlice({
       console.log(action.payload);
       const postId = action.payload.postId;
       const isOwner = action.payload.isOwner;
-      
+
       state.isOwner = isOwner;
       // console.log( state.endTime, state.realTime );
     },

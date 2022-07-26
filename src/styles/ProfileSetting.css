@@ -75,13 +75,13 @@
     line-height: 20px;
 }
 .profile-setting-form-input{
+    background-color: transparent;
     border: none;
     margin-bottom: 15px;
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
     line-height: 20px;
-    
 }
 input::placeholder {
     font-style: normal;

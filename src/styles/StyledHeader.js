@@ -143,6 +143,14 @@ export const ChattingBackKey = styled.img`
   width: 11.67px;
   height: 19.8px;
   cursor: pointer;
+  // margin-left: 20px;
+`;
+
+export const MapBackKey = styled.img`
+  position: relative;
+  width: 11.67px;
+  height: 19.8px;
+  cursor: pointer;
   margin-left: 20px;
 `;
 
@@ -176,14 +184,14 @@ export const EditHeadrIconsWrap = styled.div`
   /* position: absolute; */
   /* right: 22px;
     top: 5px; */
-    font-weight: 400;
-font-size: 14px;
-line-height: 20px;
-text-align: center;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
 
-/* Dark Gray */
+  /* Dark Gray */
 
-color: #000000;
+  color: #000000;
   margin-right: 22px;
 `;
 
@@ -209,7 +217,7 @@ export const IconHamburger = styled.img`
   width: 19px;
   height: 23px;
   cursor: pointer;
-  margin-right: 20px;
+  // margin-right: 20px;
 `;
 
 // Video Header

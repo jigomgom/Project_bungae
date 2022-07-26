@@ -6,8 +6,23 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    margin-bottom: 90px;
+    margin-bottom: 60px;
 }
+.chatlist-top-wrapper{
+    height: 83vh;
+    overflow: auto;
+}
+
+/* 스크롤 바 숨기기 */
+.chatlist-top-wrapper{
+	-ms-overflow-style:none; /* IE and Edge */
+    scrollbar-width:none; /* Firefox */
+}
+
+.chatlist-top-wrapper::-webkit-scrollbar {
+	display:none; /* Chrome , Safari , Opera */
+}
+/* 스크롤 숨기기 */
 
 .first_swiper_main{
     display: flex;

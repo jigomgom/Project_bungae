@@ -41,15 +41,12 @@ import "../styles/Chat1.css";
 import Hamburger from "../assets/icon-hamburger.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
 import IconForwardKey from "../assets/icon-right-arrow.svg";
-import IconMyPoint from "../assets/icon-mylocation.svg";
 import IconCamera from "../assets/icon-camera-mono (1).svg";
-import defaultProfile from "../assets/icon-default-profile.svg";
 import SendBtn from "../assets/icon-sendbtn (1).svg";
-import IconMainLogo from "../assets/icon-main-logo.svg";
+import SendBtnActive from "../assets/icon-sendbtn-active.svg";
 import IconSiren from "../assets/icon-siren.svg";
 import IconMoon from "../assets/icon-share-mono.svg";
 import Notification from "../assets/icon-notification.svg";
-import Setting from "../assets/icon-setting.svg";
 
 import IconHighTemp from "../assets/icon-manner-high.svg";
 import IconMiddleTemp from "../assets/icon-manner-middle.svg";
@@ -196,6 +193,7 @@ function ChattingRoom({ setRealTimeChat }) {
       client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
       setUserData({ ...userData, message: "" });
       setFileUrl(null);
+      setIsFile(null);
     }
   };
 
@@ -263,7 +261,7 @@ function ChattingRoom({ setRealTimeChat }) {
       chattingDate.push(ampm + " " + hour + ":" + minutes);
     }
   }
-  // console.log("publicChats: ", publicChats);
+  console.log("publicChats: ", publicChats);
 
   //Disconnect
   const chatDisconnect = () => {
@@ -320,15 +318,16 @@ function ChattingRoom({ setRealTimeChat }) {
     if (e.target.files[0]) {
       setIsFile(e.target.files[0]);
     } else {
-      setIsFile(null);
+      setIsFile("");
       return;
     }
   };
-  // console.log(isFile);
+  console.log(isFile);
+  console.log(fileUrl);
 
   const chatImg = async () => {
     if (fileUrl) {
-      setFileUrl(null);
+      setFileUrl("");
       console.log(fileUrl);
     } else {
       const formData = new FormData();
@@ -349,6 +348,8 @@ function ChattingRoom({ setRealTimeChat }) {
     // console.log( isFile );
     if (isFile) {
       chatImg();
+      // setFileUrl(null);
+      // setIsFile(null);
     }
   }, [isFile]);
 
@@ -937,7 +938,6 @@ function ChattingRoom({ setRealTimeChat }) {
                               </>
                             ) : (
                               <>
-                                {console.log(chat.fileUrl.slice(-3))}
                                 {chat.fileUrl.slice(-3) === "jpg" ||
                                 chat.fileUrl.slice(-3) === "png" ||
                                 chat.fileUrl.slice(-4) === "jpeg" ||
@@ -1054,7 +1054,6 @@ function ChattingRoom({ setRealTimeChat }) {
                               </>
                             ) : (
                               <>
-                                {console.log(chat.fileUrl.slice(-3))}
                                 {chat.fileUrl.slice(-3) === "jpg" ||
                                 chat.fileUrl.slice(-3) === "png" ||
                                 chat.fileUrl.slice(-4) === "jpeg" ||
@@ -1118,17 +1117,49 @@ function ChattingRoom({ setRealTimeChat }) {
                       name="chat_img"
                       onChange={imageUpload}
                     />
-                    {/* <img src={IconCamera} alt="" /> */}
                   </div>
                   <div className="chatting-footer-input">
-                    <input
-                      type="text"
-                      value={userData.message}
-                      onChange={handleMessage}
-                      onKeyPress={onKeyPress}
-                    />
+                    {fileUrl ? (
+                      <>
+                        <input
+                          type="text"
+                          placeholder="전송 버튼 클릭!!"
+                          value={userData.message}
+                          onChange={handleMessage}
+                          onKeyPress={onKeyPress}
+                          disabled
+                          // style={{
+                          //   backgroundImage: `url(${fileUrl})`,
+                          //   objectFit: "cover",
+                          // }}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <input
+                          type="text"
+                          value={userData.message}
+                          onChange={handleMessage}
+                          onKeyPress={onKeyPress}
+                        />
+                      </>
+                    )}
 
-                    <img src={SendBtn} alt="" onClick={sendValue}></img>
+                    {userData.message || fileUrl ? (
+                      <>
+                        <img
+                          src={SendBtnActive}
+                          alt=""
+                          onClick={() => {
+                            sendValue();
+                          }}
+                        ></img>
+                      </>
+                    ) : (
+                      <>
+                        <img src={SendBtn} alt="" onClick={sendValue}></img>
+                      </>
+                    )}
                   </div>
                 </div>
               </>

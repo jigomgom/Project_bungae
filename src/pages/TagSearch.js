@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-
 //CSS
 import "../styles/TagCategorySearch.css";
 import {
@@ -10,7 +9,7 @@ import {
   ChattingBackKey,
   HeadrIconsWrap,
   IconNotification,
-  IconSetting
+  IconSetting,
 } from "../styles/StyledHeader.js";
 
 // css
@@ -42,27 +41,28 @@ import IconMyBungae from "../assets/icon-account.svg";
 import IconCreate from "../assets/icon-create-post.svg";
 import IconEdit from "../assets/icon-edit-footer.svg";
 
-
 function TagSearch() {
   const ownerCheck = useSelector((state) => state.Bungle.isOwner);
   //
   const navigate = useNavigate();
   // isLoad
-  const [ isLoad, setIsLoad ] = useState( true );
+  const [isLoad, setIsLoad] = useState(true);
   //검색 정렬 드롭박스
-  const searchList = useSelector( state => state.Bungle.moreList );
-  console.log( searchList );
+  const searchList = useSelector((state) => state.Bungle.moreList);
+  console.log(searchList);
   const [selected, setSelected] = React.useState("최신순");
   const handleSelect = (e) => {
     // console.log(e.target.value);
     setSelected(e.target.value);
   };
-  useEffect(()=>{
-    if( isLoad ){
-      window.scrollTo(0,0);
-      setTimeout(()=>{ setIsLoad( false )}, 200 );
+  useEffect(() => {
+    if (isLoad) {
+      window.scrollTo(0, 0);
+      setTimeout(() => {
+        setIsLoad(false);
+      }, 200);
     }
-  },[])
+  }, []);
 
   // console.log(selected);
   const searchOptions = [
@@ -104,78 +104,74 @@ function TagSearch() {
           </select>
         </div>
         <div className="search-result-card-wrap">
-          { searchList && searchList.map( ( item, index ) => {
-            return <SearchCard key={index} moreList={item} />
-          })}
-          {/* <SearchCard />
-          <SearchCard />
-          <SearchCard />
-          <SearchCard />
-          <SearchCard /> */}
+          {searchList &&
+            searchList.map((item, index) => {
+              return <SearchCard key={index} moreList={item} />;
+            })}
         </div>
       </div>
       <FooterWrap>
-          <FooterIconWrap
+        <FooterIconWrap
+          onClick={() => {
+            navigate("/main");
+          }}
+        >
+          <FooterIconImg src={IconHome} />
+          <FooterIconText>홈</FooterIconText>
+        </FooterIconWrap>
+        <FooterIconWrap
+          onClick={() => {
+            navigate("/map");
+          }}
+        >
+          <FooterIconImg src={IconLocation} />
+          <FooterIconText>벙글지도</FooterIconText>
+        </FooterIconWrap>
+        {ownerCheck ? (
+          <FooterAddBungae
+            src={IconEdit}
             onClick={() => {
-              navigate("/main");
+              navigate("/editpost");
             }}
-          >
-            <FooterIconImg src={IconHome} />
-            <FooterIconText >홈</FooterIconText>
-          </FooterIconWrap>
-          <FooterIconWrap
+          />
+        ) : (
+          <FooterAddBungae
+            src={IconCreate}
             onClick={() => {
-              navigate("/map");
+              navigate("/createpost");
             }}
-          >
-            <FooterIconImg src={IconLocation} />
-            <FooterIconText>벙글지도</FooterIconText>
-          </FooterIconWrap>
-          {ownerCheck ? (
-            <FooterAddBungae
-              src={IconEdit}
-              onClick={() => {
-                navigate("/editpost");
-              }}
-            />
-          ) : (
-            <FooterAddBungae
-              src={IconCreate}
-              onClick={() => {
-                navigate("/createpost");
-              }}
-            />
-          )}
-          <FooterIconWrap>
-            <FooterIconImg
-              src={IconChat}
-              onClick={() => {
-                navigate("/chatlist");
-              }}
-            />
-            <FooterIconText>채팅</FooterIconText>
-          </FooterIconWrap>
-          <FooterIconWrap
+          />
+        )}
+        <FooterIconWrap>
+          <FooterIconImg
+            src={IconChat}
+            onClick={() => {
+              navigate("/chatlist");
+            }}
+          />
+          <FooterIconText>채팅</FooterIconText>
+        </FooterIconWrap>
+        <FooterIconWrap
+          onClick={() => {
+            navigate("/mypage");
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
             onClick={() => {
               navigate("/mypage");
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onClick={() => {
-                navigate("/mypage");
-              }}
-            >
-              <FooterIconImg src={IconMyBungae} />
-              <FooterIconText>나의 벙글</FooterIconText>
-            </div>
-          </FooterIconWrap>
-        </FooterWrap>
+            <FooterIconImg src={IconMyBungae} />
+            <FooterIconText>나의 벙글</FooterIconText>
+          </div>
+        </FooterIconWrap>
+      </FooterWrap>
     </div>
   );
 }

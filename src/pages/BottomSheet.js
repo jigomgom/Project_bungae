@@ -18,7 +18,7 @@ import { Navigate } from "react-router-dom";
 
 function BottomSheet({ aroundLocation }) {
   console.log(aroundLocation);
-  
+
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -51,7 +51,7 @@ function BottomSheet({ aroundLocation }) {
       >
         <div id="bottomSheetControllerHeader"></div>
       </div>
-      {isBottom && (
+      {isBottom ? (
         <>
           <div className="map-bungle-modal-wrapper">
             <div
@@ -75,15 +75,16 @@ function BottomSheet({ aroundLocation }) {
                               src={item.postUrl ? item.postUrl : defaultCardImg}
                               alt=""
                               onClick={() => {
-                                navigate(`detailpost/${item.id}`);
+                                navigate(`detailpost/${item.postId}`);
                               }}
                             />
+                            {console.log(item.postId)}
                             <img
                               className="search-card-img-like"
                               src={item.isLike ? likeImg : UnlikeImg}
                               alt=""
                               onClick={() => {
-                                moreTagLikeOnClick(item.id);
+                                moreTagLikeOnClick(item.postId);
                               }}
                             />
                           </div>
@@ -126,6 +127,8 @@ function BottomSheet({ aroundLocation }) {
             </div>
           </div>
         </>
+      ) : (
+        <></>
       )}
     </>
   );

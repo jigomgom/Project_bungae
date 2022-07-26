@@ -8,7 +8,7 @@
 .map-wrapper{
     width: 100%;
     max-width: 375px;
-    height: 84vh;
+    height: 80vh;
 }
 .map-content-searchbar{
     display: flex;
@@ -106,7 +106,7 @@
     z-index: 999;
     width: 100%;
     max-width: 375px;
-    height: 80vh;
+    height: 83vh;
     margin: auto;
 }
 .map-detail-modal-inner{
