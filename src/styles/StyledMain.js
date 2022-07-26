@@ -6,6 +6,33 @@ export const MainWrap = styled.div`
     display: flex;
     flex-direction: column;
     margin-bottom: 90px;
+    /* position: relative; */
+`;
+
+// notification 말풍선 추가
+export const NotificationDiv = styled.div`
+  /* display: none; */
+  position: absolute;
+  width: 205px;
+  height: 40px;
+  left: 448px;
+  bottom: 62px;
+  background: #484848;
+  color: white;
+  border-radius: 5px;
+  padding: 12px 12.8px;
+  z-index: 10000;
+  &:after {
+    border-top: 10px solid #484848;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 0px solid transparent;
+    content: "";
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 10000;
+  }
 `;
 
 export const ContentDivide = styled.div`

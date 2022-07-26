@@ -4,15 +4,17 @@
   작성 내용 :
 */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   getMainBungleList,
   likeBungleList,
   moreBungleList,
-  detailBungleList,
+  getIntervalNotification,
 } from "../redux/modules/BungleSlice";
+
+import Loading from "../components/Loading";
 
 import Tag from "../components/Tag";
 import Search from "../components/Search";
@@ -69,21 +71,11 @@ import IconCreate from "../assets/icon-create-post.svg";
 import IconEdit from "../assets/icon-edit-footer.svg";
 
 import SockJS from "sockjs-client";
+import AxiosAPI from "../customapi/CustomAxios";
 
 function Main() {
-  // 새로고침 막기
-  // const preventClose = (e) => {
-  //   e.preventDefault();
-  //   e.returnValue = ""; //Chrome에서 동작하도록; deprecated
-  // };
-  // useEffect(() => {
-  //   (() => {
-  //     window.addEventListener("beforeunload", preventClose);
-  //   })();
-  //   return () => {
-  //     window.removeEventListener("beforeunload", preventClose);
-  //   };
-  // }, []);
+  // 알림 call
+  const interval = useRef(null);
   
   // isOwner
   const ownerCheck = useSelector((state) => state.Bungle.isOwner);
@@ -152,7 +144,9 @@ function Main() {
       handleError,
       options
     );
+    dispatch(getMainBungleList(location));
   };
+  
 
   useEffect(() => {
     // const response = navigator.geolocation;
@@ -165,6 +159,14 @@ function Main() {
     );
     window.scrollTo(0,0);
   }, []);
+
+  useEffect(()=>{
+    interval.current = setInterval( async()=>{
+      dispatch( getIntervalNotification() );
+    }, 5000);
+    return () => clearInterval( interval.current );
+  },[])
+  
 
   useEffect(() => {
     if (location) {
@@ -256,69 +258,81 @@ function Main() {
     navigate(`/detailpost/${postId}`);
   };
 
-  return (
-    <>
-      {/* {!isLoad && ( */}
-      <MainWrap>
-        <MainHeaderWrap>
-          <MainHeaderLogo src={IconMainLogo} />
-          <MainHeaderIconsWrap>
-          <IconMyLocation src={IconMyPoint} />
-          <IconNotification src={Notification}/>
-          <IconSetting src={Setting} />
-        </MainHeaderIconsWrap>
-        </MainHeaderWrap>
-        <Tag />
-        <Search location={location} />
-        <Category location={location} />
-        <ContentDivide />
-        {/* 실시간 벙글 */}
-        <MainContentWrap>
-          <MainContentTitle>실시간 벙글</MainContentTitle>
-          <MainContentItemWrap>
-            {realTimeList.map((item, index) => {
-              // console.log( item );
-              return (
-                <MainContentItemFrame key={index}>
-                  <MainContentItemImg
-                    src={item.postUrl ? item.postUrl : defaultCardImg}
-                    onClick={() => {
-                      showDetailBungle(item.postId);
-                    }}
-                  />
-                  <MainContentItemImgTemp
-                    src={
-                      item.avgTemp >= 50
-                        ? IconHighTemp
-                        : item.avgTemp >= 25
-                        ? IconMiddleTemp
-                        : IconLowTemp
-                    }
-                  />
-                  <MainContentTextWrap>
-                    <MainContentTitleWrap>
-                      <MainContentItemTitle>{item.title}</MainContentItemTitle>
-                      <MainContentItemLike
-                        src={item.isLike ? IconLike : IconUnlike}
-                        onClick={() =>
-                          HeartRealTimeClickHanlder(index, item.postId)
-                        }
-                      />
-                    </MainContentTitleWrap>
-                    <MainContentItemTimePeople>
-                      {item.time} ({item.joinCount}/{item.personnel})
-                    </MainContentItemTimePeople>
-                  </MainContentTextWrap>
-                </MainContentItemFrame>
-              );
-            })}
-          </MainContentItemWrap>
-          <MainContentButton onClick={() => MoreBtnClickHandler("realTime")}>
-            더보기
-          </MainContentButton>
-        </MainContentWrap>
-        {/* 평균 매너가 좋은 벙글 */}
-        {/* <MainContentWrap>
+  if (!location) {
+    // console.log(location);
+    return <Loading></Loading>
+  } else {
+    console.log(location);
+    return (
+      <>
+        {/* {!isLoad && ( */}
+        <MainWrap>
+          <MainHeaderWrap>
+            <MainHeaderLogo src={IconMainLogo} />
+            <MainHeaderIconsWrap>
+              <IconMyLocation src={IconMyPoint} onClick={() => {
+              getCurrentLocationBtnClick();
+            }}/>
+              <IconNotification src={Notification} />
+              {/* <span style={{ color:"#FFC632"}} className="material-icons">notifications</span> */}
+              <IconSetting src={Setting} />
+            </MainHeaderIconsWrap>
+          </MainHeaderWrap>
+          <Tag />
+          <Search
+            location={location}
+          />
+          <Category location={location} />
+          <ContentDivide />
+          {/* 실시간 벙글 */}
+          <MainContentWrap>
+            <MainContentTitle>실시간 벙글</MainContentTitle>
+            <MainContentItemWrap>
+              {realTimeList.map((item, index) => {
+                // console.log( item );
+                return (
+                  <MainContentItemFrame key={index}>
+                    <MainContentItemImg
+                      src={item.postUrl ? item.postUrl : defaultCardImg}
+                      onClick={() => {
+                        showDetailBungle(item.postId);
+                      }}
+                    />
+                    <MainContentItemImgTemp
+                      src={
+                        item.avgTemp >= 50
+                          ? IconHighTemp
+                          : item.avgTemp >= 25
+                          ? IconMiddleTemp
+                          : IconLowTemp
+                      }
+                    />
+                    <MainContentTextWrap>
+                      <MainContentTitleWrap>
+                        <MainContentItemTitle>
+                          {item.title}
+                        </MainContentItemTitle>
+                        <MainContentItemLike
+                          src={item.isLike ? IconLike : IconUnlike}
+                          onClick={() =>
+                            HeartRealTimeClickHanlder(index, item.postId)
+                          }
+                        />
+                      </MainContentTitleWrap>
+                      <MainContentItemTimePeople>
+                        {item.time} ({item.joinCount}/{item.personnel})
+                      </MainContentItemTimePeople>
+                    </MainContentTextWrap>
+                  </MainContentItemFrame>
+                );
+              })}
+            </MainContentItemWrap>
+            <MainContentButton onClick={() => MoreBtnClickHandler("realTime")}>
+              더보기
+            </MainContentButton>
+          </MainContentWrap>
+          {/* 평균 매너가 좋은 벙글 */}
+          {/* <MainContentWrap>
         <MainContentTitle>평균 매너가 좋은 벙글</MainContentTitle>
         <MainContentItemWrap>
           {ContentArray.map((item, index) => {
@@ -341,121 +355,124 @@ function Main() {
         </MainContentItemWrap>
         <MainContentButton onClick={ () => { MoreBtnClickHandler( "manner" ) } }>더보기</MainContentButton>
       </MainContentWrap> */}
-        {/* 마감 임박순 벙글 */}
-        <MainContentWrap>
-          <MainContentTitle>마감 임박순 벙글</MainContentTitle>
-          <MainContentItemWrap>
-            {endTimeList.map((item, index) => {
-              // console.log( item );
-              return (
-                <MainContentItemFrame key={index}>
-                  <MainContentItemImg
-                    src={item.postUrl ? item.postUrl : defaultCardImg}
-                    onClick={() => {
-                      showDetailBungle(item.postId);
-                    }}
-                  />
-                  <MainContentItemImgTemp
-                    src={
-                      item.avgTemp >= 50
-                        ? IconHighTemp
-                        : item.avgTemp >= 25
-                        ? IconMiddleTemp
-                        : IconLowTemp
-                    }
-                  />
-                  <MainContentTextWrap>
-                    <MainContentTitleWrap>
-                      <MainContentItemTitle>{item.title}</MainContentItemTitle>
-                      <MainContentItemLike
-                        src={item.isLike ? IconLike : IconUnlike}
-                        onClick={() => {
-                          HeartEndTimeClickHandler(index, item.postId);
-                        }}
-                      />
-                    </MainContentTitleWrap>
-                    <MainContentItemTimePeople>
-                      {item.time} ({item.joinCount}/{item.personnel})
-                    </MainContentItemTimePeople>
-                  </MainContentTextWrap>
-                </MainContentItemFrame>
-              );
-            })}
-          </MainContentItemWrap>
-          <MainContentButton
-            onClick={() => {
-              MoreBtnClickHandler("endTime");
-            }}
-          >
-            더보기
-          </MainContentButton>
-        </MainContentWrap>
-        <FooterWrap>
-          <FooterIconWrap
-            onClick={() => {
-              navigate("/main");
-            }}
-          >
-            <FooterIconImg src={IconHomeCurrent} />
-            <FooterIconText style={{ color:"#FFC632" }}>홈</FooterIconText>
-          </FooterIconWrap>
-          <FooterIconWrap
-            onClick={() => {
-              navigate("/map");
-            }}
-          >
-            <FooterIconImg src={IconLocation} />
-            <FooterIconText>벙글지도</FooterIconText>
-          </FooterIconWrap>
-          {ownerCheck ? (
-            <FooterAddBungae
-              src={IconEdit}
+          {/* 마감 임박순 벙글 */}
+          <MainContentWrap>
+            <MainContentTitle>마감 임박순 벙글</MainContentTitle>
+            <MainContentItemWrap>
+              {endTimeList.map((item, index) => {
+                // console.log( item );
+                return (
+                  <MainContentItemFrame key={index}>
+                    <MainContentItemImg
+                      src={item.postUrl ? item.postUrl : defaultCardImg}
+                      onClick={() => {
+                        showDetailBungle(item.postId);
+                      }}
+                    />
+                    <MainContentItemImgTemp
+                      src={
+                        item.avgTemp >= 50
+                          ? IconHighTemp
+                          : item.avgTemp >= 25
+                          ? IconMiddleTemp
+                          : IconLowTemp
+                      }
+                    />
+                    <MainContentTextWrap>
+                      <MainContentTitleWrap>
+                        <MainContentItemTitle>
+                          {item.title}
+                        </MainContentItemTitle>
+                        <MainContentItemLike
+                          src={item.isLike ? IconLike : IconUnlike}
+                          onClick={() => {
+                            HeartEndTimeClickHandler(index, item.postId);
+                          }}
+                        />
+                      </MainContentTitleWrap>
+                      <MainContentItemTimePeople>
+                        {item.time} ({item.joinCount}/{item.personnel})
+                      </MainContentItemTimePeople>
+                    </MainContentTextWrap>
+                  </MainContentItemFrame>
+                );
+              })}
+            </MainContentItemWrap>
+            <MainContentButton
               onClick={() => {
-                navigate("/editpost");
+                MoreBtnClickHandler("endTime");
               }}
-            />
-          ) : (
-            <FooterAddBungae
-              src={IconCreate}
+            >
+              더보기
+            </MainContentButton>
+          </MainContentWrap>
+          <FooterWrap>
+            <FooterIconWrap
               onClick={() => {
-                navigate("/createpost");
+                navigate("/main");
               }}
-            />
-          )}
-          <FooterIconWrap>
-            <FooterIconImg
-              src={IconChat}
+            >
+              <FooterIconImg src={IconHomeCurrent} />
+              <FooterIconText style={{ color: "#FFC632" }}>홈</FooterIconText>
+            </FooterIconWrap>
+            <FooterIconWrap
               onClick={() => {
-                navigate("/chatlist");
+                navigate("/map");
               }}
-            />
-            <FooterIconText>채팅</FooterIconText>
-          </FooterIconWrap>
-          <FooterIconWrap
-            onClick={() => {
-              navigate("/mypage");
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+            >
+              <FooterIconImg src={IconLocation} />
+              <FooterIconText>벙글지도</FooterIconText>
+            </FooterIconWrap>
+            {ownerCheck ? (
+              <FooterAddBungae
+                src={IconEdit}
+                onClick={() => {
+                  navigate("/editpost");
+                }}
+              />
+            ) : (
+              <FooterAddBungae
+                src={IconCreate}
+                onClick={() => {
+                  navigate("/createpost");
+                }}
+              />
+            )}
+            <FooterIconWrap>
+              <FooterIconImg
+                src={IconChat}
+                onClick={() => {
+                  navigate("/chatlist");
+                }}
+              />
+              <FooterIconText>채팅</FooterIconText>
+            </FooterIconWrap>
+            <FooterIconWrap
               onClick={() => {
                 navigate("/mypage");
               }}
             >
-              <FooterIconImg src={IconMyBungae} />
-              <FooterIconText>나의 벙글</FooterIconText>
-            </div>
-          </FooterIconWrap>
-        </FooterWrap>
-      </MainWrap>
-      {/* )} */}
-    </>
-  );
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                onClick={() => {
+                  navigate("/mypage");
+                }}
+              >
+                <FooterIconImg src={IconMyBungae} />
+                <FooterIconText>나의 벙글</FooterIconText>
+              </div>
+            </FooterIconWrap>
+          </FooterWrap>
+        </MainWrap>
+        {/* )} */}
+      </>
+    );
+  }
 }
 
 export default Main;

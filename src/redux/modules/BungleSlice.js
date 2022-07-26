@@ -7,17 +7,21 @@ const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 // 벙글 생성하기
 export const createBungleList = createAsyncThunk(
   "CREATE/createBungleList",
-  async (formData) => {
+  async (data) => {
     try {
-      const response = await AxiosAPI.post(`/posts`, formData, {
+      const response = await AxiosAPI.post(`/posts`, data.formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           // Authorization: localStorage.getItem("login-token"),
         },
       });
       console.log(response);
-      if (response.data.response) {
-        return response.data.postId;
+      if (response.status === 200 && response.data.response) {
+        console.log(data);
+        if (data.isLetter) {
+          data.navigate("/chat");
+          return response.data.postId;
+        }
       }
     } catch (error) {
       console.log(error);
@@ -78,11 +82,11 @@ export const editMyBungleList = createAsyncThunk(
 // 벙글 삭제하기
 export const deleteMyBungleList = createAsyncThunk(
   "DELETE/deleteMyBungleList",
-  async (postId) => {
+  async (rev) => {
     try {
       //axios.delete(URL, {params: payload}, header);
       const response = await AxiosAPI.delete(
-        `/posts/${postId}`
+        `/posts/${rev.postId}`
         // {
         //   headers: {
         //     Authorization: localStorage.getItem("login-token"),
@@ -92,10 +96,11 @@ export const deleteMyBungleList = createAsyncThunk(
       console.log(response);
       if (response.data.response) {
         let data = {
-          postId,
+          postId: rev.postId,
           isOwner: response.data.isOwner,
         };
-        window.location.href = "/main";
+        rev.navigate("/main");
+        // window.location.href = "/main";
         return data;
       }
     } catch (e) {
@@ -149,6 +154,7 @@ export const moreBungleList = createAsyncThunk(
         data.navigate("/tagsearch"); // window.location.href = "/tagsearch";
         return response.data.list;
       } else {
+        data.navigate("/tagsearch");
         // alert(response.data.message);
       }
     } catch (e) {
@@ -369,9 +375,9 @@ export const getUserProfile = createAsyncThunk(
 // 유저 프로필 수정
 export const editUserProfile = createAsyncThunk(
   "EDIT/editUserProfile",
-  async (formData) => {
+  async (data) => {
     try {
-      const response = await AxiosAPI.post(`/user/profile`, formData, {
+      const response = await AxiosAPI.post(`/user/profile`, data.formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           // Authorization: localStorage.getItem("login-token"),
@@ -379,6 +385,7 @@ export const editUserProfile = createAsyncThunk(
       });
       console.log(response);
       if (response.data.response) {
+        data.navigate("/mypage");
         return response.data.profileResponseDto;
       }
     } catch (error) {
@@ -434,6 +441,22 @@ export const myChattingList = createAsyncThunk(
   }
 );
 
+// 실시간 알림
+export const getIntervalNotification = createAsyncThunk(
+  "GET/getIntervalNotification",
+  async () => {
+    try {
+      const response = await AxiosAPI.get(`/noti`);
+      // console.log( response );
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 const BungleSlice = createSlice({
   name: "Bungle",
   isOwner: false,
@@ -462,10 +485,16 @@ const BungleSlice = createSlice({
     list: [{}],
     // 내 채팅 목록
     myChatting: [],
+    // 문자 채팅 client
     ChatClient: {
       client: null,
       guest: 0,
     },
+    // nofitication state
+    isReadNotification: false,
+    NofiticationList: [{}],
+    // 화상 채팅 info
+    VideoInfo: {},
     //지도 화면 렌더링 되자마자 보여줄 리스트
     mapList: [{}],
     //지도 화면 상세 검색 후 보여줄 리스트
@@ -474,10 +503,11 @@ const BungleSlice = createSlice({
   reducers: {
     // 클라이언트 값 가져오기
     getChatClient: (state, action) => {
-      // console.log( "Chat client ", action.payload );
+      console.log("Chat client ", action.payload);
       state.ChatClient.client = action.payload.client;
       state.ChatClient.guest = action.payload.Guest;
     },
+    setNotificationState: (state, action) => {},
   },
   extraReducers: {
     // 벙글 생성, post ID 전달
@@ -588,7 +618,6 @@ const BungleSlice = createSlice({
           return item;
         }
       });
-      console.log(MapBungleUpdate);
       state.mapList = MapBungleUpdate;
 
       // 지도 상세 검색 벙글 update
@@ -608,6 +637,21 @@ const BungleSlice = createSlice({
       );
       console.log(MapDetailBungleUpdate);
       state.detailMapBungle = MapDetailBungleUpdate;
+
+      const MyLikeBungleUpdate = current(state.myLikeList).map((item) => {
+        console.log(item, action.payload);
+        if (item.postId === action.payload) {
+          if (item.isLike) {
+            return { ...item, isLike: false };
+          } else {
+            return { ...item, isLike: true };
+          }
+        } else {
+          return item;
+        }
+      });
+
+      state.myLikeList = MyLikeBungleUpdate;
     },
     [likeBungleList.rejected]: (state, action) => {
       console.log("Like reject");
@@ -703,6 +747,11 @@ const BungleSlice = createSlice({
       // console.log( state.endTime, state.realTime );
     },
     [deleteMyBungleList.rejected]: (state, action) => {},
+    // 알림
+    [getIntervalNotification.fulfilled]: (state, action) => {
+      console.log(action.payload);
+    },
+    [getIntervalNotification.rejected]: (state, action) => {},
   },
 });
 

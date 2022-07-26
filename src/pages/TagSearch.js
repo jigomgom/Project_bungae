@@ -21,8 +21,10 @@ import {
   FooterAddBungae,
 } from "../styles/StyledFooter.js";
 
+import { LoadingWrap, LoadingLogo, LoadingText } from "../styles/StyledLoading";
+
 //Components
-import SearchCard from "../components/SearchCard";
+import TagSearchCard from "../components/TagSearchCard";
 import Divider from "../components/Divider";
 //Styled-Components
 import Tag from "../components/Tag";
@@ -41,6 +43,7 @@ import IconMyBungae from "../assets/icon-account.svg";
 import IconCreate from "../assets/icon-create-post.svg";
 import IconEdit from "../assets/icon-edit-footer.svg";
 
+import IconLoadingLogo from "../assets/icon-splash-logo.svg";
 function TagSearch() {
   const ownerCheck = useSelector((state) => state.Bungle.isOwner);
   //
@@ -104,10 +107,16 @@ function TagSearch() {
           </select>
         </div>
         <div className="search-result-card-wrap">
-          {searchList &&
+          {searchList ? (
             searchList.map((item, index) => {
-              return <SearchCard key={index} moreList={item} />;
-            })}
+              return <TagSearchCard key={index} moreList={item} />;
+            })
+          ) : (
+            <LoadingWrap>
+              <LoadingLogo src={IconLoadingLogo} />
+              <LoadingText>검색 결과 벙글이 없습니다.</LoadingText>
+            </LoadingWrap>
+          )}
         </div>
       </div>
       <FooterWrap>

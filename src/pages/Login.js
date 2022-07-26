@@ -48,7 +48,7 @@ const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${p
 // 소셜 로그인 URL - Kakao
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_LOGIN_CLIENT_KEY}&redirect_uri=${process.env.REACT_APP_SOCIAL_LOGIN_REDIRECTION_URL}&response_type=code`;
 
-// const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 function Login() {
   useEffect(()=>{
@@ -68,7 +68,7 @@ function Login() {
     console.log(code);
 
     try {
-      const response = await AxiosAPI.get(`/user/signin/naver`, {
+      const response = await axios.get(`${SERVER_URL}/user/signin/naver`, {
         params: {
           code: code,
           state: createStateToken(code),
@@ -87,7 +87,7 @@ function Login() {
           secure: true,
         });
         console.log(localStorage.getItem("login-token"));
-        window.location.href = "/main";
+        navigate("/main")
       }
     } catch (error) {
       console.log(error);
@@ -108,7 +108,7 @@ function Login() {
   // 카카오 소셜 로그인 시도 후, JWT 토큰 획득
   const getKakaoLoginJWTtoken = async () => {
     try {
-      const response = await AxiosAPI.get(`/user/signin/kakao`, {
+      const response = await axios.get(`${SERVER_URL}/user/signin/kakao`, {
         params: {
           code: code,
         },
@@ -126,7 +126,7 @@ function Login() {
           secure: true,
         });
         console.log(localStorage.getItem("login-token"));
-        window.location.href = "/main";
+        navigate("/main")
       }
     } catch (error) {
       console.log(error);
@@ -142,7 +142,7 @@ function Login() {
   // 구글 소셜 로그인 시도 후, JWT 토큰 획득
   const getGoogleLoginJWTtoken = async () => {
     try {
-      const response = await AxiosAPI.get(`/user/signin/google`, {
+      const response = await axios.get(`${SERVER_URL}/user/signin/google`, {
         params: {
           code: code,
         },
@@ -160,7 +160,7 @@ function Login() {
           secure: true,
         });
         console.log(localStorage.getItem("login-token"));
-        window.location.href = "/main";
+        navigate("/main");
       }
     } catch (error) {
       console.log(error);
@@ -212,7 +212,7 @@ function Login() {
   // 로그인
   const LoginEnterKeyPressHanlder = async (LoginUser) => {
     try {
-      const response = await AxiosAPI.post(`/user/login`, LoginUser);
+      const response = await axios.post(`${SERVER_URL}/user/login`, LoginUser);
       // localStorage.setItem("login-token", response.headers.authorization );
       console.log(response);
       if (response.data.response) {
@@ -281,36 +281,6 @@ function Login() {
     setIsPasswordClear(false);
   };
 
-  // 비밀번호 enter event
-  const onKeyPress = (event) => {
-    // setPos( true );
-    // console.log( event.charCode, event.code, event.key );
-    // // setKeyCode( event );
-    // // setKeyCode( event.code );
-    // setKeyChar( event.charCode );
-    // SetKey( event.key );
-    // if (
-    //   email_Ref.current.value.length > 0 &&
-    //   password_Ref.current.value.length > 0 &&
-    //   event.code === "Enter"
-    // ) {
-    //   const LoginUser = {
-    //     username: email_Ref.current.value,
-    //     password: password_Ref.current.value,
-    //   };
-    //   // LoginEnterKeyPressHanlder(LoginUser);
-    // } else if (email_Ref.current.value.length <= 0 && event.code === "Enter") {
-    //   setIsModal(true);
-    //   setIsError("이메일을 입력해주세요.");
-    // } else if (
-    //   password_Ref.current.value.length <= 0 &&
-    //   event.code === "Enter"
-    // ) {
-    //   setIsModal(true);
-    //   setIsError("비밀번호를 입력해주세요.");
-    // }
-  };
-
   // 안드로이드 아이폰 둘다 enter는 event.key로 확인 가능
   // 아이폰은 enter가 event.code도 가능
   const onKeyDown = (event) => {
@@ -373,7 +343,6 @@ function Login() {
           value={isPassword || ""}
           maxLength={20}
           onChange={appearPasswordClearBtnHandler}
-          onKeyPress={onKeyPress}
           onKeyDown={onKeyDown}
           onKeyUp={onKeyUp}
         />

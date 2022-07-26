@@ -20,6 +20,8 @@ import {
   FooterAddBungae,
 } from "../styles/StyledFooter.js";
 
+import { LoadingWrap, LoadingLogo, LoadingText } from "../styles/StyledLoading";
+
 import {
   // LeadingActions,
   SwipeableList,
@@ -32,6 +34,7 @@ import "react-swipeable-list/dist/styles.css";
 import "../styles/ChatListSwiper.css";
 
 //icon
+import IconLoadingLogo from "../assets/icon-splash-logo.svg";
 import Setting from "../assets/icon-setting.svg";
 import Notification from "../assets/icon-notification.svg";
 import IconHome from "../assets/icon-home.svg";
@@ -68,13 +71,6 @@ function App() {
       </SwipeAction>
     </TrailingActions>
   );
-  const RoomArray = [
-    "Lorem ipsum1",
-    "Lorem ipsum2",
-    "Lorem ipsum3",
-    "Lorem ipsum4",
-    "Lorem ipsum5",
-  ];
 
   //postId 가져오는 함수
   const [getPostId, setGetPostId] = useState();
@@ -171,19 +167,28 @@ function App() {
             <IconSetting src={Setting} />
           </MapIconsWrap>
         </MapHeaderWrap>
-        <div className="chatlist-top-wrapper">
-          {myChattingInfo?.length > 0 &&
-            myChattingInfo.map((item, index) => {
-              return (
-                <SwipeableList key={index} style={{ height: "auto" }}>
-                  <SwipeableListItem
-                    // leadingActions={leadingActions()}
-                    trailingActions={trailingActions()}
-                  >
-                    <div className="first_swiper_main">
-                      <div className="first_swiper_img">
-                        {/* <img src={defaultProfile} alt="" /> */}
-                        <img src={item.postUrl} alt="" />
+        {myChattingInfo?.lenght > 0 ? (
+          myChattingInfo.map((item, index) => {
+            return (
+              <SwipeableList key={index}>
+                <SwipeableListItem
+                  // leadingActions={leadingActions()}
+                  trailingActions={trailingActions()}
+                >
+                  <div className="first_swiper_main">
+                    <div className="first_swiper_img">
+                      {/* <img src={defaultProfile} alt="" /> */}
+                      <img src={item.postUrl} alt="" />
+                    </div>
+                    <div
+                      className="first_swipe"
+                      onClick={() => {
+                        getInnerHTML(item.postId);
+                      }}
+                    >
+                      <div className="first_swipe_title">
+                        {item.postTitle}
+                        {/* 제목 */}
                       </div>
                       <div
                         className="first_swipe"
@@ -211,12 +216,17 @@ function App() {
                         </p>
                       </div>
                     </div>
-                  </SwipeableListItem>
-                </SwipeableList>
-              );
-            })}
-        </div>
-
+                  </div>
+                </SwipeableListItem>
+              </SwipeableList>
+            );
+          })
+        ) : (
+          <LoadingWrap>
+            <LoadingLogo src={IconLoadingLogo} />
+            <LoadingText>진행 중인 채팅이 없습니다.</LoadingText>
+          </LoadingWrap>
+        )}
         <MapFooterWrap>
           <FooterIconWrap
             onClick={() => {

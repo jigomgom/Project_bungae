@@ -52,7 +52,6 @@ import {
 import {
   PostHeaderWrap,
   ChattingBackKey,
-  PageTitle,
   HeadrIconsWrap,
   IconNotification,
   IconSetting
@@ -60,11 +59,11 @@ import {
 
 // icons
 import IconShared from "../assets/icon-url-shared.svg";
-import IconPostTemp from "../assets/icon-post-temp.svg";
 import IconLightening from "../assets/icon-lightening.svg";
 import IconLike from "../assets/icon-like.svg";
 import IconUnlike from "../assets/icon-unlike.svg";
 import IconChat from "../assets/icon-chat.svg";
+import IconVideo from "../assets/icon-detail-camera.svg";
 
 import IconHighTemp from "../assets/icon-manner-high.svg";
 import IconMiddleTemp from "../assets/icon-manner-middle.svg";
@@ -76,13 +75,8 @@ import IconBackKey from "../assets/icon-left-arrow.svg";
 
 import IconCurrentMarker from "../assets/icon-marker-current.svg";
 
-const MembersArray = [
-  "Lorem ipsum1",
-  "Lorem ipsum2",
-  "Lorem ipsum3",
-  "Lorem ipsum4",
-  "Lorem ipsum5",
-];
+import IconNoPost from "../assets/icon-detail-no-post.svg";
+
 //채팅 입장 client
 const Post = () => {
   const navigate = useNavigate();
@@ -144,6 +138,10 @@ const Post = () => {
     navigate(`/chat/${postId}`);
   };
 
+  const goToVideoRoom = () => {
+    navigate(`/videochat/${postId}`);
+  }
+
   // 좋아요 클릭
 
   const isLikeClick = (postId) => {
@@ -178,7 +176,7 @@ const Post = () => {
                   isLikeClick(detailBungleInfo.postId);
                 }}
               />
-              {detailBungleInfo.postUrls.length > 1 ? (
+              {detailBungleInfo.postUrls[0] !== null ? (
                 <Swiper
                   style={{
                     position: "relative",
@@ -195,9 +193,8 @@ const Post = () => {
                   })}
                 </Swiper>
               ) : (
-                <PostImg src={detailBungleInfo.postUrls[0]} />
+                <PostImg src={IconNoPost} />
               )}
-              {/* <PostImg src={detailBungleInfo.postUrls[0]} /> */}
 
               <PostUserBox>
                 <PostUserBoxProfile
@@ -282,29 +279,56 @@ const Post = () => {
                 })}
               </Swiper>
             </PostMemberWrap>
-            <PostJoinButtonWrapper>
-              <PostJoinIcon src={IconChat} />
-              {detailBungleInfo.joinCount === detailBungleInfo.personnel ? (
-                <>
-                  <PostJoinButton
-                    onClick={goToChatRoom}
-                    style={{
-                      pointerEvents: "none",
-                      backgroundColor: "#D9D9D9",
-                      color: "red",
-                    }}
-                  >
-                    정원초과
-                  </PostJoinButton>
-                </>
-              ) : (
-                <>
-                  <PostJoinButton onClick={goToChatRoom}>
-                    참여하기
-                  </PostJoinButton>
-                </>
-              )}
-            </PostJoinButtonWrapper>
+            {detailBungleInfo.isLetter ? (
+              <PostJoinButtonWrapper>
+                <PostJoinIcon src={IconChat} />
+                {detailBungleInfo.joinCount === detailBungleInfo.personnel ? (
+                  <>
+                    <PostJoinButton
+                      // onClick={goToChatRoom}
+                      style={{
+                        pointerEvents: "none",
+                        backgroundColor: "#D9D9D9",
+                        color: "#898989",
+                      }}
+                    >
+                      참여하기
+                    </PostJoinButton>
+                  </>
+                ) : (
+                  <>
+                    <PostJoinButton onClick={goToChatRoom}>
+                      참여하기
+                    </PostJoinButton>
+                  </>
+                )}
+              </PostJoinButtonWrapper>
+            ) : (
+              <PostJoinButtonWrapper>
+                <span className="material-icons-outlined"
+                style={{ position:"absolute", width:"20px", height:"20px", left:"128px", top:"16px"}}
+                >
+                  video_camera_front</span>
+                {detailBungleInfo.joinCount === detailBungleInfo.personnel ? (
+                  <>
+                    <PostJoinButton
+                      // onClick={goToChatRoom}
+                      style={{
+                        pointerEvents: "none",
+                        backgroundColor: "#D9D9D9",
+                        color: "#898989",
+                      }}
+                    >
+                      참여하기
+                    </PostJoinButton>
+                  </>
+                ) : (
+                  <>
+                    <PostJoinButton>참여하기</PostJoinButton>
+                  </>
+                )}
+              </PostJoinButtonWrapper>
+            )}
           </PostWrap>
         </>
       )}

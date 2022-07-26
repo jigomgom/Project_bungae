@@ -22,6 +22,17 @@ import {
   FooterAddBungae,
 } from "../styles/StyledFooter.js";
 
+import {
+  // Moadl
+  ModalWrapper,
+  ModalOverlay,
+  ModalInner,
+  ModalContentWrap,
+  ModalDivider,
+  ModalButton,
+} from "../styles/StyledLogin";
+
+
 import Setting from "../assets/icon-setting.svg";
 import Notification from "../assets/icon-notification.svg";
 import IconHome from "../assets/icon-home.svg";
@@ -46,6 +57,9 @@ function MyPageSetting() {
 
   const [ isLoad, setIsLoad ] = useState( true );
   const [ receiveProfileUrl, setReceiveProfileUrl ] = useState();
+
+  // modal state
+  const [isModal, setIsModal ] = useState( false );
 
   useEffect(()=>{
     if( isLoad ){
@@ -89,9 +103,6 @@ function MyPageSetting() {
   const intro_Ref = useRef();
 
   const editUserProfileComplete = () => {
-    console.log( nickName_Ref.current.value );
-    console.log( intro_Ref.current.value );
-    console.log( file );
     const profileDto = {
       nickName: nickName_Ref.current.value,
       intro: intro_Ref.current.value
@@ -111,16 +122,19 @@ function MyPageSetting() {
       console.log( file );
       formData.append("profileImg ", file);
     }
-
-    dispatch( editUserProfile( formData ) );
-    navigate("/mypage");
+    if (intro_Ref.current.value.length < 15) {
+      console.log("아우어우아");
+      setIsModal( true );
+    } else {
+      dispatch(editUserProfile({ formData, navigate }));
+    }
   };
 
   return (
     <div className="profile-setting-wrap">
       <MapDetailHeaderWrap>
-        <ChattingBackKey src={IconBackKey} />
-        <EditHeadrIconsWrap>
+        <ChattingBackKey src={IconBackKey} onClick={()=>{navigate("/mypage")}} />
+        <EditHeadrIconsWrap onClick={()=>{editUserProfileComplete()}}>
         완료
         </EditHeadrIconsWrap>
       </MapDetailHeaderWrap>
@@ -237,6 +251,26 @@ function MyPageSetting() {
             </div>
           </FooterIconWrap>
         </MapFooterWrap>
+        {isModal && (
+        <ModalWrapper>
+          <ModalOverlay>
+            <ModalInner>
+              <ModalContentWrap>
+                <h3>프로필 수정 실패</h3>
+                <div>자기소개를 두 글자 이상 입력해주세요.</div>
+              </ModalContentWrap>
+              <ModalDivider />
+              <ModalButton
+                onClick={() => {
+                  setIsModal(false);
+                }}
+              >
+                확인
+              </ModalButton>
+            </ModalInner>
+          </ModalOverlay>
+        </ModalWrapper>
+      )}
       </div>
   );
 }
