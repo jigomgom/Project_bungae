@@ -125,8 +125,10 @@ function MyPageSetting() {
       console.log(file);
       formData.append("profileImg ", file);
     }
-    if (intro_Ref.current.value.length < 10) {
-      console.log("아우어우아");
+    if (
+      intro_Ref.current.value.length >= 2 ||
+      intro_Ref.current.value.length < 15
+    ) {
       setIsModal(true);
     } else {
       dispatch(editUserProfile({ formData, navigate }));
@@ -188,15 +190,30 @@ function MyPageSetting() {
             placeholder="닉네임을 입력해주세요."
           />
         </div>
-        <div className="profile-setting-form-desc">
-          <label className="profile-setting-form-title">자기소개</label>
-          <input
-            ref={intro_Ref}
-            defaultValue={userProfileInfo.intro ? userProfileInfo.intro : ""}
-            className="profile-setting-form-input"
-            type="search"
-            placeholder="자기소개를 입력해주세요."
-          />
+        <div className="profile-setting-form">
+          <div className="profile-setting-form-nickname">
+            <label className="profile-setting-form-title">닉네임</label>
+            <input
+              ref={nickName_Ref}
+              defaultValue={
+                userProfileInfo.nickName ? userProfileInfo.nickName : ""
+              }
+              className="profile-setting-form-input"
+              type="search"
+              placeholder="닉네임을 입력해주세요."
+            />
+          </div>
+          <div className="profile-setting-form-desc">
+            <label className="profile-setting-form-title">자기소개</label>
+            <input
+              ref={intro_Ref}
+              defaultValue={userProfileInfo.intro ? userProfileInfo.intro : ""}
+              className="profile-setting-form-input"
+              type="search"
+              placeholder="자기소개를 입력해주세요."
+            />
+          </div>
+          {/* <button className="profile-setting-form-btn">가입하기</button> */}
         </div>
         {/* <button className="profile-setting-form-btn">가입하기</button> */}
       </div>

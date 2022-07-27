@@ -13,10 +13,17 @@ import { useSelector } from "react-redux";
 import "../styles/MyPage.css";
 //Components
 import Divider from "../components/Divider";
-//img
-import defaultImg from "../assets/defaultImg.jpg";
-import lighteningImg from "../assets/icon-lightening.jpg";
-import tempImg from "../assets/icon-temp.svg";
+
+// modal
+import {
+  // Moadl
+  ModalWrapper,
+  ModalOverlay,
+  ModalInner,
+  ModalContentWrap,
+  ModalDivider,
+  ModalButton,
+} from "../styles/StyledLogin";
 
 // Header css
 import {
@@ -35,6 +42,10 @@ import {
   FooterAddBungae,
 } from "../styles/StyledFooter.js";
 
+//img
+import defaultImg from "../assets/defaultImg.jpg";
+import lighteningImg from "../assets/icon-lightening.svg";
+
 import Setting from "../assets/icon-setting.svg";
 import Notification from "../assets/icon-notification.svg";
 import IconHome from "../assets/icon-home.svg";
@@ -43,14 +54,21 @@ import IconChat from "../assets/icon-chat.svg";
 import IconMyBungleCurrent from "../assets/icon-mybungle-current.svg";
 import IconCreate from "../assets/icon-create-post.svg";
 import IconEdit from "../assets/icon-edit-footer.svg";
+import IconHighTemp from "../assets/icon-manner-high.svg";
+import IconMiddleTemp from "../assets/icon-manner-middle.svg";
+import IconLowTemp from "../assets/icon-manner-low.svg";
 
 function MyPage() {
   const isOwner = useSelector((state) => state.Bungle.isOwner);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isLoad, setIsLoad] = useState(true);
-  const [receiveUrl, setReceiveUrl] = useState();
   const userProfileInfo = useSelector((state) => state.Bungle.userProfile);
+
+  // modal state
+  const [isModal, setIsModal] = useState(false);
+  // modal message
+  const [modalMessage, setModalMessage] = useState("서비스 예정 중입니다.");
 
   // 알림 call
   const interval = useRef(null);
@@ -85,10 +103,33 @@ function MyPage() {
     return () => clearInterval(interval.current);
   }, []);
 
+  // 서비스 예정중인 메뉴 block
+  const noActiveMenuClickHander = () => {};
+
   return (
     <>
       {!isLoad && (
         <div className="top-mypage-wrap">
+          {isModal && (
+            <ModalWrapper>
+              <ModalOverlay>
+                <ModalInner>
+                  <ModalContentWrap>
+                    <h3>서비스 준비 중</h3>
+                    <div>{modalMessage}</div>
+                  </ModalContentWrap>
+                  <ModalDivider />
+                  <ModalButton
+                    onClick={() => {
+                      setIsModal(false);
+                    }}
+                  >
+                    확인
+                  </ModalButton>
+                </ModalInner>
+              </ModalOverlay>
+            </ModalWrapper>
+          )}
           <MapHeaderWrap>
             <MapIconsWrap>
               <IconNotification
@@ -141,9 +182,18 @@ function MyPage() {
                 </div>
                 <div className="mypage-profile-detail">
                   <img src={lighteningImg} alt="" />
-                  <span>25회 참여</span>
-                  <img src={tempImg} alt="" />
-                  <span>80°C</span>
+                  <span>{userProfileInfo.bungCount}회 참여</span>
+                  <img
+                    src={
+                      userProfileInfo.mannerTemp >= 50
+                        ? IconHighTemp
+                        : userProfileInfo.mannerTemp >= 25
+                        ? IconMiddleTemp
+                        : IconLowTemp
+                    }
+                    alt=""
+                  />
+                  <span>{userProfileInfo.mannerTemp}°C</span>
                 </div>
               </div>
             </div>
@@ -174,12 +224,33 @@ function MyPage() {
               >
                 내가 찜한 벙글
               </div>
-              {/* <div className="mypage-selectbar">내가 작성한 벙글</div> */}
+              <div
+                className="mypage-selectbar"
+                onClick={() => {
+                  setIsModal(true);
+                }}
+              >
+                내가 작성한 벙글
+              </div>
             </div>
             <Divider />
             <div className="mypage-selectbar-list">
-              {/* <div className="mypage-selectbar">비매너 유저 신고</div>
-        <div className="mypage-selectbar">나의 신고 내역</div> */}
+              <div
+                className="mypage-selectbar"
+                onClick={() => {
+                  setIsModal(true);
+                }}
+              >
+                비매너 유저 신고
+              </div>
+              <div
+                className="mypage-selectbar"
+                onClick={() => {
+                  setIsModal(true);
+                }}
+              >
+                나의 신고 내역
+              </div>
               {/* <div className="mypage-selectbar">Lorem ipsum</div> */}
             </div>
           </div>

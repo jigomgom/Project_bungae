@@ -105,26 +105,36 @@ function App() {
   }, []);
 
   //시간 커스텀
-  let dataArray = [];
-  let now = moment();
-  let date;
-  if (myChattingInfo) {
-    for (let i = 0; i < myChattingInfo.length; i++) {
-      date = moment(myChattingInfo[i].lastMessageTime, "YYYY-MM-DD HH:mm:ss");
-      console.log(now.diff(date, "seconds"));
 
-      dataArray.push(now.diff(date, "seconds"));
-      console.log(dataArray);
-      if (dataArray[i] < 60) {
-        dataArray[i] = dataArray[i] + "초 전";
-      } else if (dataArray[i] > 60 && dataArray[i] < 3600) {
-        dataArray[i] = Math.floor(dataArray[i] / 60) + "분 전";
-      } else if (dataArray[i] > 3600) {
-        dataArray[i] = Math.floor(dataArray[i] / 3600) + "시간 전";
-      }
+  let dataArray = [];
+  let date;
+
+  const dateHandler = (lastMessageTime) => {
+    let a = lastMessageTime;
+    const now = new Date();
+    let currentHour = now.getHours();
+    let currentMinute = now.getMinutes();
+    let currentSecond = now.getSeconds();
+
+    const dateList = a.split(",");
+    console.log(dateList);
+    let hour = (Number(currentHour) - Number(dateList[3])) * 3600;
+    let minute = (Number(currentMinute) - Number(dateList[4])) * 60;
+    let second = Number(currentSecond) - Number(dateList[5]);
+
+    let time = hour + minute + second;
+
+    let returnTime = "";
+
+    if (time < 60) {
+      returnTime = time + "초 전";
+    } else if (time > 60 && time < 3600) {
+      returnTime = Math.floor(time / 60) + "분 전";
+    } else if (time > 3600) {
+      returnTime = Math.floor(time / 3600) + "시간 전";
     }
-  }
-  console.log(dataArray);
+    return returnTime;
+  };
 
   //벙글 시작 예정 날짜 커스텀
   let realStartDate = [];
@@ -172,7 +182,7 @@ function App() {
   };
 
   console.log();
-  if (!myChattingInfo) {
+  if (myChattingInfo?.length === 0) {
     return (
       <div className="top-chatlist-wrap">
         <MapHeaderWrap>
@@ -280,7 +290,12 @@ function App() {
               style={{ visibility: "hidden" }}
               src={Notification}
             />
-            <IconSetting src={Setting} />
+            <IconSetting
+              src={Setting}
+              onClick={() => {
+                dateHandler();
+              }}
+            />
           </MapIconsWrap>
         </MapHeaderWrap>
         {myChattingInfo.map((item, index) => {
@@ -313,7 +328,8 @@ function App() {
                       </span>
                     </div>
                     <div className="first_swipe_sub">
-                      {dataArray[index]} ∙ {realStartDate[index]}
+                      {dateHandler(item.lastMessageTime)} ∙{" "}
+                      {realStartDate[index]}
                       {/* 마지막 시간 */}
                     </div>
                     <p id="postId" style={{ display: "none" }}>

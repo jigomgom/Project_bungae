@@ -19,7 +19,7 @@ export const createBungleList = createAsyncThunk(
       if (response.status === 200 && response.data.response) {
         console.log(data);
         if (data.isLetter) {
-          data.navigate("/chat");
+          data.navigate(`/chat/${response.data.postId}`);
           return response.data.postId;
         }
       }
@@ -547,7 +547,8 @@ const BungleSlice = createSlice({
     [likeBungleList.fulfilled]: (state, action) => {
       console.log(action.payload);
       // realTime Update
-      const realTimeUpdate = current(state.realTime).map((item) => {
+      // const realTimeUpdate = current(state.realTime).map((item) => {
+      const realTimeUpdate = state.realTime.map((item) => {
         // console.log( item )
         if (item.postId === action.payload) {
           // console.log( item.isLike );
@@ -562,7 +563,8 @@ const BungleSlice = createSlice({
       });
       state.realTime = realTimeUpdate;
       // endTimeUpdate
-      const endTimeUpdate = current(state.endTime).map((item) => {
+      // const endTimeUpdate = current(state.endTime).map((item) => {
+      const endTimeUpdate = state.endTime.map((item) => {
         // console.log( item )
         if (item.postId === action.payload) {
           // console.log( item.isLike );
@@ -578,7 +580,8 @@ const BungleSlice = createSlice({
       state.endTime = endTimeUpdate;
 
       // more or Tag search Update
-      const moreTempUpdate = current(state.moreList).map((item) => {
+      // const moreTempUpdate = current(state.moreList).map((item) => {
+      const moreTempUpdate = state.moreList.map((item) => {
         console.log(item);
         if (item.postId === action.payload) {
           // console.log( item.isLike );
@@ -595,7 +598,8 @@ const BungleSlice = createSlice({
       state.moreList = moreTempUpdate;
 
       // 카테고리 update
-      const CategoryUpdate = current(state.categoriesList).map((item) => {
+      // const CategoryUpdate = current(state.categoriesList).map((item) => {
+      const CategoryUpdate = state.categoriesList.map((item) => {
         // console.log( item )
         if (item.postId === action.payload) {
           // console.log( item.isLike );
@@ -612,7 +616,8 @@ const BungleSlice = createSlice({
       state.categoriesList = CategoryUpdate;
 
       // 지도 벙글 update
-      const MapBungleUpdate = current(state.mapList).map((item) => {
+      // const MapBungleUpdate = current(state.mapList).map((item) => {
+      const MapBungleUpdate = state.mapList.map((item) => {
         // console.log(item);
         if (item.postId === action.payload) {
           if (item.isLike) {
@@ -627,24 +632,24 @@ const BungleSlice = createSlice({
       state.mapList = MapBungleUpdate;
 
       // 지도 상세 검색 벙글 update
-      const MapDetailBungleUpdate = current(state.detailMapBungle).map(
-        (item) => {
-          // console.log(item);
-          if (item.postId === action.payload) {
-            if (item.isLike) {
-              return { ...item, isLike: false };
-            } else {
-              return { ...item, isLike: true };
-            }
+      // const MapDetailBungleUpdate = current(state.detailMapBungle).map(
+      const MapDetailBungleUpdate = state.detailMapBungle.map((item) => {
+        // console.log(item);
+        if (item.postId === action.payload) {
+          if (item.isLike) {
+            return { ...item, isLike: false };
           } else {
-            return item;
+            return { ...item, isLike: true };
           }
+        } else {
+          return item;
         }
-      );
-      console.log(MapDetailBungleUpdate);
+      });
+
       state.detailMapBungle = MapDetailBungleUpdate;
 
-      const MyLikeBungleUpdate = current(state.myLikeList).map((item) => {
+      // const MyLikeBungleUpdate = current(state.myLikeList).map((item) => {
+      const MyLikeBungleUpdate = state.myLikeList.map((item) => {
         console.log(item, action.payload);
         if (item.postId === action.payload) {
           if (item.isLike) {

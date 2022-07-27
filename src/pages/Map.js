@@ -313,7 +313,6 @@ function Map() {
       handleError,
       options
     );
-    setCheckMapData([true, false, false]);
   };
 
   //지도 생성
@@ -324,7 +323,7 @@ function Map() {
       const options = {
         //지도를 생성할 때 필요한 기본 옵션
         // center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
-        center: new kakao.maps.LatLng(location.latitude, location.longitude),
+        center: new kakao.maps.LatLng(location?.latitude, location?.longitude),
         level: 10, //지도의 레벨(확대, 축소 정도)
       };
 
@@ -521,21 +520,21 @@ function Map() {
                           src={IconBackKey}
                           onClick={() => {
                             setIsDetail(false);
-                            setOnlyDistance(100);
-                            setOnlyNumber(25);
-                            setSelectCategory([]);
-                            setIsCategoryClick([
-                              false,
-                              false,
-                              false,
-                              false,
-                              false,
-                              false,
-                              false,
-                              false,
-                              false,
-                              false,
-                            ]);
+                            // setOnlyDistance(100);
+                            // setOnlyNumber(25);
+                            // setSelectCategory([]);
+                            // setIsCategoryClick([
+                            //   false,
+                            //   false,
+                            //   false,
+                            //   false,
+                            //   false,
+                            //   false,
+                            //   false,
+                            //   false,
+                            //   false,
+                            //   false,
+                            // ]);
                           }}
                         />
                         <div

@@ -118,7 +118,7 @@ function BottomSheet({ aroundLocation }) {
                 </div>
                 <div className="map-detail-modal-content-wrap">
                   <div className="search-result-card-wrap-map">
-                    {aroundLocation && aroundLocation[0].postId ? (
+                    {aroundLocation && aroundLocation[0]?.postId ? (
                       <>
                         {aroundLocation.map((item, index) => {
                           return (
