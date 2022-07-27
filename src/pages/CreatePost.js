@@ -2,10 +2,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import Divider from "../components/Divider";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // import redux slice
-import { createBungleList } from "../redux/modules/BungleSlice";
+import { createBungleList, getIntervalNotification } from "../redux/modules/BungleSlice";
 
 // slider 추가
 import Slider from "rc-slider";
@@ -116,6 +116,23 @@ const CategoriesArray = [
 ];
 
 function CreatePost() {
+  // 알림 interval
+  const interval = useRef(null);
+  // 알람 추가
+  const NotificationState = useSelector( state => state.Bungle.isReadNotification );
+  const [ notificationState, setNotificationState ] = useState( NotificationState);
+  useEffect(()=>{
+    setNotificationState( NotificationState );
+  },[NotificationState]);
+
+  // 알림 setInterval
+  useEffect(()=>{
+    interval.current = setInterval( async()=>{
+      dispatch( getIntervalNotification() );
+    }, 5000);
+    return () => clearInterval( interval.current );
+  },[])
+
   // modal state
   const [ isModal, setIsModal ] = useState(false);
   // modal message
@@ -775,7 +792,18 @@ function CreatePost() {
         />
         <PageTitle>벙글 생성</PageTitle>
         <HeadrIconsWrap>
-          <IconNotification src={Notification} />
+        {notificationState ? (
+                  <span
+                    style={{ cursor: "pointer", color: "#FFC632" }}
+                    className="material-icons"
+                    onClick={() => {
+                      navigate("/notification");
+                    }}
+                  >
+                    notifications
+                  </span>
+                ) : (
+          <IconNotification src={Notification} /> )}
           <IconSetting src={Setting} />
         </HeadrIconsWrap>
       </PostHeaderWrap>
@@ -1046,9 +1074,9 @@ function CreatePost() {
             </SelectChatLetterBtn>
             <SelectChatVideoBtn
               CheckedState={isVideo}
-              onClick={() => {
-                ChatButtonClickHandler("video");
-              }}
+              // onClick={() => {
+              //   ChatButtonClickHandler("video");
+              // }}
             >
               {/* <SelectChatBtnImg src={IconChatVideo} /> */}
               <span

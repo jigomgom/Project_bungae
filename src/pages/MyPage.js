@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch } from "react-redux/es/exports";
-import { getUserProfile, myLikeBungleList } from "../redux/modules/BungleSlice";
+import { getUserProfile, myLikeBungleList, getIntervalNotification } from "../redux/modules/BungleSlice";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 // Library
@@ -49,7 +49,14 @@ function MyPage() {
   const [ receiveUrl, setReceiveUrl ] = useState();
   const userProfileInfo = useSelector( state => state.Bungle.userProfile);
 
-  console.log( userProfileInfo );
+  // 알림 call
+  const interval = useRef(null);
+  // 알림 state
+  const NotificationState = useSelector( state => state.Bungle.isReadNotification );
+  const [ notificationState, setNotificationState ] = useState( NotificationState);
+  useEffect(()=>{
+    setNotificationState( NotificationState );
+  },[NotificationState])
 
   const myLikeBungleClickHandler = () => {
     dispatch( myLikeBungleList() );
@@ -63,6 +70,13 @@ function MyPage() {
       setTimeout(()=>{setIsLoad( false )}, 150);
     }
   }, []);
+  // 알림 interval
+  useEffect(()=>{
+    interval.current = setInterval( async()=>{
+      dispatch( getIntervalNotification() );
+    }, 5000);
+    return () => clearInterval( interval.current );
+  },[])
 
   
   return (
@@ -76,7 +90,8 @@ function MyPage() {
         </MapIconsWrap>
         <MapPageTitle>나의 벙글</MapPageTitle>
         <MapIconsWrap>
-          <IconNotification src={Notification} />
+        {notificationState ? <span style={{ cursor:"pointer",color:"#FFC632"}} className="material-icons" onClick={()=>{navigate("/notification")}} >notifications</span> :
+          <IconNotification src={Notification} />}
           <IconSetting src={Setting} />
         </MapIconsWrap>
       </MapHeaderWrap>

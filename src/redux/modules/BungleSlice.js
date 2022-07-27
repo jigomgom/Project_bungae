@@ -122,7 +122,7 @@ export const getMainBungleList = createAsyncThunk(
           longitude: position?.longitude,
         },
       });
-      console.log(response);
+      // console.log(response);
       if (response.status === 200) {
         // console.log("왜?");
         return response.data;
@@ -492,7 +492,7 @@ const BungleSlice = createSlice({
     },
     // nofitication state
     isReadNotification: false,
-    NofiticationList: [{}],
+    NoitficationList: [{}],
     // 화상 채팅 info
     VideoInfo: {},
     //지도 화면 렌더링 되자마자 보여줄 리스트
@@ -507,7 +507,13 @@ const BungleSlice = createSlice({
       state.ChatClient.client = action.payload.client;
       state.ChatClient.guest = action.payload.Guest;
     },
-    setNotificationState: (state, action) => {},
+    // 알림 클리어
+    clearNotificationState: (state, action) => {
+      console.log("clear")
+      state.isReadNotification = false;
+      state.NoitficationList = [{}];
+      console.log("clear", state.isReadNotification, state.NoitficationList );
+    },
   },
   extraReducers: {
     // 벙글 생성, post ID 전달
@@ -744,16 +750,20 @@ const BungleSlice = createSlice({
       const isOwner = action.payload.isOwner;
 
       state.isOwner = isOwner;
-      // console.log( state.endTime, state.realTime );
     },
     [deleteMyBungleList.rejected]: (state, action) => {},
     // 알림
     [getIntervalNotification.fulfilled]: (state, action) => {
-      console.log(action.payload);
+      if( action.payload.length > 0 ){
+        state.isReadNotification = true;
+      }else{
+        state.isReadNotification = false;
+      }
+      state.NoitficationList = action.payload;
     },
     [getIntervalNotification.rejected]: (state, action) => {},
   },
 });
 
-export const { getChatClient } = BungleSlice.actions;
+export const { getChatClient, clearNotificationState } = BungleSlice.actions;
 export default BungleSlice.reducer;
