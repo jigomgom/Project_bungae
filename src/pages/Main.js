@@ -58,7 +58,7 @@ import {
 //icons
 import IconLike from "../assets/icon-like.svg";
 import IconUnlike from "../assets/icon-unlike.svg";
-import defaultCardImg from "../assets/defaultImg.jpg";
+import defaultCardImg from "../assets/icon-main-default.svg";
 import IconHighTemp from "../assets/icon-manner-high.svg";
 import IconMiddleTemp from "../assets/icon-manner-middle.svg";
 import IconLowTemp from "../assets/icon-manner-low.svg";

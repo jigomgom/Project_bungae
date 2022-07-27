@@ -171,7 +171,7 @@ function EditPost() {
     if (!isLoad) {
       setTagList(myBungle.tags);
 
-      myBungle.categories.forEach((Checkeditem) => {
+      myBungle.categories?.forEach((Checkeditem) => {
         CategoriesObjArray.map((item) => {
           if (item.category === Checkeditem) {
             item.clicked = true;
@@ -867,7 +867,7 @@ function EditPost() {
     setIsDeleteModal( false );
     if (myBungle.isLetter) {
       chatDisconnect();
-      dispatch(deleteMyBungleList({ postId, navigate }));
+      //dispatch(deleteMyBungleList({ postId, navigate }));
     }    
   };
 
@@ -884,16 +884,13 @@ function EditPost() {
         roomId: `${parseInt(guest)}`,
       };
     }
-    // const token = localStorage.getItem("login-token");
-    console.log( "sockClient", client );
+    
     const PK = Number( localStorage.getItem("userId") );
-    const storageClient = JSON.parse( localStorage.getItem("client") );
-    console.log( "localStorage", JSON.parse( localStorage.getItem("client") ));
-    client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
-    client.disconnect(function () {
-      localStorage.removeItem("client");
-      // alert("See you next time!");
-    });
+    console.log( "삭제 버튼 클릭", chatMessage );
+    dispatch(deleteMyBungleList({ postId:myBungle.postId, client, navigate, chatMessage }));
+    // client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
+    // client.disconnect(function () {
+    // });
   };
 
   return (

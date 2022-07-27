@@ -208,7 +208,7 @@ const Post = () => {
                 }}
               />
               { console.log( detailBungleInfo.postUrls.length)}
-              { detailBungleInfo.postUrls.length === 1 && detailBungleInfo.postUrls[0] === filterPostURL ?
+              {/* { detailBungleInfo.postUrls.length === 1 && detailBungleInfo.postUrls[0] === filterPostURL ?
               (
                 <PostImg src={IconNoPost} />
               ) : (<Swiper
@@ -225,8 +225,8 @@ const Post = () => {
                     </SwiperSlide>
                   );
                 })}
-              </Swiper>)}
-              {/* {detailBungleInfo.postUrls[0] !== null ? (
+              </Swiper>)} */}
+              {detailBungleInfo.postUrls[0] !== null ? (
                 <Swiper
                   style={{
                     position: "relative",
@@ -244,7 +244,7 @@ const Post = () => {
                 </Swiper>
               ) : (
                 <PostImg src={IconNoPost} />
-              )} */}
+              )}
 
               <PostUserBox>
                 <PostUserBoxProfile

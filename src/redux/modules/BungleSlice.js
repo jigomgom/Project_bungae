@@ -1,5 +1,4 @@
-import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
-import axios from "axios";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import AxiosAPI from "../../customapi/CustomAxios";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
@@ -12,7 +11,6 @@ export const createBungleList = createAsyncThunk(
       const response = await AxiosAPI.post(`/posts`, data.formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          // Authorization: localStorage.getItem("login-token"),
         },
       });
       console.log(response);
@@ -32,19 +30,10 @@ export const createBungleList = createAsyncThunk(
 export const getMyBungleList = createAsyncThunk(
   "GET/getMyBungleList",
   async () => {
-    // console.log("!!");
-    // console.log( token );
     try {
-      // const response = await axios.get(`${SERVER_URL}/posts/posts/mypost`, {
       const response = await AxiosAPI.get(
         `/posts/mypost`
-        // {
-        //   headers: {
-        //     Authorization: localStorage.getItem("login-token"),
-        //   },
-        // }
       );
-      // console.log(response);
       if (response.data.response) {
         return response.data.postResponseDto;
       }
@@ -57,7 +46,6 @@ export const getMyBungleList = createAsyncThunk(
 export const editMyBungleList = createAsyncThunk(
   "EDIT/editMyBungleList",
   async (data) => {
-    // console.log( data );
     try {
       const response = await AxiosAPI.put(
         `/posts/${data.postId}`,
@@ -65,7 +53,6 @@ export const editMyBungleList = createAsyncThunk(
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            // Authorization: localStorage.getItem("login-token"),
           },
         }
       );
@@ -84,23 +71,30 @@ export const deleteMyBungleList = createAsyncThunk(
   "DELETE/deleteMyBungleList",
   async (rev) => {
     try {
-      //axios.delete(URL, {params: payload}, header);
       const response = await AxiosAPI.delete(
         `/posts/${rev.postId}`
-        // {
-        //   headers: {
-        //     Authorization: localStorage.getItem("login-token"),
-        //   },
-        // }
       );
       console.log(response);
+      
       if (response.data.response) {
         let data = {
           postId: rev.postId,
           isOwner: response.data.isOwner,
         };
+        if (rev.client) {
+          const PK = Number(localStorage.getItem("userId"));
+
+          console.log("게시물 삭제 성공 후 disconnect");
+          rev.client.send(
+            "/pub/chat/message",
+            { PK },
+            JSON.stringify(rev.chatMessage)
+          );
+          rev.client.disconnect(function () {
+            console.log("disconnect 완료");
+          });
+        }
         rev.navigate("/main");
-        // window.location.href = "/main";
         return data;
       }
     } catch (e) {
@@ -114,17 +108,12 @@ export const getMainBungleList = createAsyncThunk(
   async (position) => {
     try {
       const response = await AxiosAPI.get(`/posts`, {
-        // headers: {
-        //   Authorization: localStorage.getItem("login-token"),
-        // },
         params: {
           latitude: position?.latitude,
           longitude: position?.longitude,
         },
       });
-      // console.log(response);
       if (response.status === 200) {
-        // console.log("왜?");
         return response.data;
       }
     } catch (e) {
@@ -136,13 +125,8 @@ export const getMainBungleList = createAsyncThunk(
 export const moreBungleList = createAsyncThunk(
   "MORE/moreBungleList",
   async (data) => {
-    console.log(data);
-    // const navigate = useNavigate();
     try {
       const response = await AxiosAPI.get(`/posts/more`, {
-        // headers: {
-        //   Authorization: localStorage.getItem("login-token"),
-        // },
         params: {
           latitude: data.location.latitude,
           longitude: data.location.longitude,
@@ -155,7 +139,6 @@ export const moreBungleList = createAsyncThunk(
         return response.data.list;
       } else {
         data.navigate("/tagsearch");
-        // alert(response.data.message);
       }
     } catch (e) {
       console.log(e);
@@ -168,12 +151,8 @@ export const getMapBungle = createAsyncThunk(
   "GET/getMapBungle",
   async (data) => {
     console.log(data);
-    // const navigate = useNavigate();
     try {
       const response = await AxiosAPI.get(`/map`, {
-        // headers: {
-        //   Authorization: localStorage.getItem("login-token"),
-        // },
         params: {
           latitude: data.latitude,
           longitude: data.longitude,
@@ -183,7 +162,7 @@ export const getMapBungle = createAsyncThunk(
       if (response.data.response) {
         return response.data;
       } else {
-        // alert(response.data.message);
+
       }
     } catch (e) {
       console.log(e);
@@ -196,9 +175,6 @@ export const getDetailMap = createAsyncThunk(
   "GET/getDetailMap",
   async (data) => {
     console.log(data);
-    // if (data.selectCategory.length === 0) {
-    //   data.selectCategory = "null";
-    // }
     try {
       const response = await AxiosAPI.get(`/map/details`, {
         params: {
@@ -213,7 +189,7 @@ export const getDetailMap = createAsyncThunk(
       if (response.data.response) {
         return response.data.mapListDtos;
       } else {
-        // alert(response.data.message);
+
       }
     } catch (e) {
       console.log(e);
@@ -230,11 +206,6 @@ export const likeBungleList = createAsyncThunk(
       const response = await AxiosAPI.post(
         `/posts/like/${postId}`,
         {}
-        // {
-        //   headers: {
-        //     Authorization: localStorage.getItem("login-token"),
-        //   },
-        // }
       );
       console.log(response);
       if (response.data.response) {
@@ -254,11 +225,6 @@ export const detailBungleList = createAsyncThunk(
     try {
       const response = await AxiosAPI.get(
         `/posts/${postId}`
-        // {
-        //   headers: {
-        //     Authorization: localStorage.getItem("login-token"),
-        //   },
-        // }
       );
       console.log(response);
       if (response.data.response) {
@@ -279,11 +245,6 @@ export const detailLikeBungleList = createAsyncThunk(
       const response = await AxiosAPI.post(
         `${SERVER_URL}/posts/like/${postId}`,
         {}
-        // {
-        //   headers: {
-        //     Authorization: localStorage.getItem("login-token"),
-        //   },
-        // }
       );
       console.log(response);
       if (response.data.response) {
@@ -302,9 +263,6 @@ export const categoryBungleList = createAsyncThunk(
     console.log(item);
     try {
       const response = await AxiosAPI.get(`/posts/categories`, {
-        // headers: {
-        //   Authorization: localStorage.getItem("login-token"),
-        // },
         params: {
           latitude: item.location.latitude,
           longitude: item.location.longitude,
@@ -317,7 +275,6 @@ export const categoryBungleList = createAsyncThunk(
         item.navigate(`/categorysearch/${item.category}`);
         return response.data.list;
       } else {
-        // alert(`${response.data.message}`);
         item.navigate(`/categorysearch/${item.category}`);
       }
     } catch (e) {
@@ -330,12 +287,8 @@ export const categoryBungleList = createAsyncThunk(
 export const tagBungleList = createAsyncThunk(
   "GET/tagBungleList",
   async (item) => {
-    // console.log(item);
     try {
       const response = await AxiosAPI.get(`/posts/tags`, {
-        // headers: {
-        //   Authorization: localStorage.getItem("login-token"),
-        // },
         params: {
           latitude: item.location.latitude,
           longitude: item.location.longitude,
@@ -358,9 +311,6 @@ export const getUserProfile = createAsyncThunk(
   async () => {
     try {
       const response = await AxiosAPI.get(`/user/profile`, {
-        // headers: {
-        //   Authorization: localStorage.getItem("login-token"),
-        // },
       });
       console.log(response);
       if (response.data.response) {
@@ -380,16 +330,14 @@ export const editUserProfile = createAsyncThunk(
       const response = await AxiosAPI.post(`/user/profile`, data.formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          // Authorization: localStorage.getItem("login-token"),
         },
       });
-      console.log(response);
       if (response.data.response) {
         data.navigate("/mypage");
         return response.data.profileResponseDto;
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
 );
@@ -401,11 +349,6 @@ export const myLikeBungleList = createAsyncThunk(
     try {
       const response = await AxiosAPI.get(
         `/posts/like/`
-        // {
-        //   headers: {
-        //     Authorization: localStorage.getItem("login-token"),
-        //   },
-        // }
       );
       console.log(response);
       if (response.data.response) {
@@ -425,14 +368,9 @@ export const myChattingList = createAsyncThunk(
     try {
       const response = await AxiosAPI.get(
         `/chat/rooms`
-        // {
-        //   headers: {
-        //     Authorization: localStorage.getItem("login-token"),
-        //   },
-        // }
       );
       console.log(response);
-      if (response.data) {
+      if (response.status === 200 ) {
         return response.data;
       }
     } catch (e) {
@@ -447,7 +385,7 @@ export const getIntervalNotification = createAsyncThunk(
   async () => {
     try {
       const response = await AxiosAPI.get(`/notification`);
-      // console.log( response );
+
       if (response.status === 200) {
         return response.data;
       }
@@ -737,10 +675,14 @@ const BungleSlice = createSlice({
     },
     // 채팅 목록 조회
     [myChattingList.fulfilled]: (state, action) => {
-      state.myChatting = action.payload;
-      const isOwner = action.payload[0].owner;
-
-      state.isOwner = isOwner;
+      console.log( action.payload);
+      state.myChatting = action.payload.messageDto;
+      state.isOwner = action.payload.owner;
+      console.log( state.isOwner );
+      // state.myChatting = action.payload;
+      // const isOwner = action.payload[0].owner;
+      // console.log( state.myChatting )
+      // state.isOwner = isOwner;
     },
     [myChattingList.rejected]: (state, action) => {
       console.log("상세조회 실패");

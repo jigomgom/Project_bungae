@@ -73,12 +73,6 @@ function App() {
   console.log(myChattingInfo);
   const dispatch = useDispatch();
 
-  const [onwerState, setOnwerState] = useState(ownerCheck);
-
-  useEffect(() => {
-    setOnwerState(() => ownerCheck);
-  }, [ownerCheck]);
-
   // const trailingActions = () => (
   //   <TrailingActions>
   //     <SwipeAction
@@ -381,7 +375,7 @@ function App() {
             <FooterIconImg src={IconLocation} />
             <FooterIconText>벙글지도</FooterIconText>
           </FooterIconWrap>
-          {onwerState ? (
+          {ownerCheck ? (
             <FooterAddBungae
               src={IconEdit}
               onClick={() => {
