@@ -85,7 +85,7 @@ function App() {
   const enterChat = (id) => {
     navigate(`/chat/${id}`);
   };
-  
+
   useEffect(() => {
     dispatch(myChattingList());
   }, []);
@@ -105,7 +105,7 @@ function App() {
         dataArray[i] = dataArray[i] + "초 전";
       } else if (dataArray[i] > 60 && dataArray[i] < 3600) {
         dataArray[i] = Math.floor(dataArray[i] / 60) + "분 전";
-      } else if (dataArray[i] > 3600 && dataArray[i] < 86400) {
+      } else if (dataArray[i] > 3600 ) {
         dataArray[i] = Math.floor(dataArray[i] / 3600) + "시간 전";
       }
     }
@@ -127,7 +127,7 @@ function App() {
           startDate.split("-")[1][1] + "월" + startDate.split("-")[2] + "일 벙글";
       }
   }
-    console.log(realStartDate);
+    // console.log(realStartDate);
   }
 
   //Disconnect
@@ -277,17 +277,6 @@ function App() {
                         {item.postTitle}
                         {/* 제목 */}
                       </div>
-                      <div
-                        className="first_swipe"
-                        onClick={() => {
-                          getInnerHTML(item.postId);
-                        }}
-                      >
-                        <div className="first_swipe_title">
-                          {item.postTitle}
-                          {/* 제목 */}
-                        </div>
-
                         <div className="first_swipe_content">
                           <span>
                             {item.lastMessage}
@@ -301,7 +290,6 @@ function App() {
                         <p id="postId" style={{ display: "none" }}>
                           {item.postId}
                         </p>
-                      </div>
                     </div>
                   </div>
                 </SwipeableListItem>

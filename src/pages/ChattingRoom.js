@@ -73,14 +73,14 @@ function ChattingRoom({ setRealTimeChat }) {
   // }
   const token = localStorage.getItem("login-token");
   const PK = Number(localStorage.getItem("userId"));
-  let postId;
+  
   const Guest = params.postId;
-
-  if (Bungle) {
-    postId = Bungle;
-  } else {
-    postId = String(Guest);
-  } // console.log(parseInt(postId)); }
+  let postId = String(Guest);
+  // if (Bungle) {
+  //   postId = Bungle;
+  // } else {
+  //   postId = String(Guest);
+  // } // console.log(parseInt(postId)); }
 
   console.log(
     "OnwerPostId ",
@@ -131,7 +131,7 @@ function ChattingRoom({ setRealTimeChat }) {
     setUserData({ ...userData, connected: true });
     if (Bungle) {
       console.log("방장 connect");
-      client.subscribe(`/sub/chat/room/${postId}`, onMessageReceived);
+      client.subscribe(`/sub/chat/room/${parseInt(postId)}`, onMessageReceived);
     } else if (Guest) {
       console.log("게스트 connect");
       client.subscribe(`/sub/chat/room/${parseInt(postId)}`, onMessageReceived);
@@ -142,21 +142,23 @@ function ChattingRoom({ setRealTimeChat }) {
 
   const userJoin = () => {
     console.log("Test user Join");
-    if (Bungle) {
-      var chatMessage = {
-        type: "ENTER",
-        nickName: "seowoo",
-        roomId: `${postId}`,
-        status: "JOIN",
-      };
-    } else if (Guest) {
-      var chatMessage = {
-        type: "ENTER",
-        nickName: "seowoo",
-        roomId: `${parseInt(postId)}`,
-        status: "JOIN",
-      };
-    }
+    // if (Bungle) {
+      if(1){
+        var chatMessage = {
+          type: "ENTER",
+          nickName: "seowoo",
+          roomId: `${postId}`,
+          status: "JOIN",
+        };
+      } 
+    // else if (Guest) {
+    //   var chatMessage = {
+    //     type: "ENTER",
+    //     nickName: "seowoo",
+    //     roomId: `${parseInt(postId)}`,
+    //     status: "JOIN",
+    //   };
+    // }
 
     client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
     console.log("Test user Subscribe");
@@ -171,21 +173,23 @@ function ChattingRoom({ setRealTimeChat }) {
     console.log("Test user send");
 
     if ((client && userData.message) || (client && fileUrl)) {
-      if (Bungle) {
+      // if (Bungle) {
+      if(1){
         var chatMessage = {
           type: "TALK",
           message: userData.message,
           roomId: `${postId}`,
           fileUrl: fileUrl,
         };
-      } else if (Guest) {
-        var chatMessage = {
-          type: "TALK",
-          message: userData.message,
-          roomId: `${parseInt(postId)}`,
-          fileUrl: fileUrl,
-        };
-      }
+      } 
+      // else if (Guest) {
+      //   var chatMessage = {
+      //     type: "TALK",
+      //     message: userData.message,
+      //     roomId: `${parseInt(postId)}`,
+      //     fileUrl: fileUrl,
+      //   };
+      // }
       // console.log(chatMessage);
       client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
       setUserData({ ...userData, message: "" });
@@ -263,17 +267,19 @@ function ChattingRoom({ setRealTimeChat }) {
   //Disconnect
   const chatDisconnect = () => {
     console.log("Chat disconnect");
-    if (Bungle) {
+    // if (Bungle) {
+    if(1){
       var chatMessage = {
         type: "QUIT",
         roomId: `${postId}`,
       };
-    } else if (Guest) {
-      var chatMessage = {
-        type: "QUIT",
-        roomId: `${parseInt(postId)}`,
-      };
-    }
+    } 
+    // else if (Guest) {
+    //   var chatMessage = {
+    //     type: "QUIT",
+    //     roomId: `${parseInt(postId)}`,
+    //   };
+    // }
     client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
     client.disconnect(function () {
       alert("See you next time!");
@@ -626,7 +632,7 @@ function ChattingRoom({ setRealTimeChat }) {
             <ChattingBackKey
               src={IconBackKey}
               onClick={() => {
-                navigate("/main");
+                navigate("/chatlist");
                 setOutOwner(() => false);
               }}
             />

@@ -841,7 +841,7 @@ function CreatePost() {
             <FileInput
               id="file-input-1"
               type="file"
-              accept="image/*"
+              accept="image/jpg, image/png, image/jpeg, image/gif image/bmp image/jfif image/JPG image/PNG image/JPEG image/GIF iage/BMP image/img"
               onChange={onFistFileChange}
               onClick={(event)=>event.target.value = null}
               // disabled={isFirstFileClear ? true : false}
@@ -860,7 +860,7 @@ function CreatePost() {
             <FileInput
               id="file-input-2"
               type="file"
-              accept="image/*"
+              accept="image/jpg, image/png, image/jpeg, image/gif image/bmp image/jfif image/JPG image/PNG image/JPEG image/GIF iage/BMP image/img"
               onChange={onSecondFileChange}
               onClick={(event)=>event.target.value = null}
             />
@@ -879,7 +879,7 @@ function CreatePost() {
             <FileInput
               id="file-input-3"
               type="file"
-              accept="image/*"
+              accept="image/jpg, image/png, image/jpeg, image/gif image/bmp image/jfif image/JPG image/PNG image/JPEG image/GIF iage/BMP image/img"
               onChange={onThirdFileChange}
               onClick={(event)=>event.target.value = null}
             />

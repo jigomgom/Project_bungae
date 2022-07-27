@@ -69,7 +69,9 @@ function MyLikeBungleCard(props) {
     <TrailingActions>
       <SwipeAction
         destructive={true}
-        onClick={() => console.info("swipe action triggered")}
+        onClick={() => { 
+          console.log("찜 삭제");
+          likeMyBugleList(myLikeList.postId)}}
       >
         삭제
       </SwipeAction>

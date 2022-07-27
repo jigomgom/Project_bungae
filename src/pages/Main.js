@@ -49,7 +49,6 @@ import {
 } from "../styles/StyledFooter.js";
 
 //icons
-import IconTemp from "../assets/icon-temp.svg";
 import IconLike from "../assets/icon-like.svg";
 import IconUnlike from "../assets/icon-unlike.svg";
 import defaultCardImg from "../assets/defaultImg.jpg";
@@ -263,7 +262,7 @@ function Main() {
     navigate(`/detailpost/${postId}`);
   };
 
-  if (!location) {
+  if (!location || ( !realTimeList && !endTimeList )) {
     // console.log(location);
     return <Loading></Loading>
   } else {

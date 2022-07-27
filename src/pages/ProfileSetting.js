@@ -32,9 +32,6 @@ import {
   ModalButton,
 } from "../styles/StyledLogin";
 
-
-import Setting from "../assets/icon-setting.svg";
-import Notification from "../assets/icon-notification.svg";
 import IconHome from "../assets/icon-home.svg";
 import IconLocation from "../assets/icon-location.svg";
 import IconChat from "../assets/icon-chat.svg";
@@ -122,8 +119,8 @@ function MyPageSetting() {
       console.log( file );
       formData.append("profileImg ", file);
     }
-    if (intro_Ref.current.value.length < 15) {
-      console.log("아우어우아");
+    if (intro_Ref.current.value.length >= 2 || intro_Ref.current.value.length < 15) {
+      
       setIsModal( true );
     } else {
       dispatch(editUserProfile({ formData, navigate }));
@@ -163,7 +160,7 @@ function MyPageSetting() {
         <div className="profile-setting-form">
           <div className="profile-setting-form-nickname">
             <label className="profile-setting-form-title">
-              {userProfileInfo.nickName ? userProfileInfo.nickName : "닉네임"}
+              닉네임
             </label>
             <input
               ref={nickName_Ref}
@@ -177,7 +174,7 @@ function MyPageSetting() {
           </div>
           <div className="profile-setting-form-desc">
             <label className="profile-setting-form-title">
-              {userProfileInfo.intro ? userProfileInfo.intro : "자기소개"}
+              자기소개
             </label>
             <input
               ref={intro_Ref}

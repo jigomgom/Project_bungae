@@ -19,7 +19,6 @@ import "react-swipeable-list/dist/styles.css";
 
 //img
 import defaultCardImg from "../assets/defaultImg.jpg";
-import tempImg from "../assets/icon-temp.svg";
 import likeImg from "../assets/icon-like.svg";
 import UnlikeImg from "../assets/icon-unlike.svg";
 import IconHighTemp from "../assets/icon-manner-high.svg";

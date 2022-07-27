@@ -233,7 +233,7 @@ export const ModalWrapper = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 10000;
   overflow: auto;
   outline: 0;
 `; 
@@ -247,7 +247,7 @@ export const ModalOverlay = styled.div`
   bottom: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 999;
+  z-index: 9999;
 `;
 
 export const ModalInner = styled.div`
