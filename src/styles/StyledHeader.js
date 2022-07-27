@@ -210,8 +210,10 @@ export const IconMyLocation = styled.img`
 `;
 
 export const IconNotification = styled.img`
-  width: 16px;
-  height: 19.5px;
+  width: 22px;
+  height: 22px;
+  margin-left: 1px;
+  margin-right: 1px;
   cursor: pointer;
 `;
 

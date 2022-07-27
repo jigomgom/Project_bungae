@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { getIntervalNotification } from "../redux/modules/BungleSlice";
 
 //CSS
 import "../styles/TagCategorySearch.css";
@@ -45,6 +46,17 @@ import IconEdit from "../assets/icon-edit-footer.svg";
 
 import IconLoadingLogo from "../assets/icon-splash-logo.svg";
 function TagSearch() {
+  const dispatch = useDispatch();
+  // 알림 call
+  const interval = useRef(null);
+  // 알림 state
+  const NotificationState = useSelector( state => state.Bungle.isReadNotification );
+  const [ notificationState, setNotificationState ] = useState( NotificationState);
+  useEffect(()=>{
+    setNotificationState( NotificationState );
+  },[NotificationState])
+
+  
   const ownerCheck = useSelector((state) => state.Bungle.isOwner);
   //
   const navigate = useNavigate();
@@ -67,6 +79,15 @@ function TagSearch() {
     }
   }, []);
 
+  // 알림 interval
+  useEffect(()=>{
+    interval.current = setInterval( async()=>{
+      dispatch( getIntervalNotification() );
+    }, 5000);
+    return () => clearInterval( interval.current );
+  },[])
+  
+
   // console.log(selected);
   const searchOptions = [
     { key: 1, value: "최신순" },
@@ -84,7 +105,19 @@ function TagSearch() {
         />
 
         <HeadrIconsWrap>
-          <IconNotification src={Notification} />
+          {notificationState ? (
+            <span
+              style={{ cursor: "pointer", color: "#FFC632" }}
+              className="material-icons"
+              onClick={() => {
+                navigate("/notification");
+              }}
+            >
+              notifications
+            </span>
+          ) : (
+            <IconNotification src={Notification} />
+          )}
           <IconSetting src={Setting} />
         </HeadrIconsWrap>
       </PostHeaderWrap>

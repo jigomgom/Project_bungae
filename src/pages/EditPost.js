@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import {
   getMyBungleList,
   editMyBungleList,
-  deleteMyBungleList,
+  deleteMyBungleList
 } from "../redux/modules/BungleSlice";
 
 // slider 추가
@@ -142,6 +142,7 @@ function EditPost() {
       }, 200);
     }
   }, []);
+
   //초기 세팅
   let CategoriesObjArray = [
     { category: "맛집", clicked: false },
@@ -1183,9 +1184,9 @@ function EditPost() {
               </SelectChatLetterBtn>
               <SelectChatVideoBtn
                 CheckedState={isVideo}
-                onClick={() => {
-                  ChatButtonClickHandler("video");
-                }}
+                // onClick={() => {
+                //   ChatButtonClickHandler("video");
+                // }}
               >
                 {/* <SelectChatBtnImg src={IconChatVideo} /> */}
                 <span

@@ -6,6 +6,7 @@ import axios from "axios";
 import { getMapBungle } from "../redux/modules/BungleSlice";
 import { tagBungleList } from "../redux/modules/BungleSlice";
 import { getDetailMap } from "../redux/modules/BungleSlice";
+import { getIntervalNotification } from "../redux/modules/BungleSlice";
 
 //Icons
 import MarkerLightening from "../assets/icon-map-lightening.svg";
@@ -81,6 +82,17 @@ import Slider from "rc-slider";
 import "../styles/rc-slider/index.css";
 
 function Map() {
+  // 알림 interval
+  const interval = useRef(null);
+  // 알람 추가
+  const NotificationState = useSelector(
+    (state) => state.Bungle.isReadNotification
+  );
+  const [notificationState, setNotificationState] = useState(NotificationState);
+  useEffect(() => {
+    setNotificationState(NotificationState);
+  }, [NotificationState]);
+
   const token = localStorage.getItem("login-token");
   const isOwner = useSelector((state) => state.Bungle.isOwner);
 
@@ -157,6 +169,14 @@ function Map() {
     });
   };
   console.log(location);
+
+  // 알림 setInterval
+  useEffect(() => {
+    interval.current = setInterval(async () => {
+      dispatch(getIntervalNotification());
+    }, 5000);
+    return () => clearInterval(interval.current);
+  }, []);
 
   //지도 전체 리스트
   useEffect(() => {

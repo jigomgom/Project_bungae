@@ -32,6 +32,15 @@ import {
   PostMemberVideo,
   PostMemberName,
 } from "../styles/StyledDetailPost";
+import {
+  // Moadl
+  ModalWrapper,
+  ModalOverlay,
+  ModalInner,
+  ModalContentWrap,
+  ModalDivider,
+  ModalButton,
+} from "../styles/StyledLogin";
 //CSS
 import "../styles/Chat1.css";
 //icons
@@ -97,6 +106,9 @@ function ChattingRoom({ setRealTimeChat }) {
   // const { postID } = useParams();
 
   const userPersonalId = Number(localStorage.getItem("userId"));
+
+  // disconnect modal state
+  const [isDisconnectModal, setIsDisconnectModal] = useState(false);
 
   // console.log(token);
   const [publicChats, setPublicChats] = useState([]);
@@ -277,7 +289,7 @@ function ChattingRoom({ setRealTimeChat }) {
     }
     client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
     client.disconnect(function () {
-      alert("See you next time!");
+      setIsDisconnectModal(true);
     });
   };
 
@@ -395,7 +407,6 @@ function ChattingRoom({ setRealTimeChat }) {
         console.log(error);
       });
   };
-  console.log("채팅 인원: ", chatPeople);
 
   // const [fileData, setFileData] = () => {};
   const chatFile = () => {
@@ -414,8 +425,8 @@ function ChattingRoom({ setRealTimeChat }) {
         console.log(error);
       });
   };
-  // console.log("사람 : ", chatPeople);
-  // console.log("파일 : ", chatFiles);
+  console.log("사람 : ", chatPeople);
+  console.log("파일 : ", chatFiles);
 
   // Modal state
 
@@ -513,13 +524,10 @@ function ChattingRoom({ setRealTimeChat }) {
   const detailProfile = () => {
     AxiosAPI({
       method: "get",
-      url: `/chat/details/${reportUserId}`,
+      url: `/chat/details/${postId}/${reportUserId}`,
       // headers: {
       //   Authorization: token,
       // },
-      params: {
-        roomId: postId,
-      },
     })
       .then((response) => {
         setChatProfile(() => response.data);
@@ -716,7 +724,7 @@ function ChattingRoom({ setRealTimeChat }) {
                     </div>
                     <div className="modal-divider"></div>
                     <div className="modal-member-list">
-                      <p>번개 멤버</p>
+                      <p>벙글 멤버</p>
                       {chatPeople.map((item, index) => {
                         return (
                           <div
@@ -784,6 +792,26 @@ function ChattingRoom({ setRealTimeChat }) {
                         />
                       </div>
                     </div>
+                    {isDisconnectModal && (
+                      <ModalWrapper>
+                        <ModalOverlay>
+                          <ModalInner>
+                            <ModalContentWrap>
+                              <h3>다음에 봐요!</h3>
+                              <div>즐거운 벙글</div>
+                            </ModalContentWrap>
+                            <ModalDivider />
+                            <ModalButton
+                              onClick={() => {
+                                setIsDisconnectModal(false);
+                              }}
+                            >
+                              확인
+                            </ModalButton>
+                          </ModalInner>
+                        </ModalOverlay>
+                      </ModalWrapper>
+                    )}
                     {profileModal && (
                       <div className="modal-wrapper-profile">
                         <div

@@ -83,7 +83,14 @@ import AxiosAPI from "../customapi/CustomAxios";
 function Main() {
   // 알림 call
   const interval = useRef(null);
-
+  // 알림 state
+  const NotificationState = useSelector(
+    (state) => state.Bungle.isReadNotification
+  );
+  const [notificationState, setNotificationState] = useState(NotificationState);
+  useEffect(() => {
+    setNotificationState(NotificationState);
+  }, [NotificationState]);
   // isOwner
   const ownerCheck = useSelector((state) => state.Bungle.isOwner);
   console.log(ownerCheck);
@@ -282,8 +289,19 @@ function Main() {
                   getCurrentLocationBtnClick();
                 }}
               />
-              <IconNotification src={Notification} />
-              {/* <span style={{ color:"#FFC632"}} className="material-icons">notifications</span> */}
+              {notificationState ? (
+                <span
+                  style={{ cursor: "pointer", color: "#FFC632" }}
+                  className="material-icons"
+                  onClick={() => {
+                    navigate("/notification");
+                  }}
+                >
+                  notifications
+                </span>
+              ) : (
+                <IconNotification src={Notification} />
+              )}
               <IconSetting src={Setting} />
             </MainHeaderIconsWrap>
           </MainHeaderWrap>

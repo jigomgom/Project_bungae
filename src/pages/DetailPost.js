@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   detailBungleList,
   detailLikeBungleList,
+  getIntervalNotification
 } from "../redux/modules/BungleSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -80,6 +81,14 @@ import IconNoPost from "../assets/icon-detail-no-post.svg";
 //채팅 입장 client
 const Post = () => {
   const navigate = useNavigate();
+   // 알림 interval
+   const interval = useRef(null);
+   // 알람 추가
+   const NotificationState = useSelector( state => state.Bungle.isReadNotification );
+   const [ notificationState, setNotificationState ] = useState( NotificationState);
+   useEffect(()=>{
+     setNotificationState( NotificationState );
+   },[NotificationState])
 
   const detailBungleInfo = useSelector((state) => state.Bungle.detailBungle);
   // console.log( detailBungleInfo, detailBungleInfo.length );
@@ -90,6 +99,15 @@ const Post = () => {
   const container = useRef(null);
   // const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
   const [isLoaded, setIsLoaded] = useState(true);
+
+  // 알림 setInterval
+  useEffect(()=>{
+    interval.current = setInterval( async()=>{
+      dispatch( getIntervalNotification() );
+    }, 5000);
+    return () => clearInterval( interval.current );
+  },[])
+
   useEffect(() => {
     // postId가 있을 경우, dispatch 실행
     dispatch(detailBungleList(postId));
@@ -164,7 +182,19 @@ const Post = () => {
               />
 
               <HeadrIconsWrap>
-                <IconNotification src={Notification} />
+                {notificationState ? (
+                  <span
+                    style={{ cursor: "pointer", color: "#FFC632" }}
+                    className="material-icons"
+                    onClick={() => {
+                      navigate("/notification");
+                    }}
+                  >
+                    notifications
+                  </span>
+                ) : (
+                  <IconNotification src={Notification} />
+                )}
                 <IconSetting src={Setting} />
               </HeadrIconsWrap>
             </PostHeaderWrap>
@@ -305,10 +335,18 @@ const Post = () => {
               </PostJoinButtonWrapper>
             ) : (
               <PostJoinButtonWrapper>
-                <span className="material-icons-outlined"
-                style={{ position:"absolute", width:"20px", height:"20px", left:"128px", top:"16px"}}
+                <span
+                  className="material-icons-outlined"
+                  style={{
+                    position: "absolute",
+                    width: "20px",
+                    height: "20px",
+                    left: "128px",
+                    top: "16px",
+                  }}
                 >
-                  video_camera_front</span>
+                  video_camera_front
+                </span>
                 {detailBungleInfo.joinCount === detailBungleInfo.personnel ? (
                   <>
                     <PostJoinButton

@@ -213,7 +213,7 @@ export const SelectChatVideoBtn = styled.div`
   line-height: 17px;
   color: ${(props) => (props.CheckedState ? "#FFFFFF" : "#898989")};
 
-  cursor: pointer;
+  cursor: not-allowed;
 `;
 
 export const SelectChatBtnName = styled.span`

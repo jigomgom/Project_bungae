@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import CategorySearchCard from "../components/CategorySearchCard";
+import { getIntervalNotification } from "../redux/modules/BungleSlice";
 
 
 //CSS
@@ -44,6 +45,7 @@ import IconCreate from "../assets/icon-create-post.svg";
 import IconEdit from "../assets/icon-edit-footer.svg";
 
 function CategorySearch() {
+  const dispatch = useDispatch();
   const ownerCheck = useSelector((state) => state.Bungle.isOwner);
   // isLoad
   const [ isLoad, setIsLaod ] = useState( true );
@@ -54,7 +56,22 @@ function CategorySearch() {
   const navigate = useNavigate();
   const { category } = useParams();
 
-  // console.log( category );
+  // 알림 call
+  const interval = useRef(null);
+  // 알림 state
+  const NotificationState = useSelector( state => state.Bungle.isReadNotification );
+  const [ notificationState, setNotificationState ] = useState( NotificationState);
+  useEffect(()=>{
+    setNotificationState( NotificationState );
+  },[NotificationState])
+
+  // 알림 interval
+  useEffect(()=>{
+    interval.current = setInterval( async()=>{
+      dispatch( getIntervalNotification() );
+    }, 5000);
+    return () => clearInterval( interval.current );
+  },[])
 
   useEffect(()=>{
     // if( isLoad ){
@@ -84,7 +101,8 @@ function CategorySearch() {
         />
 
         <HeadrIconsWrap>
-          <IconNotification src={Notification} />
+        {notificationState ? <span style={{ cursor:"pointer",color:"#FFC632"}} className="material-icons" onClick={()=>{navigate("/notification")}} >notifications</span> :
+          <IconNotification src={Notification} />}
           <IconSetting src={Setting} />
         </HeadrIconsWrap>
       </PostHeaderWrap>
