@@ -737,8 +737,11 @@ const BungleSlice = createSlice({
     },
     // 채팅 목록 조회
     [myChattingList.fulfilled]: (state, action) => {
-      console.log(action.payload);
+      console.log(action.payload[0].owner);
       state.myChatting = action.payload;
+      const isOwner = action.payload[0].owner;
+
+      state.isOwner = isOwner;
     },
     [myChattingList.rejected]: (state, action) => {
       console.log("상세조회 실패");

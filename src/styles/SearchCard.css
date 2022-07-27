@@ -36,6 +36,12 @@
     font-size: 14px;
     line-height: 20px;
     margin-bottom: 3px;
+    /* 두줄 이상이면 처리 */ 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    display: -webkit-box; 
+    -webkit-line-clamp: 1; 
+    -webkit-box-orient: vertical
 }
 .search-card-desc-sub{
     font-style: normal;

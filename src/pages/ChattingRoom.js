@@ -1185,7 +1185,6 @@ function ChattingRoom({ setRealTimeChat }) {
                           onChange={handleMessage}
                           onKeyPress={onKeyPress}
                           disabled
-                          style={{ backgroundColor: "#D9D9D9", border: "none" }}
                         />
                       </>
                     ) : (

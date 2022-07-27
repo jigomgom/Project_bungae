@@ -73,18 +73,24 @@ function App() {
   console.log(myChattingInfo);
   const dispatch = useDispatch();
 
-  const trailingActions = () => (
-    <TrailingActions>
-      <SwipeAction
-        destructive={true}
-        onClick={() => {
-          chatDisconnect();
-        }}
-      >
-        나가기
-      </SwipeAction>
-    </TrailingActions>
-  );
+  const [onwerState, setOnwerState] = useState(ownerCheck);
+
+  useEffect(() => {
+    setOnwerState(() => ownerCheck);
+  }, [ownerCheck]);
+
+  // const trailingActions = () => (
+  //   <TrailingActions>
+  //     <SwipeAction
+  //       destructive={true}
+  //       onClick={() => {
+  //         chatDisconnect();
+  //       }}
+  //     >
+  //       나가기
+  //     </SwipeAction>
+  //   </TrailingActions>
+  // );
 
   //postId 가져오는 함수
   const [getPostId, setGetPostId] = useState();
@@ -105,10 +111,6 @@ function App() {
   }, []);
 
   //시간 커스텀
-
-  let dataArray = [];
-  let date;
-
   const dateHandler = (lastMessageTime) => {
     let a = lastMessageTime;
     const now = new Date();
@@ -302,8 +304,8 @@ function App() {
           return (
             <SwipeableList key={index}>
               <SwipeableListItem
-                // leadingActions={leadingActions()}
-                trailingActions={trailingActions()}
+              // leadingActions={leadingActions()}
+              // trailingActions={trailingActions()}
               >
                 <div className="first_swiper_main">
                   <div className="first_swiper_img">
@@ -378,7 +380,7 @@ function App() {
             <FooterIconImg src={IconLocation} />
             <FooterIconText>벙글지도</FooterIconText>
           </FooterIconWrap>
-          {ownerCheck ? (
+          {onwerState ? (
             <FooterAddBungae
               src={IconEdit}
               onClick={() => {

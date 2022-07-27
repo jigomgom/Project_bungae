@@ -54,6 +54,9 @@
     line-height: 27px;
     padding: 5px;
 }
+.chatting-footer-input > input:focus{
+    outline: none;
+}
 .chatting-sendbtn{
     background-color: none;
     /* width: 15vw; */
