@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { likeBungleList } from "../redux/modules/BungleSlice";
+
+import { LoadingWrap, LoadingLogo, LoadingText } from "../styles/StyledLoading";
 //swipe-list
 import {
   LeadingActions,
@@ -23,9 +25,11 @@ import UnlikeImg from "../assets/icon-unlike.svg";
 import IconHighTemp from "../assets/icon-manner-high.svg";
 import IconMiddleTemp from "../assets/icon-manner-middle.svg";
 import IconLowTemp from "../assets/icon-manner-low.svg";
+import IconLoadingLogo from "../assets/icon-splash-logo.svg";
+
 
 function SearchCard(props) {
-  const { moreList, categoryList, myLikeList } = props;
+  const { moreList, myLikeList } = props;
   console.log( moreList );
   const [ isLoad, setIsLoad ] = useState( true );
 
@@ -37,15 +41,9 @@ function SearchCard(props) {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // console.log(moreList);
+  
   console.log( myLikeList );
-  // const leadingActions = () => (
-  //   <LeadingActions>
-  //     <SwipeAction onClick={() => console.info("swipe action triggered")}>
-  //       Action name
-  //     </SwipeAction>
-  //   </LeadingActions>
-  // );
+  
   const moreTagLikeOnClick = (postId) => {
     console.log(postId);
     dispatch(likeBungleList(postId));
@@ -66,6 +64,13 @@ function SearchCard(props) {
    const showDetailBungle = ( postId ) => {
     navigate(`/detailpost/${postId}`);
   };
+
+  if( !moreList || !myLikeList ){
+    return( <LoadingWrap>
+      <LoadingLogo src={IconLoadingLogo} />
+      <LoadingText>진행 중인 채팅이 없습니다.</LoadingText>
+    </LoadingWrap> )
+  }
 
   if (window.location.pathname === "/tagsearch") {
     return (
@@ -115,7 +120,6 @@ function SearchCard(props) {
     return (
       <SwipeableList>
         <SwipeableListItem
-          // leadingActions={leadingActions()}
           trailingActions={trailingActions()}
         >
           <div className="search-card-wrap">

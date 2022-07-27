@@ -2,9 +2,12 @@ import styled from "styled-components";
 
 export const LoginWrap = styled.div`
     width: 100%; // 100% -> 375px
+    /* max-height: 780px; */
+    height: 90%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    /* border: 1px solid black; */
 `;
 
 export const LoginInquiry = styled.div`
@@ -21,22 +24,25 @@ export const LoginInquiry = styled.div`
   align-self: flex-end;
 `;
 
-export const LoginTitle = styled.div`
-  width: 220px;
-  height: 46px;
+export const LoginImageWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
 
+export const LoginTitle = styled.img`
   font-weight: 700;
   font-size: 32px;
   line-height: 46px;
 
   color: #000000;
 
-  margin-top:66px;
+  margin-top:46px;
 `;
 
 export const LoginExplain = styled.div`
-  width: 257px;
-  height: 29px;
   font-weight: 400;
   font-size: 20px;
   line-height: 29px;
@@ -45,10 +51,10 @@ export const LoginExplain = styled.div`
 `;
 
 export const LoginLogo = styled.img`
-    width: 120px;
-    height: 120px;
-    margin-top: 64px;
-    margin-bottom: 101px;
+  width: 298px;
+  height: 164px;
+  margin-top: 64px;
+  margin-bottom: 50px;
 `;
 
 export const LoginContentWrap = styled.div`
@@ -78,7 +84,7 @@ export const LoginEmailInput = styled.input`
   width: 72.7%;
   height: 53px;
 
-  background-color: #d9d9d9;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
 
   border: none;
@@ -101,7 +107,7 @@ export const LoginPasswordInput = styled.input`
   width: 72.7%;
   height: 53px;
 
-  background-color: #d9d9d9;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
 
   border: none;
@@ -159,7 +165,7 @@ export const LoginSns = styled.div`
   line-height: 14px;
 
   color: #d9d9d9;
-  margin-top: 23px;
+  margin-top: 16px;
   & > p {
     font-weight: 400;
     /* font-size: 13px; */
@@ -172,14 +178,16 @@ export const LoginSns = styled.div`
     font-size: 10px;
     line-height: 14px;
 
-    color: #d9d9d9;
+    /* Dark Gray */
+
+    color: #434343;
   }
 
   & > span {
     display: block;
     width: 105.5px;
     height: 1px;
-    background: #D9D9D9;
+    background: #d9d9d9;
   }
 `;
 
@@ -188,8 +196,8 @@ export const LoginSnsIconWarp = styled.div`
   width: 56%;
   justify-content: space-between;
 
-  margin-top: 23px;
-  margin-bottom: 26px;
+  margin-top: 10px;
+  margin-bottom: 20px;
 
   & > img {
     cursor:pointer
@@ -206,10 +214,12 @@ export const SignupFindPasswordWarp = styled.div`
 
 export const LoginBottomText = styled.span`
   font-weight: 700;
-  font-size: 12px;
-  line-height: 17px;
+  font-size: 14px;
+  line-height: 20px;
 
-  color: #d9d9d9;
+  /* Gray */
+
+  color: #898989;
 `;
 
 // 로그인 모달
@@ -223,7 +233,7 @@ export const ModalWrapper = styled.div`
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 10000;
   overflow: auto;
   outline: 0;
 `; 
@@ -237,7 +247,7 @@ export const ModalOverlay = styled.div`
   bottom: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 999;
+  z-index: 9999;
 `;
 
 export const ModalInner = styled.div`
@@ -295,5 +305,34 @@ export const ModalButton = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 10px;
+  cursor: pointer;
+`;
+
+export const ModalButtonWrap = styled.div`
+  width:100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+export const ModalCancelButton = styled.div`
+  width: 50%;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid #BEBEBE;;
+  margin-top: 10px;
+  cursor: pointer;
+`;
+
+export const ModalDeleteButton = styled.div`
+  width: 50%;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  color:red;
   cursor: pointer;
 `;

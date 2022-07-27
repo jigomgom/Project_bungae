@@ -1,9 +1,15 @@
+.top-category-search-wrap{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 90px;
+}
+
 .search-result-card-wrap{
     margin-bottom: 70px;
 }
 .search-result-card-wrap-map{
-    margin-bottom: 70px;
-    padding-top: 55px;
+
 }
 .search-result-header{
     display: flex;

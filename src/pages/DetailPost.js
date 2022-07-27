@@ -1,7 +1,11 @@
 /* global kakao */
 import React, { useEffect, useRef, useState } from "react";
 
-import { detailBungleList, detailLikeBungleList } from "../redux/modules/BungleSlice";
+import {
+  detailBungleList,
+  detailLikeBungleList,
+  getIntervalNotification
+} from "../redux/modules/BungleSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
@@ -47,23 +51,20 @@ import {
 } from "../styles/StyledDetailPost";
 
 import {
-  HeaderWrap,
-  Logo,
-  BackKey,
-  PageTitle,
+  PostHeaderWrap,
+  ChattingBackKey,
   HeadrIconsWrap,
-  IconMyLocation,
   IconNotification,
-  IconSetting,
-} from "../styles/StyledHeader";
+  IconSetting
+} from "../styles/StyledHeader.js";
 
 // icons
 import IconShared from "../assets/icon-url-shared.svg";
-import IconPostTemp from "../assets/icon-post-temp.svg";
 import IconLightening from "../assets/icon-lightening.svg";
 import IconLike from "../assets/icon-like.svg";
 import IconUnlike from "../assets/icon-unlike.svg";
 import IconChat from "../assets/icon-chat.svg";
+import IconVideo from "../assets/icon-detail-camera.svg";
 
 import IconHighTemp from "../assets/icon-manner-high.svg";
 import IconMiddleTemp from "../assets/icon-manner-middle.svg";
@@ -75,16 +76,19 @@ import IconBackKey from "../assets/icon-left-arrow.svg";
 
 import IconCurrentMarker from "../assets/icon-marker-current.svg";
 
-const MembersArray = [
-  "Lorem ipsum1",
-  "Lorem ipsum2",
-  "Lorem ipsum3",
-  "Lorem ipsum4",
-  "Lorem ipsum5",
-];
+import IconNoPost from "../assets/icon-detail-no-post.svg";
+
 //채팅 입장 client
 const Post = () => {
   const navigate = useNavigate();
+   // 알림 interval
+   const interval = useRef(null);
+   // 알람 추가
+   const NotificationState = useSelector( state => state.Bungle.isReadNotification );
+   const [ notificationState, setNotificationState ] = useState( NotificationState);
+   useEffect(()=>{
+     setNotificationState( NotificationState );
+   },[NotificationState])
 
   const detailBungleInfo = useSelector((state) => state.Bungle.detailBungle);
   // console.log( detailBungleInfo, detailBungleInfo.length );
@@ -95,16 +99,25 @@ const Post = () => {
   const container = useRef(null);
   // const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
   const [isLoaded, setIsLoaded] = useState(true);
+
+  // 알림 setInterval
+  useEffect(()=>{
+    interval.current = setInterval( async()=>{
+      dispatch( getIntervalNotification() );
+    }, 5000);
+    return () => clearInterval( interval.current );
+  },[])
+
   useEffect(() => {
     // postId가 있을 경우, dispatch 실행
-      dispatch(detailBungleList(postId));
-      console.log("Detail mount");
-      window.scrollTo(0,0);
+    dispatch(detailBungleList(postId));
+    console.log("Detail mount");
+    window.scrollTo(0, 0);
   }, [postId]);
 
   useEffect(() => {
-      if( detailBungleInfo.latitude ){
-        // latitude 값이 들어왔을 경우 실행
+    if (detailBungleInfo.latitude) {
+      // latitude 값이 들어왔을 경우 실행
       const options = {
         //지도를 생성할 때 필요한 기본 옵션
         // center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
@@ -114,17 +127,24 @@ const Post = () => {
         ), //지도의 중심좌표.
         level: 3, //지도의 레벨(확대, 축소 정도)
       };
-      
+
       const map = new kakao.maps.Map(container.current, options); //지도 생성 및 객체 리턴
       // 마커 생성
       const imageSrc = IconCurrentMarker;
-      const imageSize = new kakao.maps.Size( 10, 10 );
-      const imageOption = '';
-      const markerImage = new kakao.maps.MarkerImage( imageSrc, imageSize, imageOption );
-      const markerPosition = new kakao.maps.LatLng( detailBungleInfo.latitude,detailBungleInfo.longitude );
+      const imageSize = new kakao.maps.Size(10, 10);
+      const imageOption = "";
+      const markerImage = new kakao.maps.MarkerImage(
+        imageSrc,
+        imageSize,
+        imageOption
+      );
+      const markerPosition = new kakao.maps.LatLng(
+        detailBungleInfo.latitude,
+        detailBungleInfo.longitude
+      );
       const marker = new kakao.maps.Marker({
         position: markerPosition,
-        image: markerImage
+        image: markerImage,
       });
 
       marker.setMap(map);
@@ -136,10 +156,14 @@ const Post = () => {
     navigate(`/chat/${postId}`);
   };
 
+  const goToVideoRoom = () => {
+    navigate(`/videochat/${postId}`);
+  }
+
   // 좋아요 클릭
 
-  const isLikeClick = ( postId ) => {
-    dispatch( detailLikeBungleList( postId ) );
+  const isLikeClick = (postId) => {
+    dispatch(detailLikeBungleList(postId));
     console.log("like ", postId);
   };
 
@@ -148,42 +172,59 @@ const Post = () => {
       {/* Urls가 있으면 렌더링 */}
       {detailBungleInfo.postUrls && (
         <>
-          <HeaderWrap>
-            <Logo style={{ visibility: "hidden" }} />
-            <BackKey
-              src={IconBackKey}
-              onClick={() => {
-                navigate("/main");
-              }}
-            />
-            <PageTitle></PageTitle>
-
-            <HeadrIconsWrap>
-              <IconMyLocation style={{ visibility: "hidden" }} />
-              <IconNotification src={Notification} />
-              <IconSetting src={Setting} />
-            </HeadrIconsWrap>
-          </HeaderWrap>
           <PostWrap>
+            <PostHeaderWrap>
+              <ChattingBackKey
+                src={IconBackKey}
+                onClick={() => {
+                  navigate("/main");
+                }}
+              />
+
+              <HeadrIconsWrap>
+                {notificationState ? (
+                  <span
+                    style={{ cursor: "pointer", color: "#FFC632" }}
+                    className="material-icons"
+                    onClick={() => {
+                      navigate("/notification");
+                    }}
+                  >
+                    notifications
+                  </span>
+                ) : (
+                  <IconNotification src={Notification} />
+                )}
+                <IconSetting src={Setting} />
+              </HeadrIconsWrap>
+            </PostHeaderWrap>
             <PostContent>
               <PostIconShared src={IconShared} />
-              <PostLike src={detailBungleInfo.isLike ? IconLike : IconUnlike} onClick={()=>{ isLikeClick( detailBungleInfo.postId ) }}/>
-              {detailBungleInfo.postUrls.length > 1 ? (
+              <PostLike
+                src={detailBungleInfo.isLike ? IconLike : IconUnlike}
+                onClick={() => {
+                  isLikeClick(detailBungleInfo.postId);
+                }}
+              />
+              {detailBungleInfo.postUrls[0] !== null ? (
                 <Swiper
-                style={{ position: "relative", width: "100%", height:"207px"}}
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    height: "207px",
+                  }}
                 >
-                  {detailBungleInfo.postUrls.map( ( item, index ) =>{
-                    return(
+                  {detailBungleInfo.postUrls.map((item, index) => {
+                    return (
                       <SwiperSlide key={index}>
-                       <PostImg src={item} />
-                     </SwiperSlide>
-                    )
+                        <PostImg src={item} />
+                      </SwiperSlide>
+                    );
                   })}
                 </Swiper>
               ) : (
-                <PostImg src={detailBungleInfo.postUrls[0]} />
+                <PostImg src={IconNoPost} />
               )}
-              {/* <PostImg src={detailBungleInfo.postUrls[0]} /> */}
 
               <PostUserBox>
                 <PostUserBoxProfile
@@ -197,7 +238,9 @@ const Post = () => {
                   <PostUserName>
                     {detailBungleInfo.joinPeopleNickname[0]}
                   </PostUserName>
-                  <PostUserIntro>{detailBungleInfo.joinPeopleIntro[0]}</PostUserIntro>
+                  <PostUserIntro>
+                    {detailBungleInfo.joinPeopleIntro[0]}
+                  </PostUserIntro>
                   <PostUserIcon>
                     <PostUserIconImg src={IconLightening} />
                     <PostUserIconText>
@@ -255,7 +298,7 @@ const Post = () => {
                 {detailBungleInfo.joinPeopleUrl.map((item, index) => {
                   return (
                     <SwiperSlide key={index}>
-                      <PostMemberCard >
+                      <PostMemberCard>
                         <PostMemberPicture src={item} />
                         <PostMemberName>
                           {detailBungleInfo.joinPeopleNickname[index]}
@@ -266,29 +309,64 @@ const Post = () => {
                 })}
               </Swiper>
             </PostMemberWrap>
-            <PostJoinButtonWrapper>
-              <PostJoinIcon src={IconChat} />
-              {detailBungleInfo.joinCount === detailBungleInfo.personnel ? (
-                <>
-                  <PostJoinButton
-                    onClick={goToChatRoom}
-                    style={{
-                      pointerEvents: "none",
-                      backgroundColor: "#D9D9D9",
-                      color: "red",
-                    }}
-                  >
-                    정원초과
-                  </PostJoinButton>
-                </>
-              ) : (
-                <>
-                  <PostJoinButton onClick={goToChatRoom}>
-                    참여하기
-                  </PostJoinButton>
-                </>
-              )}
-            </PostJoinButtonWrapper>
+            {detailBungleInfo.isLetter ? (
+              <PostJoinButtonWrapper>
+                <PostJoinIcon src={IconChat} />
+                {detailBungleInfo.joinCount === detailBungleInfo.personnel ? (
+                  <>
+                    <PostJoinButton
+                      // onClick={goToChatRoom}
+                      style={{
+                        pointerEvents: "none",
+                        backgroundColor: "#D9D9D9",
+                        color: "#898989",
+                      }}
+                    >
+                      참여하기
+                    </PostJoinButton>
+                  </>
+                ) : (
+                  <>
+                    <PostJoinButton onClick={goToChatRoom}>
+                      참여하기
+                    </PostJoinButton>
+                  </>
+                )}
+              </PostJoinButtonWrapper>
+            ) : (
+              <PostJoinButtonWrapper>
+                <span
+                  className="material-icons-outlined"
+                  style={{
+                    position: "absolute",
+                    width: "20px",
+                    height: "20px",
+                    left: "128px",
+                    top: "16px",
+                  }}
+                >
+                  video_camera_front
+                </span>
+                {detailBungleInfo.joinCount === detailBungleInfo.personnel ? (
+                  <>
+                    <PostJoinButton
+                      // onClick={goToChatRoom}
+                      style={{
+                        pointerEvents: "none",
+                        backgroundColor: "#D9D9D9",
+                        color: "#898989",
+                      }}
+                    >
+                      참여하기
+                    </PostJoinButton>
+                  </>
+                ) : (
+                  <>
+                    <PostJoinButton>참여하기</PostJoinButton>
+                  </>
+                )}
+              </PostJoinButtonWrapper>
+            )}
           </PostWrap>
         </>
       )}

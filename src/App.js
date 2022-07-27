@@ -19,30 +19,22 @@ import EditPost from "./pages/EditPost";
 
 import ProfileSetting from "./pages/ProfileSetting";
 import MyLikeBung from "./pages/MyLikeBung";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
 import ChatList from "./pages/ChatList";
 import ChattingRoom from "./pages/ChattingRoom";
 import Map from "./pages/Map";
-// Test
+
+import OpenViduSettings from "./components/videos/OpenViduSettings";
+
+import LoadingLogin from "./components/LoadingLogin";
+import Notification from "./pages/Notification";
 
 function App() {
-  // 실시간 채팅 state
-  // const [realTimeChat, setRealTimeChat] = useState({});
-
-  //실시간 채팅 알림
-  // const { fireNotificationWithTimeout } = usePushNotification();
-  // useEffect(() => {
-  //   fireNotificationWithTimeout("Babble 채팅 메시지", 5000, {
-  //     body: `${realTimeChat.sender}: ${realTimeChat.message}`,
-  //   });
-  // }, [realTimeChat]);
-
   return (
     <div className="App">
-      <Header />
+      {/* <Header /> */}
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/loading" element={<LoadingLogin/>} />
         {/* social login redirection URL */}
         <Route path="/oauth" element={<Login />} />
         <Route path="/main" element={<Main />} />
@@ -62,10 +54,12 @@ function App() {
         <Route path="/chat" element={<ChattingRoom />} />
         <Route path="/chat/:postId" element={<ChattingRoom />} />
         <Route path="/map" element={<Map />} />
+        {/* 알림 */}
+        <Route path="notification" element={<Notification />} />
         {/* Test */}
-        {/* <Route path="/test" element={<Test />} /> */}
+        <Route path="/videochat" element={<OpenViduSettings />} />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

@@ -6,12 +6,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useSelector } from "react-redux";
 
-import { useDispatch } from "react-redux"; 
+import { useDispatch } from "react-redux";
 import { getChatClient } from "../redux/modules/BungleSlice";
 
+import {} from "react-router-dom";
+
 import AxiosAPI from "../customapi/CustomAxios";
-import moment from "moment";
-import { getCookie, setCookie } from "../customapi/CustomCookie";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -22,14 +22,8 @@ import "swiper/css/pagination";
 
 //styled-components
 import {
-  HeaderWrap,
-  BackKey,
-  Logo,
-  PageTitle,
-  HeadrIconsWrap,
-  IconMyLocation,
-  IconNotification,
-  IconSetting,
+  ChattingHeaderWrap,
+  ChattingBackKey,
   IconHamburger,
 } from "../styles/StyledHeader.js";
 import {
@@ -44,15 +38,12 @@ import "../styles/Chat1.css";
 import Hamburger from "../assets/icon-hamburger.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
 import IconForwardKey from "../assets/icon-right-arrow.svg";
-import IconMyPoint from "../assets/icon-mylocation.svg";
 import IconCamera from "../assets/icon-camera-mono (1).svg";
-import defaultProfile from "../assets/icon-default-profile.svg";
 import SendBtn from "../assets/icon-sendbtn (1).svg";
-import IconMainLogo from "../assets/icon-main-logo.svg";
+import SendBtnActive from "../assets/icon-sendbtn-active.svg";
 import IconSiren from "../assets/icon-siren.svg";
 import IconMoon from "../assets/icon-share-mono.svg";
 import Notification from "../assets/icon-notification.svg";
-import Setting from "../assets/icon-setting.svg";
 
 import IconHighTemp from "../assets/icon-manner-high.svg";
 import IconMiddleTemp from "../assets/icon-manner-middle.svg";
@@ -63,9 +54,7 @@ import IconLightening from "../assets/icon-lightening.svg";
 let client = null;
 function ChattingRoom({ setRealTimeChat }) {
   // SERVER URL
-  // const SERVER_URL = "http://3.37.61.25";
-  const SERVER_URL = "https://gutner.shop"; //현구님
-  // const SERVER_URL = "https://meeting-platform.shop"; //현욱님
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const dispatch = useDispatch();
   // navigate
   const navigate = useNavigate();
@@ -83,16 +72,27 @@ function ChattingRoom({ setRealTimeChat }) {
   //   console.log("PostID ", Bungle);
   // }
   const token = localStorage.getItem("login-token");
-  const PK = Number( localStorage.getItem("userId") );
-  let postId;
+  const PK = Number(localStorage.getItem("userId"));
+  
   const Guest = params.postId;
+  let postId = String(Guest);
+  // if (Bungle) {
+  //   postId = Bungle;
+  // } else {
+  //   postId = String(Guest);
+  // } // console.log(parseInt(postId)); }
 
-  if (Bungle) {
-    postId = Bungle;
-  } else {
-    postId = String(Guest);
-  } // console.log(parseInt(postId)); }
-  console.log("OnwerPostId ", Bungle, "userId ", PK, "Guest( params.postId ) ", Guest, "Change Post ID ", postId);
+  console.log(
+    "OnwerPostId ",
+    Bungle,
+    "userId ",
+    PK,
+    "Guest( params.postId ) ",
+    Guest,
+    "Change Post ID ",
+    postId
+  );
+
   // const { postID } = useParams();
 
   const userPersonalId = Number(localStorage.getItem("userId"));
@@ -113,7 +113,7 @@ function ChattingRoom({ setRealTimeChat }) {
     if (postId > 0 || Number(postId) > 0) {
       connect();
     }
-  }, [postId]); // postId defendency 삭제
+  }, [postId]);
 
   const connect = () => {
     console.log("Connect 시작");
@@ -127,11 +127,11 @@ function ChattingRoom({ setRealTimeChat }) {
   };
 
   const onConnected = () => {
-    dispatch( getChatClient( { client, Guest } ) );
+    dispatch(getChatClient({ client, Guest }));
     setUserData({ ...userData, connected: true });
     if (Bungle) {
       console.log("방장 connect");
-      client.subscribe(`/sub/chat/room/${postId}`, onMessageReceived);
+      client.subscribe(`/sub/chat/room/${parseInt(postId)}`, onMessageReceived);
     } else if (Guest) {
       console.log("게스트 connect");
       client.subscribe(`/sub/chat/room/${parseInt(postId)}`, onMessageReceived);
@@ -142,22 +142,24 @@ function ChattingRoom({ setRealTimeChat }) {
 
   const userJoin = () => {
     console.log("Test user Join");
-    if (Bungle) {
-      var chatMessage = {
-        type: "ENTER",
-        nickName: "seowoo",
-        roomId: `${postId}`,
-        status: "JOIN",
-      };
-    } else if (Guest) {
-      var chatMessage = {
-        type: "ENTER",
-        nickName: "seowoo",
-        roomId: `${parseInt(postId)}`,
-        status: "JOIN",
-      };
-    }
-    
+    // if (Bungle) {
+      if(1){
+        var chatMessage = {
+          type: "ENTER",
+          nickName: "seowoo",
+          roomId: `${postId}`,
+          status: "JOIN",
+        };
+      } 
+    // else if (Guest) {
+    //   var chatMessage = {
+    //     type: "ENTER",
+    //     nickName: "seowoo",
+    //     roomId: `${parseInt(postId)}`,
+    //     status: "JOIN",
+    //   };
+    // }
+
     client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
     console.log("Test user Subscribe");
   };
@@ -169,35 +171,36 @@ function ChattingRoom({ setRealTimeChat }) {
 
   const sendValue = async () => {
     console.log("Test user send");
-    
-    
+
     if ((client && userData.message) || (client && fileUrl)) {
-      if (Bungle) {
+      // if (Bungle) {
+      if(1){
         var chatMessage = {
           type: "TALK",
           message: userData.message,
           roomId: `${postId}`,
           fileUrl: fileUrl,
         };
-      } else if (Guest) {
-        var chatMessage = {
-          type: "TALK",
-          message: userData.message,
-          roomId: `${parseInt(postId)}`,
-          fileUrl: fileUrl,
-        };
-      }
+      } 
+      // else if (Guest) {
+      //   var chatMessage = {
+      //     type: "TALK",
+      //     message: userData.message,
+      //     roomId: `${parseInt(postId)}`,
+      //     fileUrl: fileUrl,
+      //   };
+      // }
       // console.log(chatMessage);
       client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
       setUserData({ ...userData, message: "" });
       setFileUrl(null);
+      setIsFile(null);
     }
   };
 
   const onMessageReceived = (payload) => {
-    
     var payloadData = JSON.parse(payload.body);
-    console.log( payloadData );
+    console.log(payloadData);
     if (
       payloadData.type === "TALK" ||
       payloadData.type === "ENTER" ||
@@ -259,22 +262,24 @@ function ChattingRoom({ setRealTimeChat }) {
       chattingDate.push(ampm + " " + hour + ":" + minutes);
     }
   }
-  // console.log("publicChats: ", publicChats);
+  console.log("publicChats: ", publicChats);
 
   //Disconnect
   const chatDisconnect = () => {
     console.log("Chat disconnect");
-    if (Bungle) {
+    // if (Bungle) {
+    if(1){
       var chatMessage = {
         type: "QUIT",
         roomId: `${postId}`,
       };
-    } else if (Guest) {
-      var chatMessage = {
-        type: "QUIT",
-        roomId: `${parseInt(postId)}`,
-      };
-    }
+    } 
+    // else if (Guest) {
+    //   var chatMessage = {
+    //     type: "QUIT",
+    //     roomId: `${parseInt(postId)}`,
+    //   };
+    // }
     client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
     client.disconnect(function () {
       alert("See you next time!");
@@ -316,29 +321,26 @@ function ChattingRoom({ setRealTimeChat }) {
     if (e.target.files[0]) {
       setIsFile(e.target.files[0]);
     } else {
-      setIsFile(null);
+      setIsFile("");
       return;
     }
   };
-  // console.log(isFile);
+  console.log(isFile);
+  console.log(fileUrl);
 
   const chatImg = async () => {
     if (fileUrl) {
-      setFileUrl(null);
+      setFileUrl("");
       console.log(fileUrl);
     } else {
       const formData = new FormData();
       formData.append("file ", isFile);
-      const response = await AxiosAPI.post(
-        `/chat/message/file`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            // Authorization: token,
-          },
-        }
-      );
+      const response = await AxiosAPI.post(`/chat/message/file`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          // Authorization: token,
+        },
+      });
       setFileUrl(response.data);
     }
     console.log(fileUrl);
@@ -349,6 +351,8 @@ function ChattingRoom({ setRealTimeChat }) {
     // console.log( isFile );
     if (isFile) {
       chatImg();
+      // setFileUrl(null);
+      // setIsFile(null);
     }
   }, [isFile]);
 
@@ -526,7 +530,7 @@ function ChattingRoom({ setRealTimeChat }) {
       });
   };
   useEffect(() => {
-    console.log( "reportUser ", reportUserId );
+    console.log("reportUser ", reportUserId);
     if (reportUserId) {
       detailProfile();
     }
@@ -581,7 +585,6 @@ function ChattingRoom({ setRealTimeChat }) {
   // console.log("이전: ", beforeChat);
 
   useEffect(() => {
-    // getMessage undefined 수정 중
     if (postId > 0) {
       getMessage();
     }
@@ -625,36 +628,23 @@ function ChattingRoom({ setRealTimeChat }) {
     <>
       <div id="chat-app">
         <div id="page-wrap">
-          <HeaderWrap>
-            <Logo src={IconMainLogo} style={{ visibility: "hidden" }} />
-            <BackKey
+          <ChattingHeaderWrap>
+            <ChattingBackKey
               src={IconBackKey}
               onClick={() => {
-                navigate("/main");
+                navigate("/chatlist");
                 setOutOwner(() => false);
               }}
             />
-            <PageTitle style={{ visibility: "hidden" }}></PageTitle>
-            <HeadrIconsWrap>
-              <IconMyLocation
-                style={{ visibility: "hidden" }}
-                src={IconMyPoint}
-              />
-              <IconNotification
-                src={Notification}
-                style={{ visibility: "hidden" }}
-              />
-              <IconSetting src={Setting} style={{ visibility: "hidden" }} />
-              <IconHamburger
-                src={Hamburger}
-                onClick={() => {
-                  setChatModal(!chatModal);
-                  chatPerson();
-                  chatFile();
-                }}
-              />
-            </HeadrIconsWrap>
-          </HeaderWrap>
+            <IconHamburger
+              src={Hamburger}
+              onClick={() => {
+                setChatModal(!chatModal);
+                chatPerson();
+                chatFile();
+              }}
+            />
+          </ChattingHeaderWrap>
           {chatModal && (
             <div className="modal-chat-wrapper">
               <div
@@ -754,6 +744,7 @@ function ChattingRoom({ setRealTimeChat }) {
                         );
                       })}
                     </div>
+                    <div className="modal-divider"></div>
                     <div className="modal-footer">
                       <div
                         className="modal-footer-exit"
@@ -922,7 +913,7 @@ function ChattingRoom({ setRealTimeChat }) {
                                       <video controls name="media">
                                         <source
                                           src={chat.fileUrl}
-                                          type="video/mp4"
+                                          type="video/*"
                                         />
                                       </video>
                                     </p>
@@ -950,7 +941,6 @@ function ChattingRoom({ setRealTimeChat }) {
                               </>
                             ) : (
                               <>
-                                {console.log(chat.fileUrl.slice(-3))}
                                 {chat.fileUrl.slice(-3) === "jpg" ||
                                 chat.fileUrl.slice(-3) === "png" ||
                                 chat.fileUrl.slice(-4) === "jpeg" ||
@@ -1067,7 +1057,6 @@ function ChattingRoom({ setRealTimeChat }) {
                               </>
                             ) : (
                               <>
-                                {console.log(chat.fileUrl.slice(-3))}
                                 {chat.fileUrl.slice(-3) === "jpg" ||
                                 chat.fileUrl.slice(-3) === "png" ||
                                 chat.fileUrl.slice(-4) === "jpeg" ||
@@ -1131,20 +1120,49 @@ function ChattingRoom({ setRealTimeChat }) {
                       name="chat_img"
                       onChange={imageUpload}
                     />
-                    {/* <img src={IconCamera} alt="" /> */}
                   </div>
                   <div className="chatting-footer-input">
-                    <input
-                      type="text"
-                      placeholder={"체크할 항목"}
-                      value={userData.message}
-                      onChange={handleMessage}
-                      onKeyPress={onKeyPress}
-                    />
-                    <button onClick={sendValue}>
-                      <img src={SendBtn} alt="" />
-                    </button>
-                    {/* <button onClick={chatImg}>img</button> */}
+                    {fileUrl ? (
+                      <>
+                        <input
+                          type="text"
+                          placeholder="전송 버튼 클릭!!"
+                          value={userData.message}
+                          onChange={handleMessage}
+                          onKeyPress={onKeyPress}
+                          disabled
+                          // style={{
+                          //   backgroundImage: `url(${fileUrl})`,
+                          //   objectFit: "cover",
+                          // }}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <input
+                          type="text"
+                          value={userData.message}
+                          onChange={handleMessage}
+                          onKeyPress={onKeyPress}
+                        />
+                      </>
+                    )}
+
+                    {userData.message || fileUrl ? (
+                      <>
+                        <img
+                          src={SendBtnActive}
+                          alt=""
+                          onClick={() => {
+                            sendValue();
+                          }}
+                        ></img>
+                      </>
+                    ) : (
+                      <>
+                        <img src={SendBtn} alt="" onClick={sendValue}></img>
+                      </>
+                    )}
                   </div>
                 </div>
               </>

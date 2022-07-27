@@ -12,6 +12,7 @@ import "../styles/Login.css";
 import {
   LoginWrap,
   LoginInquiry,
+  LoginImageWrap,
   LoginTitle,
   LoginExplain,
   LoginLogo,
@@ -36,8 +37,9 @@ import {
 } from "../styles/StyledLogin";
 
 // icon
-import IconLoginLogo from "../assets/icon-login-main.svg";
+import IconLoginLogo from "../assets/icon-login-title.svg"
 import IconTextClear from "../assets/icon-login-clear.svg";
+import IconIllustration from "../assets/icon-login-illustration.svg";
 
 // 소셜 로그인 URL - Naver
 const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?client_id=${process.env.REACT_APP_NAVER_LOGIN_CLIENT_KEY}&response_type=code&redirect_uri=${process.env.REACT_APP_SOCIAL_LOGIN_REDIRECTION_URL}`;
@@ -46,17 +48,15 @@ const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${p
 // 소셜 로그인 URL - Kakao
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_LOGIN_CLIENT_KEY}&redirect_uri=${process.env.REACT_APP_SOCIAL_LOGIN_REDIRECTION_URL}&response_type=code`;
 
-// const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 function Login() {
-  //http://52.79.214.48
-  //http://3.37.61.25
-  // const SERVER_URL = "https://gutner.shop";
-  // const SERVER_URL = "https://meeting-platform.shop";
-
+  useEffect(()=>{
+    window.scrollTo(0,0);
+  },[])
   // navigate
   const navigate = useNavigate();
-
+  
   // 소셜 로그인 처리
   const code = new URL(window.location.href).searchParams.get("code");
   const url = new URL(window.location.href);
@@ -68,7 +68,7 @@ function Login() {
     console.log(code);
 
     try {
-      const response = await AxiosAPI.get(`/user/signin/naver`, {
+      const response = await axios.get(`${SERVER_URL}/user/signin/naver`, {
         params: {
           code: code,
           state: createStateToken(code),
@@ -80,14 +80,14 @@ function Login() {
         localStorage.setItem("userId", response.data.userId);
         localStorage.setItem(
           "expireAt",
-          moment().add(5, "minute").format("yyyy-MM-DD HH:mm:ss")
+          moment().add(30, "minute").format("yyyy-MM-DD HH:mm:ss")
         );
         setCookie("refresh_token", response.headers.refreshtoken, {
           path: "/",
           secure: true,
         });
         console.log(localStorage.getItem("login-token"));
-        window.location.href = "/main";
+        navigate("/main")
       }
     } catch (error) {
       console.log(error);
@@ -108,7 +108,7 @@ function Login() {
   // 카카오 소셜 로그인 시도 후, JWT 토큰 획득
   const getKakaoLoginJWTtoken = async () => {
     try {
-      const response = await AxiosAPI.get(`/user/signin/kakao`, {
+      const response = await axios.get(`${SERVER_URL}/user/signin/kakao`, {
         params: {
           code: code,
         },
@@ -119,14 +119,14 @@ function Login() {
         localStorage.setItem("userId", response.data.userId);
         localStorage.setItem(
           "expireAt",
-          moment().add(5, "minute").format("yyyy-MM-DD HH:mm:ss")
+          moment().add(30, "minute").format("yyyy-MM-DD HH:mm:ss")
         );
         setCookie("refresh_token", response.headers.refreshtoken, {
           path: "/",
           secure: true,
         });
         console.log(localStorage.getItem("login-token"));
-        window.location.href = "/main";
+        navigate("/main")
       }
     } catch (error) {
       console.log(error);
@@ -142,7 +142,7 @@ function Login() {
   // 구글 소셜 로그인 시도 후, JWT 토큰 획득
   const getGoogleLoginJWTtoken = async () => {
     try {
-      const response = await AxiosAPI.get(`/user/signin/google`, {
+      const response = await axios.get(`${SERVER_URL}/user/signin/google`, {
         params: {
           code: code,
         },
@@ -153,14 +153,14 @@ function Login() {
         localStorage.setItem("userId", response.data.userId);
         localStorage.setItem(
           "expireAt",
-          moment().add(5, "minute").format("yyyy-MM-DD HH:mm:ss")
+          moment().add(30, "minute").format("yyyy-MM-DD HH:mm:ss")
         );
         setCookie("refresh_token", response.headers.refreshtoken, {
           path: "/",
           secure: true,
         });
         console.log(localStorage.getItem("login-token"));
-        window.location.href = "/main";
+        navigate("/main");
       }
     } catch (error) {
       console.log(error);
@@ -212,7 +212,7 @@ function Login() {
   // 로그인
   const LoginEnterKeyPressHanlder = async (LoginUser) => {
     try {
-      const response = await AxiosAPI.post(`/user/login`, LoginUser);
+      const response = await axios.post(`${SERVER_URL}/user/login`, LoginUser);
       // localStorage.setItem("login-token", response.headers.authorization );
       console.log(response);
       if (response.data.response) {
@@ -220,7 +220,7 @@ function Login() {
         localStorage.setItem("userId", response.data.userId);
         localStorage.setItem(
           "expireAt",
-          moment().add(5, "minute").format("yyyy-MM-DD HH:mm:ss")
+          moment().add(30, "minute").format("yyyy-MM-DD HH:mm:ss")
         );
         setCookie("refresh_token", response.headers.refreshtoken, {
           path: "/",
@@ -281,37 +281,44 @@ function Login() {
     setIsPasswordClear(false);
   };
 
-  // 비밀번호 enter event
-  const onKeyPress = (event) => {
-    // console.log( event.code );
+  // 안드로이드 아이폰 둘다 enter는 event.key로 확인 가능
+  // 아이폰은 enter가 event.code도 가능
+  const onKeyDown = (event) => {
     if (
       email_Ref.current.value.length > 0 &&
       password_Ref.current.value.length > 0 &&
-      event.code === "Enter"
+      event.key === "Enter"
     ) {
       const LoginUser = {
         username: email_Ref.current.value,
         password: password_Ref.current.value,
       };
       LoginEnterKeyPressHanlder(LoginUser);
-    } else if (email_Ref.current.value.length <= 0 && event.code === "Enter") {
+      // alert("로그인 성공");
+    } else if (email_Ref.current.value.length <= 0 && event.key === "Enter") {
       setIsModal(true);
       setIsError("이메일을 입력해주세요.");
     } else if (
       password_Ref.current.value.length <= 0 &&
-      event.code === "Enter"
+      event.key === "Enter"
     ) {
       setIsModal(true);
       setIsError("비밀번호를 입력해주세요.");
     }
   };
 
+  const onKeyUp = (event) => {
+    // setKeyCode( "Up " );/
+  };
+
   return (
     <LoginWrap>
       <LoginInquiry>문의하기</LoginInquiry>
-      <LoginTitle>Lorem ipsum</LoginTitle>
-      <LoginExplain>Lorem ipsum dolor sit amet</LoginExplain>
-      <LoginLogo src={IconLoginLogo} />
+      <LoginImageWrap>
+        <LoginTitle src={IconLoginLogo} />
+        <LoginExplain>너와 나 친구되는 시간</LoginExplain>
+      </LoginImageWrap>
+      <LoginLogo src={IconIllustration} />
       {/* 로그인 회원가입 창 */}
       <LoginContentWrap>
         <LoginEmailText>이메일</LoginEmailText>
@@ -336,7 +343,8 @@ function Login() {
           value={isPassword || ""}
           maxLength={20}
           onChange={appearPasswordClearBtnHandler}
-          onKeyPress={onKeyPress}
+          onKeyDown={onKeyDown}
+          onKeyUp={onKeyUp}
         />
         {isPasswordClear && (
           <LoginPasswordClearBtn
@@ -350,6 +358,7 @@ function Login() {
         <p>소셜 로그인</p>
         <span></span>
       </LoginSns>
+
       <LoginSnsIconWarp>
         <img
           src="https://member.brandi.co.kr/images/ic_kakao.svg"

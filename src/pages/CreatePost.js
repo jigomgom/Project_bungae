@@ -2,10 +2,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import Divider from "../components/Divider";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // import redux slice
-import { createBungleList } from "../redux/modules/BungleSlice";
+import { createBungleList, getIntervalNotification } from "../redux/modules/BungleSlice";
 
 // slider 추가
 import Slider from "rc-slider";
@@ -72,14 +72,35 @@ import {
   // 게시글 작성 버튼
   PostCreateButton,
 } from "../styles/StyledCreatePost";
+import {
+  PostHeaderWrap,
+  ChattingBackKey,
+  PageTitle,
+  HeadrIconsWrap,
+  IconNotification,
+  IconSetting
+} from "../styles/StyledHeader.js";
+
+import {
+  // Moadl
+  ModalWrapper,
+  ModalOverlay,
+  ModalInner,
+  ModalContentWrap,
+  ModalDivider,
+  ModalButton,
+} from "../styles/StyledLogin";
+
 //icon
 
 import IconClear from "../assets/icon-clear.svg";
 import IconUpload from "../assets/icon-upload.svg";
-import IconChatLetter from "../assets/icon-chat-gray.svg";
-import IconChatVideo from "../assets/icon-chat-video.svg";
 import IconMylocation from "../assets/icon-mylocation-gray.svg";
-import IconAddressClose from "../assets/icon-input-xbtn.svg";
+
+// header icon
+import Notification from "../assets/icon-notification.svg";
+import Setting from "../assets/icon-setting.svg";
+import IconBackKey from "../assets/icon-left-arrow.svg";
 
 const CategoriesArray = [
   "맛집",
@@ -95,6 +116,27 @@ const CategoriesArray = [
 ];
 
 function CreatePost() {
+  // 알림 interval
+  const interval = useRef(null);
+  // 알람 추가
+  const NotificationState = useSelector( state => state.Bungle.isReadNotification );
+  const [ notificationState, setNotificationState ] = useState( NotificationState);
+  useEffect(()=>{
+    setNotificationState( NotificationState );
+  },[NotificationState]);
+
+  // 알림 setInterval
+  useEffect(()=>{
+    interval.current = setInterval( async()=>{
+      dispatch( getIntervalNotification() );
+    }, 5000);
+    return () => clearInterval( interval.current );
+  },[])
+
+  // modal state
+  const [ isModal, setIsModal ] = useState(false);
+  // modal message
+  const [ modalMessage, setModalMessage ] = useState("");
   // dispatch
   const dispatch = useDispatch();
   // navigate
@@ -323,7 +365,7 @@ function CreatePost() {
   // 엔터키 태그 입력
   const onKeyPress = (e) => {
     // console.log( e, e.target.value );
-    if (e.target.value.length !== 0 && e.code === "Enter") {
+    if (e.target.value.length !== 0 && e.key === "Enter") {
       addHashTagItemHandler();
       e.target.value = "";
     }
@@ -371,7 +413,9 @@ function CreatePost() {
 
   const peopleOnBlur = ( event ) => {
     if( Number( event.target.value ) < 2 ){
-      alert(`인원 설정은 최소 2명입니다.`);
+      setIsModal( true );
+      setModalMessage(`인원 설정은 최소 2명입니다.`);
+      // alert(`인원 설정은 최소 2명입니다.`);
       setOnlyNumber( 2 )
     }
   };
@@ -440,8 +484,9 @@ function CreatePost() {
   const hourOnBlur = ( event ) => {
     if( isToday ){
       if( Number( event.target.value ) < Number( currentHour ) ){
-        console.log("설마")
-        alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        setIsModal( true );
+        setModalMessage(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        // alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
         const limitHour = Math.max(currentHour, Math.min(24, Number(event.target.value)));
         setHour( limitHour );     
         setMinute( currentMinute );
@@ -455,7 +500,9 @@ function CreatePost() {
       }
     }else{
       if( Number( event.target.value ) > ( currentHour ) ){
-        alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        setIsModal( true );
+        setModalMessage(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        // alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
         const limitHour = Math.max(0, Math.min(currentHour, Number(event.target.value)));
         setHour( limitHour );     
       }
@@ -469,20 +516,26 @@ function CreatePost() {
     // console.log( Number( currentHour + currentMinute ));
     // console.log( Number( hour + event.target.value ) );
     if( Number( event.target.value ) >= 60 ){
-      alert(`분은 60분을 넘길 수 없습니다.`);
+      setIsModal( true );
+      setModalMessage(`분은 60분을 넘길 수 없습니다.`);
+      // alert(`분은 60분을 넘길 수 없습니다.`);
       setMinute(( "0" + currentMinute ).slice(-2));
     }
 
     if( !isToday ){
       if( Number( currentHour + currentMinute ) < Number( hour + event.target.value) ){
+        setIsModal( true );
+        setModalMessage(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
         // console.log("??");
-        alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        // alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
         const limitMinute = Math.max(0, Math.min(currentMinute, Number(event.target.value)));
         setMinute( limitMinute );
       }
     }else{
       if( Number( currentHour + currentMinute ) > Number( hour + event.target.value )){
-        alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        setIsModal( true );
+        setModalMessage(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        // alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
         const limitMinute = Math.max(currentMinute, Math.min(currentMinute, Number(event.target.value)));
         console.log("limit ", limitMinute );
         setMinute( limitMinute );
@@ -630,9 +683,16 @@ function CreatePost() {
 
     const title = Title_ref.current.value;
     let content = "";
-    
+    if( title.length <= 0 ){
+      setIsModal( true );
+      setModalMessage("벙글 제목을 작성해주세요.")
+      window.scrollTo(0,0);
+      return null;
+    }
     if (Content_ref.current.value.length <= 100 && Content_ref.current.value.length === 0 ) {
-      alert("소개글은 0자 이상 100자 이하여야 합니다.")
+      setIsModal( true );
+      setModalMessage("소개글은 0자 이상 100자 이하여야 합니다.");
+      window.scrollTo(0,0);
       return null;
     } else {
       content = Content_ref.current.value;
@@ -692,22 +752,67 @@ function CreatePost() {
           formData.append("postImg", item);
         });
       }
-
-      dispatch(createBungleList(formData));
-      navigate("/chat");
+      dispatch(createBungleList( { formData, navigate, isLetter }));
+      // console.log( postDto.isLetter, postDto.personnel )
     }else{
-      alert("벙글 제목은 필수 사항입니다.");
-      window.scrollTo(0,0);
+      
     }
   };
 
   return (
+    <>
     <CreatePostWrap>
+    {isModal && (
+        <ModalWrapper>
+          <ModalOverlay>
+            <ModalInner>
+              <ModalContentWrap>
+                <h3>벙글 생성 실패</h3>
+                <div>{modalMessage}</div>
+              </ModalContentWrap>
+              <ModalDivider />
+              <ModalButton
+                onClick={() => {
+                  setIsModal(false);
+                }}
+              >
+                확인
+              </ModalButton>
+            </ModalInner>
+          </ModalOverlay>
+        </ModalWrapper>
+      )}
+      {/* Header */}
+      <PostHeaderWrap>
+        <ChattingBackKey
+          src={IconBackKey}
+          onClick={() => {
+            navigate("/main");
+          }}
+        />
+        <PageTitle>벙글 생성</PageTitle>
+        <HeadrIconsWrap>
+        {notificationState ? (
+                  <span
+                    style={{ cursor: "pointer", color: "#FFC632" }}
+                    className="material-icons"
+                    onClick={() => {
+                      navigate("/notification");
+                    }}
+                  >
+                    notifications
+                  </span>
+                ) : (
+          <IconNotification src={Notification} /> )}
+          <IconSetting src={Setting} />
+        </HeadrIconsWrap>
+      </PostHeaderWrap>
+      
       {/* Title 부분 */}
       <PostTilteDiv>
         <PostTitle
           type="search"
-          placeholder="벙글 이름을 입력해주세요!."
+          placeholder="벙글 이름을 입력해주세요!"
           maxLength={36}
           ref={Title_ref}
         />
@@ -736,7 +841,7 @@ function CreatePost() {
             <FileInput
               id="file-input-1"
               type="file"
-              accept="image/*"
+              accept="image/jpg, image/png, image/jpeg, image/gif image/bmp image/jfif image/JPG image/PNG image/JPEG image/GIF iage/BMP image/img"
               onChange={onFistFileChange}
               onClick={(event)=>event.target.value = null}
               // disabled={isFirstFileClear ? true : false}
@@ -755,7 +860,7 @@ function CreatePost() {
             <FileInput
               id="file-input-2"
               type="file"
-              accept="image/*"
+              accept="image/jpg, image/png, image/jpeg, image/gif image/bmp image/jfif image/JPG image/PNG image/JPEG image/GIF iage/BMP image/img"
               onChange={onSecondFileChange}
               onClick={(event)=>event.target.value = null}
             />
@@ -774,7 +879,7 @@ function CreatePost() {
             <FileInput
               id="file-input-3"
               type="file"
-              accept="image/*"
+              accept="image/jpg, image/png, image/jpeg, image/gif image/bmp image/jfif image/JPG image/PNG image/JPEG image/GIF iage/BMP image/img"
               onChange={onThirdFileChange}
               onClick={(event)=>event.target.value = null}
             />
@@ -969,13 +1074,13 @@ function CreatePost() {
             </SelectChatLetterBtn>
             <SelectChatVideoBtn
               CheckedState={isVideo}
-              onClick={() => {
-                // ChatButtonClickHandler("video");
-              }}
+              // onClick={() => {
+              //   ChatButtonClickHandler("video");
+              // }}
             >
               {/* <SelectChatBtnImg src={IconChatVideo} /> */}
               <span
-                className="material-icons"
+                className="material-icons-outlined"
                 style={{ marginRight: "7px", marginTop: "2px" }}
               >
                 video_camera_front
@@ -1044,7 +1149,10 @@ function CreatePost() {
       <PostCreateButton onClick={CreateBunggleOnClickHandler}>
         등록하기
       </PostCreateButton>
+      
     </CreatePostWrap>
+    
+    </>
   );
 }
 

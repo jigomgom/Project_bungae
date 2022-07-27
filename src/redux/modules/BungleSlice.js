@@ -7,17 +7,21 @@ const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 // 벙글 생성하기
 export const createBungleList = createAsyncThunk(
   "CREATE/createBungleList",
-  async (formData) => {
+  async (data) => {
     try {
-      const response = await AxiosAPI.post(`/posts`, formData, {
+      const response = await AxiosAPI.post(`/posts`, data.formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           // Authorization: localStorage.getItem("login-token"),
         },
       });
       console.log(response);
-      if (response.data.response) {
-        return response.data.postId;
+      if (response.status === 200 && response.data.response) {
+        console.log(data);
+        if (data.isLetter) {
+          data.navigate("/chat");
+          return response.data.postId;
+        }
       }
     } catch (error) {
       console.log(error);
@@ -32,12 +36,13 @@ export const getMyBungleList = createAsyncThunk(
     // console.log( token );
     try {
       // const response = await axios.get(`${SERVER_URL}/posts/posts/mypost`, {
-      const response = await AxiosAPI.get(`/posts/mypost`, 
-      // {
-      //   headers: {
-      //     Authorization: localStorage.getItem("login-token"),
-      //   },
-      // }
+      const response = await AxiosAPI.get(
+        `/posts/mypost`
+        // {
+        //   headers: {
+        //     Authorization: localStorage.getItem("login-token"),
+        //   },
+        // }
       );
       // console.log(response);
       if (response.data.response) {
@@ -77,23 +82,25 @@ export const editMyBungleList = createAsyncThunk(
 // 벙글 삭제하기
 export const deleteMyBungleList = createAsyncThunk(
   "DELETE/deleteMyBungleList",
-  async (postId) => {
+  async (rev) => {
     try {
       //axios.delete(URL, {params: payload}, header);
-      const response = await AxiosAPI.delete(`/posts/${postId}`, 
-      // {
-      //   headers: {
-      //     Authorization: localStorage.getItem("login-token"),
-      //   },
-      // }
+      const response = await AxiosAPI.delete(
+        `/posts/${rev.postId}`
+        // {
+        //   headers: {
+        //     Authorization: localStorage.getItem("login-token"),
+        //   },
+        // }
       );
       console.log(response);
       if (response.data.response) {
         let data = {
-          postId,
+          postId: rev.postId,
           isOwner: response.data.isOwner,
         };
-        window.location.href = "/main";
+        rev.navigate("/main");
+        // window.location.href = "/main";
         return data;
       }
     } catch (e) {
@@ -115,7 +122,7 @@ export const getMainBungleList = createAsyncThunk(
           longitude: position?.longitude,
         },
       });
-      console.log(response);
+      // console.log(response);
       if (response.status === 200) {
         // console.log("왜?");
         return response.data;
@@ -144,10 +151,69 @@ export const moreBungleList = createAsyncThunk(
       });
       console.log(response);
       if (response.data.response) {
-        data.navigate("/tagsearch");// window.location.href = "/tagsearch";
+        data.navigate("/tagsearch"); // window.location.href = "/tagsearch";
         return response.data.list;
-      }else{
-        alert(response.data.message);
+      } else {
+        data.navigate("/tagsearch");
+        // alert(response.data.message);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
+
+// 지도 주변 벙글
+export const getMapBungle = createAsyncThunk(
+  "GET/getMapBungle",
+  async (data) => {
+    console.log(data);
+    // const navigate = useNavigate();
+    try {
+      const response = await AxiosAPI.get(`/map`, {
+        // headers: {
+        //   Authorization: localStorage.getItem("login-token"),
+        // },
+        params: {
+          latitude: data.latitude,
+          longitude: data.longitude,
+        },
+      });
+      console.log(response);
+      if (response.data.response) {
+        return response.data;
+      } else {
+        // alert(response.data.message);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
+
+// 지도 상세 적용
+export const getDetailMap = createAsyncThunk(
+  "GET/getDetailMap",
+  async (data) => {
+    console.log(data);
+    // if (data.selectCategory.length === 0) {
+    //   data.selectCategory = "null";
+    // }
+    try {
+      const response = await AxiosAPI.get(`/map/details`, {
+        params: {
+          categories: data.selectCategory,
+          personnel: data.onlyNumber,
+          distance: data.onlyDistance,
+          latitude: data.location.latitude,
+          longitude: data.location.longitude,
+        },
+      });
+      console.log(response);
+      if (response.data.response) {
+        return response.data.mapListDtos;
+      } else {
+        // alert(response.data.message);
       }
     } catch (e) {
       console.log(e);
@@ -163,7 +229,7 @@ export const likeBungleList = createAsyncThunk(
     try {
       const response = await AxiosAPI.post(
         `/posts/like/${postId}`,
-        {},
+        {}
         // {
         //   headers: {
         //     Authorization: localStorage.getItem("login-token"),
@@ -186,12 +252,13 @@ export const detailBungleList = createAsyncThunk(
   async (postId) => {
     console.log(postId);
     try {
-      const response = await AxiosAPI.get(`/posts/${postId}`, 
-      // {
-      //   headers: {
-      //     Authorization: localStorage.getItem("login-token"),
-      //   },
-      // }
+      const response = await AxiosAPI.get(
+        `/posts/${postId}`
+        // {
+        //   headers: {
+        //     Authorization: localStorage.getItem("login-token"),
+        //   },
+        // }
       );
       console.log(response);
       if (response.data.response) {
@@ -211,7 +278,7 @@ export const detailLikeBungleList = createAsyncThunk(
     try {
       const response = await AxiosAPI.post(
         `${SERVER_URL}/posts/like/${postId}`,
-        {},
+        {}
         // {
         //   headers: {
         //     Authorization: localStorage.getItem("login-token"),
@@ -247,10 +314,11 @@ export const categoryBungleList = createAsyncThunk(
       });
       console.log(response);
       if (response.data.response) {
-        window.location.herf = `/categorysearch/${item.category}`
+        item.navigate(`/categorysearch/${item.category}`);
         return response.data.list;
       } else {
-        alert(`${response.data.message}`);
+        // alert(`${response.data.message}`);
+        item.navigate(`/categorysearch/${item.category}`);
       }
     } catch (e) {
       console.log(e);
@@ -262,7 +330,7 @@ export const categoryBungleList = createAsyncThunk(
 export const tagBungleList = createAsyncThunk(
   "GET/tagBungleList",
   async (item) => {
-    // console.log( item );
+    // console.log(item);
     try {
       const response = await AxiosAPI.get(`/posts/tags`, {
         // headers: {
@@ -274,7 +342,9 @@ export const tagBungleList = createAsyncThunk(
           tags: item.tag,
         },
       });
+      console.log(response);
       if (response.data.response) {
+        console.log(response.data.list);
         return response.data.list;
       }
     } catch (e) {
@@ -305,20 +375,17 @@ export const getUserProfile = createAsyncThunk(
 // 유저 프로필 수정
 export const editUserProfile = createAsyncThunk(
   "EDIT/editUserProfile",
-  async (formData) => {
+  async (data) => {
     try {
-      const response = await AxiosAPI.post(
-        `/user/profile`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            // Authorization: localStorage.getItem("login-token"),
-          },
-        }
-      );
+      const response = await AxiosAPI.post(`/user/profile`, data.formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          // Authorization: localStorage.getItem("login-token"),
+        },
+      });
       console.log(response);
       if (response.data.response) {
+        data.navigate("/mypage");
         return response.data.profileResponseDto;
       }
     } catch (error) {
@@ -332,12 +399,13 @@ export const myLikeBungleList = createAsyncThunk(
   "GET/myLikeBungleList",
   async () => {
     try {
-      const response = await AxiosAPI.get(`/posts/like/`, 
-      // {
-      //   headers: {
-      //     Authorization: localStorage.getItem("login-token"),
-      //   },
-      // }
+      const response = await AxiosAPI.get(
+        `/posts/like/`
+        // {
+        //   headers: {
+        //     Authorization: localStorage.getItem("login-token"),
+        //   },
+        // }
       );
       console.log(response);
       if (response.data.response) {
@@ -355,12 +423,13 @@ export const myChattingList = createAsyncThunk(
   async () => {
     // console.log(1);
     try {
-      const response = await AxiosAPI.get(`/chat/rooms`, 
-      // {
-      //   headers: {
-      //     Authorization: localStorage.getItem("login-token"),
-      //   },
-      // }
+      const response = await AxiosAPI.get(
+        `/chat/rooms`
+        // {
+        //   headers: {
+        //     Authorization: localStorage.getItem("login-token"),
+        //   },
+        // }
       );
       console.log(response);
       if (response.data) {
@@ -368,6 +437,22 @@ export const myChattingList = createAsyncThunk(
       }
     } catch (e) {
       console.log(e);
+    }
+  }
+);
+
+// 실시간 알림
+export const getIntervalNotification = createAsyncThunk(
+  "GET/getIntervalNotification",
+  async () => {
+    try {
+      const response = await AxiosAPI.get(`/notification`);
+      console.log( response );
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 );
@@ -400,25 +485,42 @@ const BungleSlice = createSlice({
     list: [{}],
     // 내 채팅 목록
     myChatting: [],
-    ChatClient : {
-      client : null,
-      guest : 0,
-    }
+    // 문자 채팅 client
+    ChatClient: {
+      client: null,
+      guest: 0,
+    },
+    // nofitication state
+    isReadNotification: false,
+    NoitficationList: [{}],
+    // 화상 채팅 info
+    VideoInfo: {},
+    //지도 화면 렌더링 되자마자 보여줄 리스트
+    mapList: [{}],
+    //지도 화면 상세 검색 후 보여줄 리스트
+    detailMapBungle: [{}],
   },
   reducers: {
     // 클라이언트 값 가져오기
-    getChatClient : ( state, action ) => {
-      // console.log( "Chat client ", action.payload );
+    getChatClient: (state, action) => {
+      console.log("Chat client ", action.payload);
       state.ChatClient.client = action.payload.client;
       state.ChatClient.guest = action.payload.Guest;
-    }
+    },
+    // 알림 클리어
+    clearNotificationState: (state, action) => {
+      console.log("clear")
+      state.isReadNotification = false;
+      state.NoitficationList = [{}];
+      console.log("clear", state.isReadNotification, state.NoitficationList );
+    },
   },
   extraReducers: {
     // 벙글 생성, post ID 전달
     [createBungleList.fulfilled]: (state, action) => {
       console.log("create fullfill");
       // console.log( action.payload );
-      console.log( action.payload );
+      console.log(action.payload);
       state.OnwerPostId = action.payload;
     },
     [createBungleList.rejected]: (state, action) => {
@@ -445,7 +547,8 @@ const BungleSlice = createSlice({
     [likeBungleList.fulfilled]: (state, action) => {
       console.log(action.payload);
       // realTime Update
-      const realTimeUpdate = current(state.realTime).map((item) => {
+      // const realTimeUpdate = current(state.realTime).map((item) => {
+      const realTimeUpdate = (state.realTime).map((item) => {
         // console.log( item )
         if (item.postId === action.payload) {
           // console.log( item.isLike );
@@ -460,7 +563,8 @@ const BungleSlice = createSlice({
       });
       state.realTime = realTimeUpdate;
       // endTimeUpdate
-      const endTimeUpdate = current(state.endTime).map((item) => {
+      // const endTimeUpdate = current(state.endTime).map((item) => {
+      const endTimeUpdate = (state.endTime).map((item) => {        
         // console.log( item )
         if (item.postId === action.payload) {
           // console.log( item.isLike );
@@ -476,8 +580,9 @@ const BungleSlice = createSlice({
       state.endTime = endTimeUpdate;
 
       // more or Tag search Update
-      const moreTempUpdate = current(state.moreList).map((item) => {
-        // console.log( item )
+      // const moreTempUpdate = current(state.moreList).map((item) => {
+      const moreTempUpdate = (state.moreList).map((item) => {
+        console.log(item);
         if (item.postId === action.payload) {
           // console.log( item.isLike );
           if (item.isLike) {
@@ -493,7 +598,8 @@ const BungleSlice = createSlice({
       state.moreList = moreTempUpdate;
 
       // 카테고리 update
-      const CategoryUpdate = current(state.categoriesList).map((item) => {
+      // const CategoryUpdate = current(state.categoriesList).map((item) => {
+      const CategoryUpdate = (state.categoriesList).map((item) => {
         // console.log( item )
         if (item.postId === action.payload) {
           // console.log( item.isLike );
@@ -508,16 +614,82 @@ const BungleSlice = createSlice({
       });
 
       state.categoriesList = CategoryUpdate;
+
+      // 지도 벙글 update
+      // const MapBungleUpdate = current(state.mapList).map((item) => {
+      const MapBungleUpdate = (state.mapList).map((item) => {
+        // console.log(item);
+        if (item.postId === action.payload) {
+          if (item.isLike) {
+            return { ...item, isLike: false };
+          } else {
+            return { ...item, isLike: true };
+          }
+        } else {
+          return item;
+        }
+      });
+      state.mapList = MapBungleUpdate;
+
+      // 지도 상세 검색 벙글 update
+      // const MapDetailBungleUpdate = current(state.detailMapBungle).map(
+      const MapDetailBungleUpdate = (state.detailMapBungle).map(
+        (item) => {
+          // console.log(item);
+          if (item.postId === action.payload) {
+            if (item.isLike) {
+              return { ...item, isLike: false };
+            } else {
+              return { ...item, isLike: true };
+            }
+          } else {
+            return item;
+          }
+        }
+      );
+      
+      state.detailMapBungle = MapDetailBungleUpdate;
+
+      // const MyLikeBungleUpdate = current(state.myLikeList).map((item) => {
+      const MyLikeBungleUpdate = (state.myLikeList).map((item) => {
+        console.log(item, action.payload);
+        if (item.postId === action.payload) {
+          if (item.isLike) {
+            return { ...item, isLike: false };
+          } else {
+            return { ...item, isLike: true };
+          }
+        } else {
+          return item;
+        }
+      });
+
+      state.myLikeList = MyLikeBungleUpdate;
     },
     [likeBungleList.rejected]: (state, action) => {
       console.log("Like reject");
     },
     // 더보기, 태그 검색 결과
     [moreBungleList.fulfilled]: (state, action) => {
-      console.log( action.payload );
+      console.log(action.payload);
       state.moreList = action.payload;
     },
     [moreBungleList.rejected]: (state, action) => {},
+
+    // 지도 리스트
+    [getMapBungle.fulfilled]: (state, action) => {
+      // console.log(action.payload);
+      state.mapList = action.payload.mapListDtos;
+      state.isOwner = action.payload.owner;
+    },
+    [getMapBungle.rejected]: (state, action) => {},
+
+    // 지도 상세 검색 후리스트
+    [getDetailMap.fulfilled]: (state, action) => {
+      // console.log(action.payload);
+      state.detailMapBungle = action.payload;
+    },
+    [getDetailMap.rejected]: (state, action) => {},
 
     // 상세 조회
     [detailBungleList.fulfilled]: (state, action) => {
@@ -583,44 +755,22 @@ const BungleSlice = createSlice({
       console.log(action.payload);
       const postId = action.payload.postId;
       const isOwner = action.payload.isOwner;
-      // let deleteSelector = "";
-      //  // 마감 임박
-      // const returnEndList = state.endTime.filter( ( item)=>{
-      //   if( item.postId === postId ){
-      //     deleteSelector = "real";
-      //   }
-      //   return item.postId !== postId;
-      //   // if( item.postId !== postId ){
-      //   //   // console.log( item );
-      //   //   return item;
-      //   // }
-      // });
-      // // 실시간
-      // const returnRealList = state.realTime.filter( ( item ) => {
-      //   if( item.postId === postId ){
-      //     deleteSelector = "end";
-      //   }
-      //   return item.postId !== postId;
-      // })
 
-      // console.log(returnEndList );
-      // console.log( returnRealList);
-      // // state.endTime = [];
-      // if( deleteSelector === "real" ){
-      //   state.realTime = [];
-      // }else if( deleteSelector === "end" ){
-      //   state.endTime = [];
-      // }
-
-      // state.endTime = returnEndList;
-      // state.realTime = returnRealList;
       state.isOwner = isOwner;
-      // console.log( state.endTime, state.realTime );
     },
     [deleteMyBungleList.rejected]: (state, action) => {},
+    // 알림
+    [getIntervalNotification.fulfilled]: (state, action) => {
+      if( action.payload.length > 0 ){
+        state.isReadNotification = true;
+      }else{
+        state.isReadNotification = false;
+      }
+      state.NoitficationList = action.payload;
+    },
+    [getIntervalNotification.rejected]: (state, action) => {},
   },
 });
 
-
-export const { getChatClient } = BungleSlice.actions;
+export const { getChatClient, clearNotificationState } = BungleSlice.actions;
 export default BungleSlice.reducer;

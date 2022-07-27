@@ -2,6 +2,28 @@
   margin: 20px 10px 0px 10px;
   border-bottom: 3px solid rgb(242, 243, 245);
 } */
+.top-chatlist-wrap{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 60px;
+}
+.chatlist-top-wrapper{
+    height: 83vh;
+    overflow: auto;
+}
+
+/* 스크롤 바 숨기기 */
+.chatlist-top-wrapper{
+	-ms-overflow-style:none; /* IE and Edge */
+    scrollbar-width:none; /* Firefox */
+}
+
+.chatlist-top-wrapper::-webkit-scrollbar {
+	display:none; /* Chrome , Safari , Opera */
+}
+/* 스크롤 숨기기 */
+
 .first_swiper_main{
     display: flex;
     flex-direction: row;
