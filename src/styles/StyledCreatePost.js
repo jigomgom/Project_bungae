@@ -147,8 +147,7 @@ export const PostCategoriesItem = styled.div`
   width: 62px;
   height: 26px;
   background-color: ${(props) =>
-    props.isChecked ? "#FFC632" : "#d9d9d9"}; //#d9d9d9;//${(props) =>
-    props.isChecked ? "#d9d9d9" : "black"};
+    props.isChecked ? "#FFC632" : "#d9d9d9"}; //#d9d9d9;//${(props) =>   props.isChecked ? "#d9d9d9" : "black"};
   border-radius: 5px;
   font-weight: 400;
   font-size: 16px;

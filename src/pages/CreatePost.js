@@ -680,8 +680,8 @@ function CreatePost() {
 
       dates = year + "-" + month + "-" + day;
     }
-
-    const title = Title_ref.current.value;
+    
+    const title = Title_ref.current.value.trim();
     let content = "";
     if( title.length <= 0 ){
       setIsModal( true );
@@ -689,14 +689,15 @@ function CreatePost() {
       window.scrollTo(0,0);
       return null;
     }
-    if (Content_ref.current.value.length <= 100 && Content_ref.current.value.length === 0 ) {
+    if (Content_ref.current.value.trim().length <= 500 && Content_ref.current.value.trim().length === 0 ) {
       setIsModal( true );
-      setModalMessage("소개글은 0자 이상 100자 이하여야 합니다.");
+      setModalMessage("소개글은 0자 이상 500자 이하여야 합니다.");
       window.scrollTo(0,0);
       return null;
     } else {
-      content = Content_ref.current.value;
+      content = Content_ref.current.value.trim();
     }
+    console.log( "제목 길이 :", title.length, "본문 길이 :", content.length );
     const hour = ("0" + hour_ref.current.value).slice(-2);
     const minute = ("0" + minute_ref.current.value).slice(-2);
     

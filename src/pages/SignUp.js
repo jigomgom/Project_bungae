@@ -294,7 +294,9 @@ const Signup = () => {
                 </span>
               </ModalContentWrap>
               <ModalDivider />
-              <ModalButton onClick={ModalOnClickHandler}>확인</ModalButton>
+              {/* <ModalButton onClick={ModalOnClickHandler}>확인</ModalButton> */}
+              <ModalButton >확인</ModalButton>
+              { isEmail && isSetPassword && duplicateEmail && <ModalButton style={{backgroundColor:" #FFC634", color:"black"}}onClick={ModalOnClickHandler}>확인</ModalButton>}
             </ModalInner>
           </ModalOverlay>
         </ModalWrapper>

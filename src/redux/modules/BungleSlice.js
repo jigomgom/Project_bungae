@@ -459,7 +459,7 @@ export const getIntervalNotification = createAsyncThunk(
 
 const BungleSlice = createSlice({
   name: "Bungle",
-  isOwner: false,
+  
   initialState: {
     isOwner: false,
     // 유저 프로필
@@ -738,6 +738,7 @@ const BungleSlice = createSlice({
     // 채팅 목록 조회
     [myChattingList.fulfilled]: (state, action) => {
       console.log(action.payload);
+      state.isOwner = action.payload.owner;
       state.myChatting = action.payload;
     },
     [myChattingList.rejected]: (state, action) => {
