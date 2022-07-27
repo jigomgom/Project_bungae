@@ -37,7 +37,14 @@ import {
   MainContentButton,
 } from "../styles/StyledMain.js";
 
-import { MainHeaderWrap, MainHeaderLogo, MainHeaderIconsWrap, IconMyLocation, IconSetting, IconNotification } from "../styles/StyledHeader";
+import {
+  MainHeaderWrap,
+  MainHeaderLogo,
+  MainHeaderIconsWrap,
+  IconMyLocation,
+  IconSetting,
+  IconNotification,
+} from "../styles/StyledHeader";
 
 // css
 import {
@@ -76,9 +83,10 @@ import AxiosAPI from "../customapi/CustomAxios";
 function Main() {
   // 알림 call
   const interval = useRef(null);
-  
+
   // isOwner
   const ownerCheck = useSelector((state) => state.Bungle.isOwner);
+  console.log(ownerCheck);
 
   // dispatch
   const dispatch = useDispatch();
@@ -129,12 +137,12 @@ function Main() {
   // Geolocation의 `getCurrentPosition` 메소드에 대한 실패 callback 핸들러
   const handleError = (error) => {
     setError(error.message);
-    console.log( error.code );
+    console.log(error.code);
     console.log(error.message);
-    if( error.message === "User denied Geolocation"){
+    if (error.message === "User denied Geolocation") {
       alert("사이트 설정에서 GPS 설정을 켜주세요");
     }
-        // if( error.message );
+    // if( error.message );
   };
 
   // GPS 아이콘 클릭, update position
@@ -146,27 +154,25 @@ function Main() {
     );
     dispatch(getMainBungleList(location));
   };
-  
 
   useEffect(() => {
     // const response = navigator.geolocation;
     // console.log( response );
-    
+
     navigator.geolocation.getCurrentPosition(
       handleSuccess,
       handleError,
       options
     );
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   }, []);
 
-  useEffect(()=>{
-    interval.current = setInterval( async()=>{
-      dispatch( getIntervalNotification() );
+  useEffect(() => {
+    interval.current = setInterval(async () => {
+      dispatch(getIntervalNotification());
     }, 5000);
-    return () => clearInterval( interval.current );
-  },[])
-  
+    return () => clearInterval(interval.current);
+  }, []);
 
   useEffect(() => {
     if (location) {
@@ -260,7 +266,7 @@ function Main() {
 
   if (!location) {
     // console.log(location);
-    return <Loading></Loading>
+    return <Loading></Loading>;
   } else {
     console.log(location);
     return (
@@ -270,18 +276,19 @@ function Main() {
           <MainHeaderWrap>
             <MainHeaderLogo src={IconMainLogo} />
             <MainHeaderIconsWrap>
-              <IconMyLocation src={IconMyPoint} onClick={() => {
-              getCurrentLocationBtnClick();
-            }}/>
+              <IconMyLocation
+                src={IconMyPoint}
+                onClick={() => {
+                  getCurrentLocationBtnClick();
+                }}
+              />
               <IconNotification src={Notification} />
               {/* <span style={{ color:"#FFC632"}} className="material-icons">notifications</span> */}
               <IconSetting src={Setting} />
             </MainHeaderIconsWrap>
           </MainHeaderWrap>
           <Tag />
-          <Search
-            location={location}
-          />
+          <Search location={location} />
           <Category location={location} />
           <ContentDivide />
           {/* 실시간 벙글 */}

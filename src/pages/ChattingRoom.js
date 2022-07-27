@@ -23,7 +23,7 @@ import "swiper/css/pagination";
 //styled-components
 import {
   ChattingHeaderWrap,
-  ChattingBackKey,
+  ChattingRoomBackKey,
   IconHamburger,
 } from "../styles/StyledHeader.js";
 import {
@@ -41,6 +41,7 @@ import IconForwardKey from "../assets/icon-right-arrow.svg";
 import IconCamera from "../assets/icon-camera-mono (1).svg";
 import SendBtn from "../assets/icon-sendbtn (1).svg";
 import SendBtnActive from "../assets/icon-sendbtn-active.svg";
+import SendImgBtnActive from "../assets/icon-img-sendbtn.svg";
 import IconSiren from "../assets/icon-siren.svg";
 import IconMoon from "../assets/icon-share-mono.svg";
 import Notification from "../assets/icon-notification.svg";
@@ -319,8 +320,8 @@ function ChattingRoom({ setRealTimeChat }) {
       return;
     }
   };
-  console.log(isFile);
-  console.log(fileUrl);
+  // console.log(isFile);
+  // console.log(fileUrl);
 
   const chatImg = async () => {
     if (fileUrl) {
@@ -394,6 +395,7 @@ function ChattingRoom({ setRealTimeChat }) {
         console.log(error);
       });
   };
+  console.log("채팅 인원: ", chatPeople);
 
   // const [fileData, setFileData] = () => {};
   const chatFile = () => {
@@ -515,6 +517,9 @@ function ChattingRoom({ setRealTimeChat }) {
       // headers: {
       //   Authorization: token,
       // },
+      params: {
+        roomId: postId,
+      },
     })
       .then((response) => {
         setChatProfile(() => response.data);
@@ -618,12 +623,29 @@ function ChattingRoom({ setRealTimeChat }) {
     [beforeChat]
   );
 
+  //QR 코드 받기
+  const getQR = () => {
+    AxiosAPI({
+      method: "get",
+      url: `/qrcode`,
+      params: {
+        roomId: postId,
+      },
+    })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <>
       <div id="chat-app">
         <div id="page-wrap">
           <ChattingHeaderWrap>
-            <ChattingBackKey
+            <ChattingRoomBackKey
               src={IconBackKey}
               onClick={() => {
                 navigate("/main");
@@ -1118,17 +1140,18 @@ function ChattingRoom({ setRealTimeChat }) {
                   <div className="chatting-footer-input">
                     {fileUrl ? (
                       <>
+                        <img
+                          className="chatting-img-sendbtn"
+                          src={SendImgBtnActive}
+                          alt=""
+                        />
                         <input
                           type="text"
-                          placeholder="전송 버튼 클릭!!"
                           value={userData.message}
                           onChange={handleMessage}
                           onKeyPress={onKeyPress}
                           disabled
-                          // style={{
-                          //   backgroundImage: `url(${fileUrl})`,
-                          //   objectFit: "cover",
-                          // }}
+                          style={{ backgroundColor: "#D9D9D9", border: "none" }}
                         />
                       </>
                     ) : (
@@ -1145,6 +1168,7 @@ function ChattingRoom({ setRealTimeChat }) {
                     {userData.message || fileUrl ? (
                       <>
                         <img
+                          className="chatting-sendbtn"
                           src={SendBtnActive}
                           alt=""
                           onClick={() => {
@@ -1154,7 +1178,12 @@ function ChattingRoom({ setRealTimeChat }) {
                       </>
                     ) : (
                       <>
-                        <img src={SendBtn} alt="" onClick={sendValue}></img>
+                        <img
+                          className="chatting-sendbtn"
+                          src={SendBtn}
+                          alt=""
+                          onClick={sendValue}
+                        ></img>
                       </>
                     )}
                   </div>

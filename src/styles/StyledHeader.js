@@ -143,6 +143,14 @@ export const ChattingBackKey = styled.img`
   width: 11.67px;
   height: 19.8px;
   cursor: pointer;
+  margin-left: 20px;
+`;
+
+export const ChattingRoomBackKey = styled.img`
+  position: relative;
+  width: 11.67px;
+  height: 19.8px;
+  cursor: pointer;
   // margin-left: 20px;
 `;
 

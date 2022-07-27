@@ -54,7 +54,7 @@
     line-height: 27px;
     padding: 5px;
 }
-.chatting-footer-input > img{
+.chatting-sendbtn{
     background-color: none;
     /* width: 15vw; */
     /* height: 10px; */
@@ -64,6 +64,11 @@
     position: absolute;
     top: 25%;
     left: 100%;
+}
+.chatting-img-sendbtn{
+    position: absolute;
+    bottom: 100%;
+    left: 82%;
 }
 
 

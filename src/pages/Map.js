@@ -39,6 +39,7 @@ import IconLocationCurrent from "../assets/icon-location-current.svg";
 //Components
 import BottomSheet from "./BottomSheet";
 import Divide from "../components/Divider";
+import Loading from "../components/Loading";
 
 //StyledComponents
 import {
@@ -124,6 +125,8 @@ function Map() {
   });
   //태그 검색, 상세 조회, 주변 지도 리스트 담을 배열 state
   const [mapBungleData, setMapBungleData] = useState([]);
+  //태그 검색, 상세 조회, 주변 지도 리스트 없을때 배열
+  const [nothingBungleData, setNothingBungleData] = useState([]);
   //태그 검색, 상세 조회 구분 boolean state
   //첫번째 전체, 두번째 태그, 세번째 상세조회
   const [checkMapData, setCheckMapData] = useState([true, false, false]);
@@ -302,7 +305,7 @@ function Map() {
         //지도를 생성할 때 필요한 기본 옵션
         // center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
         center: new kakao.maps.LatLng(location.latitude, location.longitude),
-        level: 11, //지도의 레벨(확대, 축소 정도)
+        level: 10, //지도의 레벨(확대, 축소 정도)
       };
 
       const map = new kakao.maps.Map(container.current, options); //지도 생성 및 객체 리턴
@@ -333,6 +336,7 @@ function Map() {
         // },
       ];
       console.log("왜 안돼 이거");
+
       mapBungleData.map((location, index) => {
         positions = [
           ...positions,
@@ -383,326 +387,406 @@ function Map() {
           image: markerImage, // 마커 이미지
         });
       }
+    } else if (location && mapBungleData === undefined) {
+      const options = {
+        //지도를 생성할 때 필요한 기본 옵션
+        // center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+        center: new kakao.maps.LatLng(location.latitude, location.longitude),
+        level: 10, //지도의 레벨(확대, 축소 정도)
+      };
+
+      const map = new kakao.maps.Map(container.current, options); //지도 생성 및 객체 리턴
+
+      // 마커를 표시할 위치와 title 객체 배열입니다
+      var nowPosition = [
+        // {
+        //   title: "카카오",
+        //   latlng: new kakao.maps.LatLng(33.450705, 126.570677),
+        // },
+        {
+          latlng: new kakao.maps.LatLng(location.latitude, location.longitude),
+        },
+      ];
+
+      var positions = [
+        // {
+        //   // title: "생태연못",
+        //   latlng: new kakao.maps.LatLng(33.450936, 126.569477),
+        // },
+        // {
+        //   // title: "텃밭",
+        //   latlng: new kakao.maps.LatLng(33.450879, 126.56994),
+        // },
+        // {
+        //   // title: "근린공원",
+        //   latlng: new kakao.maps.LatLng(33.451393, 126.570738),
+        // },
+      ];
+
+      // 마커 이미지의 이미지 주소입니다
+      var imageSrc = MarkerLightening;
+      var imageCenterSrc = MarkerMyLocation;
+
+      //현재 위치 찍어주기
+      for (var i = 0; i < nowPosition.length; i++) {
+        // 마커 이미지의 이미지 크기 입니다
+        var imageSize = new kakao.maps.Size(10, 20);
+
+        // 마커 이미지를 생성합니다
+        var markerImage = new kakao.maps.MarkerImage(imageCenterSrc, imageSize);
+
+        // 마커를 생성합니다
+        var marker = new kakao.maps.Marker({
+          map: map, // 마커를 표시할 지도
+          position: nowPosition[i].latlng, // 마커를 표시할 위치
+          title: nowPosition[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+          image: markerImage, // 마커 이미지
+        });
+      }
+
+      //주변 위치 찍어주기
+      for (var i = 0; i < positions.length; i++) {
+        // 마커 이미지의 이미지 크기 입니다
+        var imageSize = new kakao.maps.Size(24, 35);
+
+        // 마커 이미지를 생성합니다
+        var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+        // 마커를 생성합니다
+        var marker = new kakao.maps.Marker({
+          map: map, // 마커를 표시할 지도
+          position: positions[i].latlng, // 마커를 표시할 위치
+          title: positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+          image: markerImage, // 마커 이미지
+        });
+      }
     }
     // 상세 검색 후 지도 표시
   }, [isLoad, mapBungleData]);
 
-  return (
-    <>
-      <div className="top-map-wrapper">
-        <MapHeaderWrap>
-          <MapIconsWrap>
-            <IconNotification
-              style={{ visibility: "hidden" }}
-              src={Notification}
-            />
-            <IconSetting style={{ visibility: "hidden" }} src={Setting} />
-          </MapIconsWrap>
-          <MapPageTitle>벙글 지도</MapPageTitle>
-          <MapIconsWrap>
-            <IconNotification src={Notification} />
-            <IconSetting src={Setting} />
-          </MapIconsWrap>
-        </MapHeaderWrap>
-        <div className="map-wrapper">
-          {isDetail && (
-            <div className="map-detail-modal-wrapper">
-              <div
-                className="map-detail-modal-overlay"
-                // onClick={(e) => {
-                //   handleDetailModal(e);
-                // }}
-              >
-                <div className="map-detail-modal-inner">
-                  <div className="map-detail-modal-content-wrap">
-                    <MapDetailHeaderWrap>
-                      <MapBackKey
-                        src={IconBackKey}
-                        onClick={() => {
-                          setIsDetail(false);
-                          setOnlyDistance(100);
-                          setOnlyNumber(25);
-                          setSelectCategory([]);
-                          setIsCategoryClick([
-                            false,
-                            false,
-                            false,
-                            false,
-                            false,
-                            false,
-                            false,
-                            false,
-                            false,
-                            false,
-                          ]);
-                        }}
-                      />
-                      <div
-                        className="map-detail-modal-btn"
-                        onClick={() => {
-                          mapSearch();
-                        }}
-                      >
-                        적용
+  if (!location) {
+    // console.log(location);
+    return <Loading></Loading>;
+  } else {
+    return (
+      <>
+        <div className="top-map-wrapper">
+          <MapHeaderWrap>
+            <MapIconsWrap>
+              <IconNotification
+                style={{ visibility: "hidden" }}
+                src={Notification}
+              />
+              <IconSetting style={{ visibility: "hidden" }} src={Setting} />
+            </MapIconsWrap>
+            <MapPageTitle>벙글 지도</MapPageTitle>
+            <MapIconsWrap>
+              <IconNotification src={Notification} />
+              <IconSetting src={Setting} />
+            </MapIconsWrap>
+          </MapHeaderWrap>
+          <div className="map-wrapper">
+            {isDetail && (
+              <div className="map-detail-modal-wrapper">
+                <div
+                  className="map-detail-modal-overlay"
+                  // onClick={(e) => {
+                  //   handleDetailModal(e);
+                  // }}
+                >
+                  <div className="map-detail-modal-inner">
+                    <div className="map-detail-modal-content-wrap">
+                      <MapDetailHeaderWrap>
+                        <MapBackKey
+                          src={IconBackKey}
+                          onClick={() => {
+                            setIsDetail(false);
+                            setOnlyDistance(100);
+                            setOnlyNumber(25);
+                            setSelectCategory([]);
+                            setIsCategoryClick([
+                              false,
+                              false,
+                              false,
+                              false,
+                              false,
+                              false,
+                              false,
+                              false,
+                              false,
+                              false,
+                            ]);
+                          }}
+                        />
+                        <div
+                          className="map-detail-modal-btn"
+                          onClick={() => {
+                            mapSearch();
+                          }}
+                        >
+                          적용
+                        </div>
+                      </MapDetailHeaderWrap>
+                      <div className="map-detail-modal-title-wrap">
+                        <div className="map-detail-modal-title">세부 설정</div>
+                        <img
+                          src={IconReset}
+                          alt=""
+                          onClick={() => {
+                            setOnlyDistance(100);
+                            setOnlyNumber(25);
+                            setSelectCategory([]);
+                            setIsCategoryClick([
+                              false,
+                              false,
+                              false,
+                              false,
+                              false,
+                              false,
+                              false,
+                              false,
+                              false,
+                              false,
+                            ]);
+                          }}
+                        />
                       </div>
-                    </MapDetailHeaderWrap>
-                    <div className="map-detail-modal-title-wrap">
-                      <div className="map-detail-modal-title">세부 설정</div>
-                      <img
-                        src={IconReset}
-                        alt=""
-                        onClick={() => {
-                          setOnlyDistance(100);
-                          setOnlyNumber(25);
-                          setSelectCategory([]);
-                          setIsCategoryClick([
-                            false,
-                            false,
-                            false,
-                            false,
-                            false,
-                            false,
-                            false,
-                            false,
-                            false,
-                            false,
-                          ]);
-                        }}
-                      />
-                    </div>
-                    <CategoryWrap>
-                      {CategoryArray.map((item, index) => {
-                        return (
-                          <CategoryItem key={index}>
-                            <CategoryImgWrap isChecked={isCategoryClick[index]}>
-                              <CategoryImg
-                                src={CategoryImgArray[index]}
-                                onClick={() => {
-                                  if (selectCategory.includes(item)) {
-                                    setSelectCategory(
-                                      selectCategory.filter(
-                                        (element) => element !== item
-                                      )
-                                    );
-                                  } else {
-                                    setSelectCategory([
-                                      ...selectCategory,
-                                      item,
-                                    ]);
-                                  }
-                                  CategoryClickHandler(index);
-                                }}
-                              />
-                            </CategoryImgWrap>
+                      <CategoryWrap>
+                        {CategoryArray.map((item, index) => {
+                          return (
+                            <CategoryItem key={index}>
+                              <CategoryImgWrap
+                                isChecked={isCategoryClick[index]}
+                              >
+                                <CategoryImg
+                                  src={CategoryImgArray[index]}
+                                  onClick={() => {
+                                    if (selectCategory.includes(item)) {
+                                      setSelectCategory(
+                                        selectCategory.filter(
+                                          (element) => element !== item
+                                        )
+                                      );
+                                    } else {
+                                      setSelectCategory([
+                                        ...selectCategory,
+                                        item,
+                                      ]);
+                                    }
+                                    CategoryClickHandler(index);
+                                  }}
+                                />
+                              </CategoryImgWrap>
 
-                            <CatogoryName>{item}</CatogoryName>
-                          </CategoryItem>
-                        );
-                      })}
-                    </CategoryWrap>
-                    <div className="map-divider"></div>
-                    <MapPostPeopleCount>
-                      <PostPeopleCountTitleWrap>
-                        <MapPostPeopleTitle>최대 거리</MapPostPeopleTitle>
-                        <div
-                          style={{
-                            fontStyle: "normal",
-                            fontWeight: "400",
-                            fontSize: "12px",
-                            lineHeight: "17px",
+                              <CatogoryName>{item}</CatogoryName>
+                            </CategoryItem>
+                          );
+                        })}
+                      </CategoryWrap>
+                      <div className="map-divider"></div>
+                      <MapPostPeopleCount>
+                        <PostPeopleCountTitleWrap>
+                          <MapPostPeopleTitle>최대 거리</MapPostPeopleTitle>
+                          <div
+                            style={{
+                              fontStyle: "normal",
+                              fontWeight: "400",
+                              fontSize: "12px",
+                              lineHeight: "17px",
+                            }}
+                          >
+                            {onlyDistance}km
+                          </div>
+                        </PostPeopleCountTitleWrap>
+                        {/* rc slider   */}
+                        <Slider
+                          className="testName"
+                          style={{ marginTop: "15px" }}
+                          min={10}
+                          max={200}
+                          value={onlyDistance}
+                          trackStyle={{
+                            backgroundColor: "#FFC634",
+                            border: "1px solid #898989",
+                            height: 11,
                           }}
-                        >
-                          {onlyDistance}km
-                        </div>
-                      </PostPeopleCountTitleWrap>
-                      {/* rc slider   */}
-                      <Slider
-                        className="testName"
-                        style={{ marginTop: "15px" }}
-                        min={10}
-                        max={200}
-                        value={onlyDistance}
-                        trackStyle={{
-                          backgroundColor: "#FFC634",
-                          border: "1px solid #898989",
-                          height: 11,
-                        }}
-                        inverted={false}
-                        handleStyle={{
-                          border: "3px solid #FFC634",
-                          height: 17,
-                          width: 17,
-                          marginLeft: 0,
-                          marginTop: -2.5,
-                          backgroundColor: "white",
-                          cursor: "pointer",
-                          opacity: 1,
-                          boxShadow: "none !imporatnt",
-                        }}
-                        handle={{ boxShadow: "none" }}
-                        onChange={setOnlyDistance}
-                        railStyle={{
-                          backgroundColor: "white",
-                          border: "1px solid #898989",
-                          height: 11,
-                        }}
-                      />
-                    </MapPostPeopleCount>
-                    <div className="map-detail-divider"></div>
-                    {/*  */}
-                    <MapPostPeopleCount>
-                      <PostPeopleCountTitleWrap>
-                        <MapPostPeopleTitle>최대 인원 수</MapPostPeopleTitle>
-                        <div
-                          style={{
-                            fontStyle: "normal",
-                            fontWeight: "400",
-                            fontSize: "12px",
-                            lineHeight: "17px",
+                          inverted={false}
+                          handleStyle={{
+                            border: "3px solid #FFC634",
+                            height: 17,
+                            width: 17,
+                            marginLeft: 0,
+                            marginTop: -2.5,
+                            backgroundColor: "white",
+                            cursor: "pointer",
+                            opacity: 1,
+                            boxShadow: "none !imporatnt",
                           }}
-                        >
-                          {onlyNumber}명
-                        </div>
-                      </PostPeopleCountTitleWrap>
-                      {/* rc slider   */}
-                      <Slider
-                        className="testName"
-                        style={{ marginTop: "15px" }}
-                        min={2}
-                        max={50}
-                        value={onlyNumber}
-                        trackStyle={{
-                          backgroundColor: "#FFC634",
-                          border: "1px solid #898989",
-                          height: 11,
-                        }}
-                        inverted={false}
-                        handleStyle={{
-                          border: "3px solid #FFC634",
-                          height: 17,
-                          width: 17,
-                          marginLeft: 0,
-                          marginTop: -2.5,
-                          backgroundColor: "white",
-                          cursor: "pointer",
-                          opacity: 1,
-                          boxShadow: "none !imporatnt",
-                        }}
-                        handle={{ boxShadow: "none" }}
-                        onChange={setOnlyNumber}
-                        railStyle={{
-                          backgroundColor: "white",
-                          border: "1px solid #898989",
-                          height: 11,
-                        }}
-                      />
-                    </MapPostPeopleCount>
+                          handle={{ boxShadow: "none" }}
+                          onChange={setOnlyDistance}
+                          railStyle={{
+                            backgroundColor: "white",
+                            border: "1px solid #898989",
+                            height: 11,
+                          }}
+                        />
+                      </MapPostPeopleCount>
+                      <div className="map-detail-divider"></div>
+                      {/*  */}
+                      <MapPostPeopleCount>
+                        <PostPeopleCountTitleWrap>
+                          <MapPostPeopleTitle>최대 인원 수</MapPostPeopleTitle>
+                          <div
+                            style={{
+                              fontStyle: "normal",
+                              fontWeight: "400",
+                              fontSize: "12px",
+                              lineHeight: "17px",
+                            }}
+                          >
+                            {onlyNumber}명
+                          </div>
+                        </PostPeopleCountTitleWrap>
+                        {/* rc slider   */}
+                        <Slider
+                          className="testName"
+                          style={{ marginTop: "15px" }}
+                          min={2}
+                          max={50}
+                          value={onlyNumber}
+                          trackStyle={{
+                            backgroundColor: "#FFC634",
+                            border: "1px solid #898989",
+                            height: 11,
+                          }}
+                          inverted={false}
+                          handleStyle={{
+                            border: "3px solid #FFC634",
+                            height: 17,
+                            width: 17,
+                            marginLeft: 0,
+                            marginTop: -2.5,
+                            backgroundColor: "white",
+                            cursor: "pointer",
+                            opacity: 1,
+                            boxShadow: "none !imporatnt",
+                          }}
+                          handle={{ boxShadow: "none" }}
+                          onChange={setOnlyNumber}
+                          railStyle={{
+                            backgroundColor: "white",
+                            border: "1px solid #898989",
+                            height: 11,
+                          }}
+                        />
+                      </MapPostPeopleCount>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-          <div className="map-content-searchbar">
-            <input placeholder="태그를 검색해주세요" onKeyDown={onKeyDown} />
-          </div>
-          <div className="map-content-button">
-            <div className="map-content-buttons">
-              <div className="map-content-button-1">
-                <img
-                  src={IconMyPoint}
-                  alt=""
-                  onClick={() => {
-                    getNowLocation();
-                  }}
-                />
-              </div>
-              <div className="map-content-button-2">
-                <img
-                  src={IconMapSort}
-                  alt=""
-                  onClick={() => {
-                    setIsDetail(true);
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-          <div
-            id="map"
-            ref={container}
-            style={{ width: "100%", height: "100%" }}
-          ></div>
-          <BottomSheet aroundLocation={mapBungleData} />
-        </div>
-        {!isLoad && (
-          <MapFooterWrap>
-            <FooterIconWrap
-              onClick={() => {
-                navigate("/main");
-              }}
-            >
-              <FooterIconImg src={IconHome} />
-              <FooterIconText>홈</FooterIconText>
-            </FooterIconWrap>
-            <FooterIconWrap
-              onClick={() => {
-                navigate("/map");
-              }}
-            >
-              <FooterIconImg src={IconLocationCurrent} />
-              <FooterIconText style={{ color: "#FFC634" }}>
-                벙글지도
-              </FooterIconText>
-            </FooterIconWrap>
-            {ownerCheck ? (
-              <FooterAddBungae
-                src={IconEdit}
-                onClick={() => {
-                  navigate("/editpost");
-                }}
-              />
-            ) : (
-              <FooterAddBungae
-                src={IconCreate}
-                onClick={() => {
-                  navigate("/createpost");
-                }}
-              />
             )}
-            <FooterIconWrap>
-              <FooterIconImg
-                src={IconChat}
+            <div className="map-content-searchbar">
+              <input placeholder="태그를 검색해주세요" onKeyDown={onKeyDown} />
+            </div>
+            <div className="map-content-button">
+              <div className="map-content-buttons">
+                <div className="map-content-button-1">
+                  <img
+                    src={IconMyPoint}
+                    alt=""
+                    onClick={() => {
+                      getNowLocation();
+                    }}
+                  />
+                </div>
+                <div className="map-content-button-2">
+                  <img
+                    src={IconMapSort}
+                    alt=""
+                    onClick={() => {
+                      setIsDetail(true);
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              id="map"
+              ref={container}
+              style={{ width: "100%", height: "100%" }}
+            ></div>
+            <BottomSheet aroundLocation={mapBungleData} />
+          </div>
+          {!isLoad && (
+            <MapFooterWrap>
+              <FooterIconWrap
                 onClick={() => {
-                  navigate("/chatlist");
+                  navigate("/main");
                 }}
-              />
-              <FooterIconText>채팅</FooterIconText>
-            </FooterIconWrap>
-            <FooterIconWrap
-              onClick={() => {
-                navigate("/mypage");
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
+              >
+                <FooterIconImg src={IconHome} />
+                <FooterIconText>홈</FooterIconText>
+              </FooterIconWrap>
+              <FooterIconWrap
+                onClick={() => {
+                  navigate("/map");
                 }}
+              >
+                <FooterIconImg src={IconLocationCurrent} />
+                <FooterIconText style={{ color: "#FFC634" }}>
+                  벙글지도
+                </FooterIconText>
+              </FooterIconWrap>
+              {ownerCheck ? (
+                <FooterAddBungae
+                  src={IconEdit}
+                  onClick={() => {
+                    navigate("/editpost");
+                  }}
+                />
+              ) : (
+                <FooterAddBungae
+                  src={IconCreate}
+                  onClick={() => {
+                    navigate("/createpost");
+                  }}
+                />
+              )}
+              <FooterIconWrap>
+                <FooterIconImg
+                  src={IconChat}
+                  onClick={() => {
+                    navigate("/chatlist");
+                  }}
+                />
+                <FooterIconText>채팅</FooterIconText>
+              </FooterIconWrap>
+              <FooterIconWrap
                 onClick={() => {
                   navigate("/mypage");
                 }}
               >
-                <FooterIconImg src={IconMyBungae} />
-                <FooterIconText>나의 벙글</FooterIconText>
-              </div>
-            </FooterIconWrap>
-          </MapFooterWrap>
-        )}
-      </div>
-    </>
-  );
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  onClick={() => {
+                    navigate("/mypage");
+                  }}
+                >
+                  <FooterIconImg src={IconMyBungae} />
+                  <FooterIconText>나의 벙글</FooterIconText>
+                </div>
+              </FooterIconWrap>
+            </MapFooterWrap>
+          )}
+        </div>
+      </>
+    );
+  }
 }
 
 export default Map;

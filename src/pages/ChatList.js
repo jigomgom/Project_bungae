@@ -48,6 +48,7 @@ function App() {
   const [lastMessageTime, setLastMessageTime] = useState([]);
 
   const ownerCheck = useSelector((state) => state.Bungle.isOwner);
+  console.log(ownerCheck);
 
   // chat test
   const client = useSelector((state) => state.Bungle.ChatClient.client);
@@ -105,7 +106,7 @@ function App() {
       dataArray[i] = dataArray[i] + "초 전";
     } else if (dataArray[i] > 60 && dataArray[i] < 3600) {
       dataArray[i] = Math.floor(dataArray[i] / 60) + "분 전";
-    } else if (dataArray[i] > 3600 && dataArray[i] < 86400) {
+    } else if (dataArray[i] > 3600) {
       dataArray[i] = Math.floor(dataArray[i] / 3600) + "시간 전";
     }
   }
@@ -146,7 +147,7 @@ function App() {
     const PK = Number(localStorage.getItem("userId"));
     client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
     client.disconnect(function () {
-      alert("See you next time!");
+      alert("다음에도 즐거운 벙글하세요");
     });
   };
 
@@ -167,7 +168,7 @@ function App() {
             <IconSetting src={Setting} />
           </MapIconsWrap>
         </MapHeaderWrap>
-        {myChattingInfo?.lenght > 0 ? (
+        {myChattingInfo?.length > 0 ? (
           myChattingInfo.map((item, index) => {
             return (
               <SwipeableList key={index}>
@@ -190,31 +191,20 @@ function App() {
                         {item.postTitle}
                         {/* 제목 */}
                       </div>
-                      <div
-                        className="first_swipe"
-                        onClick={() => {
-                          getInnerHTML(item.postId);
-                        }}
-                      >
-                        <div className="first_swipe_title">
-                          {item.postTitle}
-                          {/* 제목 */}
-                        </div>
 
-                        <div className="first_swipe_content">
-                          <span>
-                            {item.lastMessage}
-                            {/* 마지막 메세지 */}
-                          </span>
-                        </div>
-                        <div className="first_swipe_sub">
-                          {dataArray[index]} ∙ {realStartDate[index]}
-                          {/* 마지막 시간 */}
-                        </div>
-                        <p id="postId" style={{ display: "none" }}>
-                          {item.postId}
-                        </p>
+                      <div className="first_swipe_content">
+                        <span>
+                          {item.lastMessage}
+                          {/* 마지막 메세지 */}
+                        </span>
                       </div>
+                      <div className="first_swipe_sub">
+                        {dataArray[index]} ∙ {realStartDate[index]}
+                        {/* 마지막 시간 */}
+                      </div>
+                      <p id="postId" style={{ display: "none" }}>
+                        {item.postId}
+                      </p>
                     </div>
                   </div>
                 </SwipeableListItem>
