@@ -307,10 +307,6 @@ function Login() {
     }
   };
 
-  const onKeyUp = (event) => {
-    // setKeyCode( "Up " );/
-  };
-
   return (
     <LoginWrap>
       <LoginInquiry>문의하기</LoginInquiry>
@@ -344,7 +340,6 @@ function Login() {
           maxLength={20}
           onChange={appearPasswordClearBtnHandler}
           onKeyDown={onKeyDown}
-          onKeyUp={onKeyUp}
         />
         {isPasswordClear && (
           <LoginPasswordClearBtn

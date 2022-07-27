@@ -80,6 +80,7 @@ import IconNoPost from "../assets/icon-detail-no-post.svg";
 
 //채팅 입장 client
 const Post = () => {
+  const filterPostURL = "https://meeting-project.s3.ap-northeast-2.amazonaws.com/%EB%A9%94%EC%9D%B8+%EB%94%94%ED%90%85%ED%8A%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png";
   const navigate = useNavigate();
    // 알림 interval
    const interval = useRef(null);
@@ -206,7 +207,26 @@ const Post = () => {
                   isLikeClick(detailBungleInfo.postId);
                 }}
               />
-              {detailBungleInfo.postUrls[0] !== null ? (
+              { console.log( detailBungleInfo.postUrls.length)}
+              { detailBungleInfo.postUrls.length === 1 && detailBungleInfo.postUrls[0] === filterPostURL ?
+              (
+                <PostImg src={IconNoPost} />
+              ) : (<Swiper
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  height: "207px",
+                }}
+              >
+                {detailBungleInfo.postUrls.map((item, index) => {
+                  return (
+                    <SwiperSlide key={index}>
+                      <PostImg src={item} />
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>)}
+              {/* {detailBungleInfo.postUrls[0] !== null ? (
                 <Swiper
                   style={{
                     position: "relative",
@@ -224,7 +244,7 @@ const Post = () => {
                 </Swiper>
               ) : (
                 <PostImg src={IconNoPost} />
-              )}
+              )} */}
 
               <PostUserBox>
                 <PostUserBoxProfile

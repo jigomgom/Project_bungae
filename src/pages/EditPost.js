@@ -116,7 +116,7 @@ function EditPost() {
   const client = useSelector( state => state.Bungle.ChatClient.client );
   const guest = useSelector( state => state.Bungle.ChatClient.guest );
   const Owner = useSelector((state) => state.Bungle.OnwerPostId);
-  console.log( client, guest, Owner );
+  // console.log( client, guest, Owner );
   // dispatch
   const dispatch = useDispatch();
   // navigate
@@ -131,7 +131,7 @@ function EditPost() {
   const [isLoad, setIsLoad] = useState(true);
   // 나의 벙글 가져오기
   const myBungle = useSelector((state) => state.Bungle.myBunglePost);
-  console.log(myBungle);
+  // console.log(myBungle);
   // load
   useEffect(() => {
     if (isLoad) {
@@ -185,7 +185,6 @@ function EditPost() {
 
       const receivedTime = myBungle.time.split(" ");
 
-      console.log(dateString, myBungle.time, receivedTime[0]);
       if (dateString === receivedTime[0]) {
         setIsToday(true);
         setIsTommorow(false);
@@ -200,11 +199,9 @@ function EditPost() {
       setOnlyNumber(myBungle.personnel);
 
       if (myBungle.isLetter) {
-        console.log("??")
         setIsLetter(true);
         setIsVideo(false);
       } else {
-        console.log("!!")
         setIsLetter(false);
         setIsVideo(true);
       }
@@ -775,8 +772,8 @@ function EditPost() {
     }
 
     // const sendCategory = extractCategory.join(",");
-    const title = Title_ref.current.value;
-    const content = Content_ref.current.value;
+    const title = Title_ref.current.value.trim();
+    const content = Content_ref.current.value.trim();
     const hour = hour_ref.current.value;//("0" + hour_ref.current.value).slice(-2);
     const minute = minute_ref.current.value;//("0" + minute_ref.current.value).slice(-2);
     if( title.length <= 0 ){
@@ -784,7 +781,8 @@ function EditPost() {
       setModalMessage("벙글 제목을 입력해주세요.");
       return null;
     }
-    if( content.length <= 100 && content.length === 0){
+    console.log( "제목 길이:", title.length, "본문 길이:", content.length);
+    if( content.length <= 500 && content.length === 0){
       setIsModal( true );
       setModalMessage("소개글은 0자 이상 100자 이하여야 합니다.");
       return null;
@@ -869,10 +867,8 @@ function EditPost() {
     setIsDeleteModal( false );
     if (myBungle.isLetter) {
       chatDisconnect();
-    }else{
-      
-    }
-    dispatch(deleteMyBungleList({ postId, navigate }));
+      dispatch(deleteMyBungleList({ postId, navigate }));
+    }    
   };
 
   //Disconnect
@@ -889,10 +885,13 @@ function EditPost() {
       };
     }
     // const token = localStorage.getItem("login-token");
+    console.log( "sockClient", client );
     const PK = Number( localStorage.getItem("userId") );
+    const storageClient = JSON.parse( localStorage.getItem("client") );
+    console.log( "localStorage", JSON.parse( localStorage.getItem("client") ));
     client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
     client.disconnect(function () {
-      
+      localStorage.removeItem("client");
       // alert("See you next time!");
     });
   };

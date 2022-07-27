@@ -125,9 +125,13 @@ function MyPageSetting() {
       console.log(file);
       formData.append("profileImg ", file);
     }
+
+    // 닉네임 예외 처리
+    if( nickName_Ref.current.value.length >= 2 || nickName_Ref.current.value.length <= 15 ){
+      setIsModal(true);
+    }
     if (
-      intro_Ref.current.value.length >= 2 ||
-      intro_Ref.current.value.length < 15
+      intro_Ref.current.value.length <= 20
     ) {
       setIsModal(true);
     } else {
