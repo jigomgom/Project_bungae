@@ -690,7 +690,7 @@ function ChattingRoom({ setRealTimeChat }) {
                     <div className="modal-chat-content-file">
                       <div className="modal-chat-content-title">
                         <p>사진, 동영상</p>
-                        <img src={IconForwardKey} alt="" />
+                        {/* <img src={IconForwardKey} alt="" /> */}
                       </div>
                       <Swiper
                         style={{ marginLeft: "20px" }}
@@ -793,11 +793,11 @@ function ChattingRoom({ setRealTimeChat }) {
                         <p>나가기</p>
                       </div>
                       <div className="modal-footer-">
-                        <img
+                        {/* <img
                           className="modal-footer-noti"
                           src={Notification}
                           alt=""
-                        />
+                        /> */}
                       </div>
                     </div>
                     {isDisconnectModal && (

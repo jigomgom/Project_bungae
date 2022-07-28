@@ -1,7 +1,7 @@
 .chatting-footer-wrap{
     /* // sticky로 하니 아이템이 다 안 차있을 경우 상단으로 붙어버림
     // fixed로 하니 해결 */
-    /* position: fixed; */
+    position: sticky;
     bottom: 0px;
     display: flex;
     justify-content: space-around;
@@ -99,7 +99,7 @@
 
 /* chatting ================ */
 .chat-wrap{
-    height: 70vh;
+    height: 75vh;
     overflow: auto;
 }
 /* other Chatting */
@@ -301,12 +301,12 @@ input[type="checkbox" i]{
 }
 /* 스크롤 바 숨기기 */
 .toggle-member-list{
-	-ms-overflow-style:none; /* IE and Edge */
+    -ms-overflow-style:none; /* IE and Edge */
     scrollbar-width:none; /* Firefox */
 }
 
 .toggle-member-list::-webkit-scrollbar {
-	display:none; /* Chrome , Safari , Opera */
+    display:none; /* Chrome , Safari , Opera */
 }
 /* 스크롤 숨기기 */
 .toggle-member{
@@ -365,7 +365,7 @@ input[type="checkbox" i]{
     top: 0;
     width: 100%;
     max-width: 375px;
-    height: 87vh;
+    height: 93vh;
 }
 .modal-chat-overlay{
     /* background-color: yellow; */
@@ -451,12 +451,12 @@ input[type="checkbox" i]{
 }
 /* 스크롤 바 숨기기 */
 .modal-member-list{
-	-ms-overflow-style:none; /* IE and Edge */
+    -ms-overflow-style:none; /* IE and Edge */
     scrollbar-width:none; /* Firefox */
 }
 
 .modal-member-list::-webkit-scrollbar {
-	display:none; /* Chrome , Safari , Opera */
+    display:none; /* Chrome , Safari , Opera */
 }
 /* 스크롤 숨기기 */
 .modal-member{
