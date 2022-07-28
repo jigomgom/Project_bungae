@@ -782,7 +782,7 @@ function EditPost() {
       return null;
     }
     console.log( "제목 길이:", title.length, "본문 길이:", content.length);
-    if( content.length <= 500 && content.length === 0){
+    if( content.length > 500 || content.length === 0){
       setIsModal( true );
       setModalMessage("소개글은 0자 이상 100자 이하여야 합니다.");
       return null;

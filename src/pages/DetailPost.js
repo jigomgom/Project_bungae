@@ -80,7 +80,6 @@ import IconNoPost from "../assets/icon-detail-no-post.svg";
 
 //채팅 입장 client
 const Post = () => {
-  const filterPostURL = "https://meeting-project.s3.ap-northeast-2.amazonaws.com/%EB%A9%94%EC%9D%B8+%EB%94%94%ED%90%85%ED%8A%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png";
   const navigate = useNavigate();
    // 알림 interval
    const interval = useRef(null);

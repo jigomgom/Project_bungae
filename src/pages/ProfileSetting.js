@@ -128,10 +128,8 @@ function MyPageSetting() {
     }
 
     // 닉네임 예외 처리
-    if (
-      nickName_Ref.current.value.length < 2 ||
-      nickName_Ref.current.value.length > 15
-    ) {
+
+    if( nickName_Ref.current.value.length < 2 || nickName_Ref.current.value.length > 15 ){
       setIsModal(true);
       setModalMessage("닉네임은 2자 이상 15자 이하입니다.");
       return null;
