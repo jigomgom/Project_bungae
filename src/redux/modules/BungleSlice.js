@@ -306,6 +306,7 @@ export const tagBungleList = createAsyncThunk(
         console.log(response.data.list);
         console.log(item);
         item.navigate("/tagsearch");
+        // window.location.href = "/tagsearch";
         return response.data.list;
       }else{
         item.navigate("/tagsearch");
@@ -698,17 +699,22 @@ const BungleSlice = createSlice({
       console.log(action.payload);
       state.categoriesList = action.payload;
     },
-    [categoryBungleList.rejected]: (state, action) => {},
+    [categoryBungleList.rejected]: (state, action) => {
 
+    },
     // 태그 조회
     [tagBungleList.fulfilled]: (state, action) => {
+      console.log("?????")
+      console.log( action.payload )
       if (action.payload) {
         state.moreList = action.payload;
       } else {
-        state.moreList = [{}];
+        state.moreList = null;
       }
     },
-    [tagBungleList.rejected]: (state, action) => {},
+    [tagBungleList.rejected]: (state, action) => {
+      console.log("erarsat");
+    },
 
     // 유저 프로필 조회
     [getUserProfile.fulfilled]: (state, action) => {
@@ -728,14 +734,8 @@ const BungleSlice = createSlice({
     },
     // 채팅 목록 조회
     [myChattingList.fulfilled]: (state, action) => {
-      console.log(action.payload);
       state.myChatting = action.payload.messageDto;
       state.isOwner = action.payload.owner;
-      console.log(state.isOwner);
-      // state.myChatting = action.payload;
-      // const isOwner = action.payload[0].owner;
-      // console.log( state.myChatting )
-      // state.isOwner = isOwner;
     },
     [myChattingList.rejected]: (state, action) => {
       console.log("상세조회 실패");

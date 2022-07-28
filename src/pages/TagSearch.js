@@ -147,15 +147,15 @@ function TagSearch() {
           </select> */}
         </div>
         <div className="search-result-card-wrap">
-          {!!searchList ? (
+          {searchList ? (
+            searchList.map((item, index) => {
+              return <TagSearchCard key={index} moreList={item} />;
+            })
+          ):(
             <LoadingWrap>
               <LoadingLogo src={IconLoadingLogo} />
               <LoadingText>검색 결과 벙글이 없습니다.</LoadingText>
             </LoadingWrap>
-          ) : (
-            searchList.map((item, index) => {
-              return <TagSearchCard key={index} moreList={item} />;
-            })
           )}
         </div>
       </div>
