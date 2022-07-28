@@ -130,12 +130,12 @@ function MyPageSetting() {
     }
 
     // 닉네임 예외 처리
-    if( nickName_Ref.current.value.length <= 2 || nickName_Ref.current.value.length >= 15 ){
+    if( nickName_Ref.current.value.length < 2 || nickName_Ref.current.value.length > 15 ){
       setIsModal(true);
       setModalMessage("닉네임은 2자 이상 15자 이하입니다.");
       return null;
     }
-    if ( intro_Ref.current.value.length >= 20
+    if ( intro_Ref.current.value.length > 20
     ) {
       setIsModal(true);
       setModalMessage("자기소개는 20자 이하입니다.")

@@ -689,7 +689,7 @@ function CreatePost() {
       window.scrollTo(0,0);
       return null;
     }
-    if (Content_ref.current.value.trim().length <= 500 && Content_ref.current.value.trim().length === 0 ) {
+    if (Content_ref.current.value.trim().length > 500 || Content_ref.current.value.trim().length === 0 ) {
       setIsModal( true );
       setModalMessage("소개글은 0자 이상 500자 이하여야 합니다.");
       window.scrollTo(0,0);
