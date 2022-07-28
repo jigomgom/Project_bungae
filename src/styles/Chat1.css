@@ -99,7 +99,7 @@
 
 /* chatting ================ */
 .chat-wrap{
-    height: 80vh;
+    height: 70vh;
     overflow: auto;
 }
 /* other Chatting */
@@ -365,7 +365,7 @@ input[type="checkbox" i]{
     top: 0;
     width: 100%;
     max-width: 375px;
-    height: 100vh;
+    height: 87vh;
 }
 .modal-chat-overlay{
     /* background-color: yellow; */
