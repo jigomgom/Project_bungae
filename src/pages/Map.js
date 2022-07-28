@@ -181,30 +181,39 @@ function Map() {
   //지도 전체 리스트
   useEffect(() => {
     if (location) {
+      console.log("전체리스트 갖고오기");
       dispatch(getMapBungle(location));
     }
   }, [location]);
 
   useEffect(() => {
-    if (checkMapData[0] === true) {
+    console.log("전체: ", location, checkMapData[0]);
+    if (location && checkMapData[0] === true) {
+      console.log("전체 리스트 갖고와서 넣어주기");
       setMapBungleData(() => getAroundBungle);
     }
   }, [getAroundBungle]);
 
   //태그 검색
+  // const [key, setKey] = useState();
   const onKeyDown = (e) => {
-    if (e.target.value.length !== 0 && e.code === "Enter") {
+    // setKey(() => e.key);
+    if (e.target.value.length !== 0 && e.key === "Enter") {
+      console.log("태그 리스트 가져오기");
       dispatch(tagBungleList({ tag: e.target.value, location }));
-      setCheckMapData(() => [false, true, false]);
+      console.log("태그 검색 플래그 세우기");
+
+      setCheckMapData([false, true, false]);
     }
   };
 
   //태그 검색 시 배열에 태그 검색 리스트 담기
   useEffect(() => {
     if (location && checkMapData[1] === true) {
+      console.log("태그 리스트 가져와서 넣어주기");
       setMapBungleData(() => getTagSearchBungle);
     }
-  }, [getTagSearchBungle]);
+  }, [checkMapData[1], getTagSearchBungle]);
 
   const CategoryImgArray = [
     IconRestarunt,
@@ -258,7 +267,9 @@ function Map() {
   //세부 설정 적용 함수
   const mapSearch = () => {
     if (location && onlyNumber && onlyDistance && selectCategory) {
+      console.log("세부 설정 적용 리스트 불러오기");
       dispatch(getDetailMap(sendData));
+      console.log("세부 설정 플래그 세우기");
       setCheckMapData([false, false, true]);
       setIsDetail(false);
     }
@@ -266,9 +277,10 @@ function Map() {
 
   useEffect(() => {
     if (location && checkMapData[2] === true) {
+      console.log("세부 설정 리스트 담아주기");
       setMapBungleData(() => getDetailMapBungle);
     }
-  }, [getDetailMapBungle]);
+  }, [checkMapData[2], getDetailMapBungle]);
 
   //지도 옵션
   const options = {
@@ -505,6 +517,7 @@ function Map() {
             </MapIconsWrap>
           </MapHeaderWrap>
           <div className="map-wrapper">
+            {/* <button>{key}</button> */}
             {isDetail && (
               <div className="map-detail-modal-wrapper">
                 <div

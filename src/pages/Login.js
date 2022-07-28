@@ -37,7 +37,7 @@ import {
 } from "../styles/StyledLogin";
 
 // icon
-import IconLoginLogo from "../assets/icon-login-title.svg"
+import IconLoginLogo from "../assets/icon-login-title.svg";
 import IconTextClear from "../assets/icon-login-clear.svg";
 import IconIllustration from "../assets/icon-login-illustration.svg";
 
@@ -51,12 +51,12 @@ const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${proc
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 function Login() {
-  useEffect(()=>{
-    window.scrollTo(0,0);
-  },[])
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   // navigate
   const navigate = useNavigate();
-  
+
   // 소셜 로그인 처리
   const code = new URL(window.location.href).searchParams.get("code");
   const url = new URL(window.location.href);
@@ -87,7 +87,7 @@ function Login() {
           secure: true,
         });
         console.log(localStorage.getItem("login-token"));
-        navigate("/main")
+        navigate("/main");
       }
     } catch (error) {
       console.log(error);
@@ -126,7 +126,7 @@ function Login() {
           secure: true,
         });
         console.log(localStorage.getItem("login-token"));
-        navigate("/main")
+        navigate("/main");
       }
     } catch (error) {
       console.log(error);
@@ -283,6 +283,7 @@ function Login() {
 
   // 안드로이드 아이폰 둘다 enter는 event.key로 확인 가능
   // 아이폰은 enter가 event.code도 가능
+
   const onKeyDown = (event) => {
     if (
       email_Ref.current.value.length > 0 &&

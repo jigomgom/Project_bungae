@@ -103,6 +103,8 @@ function MyPageSetting() {
   const intro_Ref = useRef();
 
   const editUserProfileComplete = () => {
+    console.log(nickName_Ref);
+    console.log(intro_Ref);
     const profileDto = {
       nickName: nickName_Ref.current.value,
       intro: intro_Ref.current.value,
@@ -127,15 +129,16 @@ function MyPageSetting() {
     }
 
     // 닉네임 예외 처리
-    if( nickName_Ref.current.value.length >= 2 || nickName_Ref.current.value.length <= 15 ){
-      setIsModal(true);
-    }
     if (
-      intro_Ref.current.value.length <= 20
+      nickName_Ref.current.value.length >= 2 ||
+      nickName_Ref.current.value.length <= 15
     ) {
       setIsModal(true);
+    }
+    if (intro_Ref.current.value.length >= 20) {
+      setIsModal(true);
     } else {
-      dispatch(editUserProfile({ formData, navigate }));
+      // dispatch(editUserProfile({ formData, navigate }));
     }
   };
 
@@ -178,12 +181,10 @@ function MyPageSetting() {
           }}
         />
       </div>
+
       <div className="profile-setting-form">
         <div className="profile-setting-form-nickname">
-          <label className="profile-setting-form-title">
-            {/* {userProfileInfo.nickName ? userProfileInfo.nickName : "닉네임"} */}
-            닉네임
-          </label>
+          <label className="profile-setting-form-title">닉네임</label>
           <input
             ref={nickName_Ref}
             defaultValue={
@@ -194,33 +195,20 @@ function MyPageSetting() {
             placeholder="닉네임을 입력해주세요."
           />
         </div>
-        <div className="profile-setting-form">
-          <div className="profile-setting-form-nickname">
-            <label className="profile-setting-form-title">닉네임</label>
-            <input
-              ref={nickName_Ref}
-              defaultValue={
-                userProfileInfo.nickName ? userProfileInfo.nickName : ""
-              }
-              className="profile-setting-form-input"
-              type="search"
-              placeholder="닉네임을 입력해주세요."
-            />
-          </div>
-          <div className="profile-setting-form-desc">
-            <label className="profile-setting-form-title">자기소개</label>
-            <input
-              ref={intro_Ref}
-              defaultValue={userProfileInfo.intro ? userProfileInfo.intro : ""}
-              className="profile-setting-form-input"
-              type="search"
-              placeholder="자기소개를 입력해주세요."
-            />
-          </div>
-          {/* <button className="profile-setting-form-btn">가입하기</button> */}
+        <div className="profile-setting-form-desc">
+          <label className="profile-setting-form-title">자기소개</label>
+          <input
+            ref={intro_Ref}
+            defaultValue={userProfileInfo.intro ? userProfileInfo.intro : ""}
+            className="profile-setting-form-input"
+            type="search"
+            placeholder="자기소개를 입력해주세요."
+          />
         </div>
         {/* <button className="profile-setting-form-btn">가입하기</button> */}
       </div>
+      {/* <button className="profile-setting-form-btn">가입하기</button> */}
+
       <MapFooterWrap>
         <FooterIconWrap
           onClick={() => {

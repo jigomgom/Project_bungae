@@ -10,7 +10,7 @@ import "../styles/SearchCard.css";
 import { LoadingWrap, LoadingLogo, LoadingText } from "../styles/StyledLoading";
 
 //img
-import defaultCardImg from "../assets/defaultImg.jpg";
+import defaultCardImg from "../assets/icon-main-default.svg";
 import tempImg from "../assets/icon-temp.svg";
 import likeImg from "../assets/icon-like.svg";
 import UnlikeImg from "../assets/icon-unlike.svg";
