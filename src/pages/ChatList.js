@@ -105,7 +105,6 @@ function App() {
     dispatch(myChattingList());
   }, []);
 
- 
   //시간 커스텀
   const dateHandler = (lastMessageTime) => {
     let a = lastMessageTime;
@@ -197,7 +196,7 @@ function App() {
               style={{ visibility: "hidden" }}
               src={Notification}
             />
-            <IconSetting style={{ display:"none"}} src={Setting} />
+            <IconSetting style={{ display: "none" }} src={Setting} />
           </MapIconsWrap>
         </MapHeaderWrap>
         <LoadingWrap>
@@ -289,7 +288,7 @@ function App() {
               src={Notification}
             />
             <IconSetting
-              style={{ display:"none"}}
+              style={{ display: "none" }}
               src={Setting}
               onClick={() => {
                 dateHandler();
@@ -307,7 +306,10 @@ function App() {
                 <div className="first_swiper_main">
                   <div className="first_swiper_img">
                     {/* <img src={defaultProfile} alt="" /> */}
-                    <img src={item.postUrl ? item.postUrl : IconDefaultChatList} alt="" />
+                    <img
+                      src={item.postUrl ? item.postUrl : IconDefaultChatList}
+                      alt=""
+                    />
                   </div>
                   <div
                     className="first_swipe"
