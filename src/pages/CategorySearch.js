@@ -109,7 +109,7 @@ function CategorySearch() {
       <div className="search-result-wrap">
         <div className="search-result-header">
           <p className="search-result-header-title">{category}</p>
-          <select
+          {/* <select
             className="search-result-header-dropbox"
             onChange={handleSelect}
             value={selected}
@@ -119,7 +119,7 @@ function CategorySearch() {
                 {item.value}
               </option>
             ))}
-          </select>
+          </select> */}
         </div>
         <div className="search-result-card-wrap">
           {categoryList ?

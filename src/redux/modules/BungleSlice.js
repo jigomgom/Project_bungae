@@ -117,6 +117,7 @@ export const getMainBungleList = createAsyncThunk(
         return response.data;
       }
     } catch (e) {
+      window.location.href = `/notFound/${e.message}`;
       console.log(e);
     }
   }
@@ -142,6 +143,7 @@ export const moreBungleList = createAsyncThunk(
       }
     } catch (e) {
       console.log(e);
+      window.location.href = `/notFound/${e.message}`;
     }
   }
 );
@@ -166,6 +168,7 @@ export const getMapBungle = createAsyncThunk(
       }
     } catch (e) {
       console.log(e);
+      window.location.href = `/notFound/${e.message}`;
     }
   }
 );
@@ -193,6 +196,7 @@ export const getDetailMap = createAsyncThunk(
       }
     } catch (e) {
       console.log(e);
+      window.location.href = `/notFound/${e.message}`;
     }
   }
 );
@@ -213,6 +217,7 @@ export const likeBungleList = createAsyncThunk(
       }
     } catch (e) {
       console.log(e);
+      window.location.href = `/notFound/${e.message}`;
     }
   }
 );
@@ -232,6 +237,7 @@ export const detailBungleList = createAsyncThunk(
       }
     } catch (e) {
       console.log(e);
+      window.location.href = `/notFound/${e.message}`;
     }
   }
 );
@@ -252,6 +258,7 @@ export const detailLikeBungleList = createAsyncThunk(
       }
     } catch (e) {
       console.log(e);
+      window.location.href = `/notFound/${e.message}`;
     }
   }
 );
@@ -279,6 +286,7 @@ export const categoryBungleList = createAsyncThunk(
       }
     } catch (e) {
       console.log(e);
+      window.location.href = `/notFound/${e.message}`;
     }
   }
 );
@@ -302,6 +310,7 @@ export const tagBungleList = createAsyncThunk(
       }
     } catch (e) {
       console.log(e);
+      window.location.href = `/notFound/${e.message}`;
     }
   }
 );
@@ -318,6 +327,7 @@ export const getUserProfile = createAsyncThunk(
       }
     } catch (error) {
       console.log(error);
+      window.location.href = `/notFound/${error.message}`;
     }
   }
 );
@@ -338,6 +348,7 @@ export const editUserProfile = createAsyncThunk(
       }
     } catch (error) {
       // console.log(error);
+      window.location.href = `/notFound/${error.message}`;
     }
   }
 );
@@ -356,6 +367,7 @@ export const myLikeBungleList = createAsyncThunk(
       }
     } catch (error) {
       console.log(error);
+      window.location.href = `/notFound/${error.message}`;
     }
   }
 );
@@ -375,6 +387,7 @@ export const myChattingList = createAsyncThunk(
       }
     } catch (e) {
       console.log(e);
+      window.location.href = `/notFound/${e.message}`;
     }
   }
 );
@@ -391,6 +404,7 @@ export const getIntervalNotification = createAsyncThunk(
       }
     } catch (error) {
       console.log(error);
+      window.location.href = `/notFound/${error.message}`;
     }
   }
 );

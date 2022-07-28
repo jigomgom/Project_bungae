@@ -366,11 +366,11 @@ function Login() {
           alt="구글"
           onClick={googleSocialLogin}
         />
-        <img
+        {/* <img
           src="https://member.brandi.co.kr/images/ic_naver.svg"
           alt="네이버"
           onClick={naverSocialLogin}
-        />
+        /> */}
         {/* <img src="https://member.brandi.co.kr/images/ic_apple.svg" alt="애플" /> */}
       </LoginSnsIconWarp>
       <SignupFindPasswordWarp>

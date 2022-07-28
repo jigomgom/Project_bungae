@@ -28,6 +28,9 @@ import OpenViduSettings from "./components/videos/OpenViduSettings";
 import LoadingLogin from "./components/LoadingLogin";
 import Notification from "./pages/Notification";
 
+// 404 Not found
+import NotFound from "./components/NotFound";
+
 function App() {
   return (
     <div className="App">
@@ -56,6 +59,8 @@ function App() {
         <Route path="/map" element={<Map />} />
         {/* 알림 */}
         <Route path="notification" element={<Notification />} />
+        {/* Not Found */}
+        <Route path="*" element={<NotFound/>}/>
         {/* Test */}
         <Route path="/videochat" element={<OpenViduSettings />} />
       </Routes>

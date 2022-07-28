@@ -95,7 +95,7 @@ function TagSearch() {
   ];
 
   return (
-    <div>
+    <div style={{ width: "100%", display: "flex", flexDirection: "column", marginBottom: "90px" }}>
       <PostHeaderWrap>
         <ChattingBackKey
           src={IconBackKey}
@@ -121,13 +121,13 @@ function TagSearch() {
           <IconSetting src={Setting} />
         </HeadrIconsWrap>
       </PostHeaderWrap>
-      <Tag />
+      {/* <Tag /> 인기 태그 숨기기 */}
       <Search />
       <div className="search-result-wrap">
         <Divider />
         <div className="search-result-header">
           <p className="search-result-header-title">검색 결과</p>
-          <select
+          {/* <select
             className="search-result-header-dropbox"
             onChange={handleSelect}
             value={selected}
@@ -137,7 +137,7 @@ function TagSearch() {
                 {item.value}
               </option>
             ))}
-          </select>
+          </select> */}
         </div>
         <div className="search-result-card-wrap">
           {searchList ? (
