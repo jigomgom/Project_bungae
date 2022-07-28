@@ -53,6 +53,7 @@ import IconEdit from "../assets/icon-edit-footer.svg";
 import IconCreate from "../assets/icon-create-post.svg";
 import IconChatCurrent from "../assets/icon-chat-current.svg";
 import IconMyBungae from "../assets/icon-account.svg";
+import IconDefaultChatList from "../assets/icon-chatlist-default.png";
 
 function App() {
   const [lastMessageTime, setLastMessageTime] = useState([]);
@@ -305,7 +306,7 @@ function App() {
                 <div className="first_swiper_main">
                   <div className="first_swiper_img">
                     {/* <img src={defaultProfile} alt="" /> */}
-                    <img src={item.postUrl} alt="" />
+                    <img src={item.postUrl ? item.postUrl : IconDefaultChatList} alt="" />
                   </div>
                   <div
                     className="first_swipe"

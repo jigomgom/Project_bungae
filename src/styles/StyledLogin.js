@@ -193,7 +193,7 @@ export const LoginSns = styled.div`
 
 export const LoginSnsIconWarp = styled.div`
   display: flex;
-  width: 56%;
+  width: 36%; // 네이버 추가시 56%
   justify-content: space-between;
 
   margin-top: 10px;

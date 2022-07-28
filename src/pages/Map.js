@@ -193,9 +193,9 @@ function Map() {
 
   //태그 검색
   const onKeyDown = (e) => {
-    if (e.target.value.length !== 0 && e.code === "Enter") {
-      dispatch(tagBungleList({ tag: e.target.value, location }));
+    if (e.target.value.length !== 0 && e.key === "Enter") {
       setCheckMapData(() => [false, true, false]);
+      dispatch(tagBungleList({ tag: e.target.value, location }));
     }
   };
 

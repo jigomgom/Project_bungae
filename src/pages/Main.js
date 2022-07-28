@@ -304,7 +304,7 @@ function Main() {
               <IconSetting src={Setting} />
             </MainHeaderIconsWrap>
           </MainHeaderWrap>
-          <Tag />
+          {/* <Tag /> 인기 태그 막기*/}
           <Search location={location} />
           <Category location={location} />
           <ContentDivide />

@@ -59,6 +59,7 @@ function MyPageSetting() {
 
   // modal state
   const [isModal, setIsModal] = useState(false);
+  const [ modalMessage, setModalMessage ] = useState("");
 
   useEffect(() => {
     if (isLoad) {
@@ -103,9 +104,11 @@ function MyPageSetting() {
   const intro_Ref = useRef();
 
   const editUserProfileComplete = () => {
+    console.log( nickName_Ref );
+    console.log( intro_Ref );
     const profileDto = {
-      nickName: nickName_Ref.current.value,
-      intro: intro_Ref.current.value,
+      nickName: nickName_Ref.current.value.trim(),
+      intro: intro_Ref.current.value.trim(),
     };
 
     const formData = new FormData();
@@ -127,16 +130,21 @@ function MyPageSetting() {
     }
 
     // 닉네임 예외 처리
-    if( nickName_Ref.current.value.length >= 2 || nickName_Ref.current.value.length <= 15 ){
+    if( nickName_Ref.current.value.length <= 2 || nickName_Ref.current.value.length >= 15 ){
       setIsModal(true);
+      setModalMessage("닉네임은 2자 이상 15자 이하입니다.");
+      return null;
     }
-    if (
-      intro_Ref.current.value.length <= 20
+    if ( intro_Ref.current.value.length >= 20
     ) {
       setIsModal(true);
-    } else {
+      setModalMessage("자기소개는 20자 이하입니다.")
+      return null;
+    } 
+    
+    // else {
       dispatch(editUserProfile({ formData, navigate }));
-    }
+    // }
   };
 
   return (
@@ -178,49 +186,33 @@ function MyPageSetting() {
           }}
         />
       </div>
-      <div className="profile-setting-form">
-        <div className="profile-setting-form-nickname">
-          <label className="profile-setting-form-title">
-            {/* {userProfileInfo.nickName ? userProfileInfo.nickName : "닉네임"} */}
-            닉네임
-          </label>
-          <input
-            ref={nickName_Ref}
-            defaultValue={
-              userProfileInfo.nickName ? userProfileInfo.nickName : ""
-            }
-            className="profile-setting-form-input"
-            type="search"
-            placeholder="닉네임을 입력해주세요."
-          />
-        </div>
         <div className="profile-setting-form">
           <div className="profile-setting-form-nickname">
             <label className="profile-setting-form-title">닉네임</label>
             <input
+              type="search"
               ref={nickName_Ref}
               defaultValue={
                 userProfileInfo.nickName ? userProfileInfo.nickName : ""
               }
               className="profile-setting-form-input"
-              type="search"
               placeholder="닉네임을 입력해주세요."
             />
           </div>
           <div className="profile-setting-form-desc">
             <label className="profile-setting-form-title">자기소개</label>
             <input
+              type="search"
               ref={intro_Ref}
               defaultValue={userProfileInfo.intro ? userProfileInfo.intro : ""}
               className="profile-setting-form-input"
-              type="search"
+              
               placeholder="자기소개를 입력해주세요."
             />
           </div>
           {/* <button className="profile-setting-form-btn">가입하기</button> */}
         </div>
         {/* <button className="profile-setting-form-btn">가입하기</button> */}
-      </div>
       <MapFooterWrap>
         <FooterIconWrap
           onClick={() => {
@@ -291,7 +283,7 @@ function MyPageSetting() {
             <ModalInner>
               <ModalContentWrap>
                 <h3>프로필 수정 실패</h3>
-                <div>자기소개를 두 글자 이상 입력해주세요.</div>
+                <div>{modalMessage}</div>
               </ModalContentWrap>
               <ModalDivider />
               <ModalButton
