@@ -917,6 +917,7 @@ function EditPost() {
             maxLength={36}
             defaultValue={myBungle.title ? myBungle.title : ""}
             ref={Title_ref}
+            style={{ backgroundColor : "transparent" }}
           />
           {/* <DeleteButton src={IconClear} onClick={clearBtnOnClickHandler} /> */}
         </PostTilteDiv>

@@ -15,7 +15,7 @@ function Search( props ) {
     
   const onKeyDown = ( e ) => {
     if( e.target.value.length !== 0 && e.key === "Enter" && userLocation ){
-      dispatch( tagBungleList( { tag: e.target.value, location:userLocation, navigate } ) );
+      dispatch( tagBungleList( { tag: e.target.value, navigate, location:userLocation } ) );
     }
   };
 

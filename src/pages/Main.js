@@ -270,6 +270,10 @@ function Main() {
     navigate(`/detailpost/${postId}`);
   };
 
+  const researchOnClickHandler = () => {
+    window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSdYv_eLc3Bug9ZUUe6UVcbwQJXx98qfoMw_bCKaDX9Xerut2g/viewform?usp=sf_link";
+  };
+
   if (!location || ( !realTimeList && !endTimeList )) {
     // console.log(location);
     return <Loading></Loading>;
@@ -282,6 +286,7 @@ function Main() {
           <MainHeaderWrap>
             <MainHeaderLogo src={IconMainLogo} />
             <MainHeaderIconsWrap>
+              <div style={{marginRight:"20px", cursor:"pointer"}} onClick={()=>{researchOnClickHandler()}}>⭐이벤트 참여 Click!⭐</div>
               <IconMyLocation
                 src={IconMyPoint}
                 onClick={() => {

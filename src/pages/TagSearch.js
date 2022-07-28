@@ -50,13 +50,14 @@ function TagSearch() {
   // 알림 call
   const interval = useRef(null);
   // 알림 state
-  const NotificationState = useSelector( state => state.Bungle.isReadNotification );
-  const [ notificationState, setNotificationState ] = useState( NotificationState);
-  useEffect(()=>{
-    setNotificationState( NotificationState );
-  },[NotificationState])
+  const NotificationState = useSelector(
+    (state) => state.Bungle.isReadNotification
+  );
+  const [notificationState, setNotificationState] = useState(NotificationState);
+  useEffect(() => {
+    setNotificationState(NotificationState);
+  }, [NotificationState]);
 
-  
   const ownerCheck = useSelector((state) => state.Bungle.isOwner);
   //
   const navigate = useNavigate();
@@ -80,13 +81,12 @@ function TagSearch() {
   }, []);
 
   // 알림 interval
-  useEffect(()=>{
-    interval.current = setInterval( async()=>{
-      dispatch( getIntervalNotification() );
+  useEffect(() => {
+    interval.current = setInterval(async () => {
+      dispatch(getIntervalNotification());
     }, 5000);
-    return () => clearInterval( interval.current );
-  },[])
-  
+    return () => clearInterval(interval.current);
+  }, []);
 
   // console.log(selected);
   const searchOptions = [
@@ -95,7 +95,14 @@ function TagSearch() {
   ];
 
   return (
-    <div style={{ width: "100%", display: "flex", flexDirection: "column", marginBottom: "90px" }}>
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        marginBottom: "90px",
+      }}
+    >
       <PostHeaderWrap>
         <ChattingBackKey
           src={IconBackKey}
@@ -118,7 +125,7 @@ function TagSearch() {
           ) : (
             <IconNotification src={Notification} />
           )}
-          <IconSetting style={{ display:"none"}} src={Setting} />
+          <IconSetting style={{ display: "none" }} src={Setting} />
         </HeadrIconsWrap>
       </PostHeaderWrap>
       {/* <Tag /> 인기 태그 숨기기 */}
@@ -140,15 +147,15 @@ function TagSearch() {
           </select> */}
         </div>
         <div className="search-result-card-wrap">
-          {searchList ? (
-            searchList.map((item, index) => {
-              return <TagSearchCard key={index} moreList={item} />;
-            })
-          ) : (
+          {!!searchList ? (
             <LoadingWrap>
               <LoadingLogo src={IconLoadingLogo} />
               <LoadingText>검색 결과 벙글이 없습니다.</LoadingText>
             </LoadingWrap>
+          ) : (
+            searchList.map((item, index) => {
+              return <TagSearchCard key={index} moreList={item} />;
+            })
           )}
         </div>
       </div>
@@ -217,4 +224,5 @@ function TagSearch() {
     </div>
   );
 }
+
 export default TagSearch;

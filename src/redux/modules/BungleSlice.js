@@ -306,6 +306,9 @@ export const tagBungleList = createAsyncThunk(
         console.log(response.data.list);
         item.navigate("/tagsearch");
         return response.data.list;
+      }else{
+        item.navigate("/tagsearch");
+        return null;
       }
     } catch (e) {
       console.log(e);
@@ -667,8 +670,12 @@ const BungleSlice = createSlice({
 
     // 태그 조회
     [tagBungleList.fulfilled]: (state, action) => {
-      //console.log( action.payload );
-      state.moreList = action.payload;
+      console.log( action.payload );
+      if (action.payload) {
+        state.moreList = action.payload;
+      } else {
+        state.moreList = [{}];
+      }
     },
     [tagBungleList.rejected]: (state, action) => {},
 
