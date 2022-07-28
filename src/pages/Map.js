@@ -504,16 +504,16 @@ function Map() {
         <div className="top-map-wrapper">
           <MapHeaderWrap>
             <MapIconsWrap>
-              <IconNotification
+              {/* <IconNotification
                 style={{ visibility: "hidden" }}
                 src={Notification}
-              />
+              /> */}
               <IconSetting style={{ visibility: "hidden" }} src={Setting} />
             </MapIconsWrap>
             <MapPageTitle>벙글 지도</MapPageTitle>
             <MapIconsWrap>
               <IconNotification src={Notification} />
-              <IconSetting src={Setting} />
+              <IconSetting style={{ display:"none"}} src={Setting} />
             </MapIconsWrap>
           </MapHeaderWrap>
           <div className="map-wrapper">

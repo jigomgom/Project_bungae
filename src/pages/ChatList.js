@@ -185,10 +185,10 @@ function App() {
       <div className="top-chatlist-wrap">
         <MapHeaderWrap>
           <MapIconsWrap>
-            <IconNotification
+            {/* <IconNotification
               style={{ visibility: "hidden" }}
               src={Notification}
-            />
+            /> */}
             <IconSetting style={{ visibility: "hidden" }} src={Setting} />
           </MapIconsWrap>
           <MapPageTitle>채팅</MapPageTitle>
@@ -197,7 +197,7 @@ function App() {
               style={{ visibility: "hidden" }}
               src={Notification}
             />
-            <IconSetting src={Setting} />
+            <IconSetting style={{ display:"none"}} src={Setting} />
           </MapIconsWrap>
         </MapHeaderWrap>
         <LoadingWrap>
@@ -289,6 +289,7 @@ function App() {
               src={Notification}
             />
             <IconSetting
+              style={{ display:"none"}}
               src={Setting}
               onClick={() => {
                 dateHandler();

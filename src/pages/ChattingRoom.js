@@ -371,15 +371,7 @@ function ChattingRoom({ setRealTimeChat }) {
     }
   }, [isFile]);
 
-  //채팅 상세 Modal Files Array
-  const FilesArray = [
-    "Lorem ipsum1",
-    "Lorem ipsum2",
-    "Lorem ipsum3",
-    "Lorem ipsum4",
-    "Lorem ipsum5",
-  ];
-
+  
   //채팅 상세 Modal Members Array
   const MembersArray = [];
 

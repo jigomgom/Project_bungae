@@ -301,7 +301,7 @@ function Main() {
               ) : (
                 <IconNotification src={Notification} />
               )}
-              <IconSetting src={Setting} />
+              <IconSetting style={{ display:"none"}} src={Setting} />
             </MainHeaderIconsWrap>
           </MainHeaderWrap>
           {/* <Tag /> 인기 태그 막기*/}

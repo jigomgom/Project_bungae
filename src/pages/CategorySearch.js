@@ -103,7 +103,7 @@ function CategorySearch() {
         <HeadrIconsWrap>
         {notificationState ? <span style={{ cursor:"pointer",color:"#FFC632"}} className="material-icons" onClick={()=>{navigate("/notification")}} >notifications</span> :
           <IconNotification src={Notification} />}
-          <IconSetting src={Setting} />
+          <IconSetting style={{ display:"none"}} src={Setting} />
         </HeadrIconsWrap>
       </PostHeaderWrap>
       <div className="search-result-wrap">
