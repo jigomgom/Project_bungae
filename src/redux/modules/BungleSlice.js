@@ -31,9 +31,7 @@ export const getMyBungleList = createAsyncThunk(
   "GET/getMyBungleList",
   async () => {
     try {
-      const response = await AxiosAPI.get(
-        `/posts/mypost`
-      );
+      const response = await AxiosAPI.get(`/posts/mypost`);
       if (response.data.response) {
         return response.data.postResponseDto;
       }
@@ -71,11 +69,9 @@ export const deleteMyBungleList = createAsyncThunk(
   "DELETE/deleteMyBungleList",
   async (rev) => {
     try {
-      const response = await AxiosAPI.delete(
-        `/posts/${rev.postId}`
-      );
+      const response = await AxiosAPI.delete(`/posts/${rev.postId}`);
       console.log(response);
-      
+
       if (response.data.response) {
         let data = {
           postId: rev.postId,
@@ -164,7 +160,6 @@ export const getMapBungle = createAsyncThunk(
       if (response.data.response) {
         return response.data;
       } else {
-
       }
     } catch (e) {
       console.log(e);
@@ -192,7 +187,6 @@ export const getDetailMap = createAsyncThunk(
       if (response.data.response) {
         return response.data.mapListDtos;
       } else {
-
       }
     } catch (e) {
       console.log(e);
@@ -207,10 +201,7 @@ export const likeBungleList = createAsyncThunk(
   async (postId) => {
     console.log(postId);
     try {
-      const response = await AxiosAPI.post(
-        `/posts/like/${postId}`,
-        {}
-      );
+      const response = await AxiosAPI.post(`/posts/like/${postId}`, {});
       console.log(response);
       if (response.data.response) {
         return postId;
@@ -228,9 +219,7 @@ export const detailBungleList = createAsyncThunk(
   async (postId) => {
     console.log(postId);
     try {
-      const response = await AxiosAPI.get(
-        `/posts/${postId}`
-      );
+      const response = await AxiosAPI.get(`/posts/${postId}`);
       console.log(response);
       if (response.data.response) {
         return response.data.postDetailsResponseDto;
@@ -319,8 +308,7 @@ export const getUserProfile = createAsyncThunk(
   "GET/getUserProfile",
   async () => {
     try {
-      const response = await AxiosAPI.get(`/user/profile`, {
-      });
+      const response = await AxiosAPI.get(`/user/profile`, {});
       console.log(response);
       if (response.data.response) {
         return response.data.profileResponseDto;
@@ -358,9 +346,7 @@ export const myLikeBungleList = createAsyncThunk(
   "GET/myLikeBungleList",
   async () => {
     try {
-      const response = await AxiosAPI.get(
-        `/posts/like/`
-      );
+      const response = await AxiosAPI.get(`/posts/like/`);
       console.log(response);
       if (response.data.response) {
         return response.data.list;
@@ -378,11 +364,9 @@ export const myChattingList = createAsyncThunk(
   async () => {
     // console.log(1);
     try {
-      const response = await AxiosAPI.get(
-        `/chat/rooms`
-      );
+      const response = await AxiosAPI.get(`/chat/rooms`);
       console.log(response);
-      if (response.status === 200 ) {
+      if (response.status === 200) {
         return response.data;
       }
     } catch (e) {
@@ -500,7 +484,7 @@ const BungleSlice = createSlice({
       console.log(action.payload);
       // realTime Update
       // const realTimeUpdate = current(state.realTime).map((item) => {
-      const realTimeUpdate = state.realTime.map((item) => {
+      const realTimeUpdate = state.realTime?.map((item) => {
         // console.log( item )
         if (item.postId === action.payload) {
           // console.log( item.isLike );
@@ -516,7 +500,7 @@ const BungleSlice = createSlice({
       state.realTime = realTimeUpdate;
       // endTimeUpdate
       // const endTimeUpdate = current(state.endTime).map((item) => {
-      const endTimeUpdate = state.endTime.map((item) => {
+      const endTimeUpdate = state.endTime?.map((item) => {
         // console.log( item )
         if (item.postId === action.payload) {
           // console.log( item.isLike );
@@ -533,7 +517,7 @@ const BungleSlice = createSlice({
 
       // more or Tag search Update
       // const moreTempUpdate = current(state.moreList).map((item) => {
-      const moreTempUpdate = state.moreList.map((item) => {
+      const moreTempUpdate = state.moreList?.map((item) => {
         console.log(item);
         if (item.postId === action.payload) {
           // console.log( item.isLike );
@@ -551,7 +535,7 @@ const BungleSlice = createSlice({
 
       // 카테고리 update
       // const CategoryUpdate = current(state.categoriesList).map((item) => {
-      const CategoryUpdate = state.categoriesList.map((item) => {
+      const CategoryUpdate = state.categoriesList?.map((item) => {
         // console.log( item )
         if (item.postId === action.payload) {
           // console.log( item.isLike );
@@ -569,7 +553,7 @@ const BungleSlice = createSlice({
 
       // 지도 벙글 update
       // const MapBungleUpdate = current(state.mapList).map((item) => {
-      const MapBungleUpdate = state.mapList.map((item) => {
+      const MapBungleUpdate = state.mapList?.map((item) => {
         // console.log(item);
         if (item.postId === action.payload) {
           if (item.isLike) {
@@ -585,7 +569,7 @@ const BungleSlice = createSlice({
 
       // 지도 상세 검색 벙글 update
       // const MapDetailBungleUpdate = current(state.detailMapBungle).map(
-      const MapDetailBungleUpdate = state.detailMapBungle.map((item) => {
+      const MapDetailBungleUpdate = state.detailMapBungle?.map((item) => {
         // console.log(item);
         if (item.postId === action.payload) {
           if (item.isLike) {
@@ -601,7 +585,7 @@ const BungleSlice = createSlice({
       state.detailMapBungle = MapDetailBungleUpdate;
 
       // const MyLikeBungleUpdate = current(state.myLikeList).map((item) => {
-      const MyLikeBungleUpdate = state.myLikeList.map((item) => {
+      const MyLikeBungleUpdate = state.myLikeList?.map((item) => {
         console.log(item, action.payload);
         if (item.postId === action.payload) {
           if (item.isLike) {
@@ -689,10 +673,10 @@ const BungleSlice = createSlice({
     },
     // 채팅 목록 조회
     [myChattingList.fulfilled]: (state, action) => {
-      console.log( action.payload);
+      console.log(action.payload);
       state.myChatting = action.payload.messageDto;
       state.isOwner = action.payload.owner;
-      console.log( state.isOwner );
+      console.log(state.isOwner);
       // state.myChatting = action.payload;
       // const isOwner = action.payload[0].owner;
       // console.log( state.myChatting )

@@ -36,14 +36,15 @@ import PrivateRoutes from "./utils/PrivateRoutes";
 function App() {
   return (
     <div className="App">
-      
       <Routes>
         <Route element={<PrivateRoutes />}>
           {/* social login redirection URL */}
           {/* <Route path="/oauth" element={<Login />} /> */}
           <Route path="/main" element={<Main />} />
           <Route path="/tagsearch" element={<TagSearch />} />
-          <Route path="/categorysearch/:category" element={<CategorySearch />}
+          <Route
+            path="/categorysearch/:category"
+            element={<CategorySearch />}
           />
           {/* MyPage */}
           <Route path="/mypage" element={<MyPage />} />
@@ -67,7 +68,7 @@ function App() {
         {/* Not Found */}
         <Route path="*" element={<NotFound />} />
         {/* Test */}
-        <Route path="/videochat" element={<OpenViduSettings />} />
+        {/* <Route path="/videochat" element={<OpenViduSettings />} /> */}
       </Routes>
       {/* <Footer /> */}
     </div>

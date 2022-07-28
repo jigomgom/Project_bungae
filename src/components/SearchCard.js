@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -18,7 +18,7 @@ import "../styles/SearchCard.css";
 import "react-swipeable-list/dist/styles.css";
 
 //img
-import defaultCardImg from "../assets/defaultImg.jpg";
+import defaultCardImg from "../assets/icon-main-default.svg";
 import tempImg from "../assets/icon-temp.svg";
 import likeImg from "../assets/icon-like.svg";
 import UnlikeImg from "../assets/icon-unlike.svg";
@@ -27,23 +27,24 @@ import IconMiddleTemp from "../assets/icon-manner-middle.svg";
 import IconLowTemp from "../assets/icon-manner-low.svg";
 import IconLoadingLogo from "../assets/icon-splash-logo.svg";
 
-
 function SearchCard(props) {
   const { moreList, myLikeList } = props;
-  console.log( moreList );
-  const [ isLoad, setIsLoad ] = useState( true );
+  console.log(moreList);
+  const [isLoad, setIsLoad] = useState(true);
 
-  useEffect(()=>{
-    if( isLoad ){
-      setTimeout(()=>{setIsLoad( false )}, 200);
+  useEffect(() => {
+    if (isLoad) {
+      setTimeout(() => {
+        setIsLoad(false);
+      }, 200);
     }
-  },[]);
+  }, []);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
-  console.log( myLikeList );
-  
+
+  console.log(myLikeList);
+
   const moreTagLikeOnClick = (postId) => {
     console.log(postId);
     dispatch(likeBungleList(postId));
@@ -60,27 +61,31 @@ function SearchCard(props) {
     </TrailingActions>
   );
 
-   // 게시물 상세 조회 
-   const showDetailBungle = ( postId ) => {
+  // 게시물 상세 조회
+  const showDetailBungle = (postId) => {
     navigate(`/detailpost/${postId}`);
   };
 
-  if( !moreList || !myLikeList ){
-    return( <LoadingWrap>
-      <LoadingLogo src={IconLoadingLogo} />
-      <LoadingText>진행 중인 채팅이 없습니다.</LoadingText>
-    </LoadingWrap> )
+  if (!moreList || !myLikeList) {
+    return (
+      <LoadingWrap>
+        <LoadingLogo src={IconLoadingLogo} />
+        <LoadingText>진행 중인 채팅이 없습니다.</LoadingText>
+      </LoadingWrap>
+    );
   }
 
   if (window.location.pathname === "/tagsearch") {
     return (
-      <div className="search-card-wrap" >
+      <div className="search-card-wrap">
         <div className="search-card-img">
           <img
             className="search-card-img-thumbnail"
             src={moreList.postUrl ? moreList.postUrl : defaultCardImg}
             alt=""
-            onClick={() => { showDetailBungle( moreList.postId ) }}
+            onClick={() => {
+              showDetailBungle(moreList.postId);
+            }}
           />
           <img
             className="search-card-img-like"
@@ -119,9 +124,7 @@ function SearchCard(props) {
   } else if (window.location.pathname === "/mylikebung") {
     return (
       <SwipeableList>
-        <SwipeableListItem
-          trailingActions={trailingActions()}
-        >
+        <SwipeableListItem trailingActions={trailingActions()}>
           <div className="search-card-wrap">
             <div className="search-card-img">
               <img
@@ -129,24 +132,32 @@ function SearchCard(props) {
                 src={myLikeList.postUrl ? myLikeList.postUrl : defaultCardImg}
                 alt=""
               />
-              <img className="search-card-img-like" src={myLikeList.isLike ? likeImg : UnlikeImg} alt="" />
+              <img
+                className="search-card-img-like"
+                src={myLikeList.isLike ? likeImg : UnlikeImg}
+                alt=""
+              />
             </div>
             <div className="search-card-desc">
               <div className="search-card-desc-title">{myLikeList.title}</div>
-              <div className="search-card-desc-sub">{myLikeList.time} · ({myLikeList.joinCount}/{myLikeList.personnel}명)</div>
+              <div className="search-card-desc-sub">
+                {myLikeList.time} · ({myLikeList.joinCount}/
+                {myLikeList.personnel}명)
+              </div>
               <div className="search-card-desc-desc">
-                <span>
-                  {myLikeList.content}
-                </span>
+                <span>{myLikeList.content}</span>
               </div>
               <div className="search-card-desc-temp">
-                <img src={
-                myLikeList.avgTemp >= 50
-                  ? IconHighTemp
-                  : myLikeList.avgTemp >= 25
-                  ? IconMiddleTemp
-                  : IconLowTemp
-              } alt="" />
+                <img
+                  src={
+                    myLikeList.avgTemp >= 50
+                      ? IconHighTemp
+                      : myLikeList.avgTemp >= 25
+                      ? IconMiddleTemp
+                      : IconLowTemp
+                  }
+                  alt=""
+                />
                 <span>{myLikeList.avgTemp}°C</span>
               </div>
               <div></div>
