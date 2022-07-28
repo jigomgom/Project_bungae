@@ -143,7 +143,7 @@ function ChattingRoom({ setRealTimeChat }) {
     dispatch(getChatClient({ client, Guest }));
     setUserData({ ...userData, connected: true });
     console.log("local 저장");
-    localStorage.setItem("client", JSON.stringify( client ) );
+    localStorage.setItem("client", JSON.stringify(client));
     if (Bungle) {
       console.log("방장 connect");
       client.subscribe(`/sub/chat/room/${parseInt(postId)}`, onMessageReceived);
