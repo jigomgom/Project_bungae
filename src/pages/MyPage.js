@@ -132,10 +132,10 @@ function MyPage() {
           )}
           <MapHeaderWrap>
             <MapIconsWrap>
-              <IconNotification
+              {/* <IconNotification
                 style={{ visibility: "hidden" }}
                 src={Notification}
-              />
+              /> */}
               <IconSetting style={{ visibility: "hidden" }} src={Setting} />
             </MapIconsWrap>
             <MapPageTitle>나의 벙글</MapPageTitle>
@@ -153,7 +153,7 @@ function MyPage() {
               ) : (
                 <IconNotification src={Notification} />
               )}
-              <IconSetting src={Setting} />
+              <IconSetting style={{ display:"none"}} src={Setting} />
             </MapIconsWrap>
           </MapHeaderWrap>
           <div className="mypage-content-wrap">

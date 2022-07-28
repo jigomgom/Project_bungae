@@ -118,7 +118,7 @@ function TagSearch() {
           ) : (
             <IconNotification src={Notification} />
           )}
-          <IconSetting src={Setting} />
+          <IconSetting style={{ display:"none"}} src={Setting} />
         </HeadrIconsWrap>
       </PostHeaderWrap>
       {/* <Tag /> 인기 태그 숨기기 */}

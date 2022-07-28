@@ -60,7 +60,7 @@ function MyPageRecent() {
 
         <HeadrIconsWrap>
           <IconNotification src={Notification} />
-          <IconSetting src={Setting} />
+          <IconSetting style={{ display:"none"}} src={Setting} />
         </HeadrIconsWrap>
       </PostHeaderWrap>
      {/* <div style={{ marginBottom: "70px" }}> */}

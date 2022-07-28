@@ -102,6 +102,7 @@ export const deleteMyBungleList = createAsyncThunk(
 export const getMainBungleList = createAsyncThunk(
   "GET/getMainBungleList",
   async (position) => {
+    console.log( position )
     try {
       const response = await AxiosAPI.get(`/posts`, {
         params: {
@@ -110,10 +111,18 @@ export const getMainBungleList = createAsyncThunk(
         },
       });
       if (response.status === 200) {
-        return response.data;
+        // return response.data; origin
+        // for test
+        const data = {
+          latitude : position.latitude,
+          longitude: position.longitude,
+          list : response.data,
+        }
+        // end test
+        return data;
       }
     } catch (e) {
-      window.location.href = `/notFound/${e.message}`;
+      // window.location.href = `/notFound/${e.message}`;
       console.log(e);
     }
   }
@@ -139,7 +148,7 @@ export const moreBungleList = createAsyncThunk(
       }
     } catch (e) {
       console.log(e);
-      window.location.href = `/notFound/${e.message}`;
+      // window.location.href = `/notFound/${e.message}`;
     }
   }
 );
@@ -163,7 +172,7 @@ export const getMapBungle = createAsyncThunk(
       }
     } catch (e) {
       console.log(e);
-      window.location.href = `/notFound/${e.message}`;
+      // window.location.href = `/notFound/${e.message}`;
     }
   }
 );
@@ -190,7 +199,7 @@ export const getDetailMap = createAsyncThunk(
       }
     } catch (e) {
       console.log(e);
-      window.location.href = `/notFound/${e.message}`;
+      // window.location.href = `/notFound/${e.message}`;
     }
   }
 );
@@ -208,7 +217,7 @@ export const likeBungleList = createAsyncThunk(
       }
     } catch (e) {
       console.log(e);
-      window.location.href = `/notFound/${e.message}`;
+      // window.location.href = `/notFound/${e.message}`;
     }
   }
 );
@@ -226,7 +235,7 @@ export const detailBungleList = createAsyncThunk(
       }
     } catch (e) {
       console.log(e);
-      window.location.href = `/notFound/${e.message}`;
+      // window.location.href = `/notFound/${e.message}`;
     }
   }
 );
@@ -247,7 +256,7 @@ export const detailLikeBungleList = createAsyncThunk(
       }
     } catch (e) {
       console.log(e);
-      window.location.href = `/notFound/${e.message}`;
+      // window.location.href = `/notFound/${e.message}`;
     }
   }
 );
@@ -275,7 +284,7 @@ export const categoryBungleList = createAsyncThunk(
       }
     } catch (e) {
       console.log(e);
-      window.location.href = `/notFound/${e.message}`;
+      // window.location.href = `/notFound/${e.message}`;
     }
   }
 );
@@ -295,11 +304,12 @@ export const tagBungleList = createAsyncThunk(
       console.log(response);
       if (response.data.response) {
         console.log(response.data.list);
+        item.navigate("/tagsearch");
         return response.data.list;
       }
     } catch (e) {
       console.log(e);
-      window.location.href = `/notFound/${e.message}`;
+      // window.location.href = `/notFound/${e.message}`;
     }
   }
 );
@@ -315,7 +325,7 @@ export const getUserProfile = createAsyncThunk(
       }
     } catch (error) {
       console.log(error);
-      window.location.href = `/notFound/${error.message}`;
+      // window.location.href = `/notFound/${error.message}`;
     }
   }
 );
@@ -336,7 +346,7 @@ export const editUserProfile = createAsyncThunk(
       }
     } catch (error) {
       // console.log(error);
-      window.location.href = `/notFound/${error.message}`;
+      // window.location.href = `/notFound/${error.message}`;
     }
   }
 );
@@ -353,7 +363,7 @@ export const myLikeBungleList = createAsyncThunk(
       }
     } catch (error) {
       console.log(error);
-      window.location.href = `/notFound/${error.message}`;
+      // window.location.href = `/notFound/${error.message}`;
     }
   }
 );
@@ -371,7 +381,7 @@ export const myChattingList = createAsyncThunk(
       }
     } catch (e) {
       console.log(e);
-      window.location.href = `/notFound/${e.message}`;
+      // window.location.href = `/notFound/${e.message}`;
     }
   }
 );
@@ -388,7 +398,7 @@ export const getIntervalNotification = createAsyncThunk(
       }
     } catch (error) {
       console.log(error);
-      window.location.href = `/notFound/${error.message}`;
+      // window.location.href = `/notFound/${error.message}`;
     }
   }
 );
@@ -397,6 +407,11 @@ const BungleSlice = createSlice({
   name: "Bungle",
 
   initialState: {
+    // location gps
+    userLocation:{
+      latitude:0,
+      longitude:0
+    },
     isOwner: false,
     // 유저 프로필
     userProfile: {},
@@ -466,12 +481,14 @@ const BungleSlice = createSlice({
     // Main 전체 게시글 조회
     [getMainBungleList.fulfilled]: (state, action) => {
       console.log("Main get");
-      // console.log( action.payload )
+      console.log( action.payload )
       if (action.payload) {
-        state.isOwner = action.payload?.isOwner;
-
-        state.endTime = action.payload.postListEndTime;
-        state.realTime = action.payload.postListRealTime;
+        state.userLocation.latitude = action.payload.latitude;
+        state.userLocation.longitude = action.payload.longitude;
+        state.isOwner = action.payload?.list.isOwner;
+        
+        state.endTime = action.payload.list.postListEndTime;
+        state.realTime = action.payload.list.postListRealTime;
         // console.log( current( state.endTime ), current( state.realTime ) );
       }
     },

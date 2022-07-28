@@ -3,14 +3,7 @@ import { useDispatch } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
 import { likeBungleList } from "../redux/modules/BungleSlice";
-//swipe-list
-import {
-  LeadingActions,
-  SwipeableList,
-  SwipeableListItem,
-  SwipeAction,
-  TrailingActions,
-} from "react-swipeable-list";
+
 //CSS
 import "../styles/SearchCard.css";
 import "react-swipeable-list/dist/styles.css";
@@ -28,7 +21,7 @@ function CategorySearchCard(props) {
   const { categoryList } = props;
   const dispatch = useDispatch();
   // console.log(moreList);
-  // console.log(categoryList);
+  console.log(categoryList);
   const navigate = useNavigate();
 
   const categoryListLikeClick = (postId) => {
@@ -59,7 +52,7 @@ function CategorySearchCard(props) {
               src={categoryList.isLike ? likeImg : UnlikeImg}
               alt=""
               onClick={() => {
-                categoryListLikeClick(categoryList.id);
+                categoryListLikeClick(categoryList.postId);
               }}
             />
           </div>
