@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { getMapBungle } from "../redux/modules/BungleSlice";
+import { getMapBungle, mapTagSearch } from "../redux/modules/BungleSlice";
 import { tagBungleList } from "../redux/modules/BungleSlice";
 import { getDetailMap } from "../redux/modules/BungleSlice";
 import { getIntervalNotification } from "../redux/modules/BungleSlice";
@@ -200,7 +200,7 @@ function Map() {
     // setKey(() => e.key);
     if (e.target.value.length !== 0 && e.key === "Enter") {
       console.log("태그 리스트 가져오기");
-      dispatch(tagBungleList({ tag: e.target.value, location }));
+      dispatch(mapTagSearch({ tag: e.target.value, location }));
       console.log("태그 검색 플래그 세우기");
 
       setCheckMapData([false, true, false]);
@@ -513,7 +513,7 @@ function Map() {
             <MapPageTitle>벙글 지도</MapPageTitle>
             <MapIconsWrap>
               <IconNotification src={Notification} />
-              <IconSetting style={{ display:"none"}} src={Setting} />
+              <IconSetting style={{ display: "none" }} src={Setting} />
             </MapIconsWrap>
           </MapHeaderWrap>
           <div className="map-wrapper">

@@ -102,7 +102,7 @@ export const deleteMyBungleList = createAsyncThunk(
 export const getMainBungleList = createAsyncThunk(
   "GET/getMainBungleList",
   async (position) => {
-    console.log( position )
+    console.log(position);
     try {
       const response = await AxiosAPI.get(`/posts`, {
         params: {
@@ -114,10 +114,10 @@ export const getMainBungleList = createAsyncThunk(
         // return response.data; origin
         // for test
         const data = {
-          latitude : position.latitude,
+          latitude: position.latitude,
           longitude: position.longitude,
-          list : response.data,
-        }
+          list: response.data,
+        };
         // end test
         return data;
       }
@@ -304,11 +304,36 @@ export const tagBungleList = createAsyncThunk(
       console.log(response);
       if (response.data.response) {
         console.log(response.data.list);
+        console.log(item);
         item.navigate("/tagsearch");
         return response.data.list;
       }else{
         item.navigate("/tagsearch");
         return null;
+      }
+    } catch (e) {
+      console.log(e);
+      // window.location.href = `/notFound/${e.message}`;
+    }
+  }
+);
+
+// 지도 게시글 단일 태그 조회
+export const mapTagSearch = createAsyncThunk(
+  "GET/mapTagSearch",
+  async (item) => {
+    try {
+      const response = await AxiosAPI.get(`/posts/tags`, {
+        params: {
+          latitude: item.location.latitude,
+          longitude: item.location.longitude,
+          tags: item.tag,
+        },
+      });
+      console.log(response);
+      if (response.data.response) {
+        console.log(response.data.list);
+        return response.data.list;
       }
     } catch (e) {
       console.log(e);
@@ -411,9 +436,9 @@ const BungleSlice = createSlice({
 
   initialState: {
     // location gps
-    userLocation:{
-      latitude:0,
-      longitude:0
+    userLocation: {
+      latitude: 0,
+      longitude: 0,
     },
     isOwner: false,
     // 유저 프로필
@@ -484,12 +509,12 @@ const BungleSlice = createSlice({
     // Main 전체 게시글 조회
     [getMainBungleList.fulfilled]: (state, action) => {
       console.log("Main get");
-      console.log( action.payload )
+      console.log(action.payload);
       if (action.payload) {
         state.userLocation.latitude = action.payload.latitude;
         state.userLocation.longitude = action.payload.longitude;
         state.isOwner = action.payload?.list.isOwner;
-        
+
         state.endTime = action.payload.list.postListEndTime;
         state.realTime = action.payload.list.postListRealTime;
         // console.log( current( state.endTime ), current( state.realTime ) );
@@ -630,6 +655,13 @@ const BungleSlice = createSlice({
     },
     [moreBungleList.rejected]: (state, action) => {},
 
+    // 지도태그 검색 결과
+    [mapTagSearch.fulfilled]: (state, action) => {
+      console.log(action.payload);
+      state.moreList = action.payload;
+    },
+    [mapTagSearch.rejected]: (state, action) => {},
+
     // 지도 리스트
     [getMapBungle.fulfilled]: (state, action) => {
       // console.log(action.payload);
@@ -670,7 +702,6 @@ const BungleSlice = createSlice({
 
     // 태그 조회
     [tagBungleList.fulfilled]: (state, action) => {
-      console.log( action.payload );
       if (action.payload) {
         state.moreList = action.payload;
       } else {
