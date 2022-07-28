@@ -310,7 +310,7 @@ function Login() {
 
   return (
     <LoginWrap>
-      <LoginInquiry>문의하기</LoginInquiry>
+      <LoginInquiry style={{ visibility: "hidden" }}>문의하기</LoginInquiry>
       <LoginImageWrap>
         <LoginTitle src={IconLoginLogo} />
         <LoginExplain>너와 나 친구되는 시간</LoginExplain>
@@ -382,10 +382,10 @@ function Login() {
         >
           회원가입
         </LoginBottomText>
-        <LoginBottomText> · </LoginBottomText>
+        {/* <LoginBottomText> · </LoginBottomText>
         <LoginBottomText style={{ cursor: "pointer" }}>
           비밀번호 찾기
-        </LoginBottomText>
+        </LoginBottomText> */}
       </SignupFindPasswordWarp>
       {isModal && (
         <ModalWrapper>

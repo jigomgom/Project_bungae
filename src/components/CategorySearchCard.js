@@ -16,7 +16,7 @@ import "../styles/SearchCard.css";
 import "react-swipeable-list/dist/styles.css";
 
 //img
-import defaultCardImg from "../assets/defaultImg.jpg";
+import defaultCardImg from "../assets/icon-main-default.svg";
 import tempImg from "../assets/icon-temp.svg";
 import likeImg from "../assets/icon-like.svg";
 import UnlikeImg from "../assets/icon-unlike.svg";
@@ -36,21 +36,23 @@ function CategorySearchCard(props) {
     dispatch(likeBungleList(postId));
   };
 
-  // 게시물 상세 조회 
-  const showDetailBungle = ( postId ) => {
+  // 게시물 상세 조회
+  const showDetailBungle = (postId) => {
     navigate(`/detailpost/${postId}`);
   };
 
   return (
     <>
       {categoryList && (
-        <div className="search-card-wrap" >
+        <div className="search-card-wrap">
           <div className="search-card-img">
             <img
               className="search-card-img-thumbnail"
               src={categoryList.postUrl ? categoryList.postUrl : defaultCardImg}
               alt=""
-              onClick={() => { showDetailBungle( categoryList.postId ) }}
+              onClick={() => {
+                showDetailBungle(categoryList.postId);
+              }}
             />
             <img
               className="search-card-img-like"
