@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 //Components
@@ -33,6 +33,7 @@ import IconEdit from "../assets/icon-edit-footer.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
 import Setting from "../assets/icon-setting.svg";
 import Notification from "../assets/icon-notification.svg";
+import NotificationOn from "../assets/icon-notification-on.svg";
 
 import IconLoadingLogo from "../assets/icon-splash-logo.svg";
 
@@ -41,6 +42,18 @@ function MyPageRecent() {
   const navigate = useNavigate();
   const [ isLoad, setIsLoad ] = useState( true );
   const myLikeList = useSelector( state => state.Bungle.myLikeList );
+
+  // 알림 call
+  const interval = useRef(null);
+  // 알림 state
+  const NotificationState = useSelector(
+    (state) => state.Bungle.isReadNotification
+  );
+  const [notificationState, setNotificationState] = useState(NotificationState);
+  useEffect(() => {
+    setNotificationState(NotificationState);
+  }, [NotificationState]);
+
 
   useEffect(()=>{
     if( isLoad ){
@@ -59,7 +72,15 @@ function MyPageRecent() {
         />
 
         <HeadrIconsWrap>
-          <IconNotification src={Notification} />
+        {notificationState ? (
+                <IconNotification src={NotificationOn} 
+                onClick={() => {
+                      navigate("/notification");
+                    }}
+                />
+              ) : (
+                <IconNotification src={Notification} />
+              )}
           <IconSetting style={{ display:"none"}} src={Setting} />
         </HeadrIconsWrap>
       </PostHeaderWrap>

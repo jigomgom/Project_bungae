@@ -39,8 +39,8 @@ export const ContentDivide = styled.div`
     width: 100%;
     height: 8px;
 
-    background: #d9d9d9;
-    margin: 20px 0px;
+    background: #F3F3F3;
+    margin: 20px 0px 0px 0px;
 `;
 
 export const MainContentWrap = styled.div`
@@ -74,7 +74,6 @@ export const MainContentItemFrame = styled.div`
     width: 161px;
     height: 213px;
     position: relative;
-    
 `;
 
 export const MainContentItemImg = styled.img`
@@ -82,6 +81,29 @@ export const MainContentItemImg = styled.img`
     height: 168px;
     border-radius: 10px;
     background: #D9D9D9;
+    object-fit: cover;
+    cursor: pointer;
+`;
+
+export const MainContentItemDefalutWrap = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 161px;
+    height: 168px;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+    /* object-fit: cover; */
+    cursor: pointer;
+`;
+
+export const MainContentItemImgDefault = styled.img`
+    width: 85px;
+    height: 85px;
+    border-radius: 10px;
+    /* background: #D9D9D9; */
     object-fit: cover;
     cursor: pointer;
 `;
@@ -148,5 +170,6 @@ export const MainContentButton = styled.div`
 
     margin-left: 20px;
     margin-top: 25px;
+    margin-bottom: 15px;
     cursor: pointer;
 `;

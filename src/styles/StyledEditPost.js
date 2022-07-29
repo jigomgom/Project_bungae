@@ -13,27 +13,31 @@ export const PostTilteDiv = styled.div`
 `;
 
 export const PostTitle = styled.input`
-    width: 100%;
-    height: 27px;
+  width: 100%;
+  height: 27px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+  /* border를 밑줄만 만듦 */
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1.2px solid #d9d9d9;
+  padding-right: 5px;
+  margin-bottom: 15px;
+  &::placeholder {
+    /* placeholder 글씨 색 변경 */
+    color: #d9d9d9;
     font-weight: 700;
     font-size: 14px;
     line-height: 20px;
-    /* border를 밑줄만 만듦 */
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: 1.2px solid #D9D9D9;
-    padding-right: 5px;
-    margin-bottom: 15px;
-    &::placeholder{
-        /* placeholder 글씨 색 변경 */
-        color: #D9D9D9;
-    }
-    &:focus{
-        /* 클릭 시 ouline 지우기 */
-        outline: none;
-    }
-`
+    color: #d9d9d9;
+  }
+  &:focus {
+    /* 클릭 시 ouline 지우기 */
+    outline: none;
+  }
+`;
 
 export const DeleteButton = styled.img`
     position: absolute;
@@ -244,8 +248,8 @@ export const HashTagWrap = styled.div`
 export const HashTagInput = styled.input`
     width: 90%;
     height: 49px;
-    border: 1px solid #FFC634;
-    border-radius: 10px;
+    height: 49px;
+    border: 1px solid #898989;
     text-align: left;
     padding-left: 15px;
     padding-right: 15px;
@@ -384,7 +388,7 @@ export const SearchAddressInput = styled.input`
     border-top: none;
     border-left: none;
     border-right: none;
-    border-bottom: 1.2px solid #D9D9D9;
+    border-bottom: 1.2px solid #898989;
 
     font-weight: 400;
     font-size: 12px;
@@ -408,7 +412,7 @@ export const SearhAddressBtn = styled.div`
     font-weight: 400;
     font-size: 12px;
     line-height: 17px;
-
+    margin-left: 15px;
     color: #FFFFFF;
     cursor: pointer;
 `;

@@ -77,6 +77,7 @@ function SearchCard(props) {
 
   if (window.location.pathname === "/tagsearch") {
     return (
+      
       <div className="search-card-wrap">
         <div className="search-card-img">
           <img

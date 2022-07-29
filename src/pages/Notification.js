@@ -10,6 +10,7 @@ import { clearNotificationState } from "../redux/modules/BungleSlice";
 import { PostHeaderWrap, ChattingBackKey, HeadrIconsWrap, IconSetting} from "../styles/StyledHeader";
 import Setting from "../assets/icon-setting.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
+import IconBell from "../assets/icon-bell.svg";
 
 function Notification() {
   const dispatch = useDispatch();
@@ -56,9 +57,10 @@ function Notification() {
             <NotificationContent key={index} onClick={()=>{notificationListClickHandler()}}>
               <NotificationTitleWrap>
                 <div style={{ display: "flex", marginTop: "10px" }}>
-                  <span style={{ color: "#FFC632" }} className="material-icons">
+                  {/* <span style={{ color: "#FFC632" }} className="material-icons">
                     notifications
-                  </span>
+                  </span> */}
+                  <img style={{ width:"24px", height:"24px"}} src={IconBell} alt=""/>
                   <NotificationTitle>{item.nickname}</NotificationTitle>
                 </div>
                 <NotificationDisplay>{item.message}</NotificationDisplay>

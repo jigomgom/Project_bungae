@@ -36,52 +36,74 @@ function CategorySearchCard(props) {
 
   return (
     <>
-      {categoryList && (
-        <div className="search-card-wrap">
-          <div className="search-card-img">
-            <img
-              className="search-card-img-thumbnail"
-              src={categoryList.postUrl ? categoryList.postUrl : defaultCardImg}
-              alt=""
-              onClick={() => {
-                showDetailBungle(categoryList.postId);
-              }}
-            />
-            <img
-              className="search-card-img-like"
-              src={categoryList.isLike ? likeImg : UnlikeImg}
-              alt=""
-              onClick={() => {
-                categoryListLikeClick(categoryList.postId);
-              }}
-            />
-          </div>
-          <div className="search-card-desc">
-            <div className="search-card-desc-title">{categoryList.title}</div>
-            <div className="search-card-desc-sub">
-              {categoryList.time} · ({categoryList.joinCount}/
-              {categoryList.personnel}명)
-            </div>
-            <div className="search-card-desc-desc">
-              <span>{categoryList.content}</span>
-            </div>
-            <div className="search-card-desc-temp">
-              <img
-                src={
-                  categoryList.avgTemp >= 50
-                    ? IconHighTemp
-                    : categoryList.avgTemp >= 25
-                    ? IconMiddleTemp
-                    : IconLowTemp
-                }
-                alt=""
-              />
-              <span>{categoryList.avgTemp}°C</span>
-            </div>
-            <div></div>
-          </div>
+    { categoryList && (
+      <div className="search-card-wrap-map" >
+      <div className="search-card-img">
+        {categoryList.postUrl ? 
+        (
+          <img
+          className="search-card-img-thumbnail"
+          src={
+            categoryList.postUrl
+          }
+          alt=""
+          onClick={() => {
+            showDetailBungle(categoryList.postId);
+          }}
+        />
+
+        ) 
+        : 
+        (
+          <div className="search-card-img-thumbnail-default-wrap" onClick={() => {
+            showDetailBungle(categoryList.postId);
+          }}>
+          <img className="search-card-img-thumbnail-default" src={ defaultCardImg } alt="" />
         </div>
-      )}
+        )}
+        {console.log(categoryList.postId)}
+        <img
+          className="search-card-img-like"
+          src={categoryList.isLike ? likeImg : UnlikeImg}
+          alt=""
+          onClick={() => {
+            categoryListLikeClick(categoryList.postId);
+          }}
+        />
+      </div>
+      <div
+        className="search-card-desc"
+        onClick={() => {
+          showDetailBungle(categoryList.postId);
+        }}
+      >
+        <div className="search-card-desc-title">
+          {categoryList.title}
+        </div>
+        <div className="search-card-desc-sub">
+          {categoryList.time}· ({categoryList.joinCount}/
+          {categoryList.personnel}명)
+        </div>
+        <div className="search-card-desc-desc">
+          <span>{categoryList.content}</span>
+        </div>
+        <div className="search-card-desc-temp">
+          <img
+            src={
+              categoryList.avgTemp >= 50
+                ? IconHighTemp
+                : categoryList.avgTemp >= 25
+                ? IconMiddleTemp
+                : IconLowTemp
+            }
+            alt=""
+          />
+          <span>{categoryList.avgTemp}°C</span>
+        </div>
+        <div></div>
+      </div>
+    </div>
+    )}
     </>
   );
 }

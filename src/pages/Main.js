@@ -15,6 +15,7 @@ import {
 } from "../redux/modules/BungleSlice";
 
 import Loading from "../components/Loading";
+import ServiceExplainModal from "../pages/OnBoarding";
 
 import Tag from "../components/Tag";
 import Search from "../components/Search";
@@ -27,6 +28,8 @@ import {
   MainContentTitle,
   MainContentItemWrap,
   MainContentItemFrame,
+  MainContentItemDefalutWrap,
+  MainContentItemImgDefault,
   MainContentItemImg,
   MainContentItemImgTemp,
   MainContentTextWrap,
@@ -66,6 +69,7 @@ import IconMainLogo from "../assets/icon-main-logo.svg";
 
 import IconMyPoint from "../assets/icon-mylocation.svg";
 import Notification from "../assets/icon-notification.svg";
+import NotificationOn from "../assets/icon-notification-on.svg";
 import Setting from "../assets/icon-setting.svg";
 
 // Footer Icons
@@ -76,10 +80,9 @@ import IconMyBungae from "../assets/icon-account.svg";
 import IconCreate from "../assets/icon-create-post.svg";
 import IconEdit from "../assets/icon-edit-footer.svg";
 
-import SockJS from "sockjs-client";
-import AxiosAPI from "../customapi/CustomAxios";
-
 function Main() {
+  // OnBoarding
+  const [ isOnboard, setIsOnboard ] = useState( false );
   // 알림 call
   const interval = useRef(null);
   // 알림 state
@@ -252,14 +255,14 @@ function Main() {
   // 더보기 클릭
   const MoreBtnClickHandler = (status) => {
     if (status === "realTime") {
-      console.log("More real time");
+      // console.log("More real time");
       dispatch(moreBungleList({ status, location, navigate }));
       // navigate("/tagsearch");
     } else if (status === "manner") {
-      console.log("More manner");
+      // console.log("More manner");
       // navigate("/tagsearch");
     } else {
-      console.log("More endTime");
+      // console.log("More endTime");
       dispatch(moreBungleList({ status, location, navigate }));
       // navigate("/tagsearch");
     }
@@ -278,7 +281,7 @@ function Main() {
     // console.log(location);
     return <Loading></Loading>;
   } else {
-    console.log(location);
+    // console.log(location);
     return (
       <>
         {/* {!isLoad && ( */}
@@ -294,15 +297,11 @@ function Main() {
                 }}
               />
               {notificationState ? (
-                <span
-                  style={{ cursor: "pointer", color: "#FFC632" }}
-                  className="material-icons"
-                  onClick={() => {
-                    navigate("/notification");
-                  }}
-                >
-                  notifications
-                </span>
+                <IconNotification src={NotificationOn} 
+                onClick={() => {
+                      navigate("/notification");
+                    }}
+                />
               ) : (
                 <IconNotification src={Notification} />
               )}
@@ -321,12 +320,16 @@ function Main() {
                 // console.log( item );
                 return (
                   <MainContentItemFrame key={index}>
-                    <MainContentItemImg
-                      src={item.postUrl ? item.postUrl : defaultCardImg}
-                      onClick={() => {
+                    { item.postUrl ? 
+                    (<MainContentItemImg src={item.postUrl} onClick={() => {
+                      showDetailBungle(item.postId);
+                    }}/>) : 
+                    ( <MainContentItemDefalutWrap style={{ marginBottom:"7px" }}>
+                      <MainContentItemImgDefault src={defaultCardImg} onClick={() => {
                         showDetailBungle(item.postId);
-                      }}
-                    />
+                      }}/>
+                    </MainContentItemDefalutWrap>)  
+                  }
                     <MainContentItemImgTemp
                       src={
                         item.avgTemp >= 50
@@ -338,7 +341,9 @@ function Main() {
                     />
                     <MainContentTextWrap>
                       <MainContentTitleWrap>
-                        <MainContentItemTitle>
+                        <MainContentItemTitle onClick={() => {
+                        showDetailBungle(item.postId);
+                      }}>
                           {item.title}
                         </MainContentItemTitle>
                         <MainContentItemLike
@@ -390,14 +395,19 @@ function Main() {
             <MainContentItemWrap>
               {endTimeList.map((item, index) => {
                 // console.log( item );
+
                 return (
                   <MainContentItemFrame key={index}>
-                    <MainContentItemImg
-                      src={item.postUrl ? item.postUrl : defaultCardImg}
-                      onClick={() => {
+                    { item.postUrl ? 
+                    (<MainContentItemImg src={item.postUrl} onClick={() => {
+                      showDetailBungle(item.postId);
+                    }}/>) : 
+                    ( <MainContentItemDefalutWrap style={{ marginBottom:"7px" }}>
+                      <MainContentItemImgDefault src={defaultCardImg} onClick={() => {
                         showDetailBungle(item.postId);
-                      }}
-                    />
+                      }}/>
+                    </MainContentItemDefalutWrap>)  
+                  }
                     <MainContentItemImgTemp
                       src={
                         item.avgTemp >= 50
@@ -409,7 +419,9 @@ function Main() {
                     />
                     <MainContentTextWrap>
                       <MainContentTitleWrap>
-                        <MainContentItemTitle>
+                        <MainContentItemTitle onClick={() => {
+                        showDetailBungle(item.postId);
+                      }}>
                           {item.title}
                         </MainContentItemTitle>
                         <MainContentItemLike

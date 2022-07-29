@@ -52,16 +52,31 @@ function TagSearchCard(props) {
     navigate(`/detailpost/${postId}`);
   };
   return (
-    <div className="search-card-wrap">
+    <div className="search-card-wrap-map">
       <div className="search-card-img">
-        <img
+      {moreList.postUrl ? 
+        (
+          <img
           className="search-card-img-thumbnail"
-          src={moreList.postUrl ? moreList.postUrl : defaultCardImg}
+          src={
+            moreList.postUrl
+          }
           alt=""
           onClick={() => {
             showDetailBungle(moreList.postId);
           }}
         />
+
+        ) 
+        : 
+        (
+          <div className="search-card-img-thumbnail-default-wrap" onClick={() => {
+            showDetailBungle(moreList.postId);
+          }}>
+          <img className="search-card-img-thumbnail-default" src={ defaultCardImg } alt="" />
+        </div>
+        )}
+        {console.log(moreList.postId)}
         <img
           className="search-card-img-like"
           src={moreList.isLike ? likeImg : UnlikeImg}
@@ -71,10 +86,15 @@ function TagSearchCard(props) {
           }}
         />
       </div>
-      <div className="search-card-desc">
+      <div
+        className="search-card-desc"
+        onClick={() => {
+          showDetailBungle(moreList.postId);
+        }}
+      >
         <div className="search-card-desc-title">{moreList.title}</div>
         <div className="search-card-desc-sub">
-          {moreList.time} · ({moreList.joinCount}/{moreList.personnel}명)
+          {moreList.time}· ({moreList.joinCount}/{moreList.personnel}명)
         </div>
         <div className="search-card-desc-desc">
           <span>{moreList.content}</span>

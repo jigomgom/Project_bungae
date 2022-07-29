@@ -255,15 +255,16 @@ export const PostJoinIcon = styled.img`
   position: absolute;
   width: 20px;
   height: 20px;
-  left: 135px;
+  left: 145px;
   top: 17px;
+  z-index: 50;
 `;
 
 export const PostJoinButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
+  position: relative;
   width: 89%;
   height: 50px;
   font-weight: 400;
@@ -274,4 +275,8 @@ export const PostJoinButton = styled.div`
   border-radius: 10px;
   margin-left: 20px;
   cursor: pointer;
+  & > span{
+    position: absolute;
+    left: 149px;
+  }
 `;

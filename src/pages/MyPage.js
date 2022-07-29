@@ -48,6 +48,7 @@ import lighteningImg from "../assets/icon-lightening.svg";
 
 import Setting from "../assets/icon-setting.svg";
 import Notification from "../assets/icon-notification.svg";
+import NotificationOn from "../assets/icon-notification-on.svg";
 import IconHome from "../assets/icon-home.svg";
 import IconLocation from "../assets/icon-location.svg";
 import IconChat from "../assets/icon-chat.svg";
@@ -140,16 +141,12 @@ function MyPage() {
             </MapIconsWrap>
             <MapPageTitle>나의 벙글</MapPageTitle>
             <MapIconsWrap>
-              {notificationState ? (
-                <span
-                  style={{ cursor: "pointer", color: "#FFC632" }}
-                  className="material-icons"
-                  onClick={() => {
-                    navigate("/notification");
-                  }}
-                >
-                  notifications
-                </span>
+            {notificationState ? (
+                <IconNotification src={NotificationOn} 
+                onClick={() => {
+                      navigate("/notification");
+                    }}
+                />
               ) : (
                 <IconNotification src={Notification} />
               )}
@@ -198,6 +195,7 @@ function MyPage() {
               </div>
             </div>
             <button
+              style={{ color:"black" }}
               className="mypage-profile-btn"
               onClick={() => {
                 navigate("/profilesetting");
@@ -225,6 +223,7 @@ function MyPage() {
                 내가 찜한 벙글
               </div>
               <div
+                style={{ borderBottom:"0px" }}
                 className="mypage-selectbar"
                 onClick={() => {
                   setIsModal(true);

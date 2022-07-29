@@ -27,7 +27,8 @@ import OpenViduSettings from "./components/videos/OpenViduSettings";
 
 import LoadingLogin from "./components/LoadingLogin";
 import Notification from "./pages/Notification";
-
+//test
+import OnBoarding from "./pages/OnBoarding";
 // 404 Not found
 import NotFound from "./components/NotFound";
 // Private Routes
@@ -67,8 +68,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         {/* Not Found */}
         <Route path="*" element={<NotFound />} />
-        {/* Test */}
-        {/* <Route path="/videochat" element={<OpenViduSettings />} /> */}
+        <Route path="/on" element={<OnBoarding />} />
       </Routes>
       {/* <Footer /> */}
     </div>

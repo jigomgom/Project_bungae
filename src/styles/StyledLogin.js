@@ -213,8 +213,8 @@ export const SignupFindPasswordWarp = styled.div`
 `;
 
 export const LoginBottomText = styled.span`
-  font-weight: 700;
-  font-size: 14px;
+  font-weight: 400;
+  font-size: 12px;
   line-height: 20px;
 
   /* Gray */

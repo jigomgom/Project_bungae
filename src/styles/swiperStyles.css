@@ -1,0 +1,6 @@
+.swiper-pagination-bullet {
+    background: gray !important;
+  }
+  .swiper-pagination-bullet-active {
+    background: #FFC632 !important;
+  }

@@ -15,5 +15,5 @@ export default Divider;
 const DividerStyle = styled.div`
   width: 100%;
   height: 8px;
-  background: #d9d9d9;
+  background: #F3F3F3;
 `;
