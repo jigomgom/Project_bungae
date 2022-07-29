@@ -24,11 +24,15 @@ export const PostTitle = styled.input`
   border-left: none;
   border-right: none;
   border-bottom: 1.2px solid #d9d9d9;
-  padding-right: 5px;
+
   margin-bottom: 15px;
   background-color: transparent;
+  text-align: left;
   &::placeholder {
     /* placeholder 글씨 색 변경 */
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
     color: #d9d9d9;
   }
   &:focus {
@@ -243,8 +247,8 @@ export const HashTagWrap = styled.div`
 export const HashTagInput = styled.input`
   width: 90%;
   height: 49px;
-  border: 1px solid #ffc634;
-  border-radius: 10px;
+  border: 1px solid #898989;
+  border-radius: 10px;  
   text-align: left;
   padding-left: 15px;
   padding-right: 15px;
@@ -385,7 +389,7 @@ export const SearchAddressInput = styled.input`
   border-top: none;
   border-left: none;
   border-right: none;
-  border-bottom: 1.2px solid #d9d9d9;
+  border-bottom: 1.2px solid #898989;
 
   font-weight: 400;
   font-size: 12px;
@@ -393,6 +397,7 @@ export const SearchAddressInput = styled.input`
 
   &::placeholder {
     color: #d9d9d9;
+    
   }
   &:focus {
     outline: none;
@@ -409,7 +414,7 @@ export const SearhAddressBtn = styled.div`
   font-weight: 400;
   font-size: 12px;
   line-height: 17px;
-
+  margin-left: 15px;
   color: #ffffff;
   cursor: pointer;
 `;

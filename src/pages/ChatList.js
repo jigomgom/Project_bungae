@@ -196,7 +196,7 @@ function App() {
               style={{ visibility: "hidden" }}
               src={Notification}
             />
-            <IconSetting style={{ display: "none" }} src={Setting} />
+            <IconSetting style={{ visibility: "hidden" }} src={Setting} />
           </MapIconsWrap>
         </MapHeaderWrap>
         <LoadingWrap>

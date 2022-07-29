@@ -58,6 +58,14 @@ import {
   IconSetting
 } from "../styles/StyledHeader.js";
 
+import {
+  FooterWrap,
+  FooterIconWrap,
+  FooterIconImg,
+  FooterIconText,
+  FooterAddBungae,
+} from "../styles/StyledFooter.js";
+
 // icons
 import IconShared from "../assets/icon-url-shared.svg";
 import IconLightening from "../assets/icon-lightening.svg";
@@ -71,15 +79,24 @@ import IconMiddleTemp from "../assets/icon-manner-middle.svg";
 import IconLowTemp from "../assets/icon-manner-low.svg";
 
 import Notification from "../assets/icon-notification.svg";
+import NotificationOn from "../assets/icon-notification-on.svg";
 import Setting from "../assets/icon-setting.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
 
 import IconCurrentMarker from "../assets/icon-marker-current.svg";
-
 import IconNoPost from "../assets/icon-detail-no-post.svg";
+
+// Footer Icons
+import IconHome from "../assets/icon-home.svg";
+import IconLocation from "../assets/icon-location.svg";
+// import IconChat from "../assets/icon-chat.svg";
+import IconMyBungae from "../assets/icon-account.svg";
+import IconCreate from "../assets/icon-create-post.svg";
+import IconEdit from "../assets/icon-edit-footer.svg";
 
 //채팅 입장 client
 const Post = () => {
+  const ownerCheck = useSelector((state) => state.Bungle.isOwner);
   const navigate = useNavigate();
    // 알림 interval
    const interval = useRef(null);
@@ -182,19 +199,15 @@ const Post = () => {
               />
 
               <HeadrIconsWrap>
-                {notificationState ? (
-                  <span
-                    style={{ cursor: "pointer", color: "#FFC632" }}
-                    className="material-icons"
-                    onClick={() => {
+              {notificationState ? (
+                <IconNotification src={NotificationOn} 
+                onClick={() => {
                       navigate("/notification");
                     }}
-                  >
-                    notifications
-                  </span>
-                ) : (
-                  <IconNotification src={Notification} />
-                )}
+                />
+              ) : (
+                <IconNotification src={Notification} />
+              )}
                 <IconSetting src={Setting} />
               </HeadrIconsWrap>
             </PostHeaderWrap>
@@ -347,7 +360,7 @@ const Post = () => {
                 ) : (
                   <>
                     <PostJoinButton onClick={goToChatRoom}>
-                      참여하기
+                      <span>참여하기</span>
                     </PostJoinButton>
                   </>
                 )}
@@ -386,6 +399,70 @@ const Post = () => {
                 )}
               </PostJoinButtonWrapper>
             )}
+
+            {/* Footer */}
+            <FooterWrap>
+          <FooterIconWrap
+            onClick={() => {
+              navigate("/main");
+            }}
+          >
+            <FooterIconImg src={IconHome} />
+            <FooterIconText >홈</FooterIconText>
+          </FooterIconWrap>
+          <FooterIconWrap
+            onClick={() => {
+              navigate("/map");
+            }}
+          >
+            <FooterIconImg src={IconLocation} />
+            <FooterIconText>벙글지도</FooterIconText>
+          </FooterIconWrap>
+          {ownerCheck ? (
+            <FooterAddBungae
+              src={IconEdit}
+              onClick={() => {
+                navigate("/editpost");
+              }}
+            />
+          ) : (
+            <FooterAddBungae
+              src={IconCreate}
+              onClick={() => {
+                navigate("/createpost");
+              }}
+            />
+          )}
+          <FooterIconWrap>
+            <FooterIconImg
+              src={IconChat}
+              onClick={() => {
+                navigate("/chatlist");
+              }}
+            />
+            <FooterIconText>채팅</FooterIconText>
+          </FooterIconWrap>
+          <FooterIconWrap
+            onClick={() => {
+              navigate("/mypage");
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={() => {
+                navigate("/mypage");
+              }}
+            >
+              <FooterIconImg src={IconMyBungae} />
+              <FooterIconText>나의 벙글</FooterIconText>
+            </div>
+          </FooterIconWrap>
+        </FooterWrap>
           </PostWrap>
         </>
       )}

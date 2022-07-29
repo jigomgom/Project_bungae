@@ -778,13 +778,13 @@ function EditPost() {
     const minute = minute_ref.current.value;//("0" + minute_ref.current.value).slice(-2);
     if( title.length <= 0 ){
       setIsModal( true );
-      setModalMessage("벙글 제목을 입력해주세요.");
+      setModalMessage("벙글 이름을 입력해주세요.");
       return null;
     }
     console.log( "제목 길이:", title.length, "본문 길이:", content.length);
-    if( content.length > 500 || content.length === 0){
+    if( content.length > 100 || content.length === 0){
       setIsModal( true );
-      setModalMessage("소개글은 0자 이상 100자 이하여야 합니다.");
+      setModalMessage("벙글 소개글은 0자 이상 100자 이하여야 합니다.");
       return null;
     }
     // 타이틀은 필수
@@ -893,6 +893,11 @@ function EditPost() {
     // });
   };
 
+  const videoButtonClickHandler = () => {
+    setIsModal( true );
+    setModalMessage("서비스 예정 중입니다.")
+  }
+
   return (
     <>
       {/* { !isLoad && <> */}
@@ -913,7 +918,7 @@ function EditPost() {
       </PostHeaderWrap>
           <PostTitle
             type="search"
-            placeholder="번개 이름을 입력해주세요!."
+            placeholder="벙글 이름을 입력해주세요."
             maxLength={36}
             defaultValue={myBungle.title ? myBungle.title : ""}
             ref={Title_ref}
@@ -926,7 +931,7 @@ function EditPost() {
           type="text"
           defaultValue={myBungle.content ? myBungle.content : ""}
           ref={Content_ref}
-          placeholder="번개 소개글을 작성해주세요."
+          placeholder="벙글 소개글을 작성해주세요."
         ></PostBody>
         <Divider />
         <PostUploadPictureWrap>
@@ -1181,6 +1186,7 @@ function EditPost() {
               </SelectChatLetterBtn>
               <SelectChatVideoBtn
                 CheckedState={isVideo}
+                onClick={()=>{videoButtonClickHandler()}}
                 // onClick={() => {
                 //   ChatButtonClickHandler("video");
                 // }}
@@ -1230,15 +1236,15 @@ function EditPost() {
             trackStyle={{
               backgroundColor: "#FFC634",
               border: "1px solid #898989",
-              height: 9,
+              height: 11,
             }}
             inverted={false}
             handleStyle={{
               border: "3px solid #FFC634",
-              height: 14,
-              width: 14,
+              height: 20,
+              width: 20,
               marginLeft: 0,
-              marginTop: -2.5,
+              marginTop: -4.3,
               backgroundColor: "white",
               cursor: "pointer",
               opacity: 1,
@@ -1249,7 +1255,7 @@ function EditPost() {
             railStyle={{
               backgroundColor: "white",
               border: "1px solid #898989",
-              height: 9,
+              height: 11,
             }}
           />
         </PostPeopleCount>

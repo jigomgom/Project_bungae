@@ -19,8 +19,8 @@ export const SeachInput = styled.input`
     width: 89%;
     height: 34px;
     /* background-color: #D9D9D9; */
-    border-radius: 17px;
-    border: 1px solid #D9D9D9;
+    border-radius: 100px;
+    border: 1px solid #898989;
     padding-left: 50px;
     &:focus{
         outline: none;

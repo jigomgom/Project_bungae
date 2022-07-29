@@ -31,6 +31,7 @@ import { LoadingWrap, LoadingLogo, LoadingText } from "../styles/StyledLoading";
 import IconLoadingLogo from "../assets/icon-splash-logo.svg";
 
 import Notification from "../assets/icon-notification.svg";
+import NotificationOn from "../assets/icon-notification-on.svg";
 import Setting from "../assets/icon-setting.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
 import IconMyPoint from "../assets/icon-mylocation.svg";
@@ -101,8 +102,15 @@ function CategorySearch() {
         />
 
         <HeadrIconsWrap>
-        {notificationState ? <span style={{ cursor:"pointer",color:"#FFC632"}} className="material-icons" onClick={()=>{navigate("/notification")}} >notifications</span> :
-          <IconNotification src={Notification} />}
+        {notificationState ? (
+                <IconNotification src={NotificationOn} 
+                onClick={() => {
+                      navigate("/notification");
+                    }}
+                />
+              ) : (
+                <IconNotification src={Notification} />
+              )}
           <IconSetting style={{ display:"none"}} src={Setting} />
         </HeadrIconsWrap>
       </PostHeaderWrap>
@@ -125,9 +133,9 @@ function CategorySearch() {
           {categoryList ?
             categoryList.map((item, index) => {
               return <CategorySearchCard categoryList={item} />;
-            }) : (<LoadingWrap>
-              <LoadingLogo src={IconLoadingLogo}/>
-              <LoadingText>검색 결과가 없습니다.</LoadingText>
+            }) : (<LoadingWrap >
+              {/* <LoadingLogo src={IconLoadingLogo}/> */}
+              <LoadingText style={{ marginTop:"60%", color:"#898989" }}>검색 결과 벙글이 없습니다.</LoadingText>
             </LoadingWrap>)}
         </div>
       </div>

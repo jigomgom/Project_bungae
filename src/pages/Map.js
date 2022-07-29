@@ -15,6 +15,7 @@ import IconMyPoint from "../assets/icon-mylocation.svg";
 import IconMapSort from "../assets/icon-map-sort.svg";
 import Setting from "../assets/icon-setting.svg";
 import Notification from "../assets/icon-notification.svg";
+import NotificationOn from "../assets/icon-notification-on.svg";
 import IconHome from "../assets/icon-home.svg";
 import IconLocation from "../assets/icon-location.svg";
 import IconChat from "../assets/icon-chat.svg";
@@ -80,6 +81,7 @@ import "../styles/Map.css";
 // slider 추가
 import Slider from "rc-slider";
 import "../styles/rc-slider/index.css";
+
 
 function Map() {
   // 알림 interval
@@ -512,7 +514,15 @@ function Map() {
             </MapIconsWrap>
             <MapPageTitle>벙글 지도</MapPageTitle>
             <MapIconsWrap>
-              <IconNotification src={Notification} />
+            {notificationState ? (
+                <IconNotification src={NotificationOn} 
+                onClick={() => {
+                      navigate("/notification");
+                    }}
+                />
+              ) : (
+                <IconNotification src={Notification} />
+              )}
               <IconSetting style={{ display: "none" }} src={Setting} />
             </MapIconsWrap>
           </MapHeaderWrap>

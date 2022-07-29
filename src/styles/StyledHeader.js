@@ -118,13 +118,13 @@ export const Logo = styled.img`
 `;
 
 export const PageTitle = styled.h3`
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   margin-left: 20px;
 `;
 
 export const MapPageTitle = styled.h3`
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   /* margin-left: 9rem; */
 `;

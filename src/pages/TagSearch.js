@@ -33,6 +33,7 @@ import Search from "../components/Search";
 
 // Haeder icon
 import Notification from "../assets/icon-notification.svg";
+import NotificationOn from "../assets/icon-notification-on.svg";
 import Setting from "../assets/icon-setting.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
 
@@ -113,15 +114,18 @@ function TagSearch() {
 
         <HeadrIconsWrap>
           {notificationState ? (
-            <span
-              style={{ cursor: "pointer", color: "#FFC632" }}
-              className="material-icons"
-              onClick={() => {
-                navigate("/notification");
-              }}
-            >
-              notifications
-            </span>
+            // <span
+            //   style={{ cursor: "pointer", color: "#FFC632" }}
+            //   className="material-icons"
+            //   onClick={() => {
+            //     navigate("/notification");
+            //   }}
+            // >
+            //   notifications
+            // </span>
+            <IconNotification src={NotificationOn} onClick={() => {
+                  navigate("/notification");
+                }}/>
           ) : (
             <IconNotification src={Notification} />
           )}
@@ -153,8 +157,8 @@ function TagSearch() {
             })
           ):(
             <LoadingWrap>
-              <LoadingLogo src={IconLoadingLogo} />
-              <LoadingText>검색 결과 벙글이 없습니다.</LoadingText>
+              {/* <LoadingLogo src={IconLoadingLogo} /> */}
+              <LoadingText style={{ marginTop:"60%", color:"#898989" }}>검색 결과 벙글이 없습니다.</LoadingText>
             </LoadingWrap>
           )}
         </div>

@@ -99,6 +99,7 @@ import IconMylocation from "../assets/icon-mylocation-gray.svg";
 
 // header icon
 import Notification from "../assets/icon-notification.svg";
+import NotificationOn from "../assets/icon-notification-on.svg";
 import Setting from "../assets/icon-setting.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
 
@@ -647,7 +648,10 @@ function CreatePost() {
     }
   }, [location]);
 
-  
+  const videoButtonClickHandler = () => {
+    setIsModal( true );
+    setModalMessage("서비스 예정 중입니다.")
+  }
 
   // 등록하기 버튼 클릭
 
@@ -685,13 +689,13 @@ function CreatePost() {
     let content = "";
     if( title.length <= 0 ){
       setIsModal( true );
-      setModalMessage("벙글 제목을 작성해주세요.")
+      setModalMessage("벙글 이름을 입력해주세요.")
       window.scrollTo(0,0);
       return null;
     }
-    if (Content_ref.current.value.trim().length > 500 || Content_ref.current.value.trim().length === 0 ) {
+    if (Content_ref.current.value.trim().length > 100 || Content_ref.current.value.trim().length === 0 ) {
       setIsModal( true );
-      setModalMessage("소개글은 0자 이상 500자 이하여야 합니다.");
+      setModalMessage("벙글 소개글은 0자 이상 100자 이하여야 합니다.");
       window.scrollTo(0,0);
       return null;
     } else {
@@ -794,17 +798,14 @@ function CreatePost() {
         <PageTitle>벙글 생성</PageTitle>
         <HeadrIconsWrap>
         {notificationState ? (
-                  <span
-                    style={{ cursor: "pointer", color: "#FFC632" }}
-                    className="material-icons"
-                    onClick={() => {
+                <IconNotification src={NotificationOn} 
+                onClick={() => {
                       navigate("/notification");
                     }}
-                  >
-                    notifications
-                  </span>
-                ) : (
-          <IconNotification src={Notification} /> )}
+                />
+              ) : (
+                <IconNotification src={Notification} />
+              )}
           <IconSetting src={Setting} />
         </HeadrIconsWrap>
       </PostHeaderWrap>
@@ -812,8 +813,9 @@ function CreatePost() {
       {/* Title 부분 */}
       <PostTilteDiv>
         <PostTitle
-          type="search"
-          placeholder="벙글 이름을 입력해주세요!"
+          // type="search"
+          type="text"
+          placeholder="벙글 이름을 작성해주세요."
           maxLength={36}
           ref={Title_ref}
         />
@@ -823,7 +825,7 @@ function CreatePost() {
       <PostBody
         type="text"
         ref={Content_ref}
-        placeholder="벙글 소개글을 작성해주세요."
+        placeholder="벙글 소개글을 작성해주세요.( 100글자 미만 )"
       ></PostBody>
       <Divider />
       <PostUploadPictureWrap>
@@ -1075,6 +1077,7 @@ function CreatePost() {
             </SelectChatLetterBtn>
             <SelectChatVideoBtn
               CheckedState={isVideo}
+              onClick={()=>{ videoButtonClickHandler() }}
               // onClick={() => {
               //   ChatButtonClickHandler("video");
               // }}
@@ -1123,15 +1126,15 @@ function CreatePost() {
           trackStyle={{
             backgroundColor: "#FFC634",
             border: "1px solid #898989",
-            height: 9,
+            height: 11,
           }}
           inverted={false}
           handleStyle={{
             border: "3px solid #FFC634",
-            height: 14,
-            width: 14,
+            height: 20,
+            width: 20,
             marginLeft: 0,
-            marginTop: -2.5,
+            marginTop: -4.3,
             backgroundColor: "white",
             cursor: "pointer",
             opacity: 1,
@@ -1142,7 +1145,7 @@ function CreatePost() {
           railStyle={{
             backgroundColor: "white",
             border: "1px solid #898989",
-            height: 9,
+            height: 11,
           }}
         />
       </PostPeopleCount>

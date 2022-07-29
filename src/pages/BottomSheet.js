@@ -17,7 +17,6 @@ import UnlikeImg from "../assets/icon-unlike.svg";
 import IconHighTemp from "../assets/icon-manner-high.svg";
 import IconMiddleTemp from "../assets/icon-manner-middle.svg";
 import IconLowTemp from "../assets/icon-manner-low.svg";
-import { Navigate } from "react-router-dom";
 
 //icon
 import IconLoadingLogo from "../assets/icon-splash-logo.svg";

@@ -38,3 +38,7 @@ input, textarea, button {
   -webkit-background-color: none;
   -moz-background-color: none;
 }
+
+input[type=checkbox]{
+  -webkit-appearance: checkbox;
+}
