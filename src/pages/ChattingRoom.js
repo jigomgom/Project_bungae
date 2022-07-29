@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { getChatClient } from "../redux/modules/BungleSlice";
 
-import {} from "react-router-dom";
+import _ from "lodash";
 
 import AxiosAPI from "../customapi/CustomAxios";
 
@@ -212,6 +212,7 @@ function ChattingRoom({ setRealTimeChat }) {
       setIsFile(null);
     }
   };
+  console.log("userdata: ", userData);
 
   const onMessageReceived = (payload) => {
     var payloadData = JSON.parse(payload.body);
@@ -322,8 +323,12 @@ function ChattingRoom({ setRealTimeChat }) {
 
   //엔터키
   const onKeyPress = (e) => {
+    console.log(e.key);
+
     if (e.key === "Enter") {
       sendValue();
+      // console.log("Enter");
+      // scrollToBottom();
     }
   };
 
@@ -371,7 +376,6 @@ function ChattingRoom({ setRealTimeChat }) {
     }
   }, [isFile]);
 
-  
   //채팅 상세 Modal Members Array
   const MembersArray = [];
 
@@ -615,21 +619,52 @@ function ChattingRoom({ setRealTimeChat }) {
   }, [publicChats]);
 
   //채팅 자동 스크롤
-  const messagesEndRef = React.useRef(null);
+  // const messagesEndRef = React.useRef(null);
 
-  const scrollToBottom = () => {
-    const { scrollHeight, clientHeight } = messagesEndRef.current;
-    messagesEndRef.current.scrollTop = scrollHeight - clientHeight;
-    // console.log(messagesEndRef);
-  };
+  // const scrollToBottom = () => {
+  //   const { scrollHeight, clientHeight } = messagesEndRef.current;
+  //   // console.log("스크롤 높이: ", scrollHeight, "보이는 높이: ", clientHeight);
+  //   messagesEndRef.current.scrollTop = scrollHeight - clientHeight;
+  //   // console.log(messagesEndRef);
+  // };
 
-  useEffect(
-    () => {
-      scrollToBottom();
-    },
-    [publicChats],
-    [beforeChat]
-  );
+  // useEffect(
+  //   () => {
+  //     scrollToBottom();
+  //   },
+  //   // [publicChats],
+  //   [beforeChat]
+  // );
+
+  //스크롤 맨 밑에서 작성 시에만 scrollBottom
+  const scrollRef = useRef();
+  const boxRef = useRef(null);
+
+  const [scrollState, setScrollState] = useState(true); // 자동 스크롤 여부
+
+  const scrollEvent = _.debounce(() => {
+    console.log("scroll");
+    const scrollTop = boxRef.current.scrollTop; // 스크롤 위치
+    const clientHeight = boxRef.current.clientHeight; // 요소의 높이
+    const scrollHeight = boxRef.current.scrollHeight; // 스크롤의 높이
+
+    // 스크롤이 맨 아래에 있을때
+    setScrollState(
+      scrollTop + clientHeight >= scrollHeight - 100 ? true : false
+    );
+  }, 100);
+  const scroll = React.useCallback(scrollEvent, []);
+
+  useEffect(() => {
+    if (scrollState) {
+      scrollRef.current.scrollIntoView({ behavior: "smooth" });
+      // scrollRef의 element위치로 스크롤 이동 behavior는 전환 에니메이션의 정의
+    }
+  }, [publicChats]);
+
+  useEffect(() => {
+    boxRef.current.addEventListener("scroll", scroll);
+  });
 
   //QR 코드 받기
   const getQR = () => {
@@ -911,7 +946,7 @@ function ChattingRoom({ setRealTimeChat }) {
               </div>
             </div>
           )}
-          <div className="chat-wrap" ref={messagesEndRef}>
+          <div className="chat-wrap" ref={boxRef}>
             {beforeChat.map((chat, index) => (
               <div key={index}>
                 {/* {console.log(chat)} */}
@@ -924,50 +959,52 @@ function ChattingRoom({ setRealTimeChat }) {
                           <div className="profile">
                             <img src={chat.profileUrl} alt="" />
                           </div>
-                          <div className="box">
+                          <div className="box-wrapper">
                             <span className="nickname">{chat.sender}</span>
-                            {chat.message && chat.message !== "" ? (
-                              <>
-                                <p className="msg">{chat.message}</p>
-                              </>
-                            ) : (
-                              <>
-                                {/* {console.log(chat.fileUrl.data)} */}
-                                {chat.fileUrl.slice(-3) === "jpg" ||
-                                chat.fileUrl.slice(-3) === "png" ||
-                                chat.fileUrl.slice(-4) === "jpeg" ||
-                                chat.fileUrl.slice(-4) === "jfif" ||
-                                chat.fileUrl.slice(-3) === "gif" ||
-                                chat.fileUrl.slice(-3) === "bmp" ||
-                                chat.fileUrl.slice(-3) === "img" ||
-                                chat.fileUrl.slice(-3) === "JPG" ||
-                                chat.fileUrl.slice(-3) === "PNG" ||
-                                chat.fileUrl.slice(-4) === "JPEG" ||
-                                chat.fileUrl.slice(-3) === "GIF" ||
-                                chat.fileUrl.slice(-3) === "BMP" ||
-                                chat.fileUrl.slice(-3) === "IMG" ? (
-                                  <>
-                                    <p className="mymsg-file">
-                                      <img src={chat.fileUrl} alt="" />
-                                    </p>
-                                  </>
-                                ) : (
-                                  <>
-                                    <p className="mymsg-file">
-                                      <video controls name="media">
-                                        <source
-                                          src={chat.fileUrl}
-                                          type="video/*"
-                                        />
-                                      </video>
-                                    </p>
-                                  </>
-                                )}
-                              </>
-                            )}
-                            <span className="time" key={index}>
-                              {beforeChattingDate[index]}
-                            </span>
+                            <div className="box">
+                              {chat.message && chat.message !== "" ? (
+                                <>
+                                  <p className="msg">{chat.message}</p>
+                                </>
+                              ) : (
+                                <>
+                                  {/* {console.log(chat.fileUrl.data)} */}
+                                  {chat.fileUrl.slice(-3) === "jpg" ||
+                                  chat.fileUrl.slice(-3) === "png" ||
+                                  chat.fileUrl.slice(-4) === "jpeg" ||
+                                  chat.fileUrl.slice(-4) === "jfif" ||
+                                  chat.fileUrl.slice(-3) === "gif" ||
+                                  chat.fileUrl.slice(-3) === "bmp" ||
+                                  chat.fileUrl.slice(-3) === "img" ||
+                                  chat.fileUrl.slice(-3) === "JPG" ||
+                                  chat.fileUrl.slice(-3) === "PNG" ||
+                                  chat.fileUrl.slice(-4) === "JPEG" ||
+                                  chat.fileUrl.slice(-3) === "GIF" ||
+                                  chat.fileUrl.slice(-3) === "BMP" ||
+                                  chat.fileUrl.slice(-3) === "IMG" ? (
+                                    <>
+                                      <p className="mymsg-file">
+                                        <img src={chat.fileUrl} alt="" />
+                                      </p>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <p className="mymsg-file">
+                                        <video controls name="media">
+                                          <source
+                                            src={chat.fileUrl}
+                                            type="video/*"
+                                          />
+                                        </video>
+                                      </p>
+                                    </>
+                                  )}
+                                </>
+                              )}
+                              <span className="time" key={index}>
+                                {beforeChattingDate[index]}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </>
@@ -1146,8 +1183,10 @@ function ChattingRoom({ setRealTimeChat }) {
                     <p className="msg-noti">{chat.message}</p>
                   </>
                 )}
+                <div></div>
               </div>
             ))}
+            <div ref={scrollRef}></div>
           </div>
           <div className="chatting-footer-wrap">
             {outOwner === true ? null : (
@@ -1177,7 +1216,7 @@ function ChattingRoom({ setRealTimeChat }) {
                           type="text"
                           value={userData.message}
                           onChange={handleMessage}
-                          onKeyPress={onKeyPress}
+                          onKeyDown={onKeyPress}
                           disabled
                         />
                       </>
@@ -1187,7 +1226,7 @@ function ChattingRoom({ setRealTimeChat }) {
                           type="text"
                           value={userData.message}
                           onChange={handleMessage}
-                          onKeyPress={onKeyPress}
+                          onKeyDown={onKeyPress}
                         />
                       </>
                     )}
