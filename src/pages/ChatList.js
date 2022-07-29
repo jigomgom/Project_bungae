@@ -368,8 +368,11 @@ function App() {
           </ModalWrapper>
         )}
         <LoadingWrap>
-          <LoadingLogo src={IconLoadingLogo} />
-          <LoadingText>진행 중인 채팅이 없습니다.</LoadingText>
+          {/* <LoadingLogo src={IconLoadingLogo} />
+           */}
+           <LoadingText style={{ marginTop: "80%", color: "#898989" }}>
+           진행 중인 채팅이 없습니다.
+              </LoadingText>
         </LoadingWrap>
 
         <MapFooterWrap>
@@ -451,6 +454,7 @@ function App() {
               onClick={() => {
                 setSettingModal(true);
               }}
+              style={{ visibility: "hidden" }}
               src={Setting}
             />
           </MapIconsWrap>

@@ -27,9 +27,8 @@ import OpenViduSettings from "./components/videos/OpenViduSettings";
 
 import LoadingLogin from "./components/LoadingLogin";
 import Notification from "./pages/Notification";
-//test
-import TermsConditions from "./pages/TermsConditions";
 
+import TermsConditions from "./pages/TermsConditions";
 // 404 Not found
 import NotFound from "./components/NotFound";
 // Private Routes

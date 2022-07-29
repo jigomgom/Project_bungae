@@ -26,7 +26,12 @@ export const NotificationTitleWrap = styled.div`
 `;
 
 export const NotificationTitle = styled.div`
-  
+  /* 두줄 이상이면 처리 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;
