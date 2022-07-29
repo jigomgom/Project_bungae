@@ -241,7 +241,12 @@ const Post = () => {
                     }}
                   />
                 ) : (
-                  <IconNotification src={Notification} />
+                  <IconNotification
+                    src={Notification}
+                    onClick={() => {
+                      navigate("/notification");
+                    }}
+                  />
                 )}
                 <IconSetting
                   src={Setting}

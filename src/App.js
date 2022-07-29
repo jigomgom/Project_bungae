@@ -28,7 +28,8 @@ import OpenViduSettings from "./components/videos/OpenViduSettings";
 import LoadingLogin from "./components/LoadingLogin";
 import Notification from "./pages/Notification";
 //test
-import OnBoarding from "./pages/OnBoarding";
+import TermsConditions from "./pages/TermsConditions";
+
 // 404 Not found
 import NotFound from "./components/NotFound";
 // Private Routes
@@ -62,13 +63,13 @@ function App() {
           <Route path="/map" element={<Map />} />
           {/* 알림 */}
           <Route path="notification" element={<Notification />} />
+          <Route path="/termsconditions" element={<TermsConditions />} />
         </Route>
         <Route path="/" element={<Login />} />
         <Route path="/oauth" element={<LoadingLogin />} />
         <Route path="/signup" element={<SignUp />} />
         {/* Not Found */}
         <Route path="*" element={<NotFound />} />
-        <Route path="/on" element={<OnBoarding />} />
       </Routes>
       {/* <Footer /> */}
     </div>

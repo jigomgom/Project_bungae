@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { agreeUser } from "../redux/modules/BungleSlice";
 
-import AxiosAPI from "../customapi/CustomAxios";
 import { setCookie } from "../customapi/CustomCookie";
 import moment from "moment";
 
@@ -51,6 +52,7 @@ const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${proc
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 function Login() {
+  const dispatch = useDispatch();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -65,7 +67,6 @@ function Login() {
   // 네이버 소셜 로그인 시도 후, JWT 토큰 획득
   const getNaverLoginJWTtoken = async () => {
     // console.log(SERVER_URL);
-    console.log(code);
 
     try {
       const response = await axios.get(`${SERVER_URL}/user/signin/naver`, {
@@ -74,7 +75,7 @@ function Login() {
           state: createStateToken(code),
         },
       });
-      console.log(response);
+
       if (response.data.response) {
         localStorage.setItem("login-token", response.headers.authorization);
         localStorage.setItem("userId", response.data.userId);
@@ -86,7 +87,7 @@ function Login() {
           path: "/",
           secure: true,
         });
-        console.log(localStorage.getItem("login-token"));
+        dispatch( agreeUser( response.data.agreedLbs ) );
         navigate("/main");
       }
     } catch (error) {
@@ -99,10 +100,10 @@ function Login() {
     return md5(code).slice(0, 16);
   };
 
-  // naver 소셜 로그인 함수
-  const naverSocialLogin = () => {
-    window.location.href = NAVER_AUTH_URL;
-  };
+  // // naver 소셜 로그인 함수
+  // const naverSocialLogin = () => {
+  //   window.location.href = NAVER_AUTH_URL;
+  // };
 
   // 카카오 소셜 로그인 시작
   // 카카오 소셜 로그인 시도 후, JWT 토큰 획득
@@ -125,7 +126,7 @@ function Login() {
           path: "/",
           secure: true,
         });
-        console.log(localStorage.getItem("login-token"));
+        dispatch( agreeUser( response.data.agreedLbs ) );
         navigate("/main");
       }
     } catch (error) {
@@ -134,7 +135,6 @@ function Login() {
   };
   // 카카오 로그인
   const kakaoSocialLogin = () => {
-    console.log(KAKAO_AUTH_URL);
     window.location.href = KAKAO_AUTH_URL;
   };
 
@@ -159,7 +159,7 @@ function Login() {
           path: "/",
           secure: true,
         });
-        console.log(localStorage.getItem("login-token"));
+        dispatch( agreeUser( response.data.agreedLbs ) );
         navigate("/main");
       }
     } catch (error) {
@@ -226,7 +226,8 @@ function Login() {
           path: "/",
           secure: true,
         });
-        console.log(localStorage.getItem("login-token"));
+        
+        dispatch( agreeUser( response.data.agreedLbs ) );
 
         navigate("/main");
       } else {

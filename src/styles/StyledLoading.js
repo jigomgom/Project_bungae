@@ -17,9 +17,9 @@ export const LoadingLogo = styled.img`
 `;
 
 export const LoadingText = styled.div`
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 46px;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 26px;
 
   color: #000000;
 `;

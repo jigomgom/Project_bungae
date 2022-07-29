@@ -164,7 +164,12 @@ function TagSearch() {
               }}
             />
           ) : (
-            <IconNotification src={Notification} />
+            <IconNotification
+              src={Notification}
+              onClick={() => {
+                navigate("/notification");
+              }}
+            />
           )}
           <IconSetting
             src={Setting}
@@ -320,7 +325,7 @@ function TagSearch() {
           ) : (
             <LoadingWrap>
               {/* <LoadingLogo src={IconLoadingLogo} /> */}
-              <LoadingText style={{ marginTop: "60%", color: "#898989" }}>
+              <LoadingText style={{ marginTop: "80%", color: "#898989" }}>
                 검색 결과 벙글이 없습니다.
               </LoadingText>
             </LoadingWrap>

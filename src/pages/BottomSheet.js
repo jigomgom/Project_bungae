@@ -23,6 +23,14 @@ import IconLoadingLogo from "../assets/icon-splash-logo.svg";
 
 function BottomSheet({ aroundLocation }) {
   console.log(aroundLocation);
+  // 미터 예외처리
+  const distancePrint = ( distance ) => {
+    if( distance >= 0 && distance < 1 ){
+      return "1";
+    }else{
+      return String( distance );
+    }
+  }
 
   const navigate = useNavigate();
 
@@ -160,6 +168,7 @@ function BottomSheet({ aroundLocation }) {
                                   <span>{item.content}</span>
                                 </div>
                                 <div className="search-card-desc-temp">
+                                {/* <div style={{marginRight:"105px", color:" #898989"}}>{distancePrint(item.distance)}km{item.distance < 1 && " 내"}</div> */}
                                   <img
                                     src={
                                       item.avgTemp >= 50

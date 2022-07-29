@@ -154,6 +154,13 @@ export const OnboardSubTitle = styled.span`
   margin-bottom: 10px;
 `;
 
+export const OnboardAgreeText = styled.div`
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  margin: 5px 0;
+`;
+
 export const OnboardButton = styled.span`
   font-weight: 400;
   font-size: 16px;
@@ -166,5 +173,5 @@ export const OnboardButton = styled.span`
   width: 50%;
   height: 40px;
   border-radius: 10px;
-  margin-top: 15px;  
+  margin-top: 5px;  
 `;

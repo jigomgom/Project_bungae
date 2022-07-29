@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+//Components
+import MyLikeBungleCard from "../components/MyLikeBungleCard";
 import {
   getIntervalNotification,
   LogOut,
   Withdrawal,
 } from "../redux/modules/BungleSlice";
 import { getCookie } from "../customapi/CustomCookie";
-//Components
-import MyLikeBungleCard from "../components/MyLikeBungleCard";
 
 import {
   PostHeaderWrap,
@@ -26,6 +26,8 @@ import {
   FooterAddBungae,
 } from "../styles/StyledFooter.js";
 
+import { LoadingWrap, LoadingLogo, LoadingText } from "../styles/StyledLoading";
+
 import {
   // Moadl
   ModalWrapper,
@@ -39,8 +41,6 @@ import {
 } from "../styles/StyledLogin";
 import { MapPageTitle } from "../styles/StyledHeader";
 import Divider from "../components/Divider";
-
-import { LoadingWrap, LoadingLogo, LoadingText } from "../styles/StyledLoading";
 
 import IconHome from "../assets/icon-home.svg";
 import IconLocation from "../assets/icon-location.svg";
@@ -112,7 +112,7 @@ function MyPageRecent() {
         <ChattingBackKey
           src={IconBackKey}
           onClick={() => {
-            navigate("/main");
+            navigate("/mypage");
           }}
         />
 
@@ -125,13 +125,18 @@ function MyPageRecent() {
               }}
             />
           ) : (
-            <IconNotification src={Notification} />
+            <IconNotification
+              src={Notification}
+              onClick={() => {
+                navigate("/notification");
+              }}
+            />
           )}
           <IconSetting
+            src={Setting}
             onClick={() => {
               setSettingModal(true);
             }}
-            src={Setting}
           />
         </HeadrIconsWrap>
       </PostHeaderWrap>
@@ -262,8 +267,10 @@ function MyPageRecent() {
         })
       ) : (
         <LoadingWrap>
-          <LoadingLogo src={IconLoadingLogo} />
-          <LoadingText>찜한 벙글이 없습니다.</LoadingText>
+          {/* <LoadingLogo src={IconLoadingLogo} /> */}
+          <LoadingText style={{ marginTop: "80%", color: "#898989" }}>
+            찜한 벙글이 없습니다.
+          </LoadingText>
         </LoadingWrap>
       )}
       <MapFooterWrap>

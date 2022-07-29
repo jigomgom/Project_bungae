@@ -11,19 +11,7 @@ import {
   LogOut,
   Withdrawal,
 } from "../redux/modules/BungleSlice";
-import {
-  // Moadl
-  ModalWrapper,
-  ModalOverlay,
-  ModalInner,
-  ModalContentWrap,
-  ModalDivider,
-  ModalButtonWrap,
-  ModalCancelButton,
-  ModalDeleteButton,
-  ModalButton,
-} from "../styles/StyledLogin";
-import { MapPageTitle } from "../styles/StyledHeader";
+
 import { getCookie } from "../customapi/CustomCookie";
 
 // slider 추가
@@ -100,6 +88,23 @@ import {
   IconSetting,
 } from "../styles/StyledHeader.js";
 
+import {
+  // Moadl
+  ModalWrapper,
+  ModalOverlay,
+  ModalInner,
+  ModalContentWrap,
+  ModalDivider,
+  ModalButton,
+} from "../styles/StyledLogin";
+
+import {
+  // Moadl
+  ModalButtonWrap,
+  ModalCancelButton,
+  ModalDeleteButton,
+} from "../styles/StyledLogin";
+import { MapPageTitle } from "../styles/StyledHeader";
 //icon
 
 import IconClear from "../assets/icon-clear.svg";
@@ -871,7 +876,12 @@ function CreatePost() {
                 }}
               />
             ) : (
-              <IconNotification src={Notification} />
+              <IconNotification
+                src={Notification}
+                onClick={() => {
+                  navigate("/notification");
+                }}
+              />
             )}
             <IconSetting
               src={Setting}
@@ -1001,6 +1011,7 @@ function CreatePost() {
             </ModalOverlay>
           </ModalWrapper>
         )}
+
         {/* Title 부분 */}
         <PostTilteDiv>
           <PostTitle

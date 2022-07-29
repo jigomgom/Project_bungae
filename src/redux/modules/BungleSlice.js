@@ -11,6 +11,22 @@ function resetCookie(cName) {
     cName + "= " + "; expires=" + expireDate.toGMTString() + "; path=/";
 }
 
+// 유저 온보딩 클릭
+export const userAgreeLocation = createAsyncThunk(
+  "GET/userAgreeLocation",
+  async (data) => {
+    try {
+      const response = await AxiosAPI.get(`/user/onboardandlbs`);
+      console.log(response);
+      if (response.data.response) {
+        // data.navigate("/main");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 // 벙글 생성하기
 export const createBungleList = createAsyncThunk(
   "CREATE/createBungleList",
@@ -497,6 +513,8 @@ const BungleSlice = createSlice({
   name: "Bungle",
 
   initialState: {
+    // 유저 동의 여부
+    userAgree: false,
     // location gps
     userLocation: {
       latitude: 0,
@@ -542,24 +560,24 @@ const BungleSlice = createSlice({
     detailMapBungle: [{}],
   },
   reducers: {
+    // 유저 동의 여부 확인
+    agreeUser: (state, action) => {
+      state.userAgree = action.payload;
+    },
     // 클라이언트 값 가져오기
     getChatClient: (state, action) => {
-      console.log("Chat client ", action.payload);
       state.ChatClient.client = action.payload.client;
       state.ChatClient.guest = action.payload.Guest;
     },
     // 알림 클리어
     clearNotificationState: (state, action) => {
-      console.log("clear");
       state.isReadNotification = false;
-      state.NoitficationList = [{}];
-      console.log("clear", state.isReadNotification, state.NoitficationList);
+      state.NoitficationList.length = 0;
     },
   },
   extraReducers: {
     // 벙글 생성, post ID 전달
     [createBungleList.fulfilled]: (state, action) => {
-      console.log("create fullfill");
       // console.log( action.payload );
       console.log(action.payload);
       state.OnwerPostId = action.payload;
@@ -826,5 +844,6 @@ const BungleSlice = createSlice({
   },
 });
 
-export const { getChatClient, clearNotificationState } = BungleSlice.actions;
+export const { getChatClient, clearNotificationState, agreeUser } =
+  BungleSlice.actions;
 export default BungleSlice.reducer;

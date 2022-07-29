@@ -40,6 +40,10 @@ import {
   HeadrIconsWrap,
   IconSetting,
 } from "../styles/StyledHeader";
+import "../styles/Setting.css";
+
+import { LoadingWrap, LoadingLogo, LoadingText } from "../styles/StyledLoading";
+
 import Setting from "../assets/icon-setting.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
 import IconBell from "../assets/icon-bell.svg";
@@ -102,7 +106,12 @@ function Notification() {
         />
         <HeadrIconsWrap>
           {/* <IconNotification src={IconNotificationNonActive} /> */}
-          <IconSetting src={Setting} />
+          <IconSetting
+            src={Setting}
+            onClick={() => {
+              setSettingModal(true);
+            }}
+          />
         </HeadrIconsWrap>
       </PostHeaderWrap>
       {settingModal && (
@@ -129,12 +138,12 @@ function Notification() {
                     ) : (
                       <IconNotification src={Notification} />
                     )} */}
-                    <IconSetting
+                    {/* <IconSetting
                       onClick={() => {
                         setSettingModal(true);
                       }}
                       src={Setting}
-                    />
+                    /> */}
                   </HeadrIconsWrap>
                 </PostHeaderWrap>
                 <div
@@ -231,35 +240,43 @@ function Notification() {
         </ModalWrapper>
       )}
       {/* body */}
-
-      {NotificationList.map((item, index) => {
-        return (
-          <NotificationContent
-            key={index}
-            onClick={() => {
-              notificationListClickHandler();
-            }}
-          >
-            <NotificationTitleWrap>
-              <div style={{ display: "flex", marginTop: "10px" }}>
-                {/* <span style={{ color: "#FFC632" }} className="material-icons">
+      {NotificationList.length !== 0 ? (
+        NotificationList.map((item, index) => {
+          return (
+            <NotificationContent
+              key={index}
+              onClick={() => {
+                notificationListClickHandler();
+              }}
+            >
+              <NotificationTitleWrap>
+                <div style={{ display: "flex", marginTop: "10px" }}>
+                  {/* <span style={{ color: "#FFC632" }} className="material-icons">
                     notifications
                   </span> */}
-                <img
-                  style={{ width: "24px", height: "24px" }}
-                  src={IconBell}
-                  alt=""
-                />
-                <NotificationTitle>{item.nickname}</NotificationTitle>
-              </div>
-              <NotificationDisplay>{item.message}</NotificationDisplay>
-              <NofiticationDate>
-                {changeDateFormat(item.createdAt)}
-              </NofiticationDate>
-            </NotificationTitleWrap>
-          </NotificationContent>
-        );
-      })}
+                  <img
+                    style={{ width: "24px", height: "24px" }}
+                    src={IconBell}
+                    alt=""
+                  />
+                  <NotificationTitle>{item.nickname}</NotificationTitle>
+                </div>
+                <NotificationDisplay>{item.message}</NotificationDisplay>
+                <NofiticationDate>
+                  {changeDateFormat(item.createdAt)}
+                </NofiticationDate>
+              </NotificationTitleWrap>
+            </NotificationContent>
+          );
+        })
+      ) : (
+        <LoadingWrap>
+          {/* <LoadingLogo src={IconLoadingLogo} /> */}
+          <LoadingText style={{ marginTop: "80%", color: "#898989" }}>
+            알림이 없습니다.
+          </LoadingText>
+        </LoadingWrap>
+      )}
     </NotificationWrap>
   );
 }
