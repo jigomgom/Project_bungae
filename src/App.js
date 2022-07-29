@@ -67,7 +67,7 @@ function App() {
         <Route path="/oauth" element={<LoadingLogin />} />
         <Route path="/signup" element={<SignUp />} />
         {/* Not Found */}
-        {/* <Route path="*" element={<NotFound />} /> */}
+        <Route path="*" element={<NotFound />} />
         <Route path="/on" element={<OnBoarding />} />
       </Routes>
       {/* <Footer /> */}
