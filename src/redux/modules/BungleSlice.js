@@ -407,9 +407,15 @@ export const editUserProfile = createAsyncThunk(
 // 나의 찜 벙글 리스트
 export const myLikeBungleList = createAsyncThunk(
   "GET/myLikeBungleList",
-  async () => {
+  async (location) => {
+    console.log(location);
     try {
-      const response = await AxiosAPI.get(`/posts/like/`);
+      const response = await AxiosAPI.get(`/posts/like`, {
+        params: {
+          latitude: location.latitude,
+          longitude: location.longitude,
+        },
+      });
       console.log(response);
       if (response.data.response) {
         return response.data.list;
@@ -807,6 +813,7 @@ const BungleSlice = createSlice({
     },
     [editUserProfile.rejected]: (state, action) => {},
     [myLikeBungleList.fulfilled]: (state, action) => {
+      console.log(action.payload);
       state.myLikeList = action.payload;
     },
     // 채팅 목록 조회

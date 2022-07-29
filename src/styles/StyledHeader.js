@@ -184,6 +184,18 @@ export const HeadrIconsWrap = styled.div`
   gap: 10px;
   margin-right: 22px;
 `;
+
+export const SettingHeaderIconsWrap = styled.div`
+  display: flex;
+  height: 50px;
+  align-items: center;
+  /* position: absolute; */
+  /* right: 22px;
+    top: 5px; */
+  gap: 10px;
+  margin-right: 10px;
+`;
+
 // 완료, 적용 등 헤더 글씨
 export const EditHeadrIconsWrap = styled.div`
   display: flex;

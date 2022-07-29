@@ -27,13 +27,13 @@ import IconLowTemp from "../assets/icon-manner-low.svg";
 function TagSearchCard(props) {
   const { moreList } = props;
   // 미터 예외처리
-  const distancePrint = ( distance ) => {
-    if( distance >= 0 && distance < 1 ){
+  const distancePrint = (distance) => {
+    if (distance >= 0 && distance < 1) {
       return "1";
-    }else{
-      return String( distance );
+    } else {
+      return String(distance);
     }
-  }
+  };
 
   const [isLoad, setIsLoad] = useState(true);
 
@@ -62,27 +62,28 @@ function TagSearchCard(props) {
   return (
     <div className="search-card-wrap-map">
       <div className="search-card-img">
-      {moreList.postUrl ? 
-        (
+        {moreList.postUrl ? (
           <img
-          className="search-card-img-thumbnail"
-          src={
-            moreList.postUrl
-          }
-          alt=""
-          onClick={() => {
-            showDetailBungle(moreList.postId);
-          }}
-        />
-
-        ) 
-        : 
-        (
-          <div className="search-card-img-thumbnail-default-wrap" onClick={() => {
-            showDetailBungle(moreList.postId);
-          }}>
-          <img className="search-card-img-thumbnail-default" src={ defaultCardImg } alt="" />
-        </div>
+            className="search-card-img-thumbnail"
+            src={moreList.postUrl}
+            alt=""
+            onClick={() => {
+              showDetailBungle(moreList.postId);
+            }}
+          />
+        ) : (
+          <div
+            className="search-card-img-thumbnail-default-wrap"
+            onClick={() => {
+              showDetailBungle(moreList.postId);
+            }}
+          >
+            <img
+              className="search-card-img-thumbnail-default"
+              src={defaultCardImg}
+              alt=""
+            />
+          </div>
         )}
         {console.log(moreList.postId)}
         <img
@@ -108,18 +109,22 @@ function TagSearchCard(props) {
           <span>{moreList.content}</span>
         </div>
         <div className="search-card-desc-temp">
-        <div style={{marginRight:"105px", color:" #898989"}}>{distancePrint(moreList.distance)}km{moreList.distance < 1 && " 내"}</div>
-          <img
-            src={
-              moreList.avgTemp >= 50
-                ? IconHighTemp
-                : moreList.avgTemp >= 25
-                ? IconMiddleTemp
-                : IconLowTemp
-            }
-            alt=""
-          />
-          <span>{moreList.avgTemp}°C</span>
+          <div style={{ color: " #898989" }}>
+            {distancePrint(moreList.distance)}km{moreList.distance < 1 && " 내"}
+          </div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <img
+              src={
+                moreList.avgTemp >= 50
+                  ? IconHighTemp
+                  : moreList.avgTemp >= 25
+                  ? IconMiddleTemp
+                  : IconLowTemp
+              }
+              alt=""
+            />
+            <span>{moreList.avgTemp}°C</span>
+          </div>
         </div>
         <div></div>
       </div>

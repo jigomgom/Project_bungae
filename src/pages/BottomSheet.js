@@ -24,13 +24,13 @@ import IconLoadingLogo from "../assets/icon-splash-logo.svg";
 function BottomSheet({ aroundLocation }) {
   console.log(aroundLocation);
   // 미터 예외처리
-  const distancePrint = ( distance ) => {
-    if( distance >= 0 && distance < 1 ){
+  const distancePrint = (distance) => {
+    if (distance >= 0 && distance < 1) {
       return "1";
-    }else{
-      return String( distance );
+    } else {
+      return String(distance);
     }
-  }
+  };
 
   const navigate = useNavigate();
 
@@ -53,6 +53,15 @@ function BottomSheet({ aroundLocation }) {
     console.log(postId);
     dispatch(likeBungleList(postId));
   };
+
+  // 미터 예외처리
+  // const distancePrint = (distance) => {
+  //   if (distance >= 0 && distance < 1) {
+  //     return "1";
+  //   } else {
+  //     return String(distance);
+  //   }
+  // };
 
   //시간 커스텀
   // let dateArray = [];
@@ -131,16 +140,29 @@ function BottomSheet({ aroundLocation }) {
                           return (
                             <div className="search-card-wrap-map" key={index}>
                               <div className="search-card-img">
-                                <img
-                                  className="search-card-img-thumbnail"
-                                  src={
-                                    item.postUrl ? item.postUrl : defaultCardImg
-                                  }
-                                  alt=""
-                                  onClick={() => {
-                                    navigate(`detailpost/${item.postId}`);
-                                  }}
-                                />
+                                {item.postUrl ? (
+                                  <img
+                                    className="search-card-img-thumbnail"
+                                    src={item.postUrl}
+                                    alt=""
+                                    onClick={() => {
+                                      navigate(`detailpost/${item.postId}`);
+                                    }}
+                                  />
+                                ) : (
+                                  <div
+                                    className="search-card-img-thumbnail-default-wrap"
+                                    onClick={() => {
+                                      navigate(`detailpost/${item.postId}`);
+                                    }}
+                                  >
+                                    <img
+                                      className="search-card-img-thumbnail-default"
+                                      src={defaultCardImg}
+                                      alt=""
+                                    />
+                                  </div>
+                                )}
                                 {console.log(item.postId)}
                                 <img
                                   className="search-card-img-like"
@@ -168,18 +190,29 @@ function BottomSheet({ aroundLocation }) {
                                   <span>{item.content}</span>
                                 </div>
                                 <div className="search-card-desc-temp">
-                                {/* <div style={{marginRight:"105px", color:" #898989"}}>{distancePrint(item.distance)}km{item.distance < 1 && " 내"}</div> */}
-                                  <img
-                                    src={
-                                      item.avgTemp >= 50
-                                        ? IconHighTemp
-                                        : item.avgTemp >= 25
-                                        ? IconMiddleTemp
-                                        : IconLowTemp
-                                    }
-                                    alt=""
-                                  />
-                                  <span>{item.avgTemp}°C</span>
+                                  {/* <div style={{marginRight:"105px", color:" #898989"}}>{distancePrint(item.distance)}km{item.distance < 1 && " 내"}</div> */}
+                                  <div style={{ color: " #898989" }}>
+                                    {distancePrint(item.distance)}km
+                                    {item.distance < 1 && " 내"}
+                                  </div>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      alignItems: "center",
+                                    }}
+                                  >
+                                    <img
+                                      src={
+                                        item.avgTemp >= 50
+                                          ? IconHighTemp
+                                          : item.avgTemp >= 25
+                                          ? IconMiddleTemp
+                                          : IconLowTemp
+                                      }
+                                      alt=""
+                                    />
+                                    <span>{item.avgTemp}°C</span>
+                                  </div>
                                 </div>
                                 <div></div>
                               </div>

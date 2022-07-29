@@ -35,86 +35,90 @@ function CategorySearchCard(props) {
   };
 
   // 미터 예외처리
-  const distancePrint = ( distance ) => {
-    if( distance >= 0 && distance < 1 ){
+  const distancePrint = (distance) => {
+    if (distance >= 0 && distance < 1) {
       return "1";
-    }else{
-      return String( distance );
+    } else {
+      return String(distance);
     }
-  }
+  };
 
   return (
     <>
-    { categoryList && (
-      <div className="search-card-wrap-map" >
-      <div className="search-card-img">
-        {categoryList.postUrl ? 
-        (
-          <img
-          className="search-card-img-thumbnail"
-          src={
-            categoryList.postUrl
-          }
-          alt=""
-          onClick={() => {
-            showDetailBungle(categoryList.postId);
-          }}
-        />
+      {categoryList && (
+        <div className="search-card-wrap-map">
+          <div className="search-card-img">
+            {categoryList.postUrl ? (
+              <img
+                className="search-card-img-thumbnail"
+                src={categoryList.postUrl}
+                alt=""
+                onClick={() => {
+                  showDetailBungle(categoryList.postId);
+                }}
+              />
+            ) : (
+              <div
+                className="search-card-img-thumbnail-default-wrap"
+                onClick={() => {
+                  showDetailBungle(categoryList.postId);
+                }}
+              >
+                <img
+                  className="search-card-img-thumbnail-default"
+                  src={defaultCardImg}
+                  alt=""
+                />
+              </div>
+            )}
+            {console.log(categoryList.postId)}
+            <img
+              className="search-card-img-like"
+              src={categoryList.isLike ? likeImg : UnlikeImg}
+              alt=""
+              onClick={() => {
+                categoryListLikeClick(categoryList.postId);
+              }}
+            />
+          </div>
+          <div
+            className="search-card-desc"
+            onClick={() => {
+              showDetailBungle(categoryList.postId);
+            }}
+          >
+            <div className="search-card-desc-title">{categoryList.title}</div>
+            <div className="search-card-desc-sub">
+              {categoryList.time}· ({categoryList.joinCount}/
+              {categoryList.personnel}명)
+            </div>
+            <div className="search-card-desc-desc">
+              <span>{categoryList.content}</span>
+            </div>
 
-        ) 
-        : 
-        (
-          <div className="search-card-img-thumbnail-default-wrap" onClick={() => {
-            showDetailBungle(categoryList.postId);
-          }}>
-          <img className="search-card-img-thumbnail-default" src={ defaultCardImg } alt="" />
+            <div className="search-card-desc-temp">
+              <div style={{ color: " #898989" }}>
+                {distancePrint(categoryList.distance)}km
+                {categoryList.distance < 1 && " 내"}
+              </div>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <img
+                  src={
+                    categoryList.avgTemp >= 50
+                      ? IconHighTemp
+                      : categoryList.avgTemp >= 25
+                      ? IconMiddleTemp
+                      : IconLowTemp
+                  }
+                  alt=""
+                />
+                <span>{categoryList.avgTemp}°C</span>
+              </div>
+            </div>
+            <div></div>
+          </div>
         </div>
-        )}
-        {console.log(categoryList.postId)}
-        <img
-          className="search-card-img-like"
-          src={categoryList.isLike ? likeImg : UnlikeImg}
-          alt=""
-          onClick={() => {
-            categoryListLikeClick(categoryList.postId);
-          }}
-        />
-      </div>
-      <div
-        className="search-card-desc"
-        onClick={() => {
-          showDetailBungle(categoryList.postId);
-        }}
-      >
-        <div className="search-card-desc-title">
-          {categoryList.title}
-        </div>
-        <div className="search-card-desc-sub">
-          {categoryList.time}· ({categoryList.joinCount}/
-          {categoryList.personnel}명)
-        </div>
-        <div className="search-card-desc-desc">
-          <span>{categoryList.content}</span>
-        </div>
-        
-        <div className="search-card-desc-temp">
-          <div style={{marginRight:"105px", color:" #898989"}}>{distancePrint(categoryList.distance)}km{categoryList.distance < 1 && " 내"}</div>
-          <img
-            src={
-              categoryList.avgTemp >= 50
-                ? IconHighTemp
-                : categoryList.avgTemp >= 25
-                ? IconMiddleTemp
-                : IconLowTemp
-            }
-            alt=""
-          />
-          <span>{categoryList.avgTemp}°C</span>
-        </div>
-        <div></div>
-      </div>
-    </div>
-    )}
+      )}
     </>
   );
 }

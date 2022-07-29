@@ -217,15 +217,24 @@ function App() {
     dispatch(Withdrawal({ navigate }));
   };
 
+  //Setting Modal 밖 영역 클릭 시 닫기
+  const handleModal = (e) => {
+    const clicked = e.target.closest(".setting-modal-content-wrap");
+    if (clicked) return;
+    else {
+      setSettingModal(false);
+    }
+  };
+
   if (myChattingInfo?.length === 0) {
     return (
       <div className="top-chatlist-wrap">
         <MapHeaderWrap>
           <MapIconsWrap>
-            {/* <IconNotification
+            <IconNotification
               style={{ visibility: "hidden" }}
               src={Notification}
-            /> */}
+            />
             <IconSetting style={{ visibility: "hidden" }} src={Setting} />
           </MapIconsWrap>
           <MapPageTitle>채팅</MapPageTitle>
@@ -243,13 +252,19 @@ function App() {
           </MapIconsWrap>
         </MapHeaderWrap>
         {settingModal && (
-          <div className="setting-modal-wrapper">
+          <div
+            className="setting-modal-wrapper"
+            onClick={(e) => {
+              handleModal(e);
+            }}
+          >
             <div className="setting-modal-inner">
               <div className="setting-modal-content-wrap">
                 <div className="modal-content-wrap-setting">
                   <PostHeaderWrap>
                     <ChattingBackKey
                       src={IconBackKey}
+                      style={{ visibility: "hidden" }}
                       onClick={() => {
                         setSettingModal(false);
                       }}
@@ -257,19 +272,18 @@ function App() {
                     <MapPageTitle>설정</MapPageTitle>
                     <HeadrIconsWrap>
                       {/* {notificationState ? (
-                      <IconNotification
-                        src={NotificationOn}
-                        onClick={() => {
-                          navigate("/notification");
-                        }}
-                      />
-                    ) : (
-                      <IconNotification src={Notification} />
-                    )} */}
+                        <IconNotification
+                          src={NotificationOn}
+                          onClick={() => {
+                            navigate("/notification");
+                          }}
+                        />
+                      ) : (
+                        <IconNotification src={Notification} />
+                      )} */}
+                      {/* <span className="material-icons"> clear </span> */}
                       {/* <IconSetting
-                        onClick={() => {
-                          setSettingModal(true);
-                        }}
+                        style={{ visibility: "hidden" }}
                         src={Setting}
                       /> */}
                     </HeadrIconsWrap>
@@ -292,7 +306,12 @@ function App() {
                         로그 아웃
                       </div>
                     </div>
-                    <div className="mypage-selectbar-list">
+                    <div
+                      className="mypage-selectbar-list"
+                      onClick={() => {
+                        navigate("/termsconditions");
+                      }}
+                    >
                       <div className="mypage-selectbar">이용 약관</div>
                     </div>
                     <Divider />
@@ -370,9 +389,9 @@ function App() {
         <LoadingWrap>
           {/* <LoadingLogo src={IconLoadingLogo} />
            */}
-           <LoadingText style={{ marginTop: "80%", color: "#898989" }}>
-           진행 중인 채팅이 없습니다.
-              </LoadingText>
+          <LoadingText style={{ marginTop: "80%", color: "#898989" }}>
+            진행 중인 채팅이 없습니다.
+          </LoadingText>
         </LoadingWrap>
 
         <MapFooterWrap>
@@ -451,10 +470,10 @@ function App() {
               src={Notification}
             />
             <IconSetting
+              style={{ visibility: "hidden" }}
               onClick={() => {
                 setSettingModal(true);
               }}
-              style={{ visibility: "hidden" }}
               src={Setting}
             />
           </MapIconsWrap>
@@ -473,13 +492,19 @@ function App() {
           </MapIconsWrap>
         </MapHeaderWrap>
         {settingModal && (
-          <div className="setting-modal-wrapper">
+          <div
+            className="setting-modal-wrapper"
+            onClick={(e) => {
+              handleModal(e);
+            }}
+          >
             <div className="setting-modal-inner">
               <div className="setting-modal-content-wrap">
                 <div className="modal-content-wrap-setting">
                   <PostHeaderWrap>
                     <ChattingBackKey
                       src={IconBackKey}
+                      style={{ visibility: "hidden" }}
                       onClick={() => {
                         setSettingModal(false);
                       }}
@@ -487,16 +512,20 @@ function App() {
                     <MapPageTitle>설정</MapPageTitle>
                     <HeadrIconsWrap>
                       {/* {notificationState ? (
-                      <IconNotification
-                        src={NotificationOn}
-                        onClick={() => {
-                          navigate("/notification");
-                        }}
-                      />
-                    ) : (
-                      <IconNotification src={Notification} />
-                    )} */}
-                      <IconSetting style={{ display: "none" }} src={Setting} />
+                        <IconNotification
+                          src={NotificationOn}
+                          onClick={() => {
+                            navigate("/notification");
+                          }}
+                        />
+                      ) : (
+                        <IconNotification src={Notification} />
+                      )} */}
+                      {/* <span className="material-icons"> clear </span> */}
+                      {/* <IconSetting
+                        style={{ visibility: "hidden" }}
+                        src={Setting}
+                      /> */}
                     </HeadrIconsWrap>
                   </PostHeaderWrap>
                   <div
@@ -517,7 +546,12 @@ function App() {
                         로그 아웃
                       </div>
                     </div>
-                    <div className="mypage-selectbar-list">
+                    <div
+                      className="mypage-selectbar-list"
+                      onClick={() => {
+                        navigate("/termsconditions");
+                      }}
+                    >
                       <div className="mypage-selectbar">이용 약관</div>
                     </div>
                     <Divider />
