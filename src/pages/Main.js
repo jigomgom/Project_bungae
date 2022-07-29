@@ -325,15 +325,19 @@ function Main() {
     dispatch(LogOut({ navigate, refreshToken, token }));
   };
 
+  const userAgree = useSelector( state => state.Bungle.userAgree );
+
   //회원 탈퇴
   const [withdrawalModal, setWithdrawalModal] = useState(false);
   const WithdrawalApi = () => {
     dispatch(Withdrawal({ navigate }));
   };
-
-  return (
+  if( !userAgree ){
+    return <OnBoarding/>
+  }
+  else{ return (
     <>
-      <OnBoarding />
+      {/* <OnBoarding /> */}
       {/* {!isLoad && ( */}
       <MainWrap>
         <MainHeaderWrap>
@@ -729,6 +733,7 @@ function Main() {
       {/* )} */}
     </>
   );
+}
 }
 // }
 
