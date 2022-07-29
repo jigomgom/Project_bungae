@@ -34,6 +34,15 @@ function CategorySearchCard(props) {
     navigate(`/detailpost/${postId}`);
   };
 
+  // 미터 예외처리
+  const distancePrint = ( distance ) => {
+    if( distance >= 0 && distance < 1 ){
+      return "1";
+    }else{
+      return String( distance );
+    }
+  }
+
   return (
     <>
     { categoryList && (
@@ -87,7 +96,9 @@ function CategorySearchCard(props) {
         <div className="search-card-desc-desc">
           <span>{categoryList.content}</span>
         </div>
+        
         <div className="search-card-desc-temp">
+          <div style={{marginRight:"105px", color:" #898989"}}>{distancePrint(categoryList.distance)}km{categoryList.distance < 1 && " 내"}</div>
           <img
             src={
               categoryList.avgTemp >= 50

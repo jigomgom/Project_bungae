@@ -127,7 +127,9 @@ function TagSearch() {
                   navigate("/notification");
                 }}/>
           ) : (
-            <IconNotification src={Notification} />
+            <IconNotification src={Notification} onClick={() => {
+              navigate("/notification");
+            }}/>
           )}
           <IconSetting style={{ display: "none" }} src={Setting} />
         </HeadrIconsWrap>
@@ -158,7 +160,7 @@ function TagSearch() {
           ):(
             <LoadingWrap>
               {/* <LoadingLogo src={IconLoadingLogo} /> */}
-              <LoadingText style={{ marginTop:"60%", color:"#898989" }}>검색 결과 벙글이 없습니다.</LoadingText>
+              <LoadingText style={{ marginTop:"80%", color:"#898989" }}>검색 결과 벙글이 없습니다.</LoadingText>
             </LoadingWrap>
           )}
         </div>

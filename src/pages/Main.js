@@ -15,7 +15,7 @@ import {
 } from "../redux/modules/BungleSlice";
 
 import Loading from "../components/Loading";
-import ServiceExplainModal from "../pages/OnBoarding";
+import OnBoarding from "./OnBoarding";
 
 import Tag from "../components/Tag";
 import Search from "../components/Search";
@@ -277,21 +277,28 @@ function Main() {
     window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSdYv_eLc3Bug9ZUUe6UVcbwQJXx98qfoMw_bCKaDX9Xerut2g/viewform?usp=sf_link";
   };
 
-  if (!location || ( !realTimeList && !endTimeList )) {
-    // console.log(location);
-    return <Loading></Loading>;
-  } else {
+  // if (!location || ( !realTimeList && !endTimeList )) {
+  //   // console.log(location);
+  //   return (
+  //     <>
+        
+  //       <Loading></Loading>
+  //     </>
+  //   );
+  // } else {
     // console.log(location);
     return (
       <>
+      <OnBoarding />
         {/* {!isLoad && ( */}
         <MainWrap>
           <MainHeaderWrap>
             <MainHeaderLogo src={IconMainLogo} />
             <MainHeaderIconsWrap>
-              <div style={{marginRight:"20px", cursor:"pointer"}} onClick={()=>{researchOnClickHandler()}}>⭐이벤트 참여 Click!⭐</div>
+              <div style={{marginLeft:"20px", cursor:"pointer", fontSize:"14px"}} onClick={()=>{researchOnClickHandler()}}>⭐이벤트 참여 Click!⭐</div>
               <IconMyLocation
                 src={IconMyPoint}
+                style={{visibility:"hidden"}}
                 onClick={() => {
                   getCurrentLocationBtnClick();
                 }}
@@ -303,9 +310,11 @@ function Main() {
                     }}
                 />
               ) : (
-                <IconNotification src={Notification} />
+                <IconNotification src={Notification} onClick={() => {
+                  navigate("/notification");
+                }}/>
               )}
-              <IconSetting style={{ display:"none"}} src={Setting} />
+              <IconSetting src={Setting} />
             </MainHeaderIconsWrap>
           </MainHeaderWrap>
           {/* <Tag /> 인기 태그 막기*/}
@@ -514,6 +523,6 @@ function Main() {
       </>
     );
   }
-}
+// }
 
 export default Main;

@@ -83,7 +83,7 @@ import Slider from "rc-slider";
 import "../styles/rc-slider/index.css";
 
 
-function Map() {
+function Map() {  
   // 알림 interval
   const interval = useRef(null);
   // 알람 추가
@@ -506,10 +506,10 @@ function Map() {
         <div className="top-map-wrapper">
           <MapHeaderWrap>
             <MapIconsWrap>
-              {/* <IconNotification
+              <IconNotification
                 style={{ visibility: "hidden" }}
                 src={Notification}
-              /> */}
+              />
               <IconSetting style={{ visibility: "hidden" }} src={Setting} />
             </MapIconsWrap>
             <MapPageTitle>벙글 지도</MapPageTitle>
@@ -521,9 +521,11 @@ function Map() {
                     }}
                 />
               ) : (
-                <IconNotification src={Notification} />
+                <IconNotification src={Notification} onClick={() => {
+                  navigate("/notification");
+                }}/>
               )}
-              <IconSetting style={{ display: "none" }} src={Setting} />
+              <IconSetting src={Setting} />
             </MapIconsWrap>
           </MapHeaderWrap>
           <div className="map-wrapper">

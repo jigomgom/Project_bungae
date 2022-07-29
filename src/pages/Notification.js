@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { clearNotificationState } from "../redux/modules/BungleSlice";
 
+import { LoadingWrap, LoadingLogo, LoadingText } from "../styles/StyledLoading";
+
 import { PostHeaderWrap, ChattingBackKey, HeadrIconsWrap, IconSetting} from "../styles/StyledHeader";
 import Setting from "../assets/icon-setting.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
@@ -39,7 +41,7 @@ function Notification() {
       dispatch( clearNotificationState());
       navigate("/chatlist");
     };
-
+    console.log( NotificationList.length )
   return (
     <NotificationWrap>
       {/* 헤더 */}
@@ -51,8 +53,8 @@ function Notification() {
         </HeadrIconsWrap>
       </PostHeaderWrap>
       {/* body */}
-      
-        { NotificationList.map( ( item, index ) => {
+        { NotificationList.length !== 0 ?
+        ( NotificationList.map( ( item, index ) => {
           return (
             <NotificationContent key={index} onClick={()=>{notificationListClickHandler()}}>
               <NotificationTitleWrap>
@@ -68,8 +70,11 @@ function Notification() {
               </NotificationTitleWrap>
             </NotificationContent>
           );
-        })}
-      
+        })): (
+        <LoadingWrap>
+          {/* <LoadingLogo src={IconLoadingLogo} /> */}
+          <LoadingText style={{ marginTop:"80%", color:"#898989" }}>알림이 없습니다.</LoadingText>
+        </LoadingWrap>)}      
     </NotificationWrap>
   );
 }

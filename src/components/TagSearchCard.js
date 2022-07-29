@@ -26,7 +26,15 @@ import IconLowTemp from "../assets/icon-manner-low.svg";
 
 function TagSearchCard(props) {
   const { moreList } = props;
-  // console.log( moreList );
+  // 미터 예외처리
+  const distancePrint = ( distance ) => {
+    if( distance >= 0 && distance < 1 ){
+      return "1";
+    }else{
+      return String( distance );
+    }
+  }
+
   const [isLoad, setIsLoad] = useState(true);
 
   useEffect(() => {
@@ -100,6 +108,7 @@ function TagSearchCard(props) {
           <span>{moreList.content}</span>
         </div>
         <div className="search-card-desc-temp">
+        <div style={{marginRight:"105px", color:" #898989"}}>{distancePrint(moreList.distance)}km{moreList.distance < 1 && " 내"}</div>
           <img
             src={
               moreList.avgTemp >= 50

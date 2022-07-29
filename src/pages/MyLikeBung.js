@@ -67,7 +67,7 @@ function MyPageRecent() {
         <ChattingBackKey
           src={IconBackKey}
           onClick={() => {
-            navigate("/main");
+            navigate("/mypage");
           }}
         />
 
@@ -79,17 +79,19 @@ function MyPageRecent() {
                     }}
                 />
               ) : (
-                <IconNotification src={Notification} />
+                <IconNotification src={Notification} onClick={() => {
+                  navigate("/notification");
+                }}/>
               )}
-          <IconSetting style={{ display:"none"}} src={Setting} />
+          <IconSetting src={Setting} />
         </HeadrIconsWrap>
       </PostHeaderWrap>
      {/* <div style={{ marginBottom: "70px" }}> */}
       { myLikeList.length > 0 ? ( myLikeList.map( ( item, index ) => {
         return <MyLikeBungleCard myLikeList={item}/>
       })) : ( <LoadingWrap>
-        <LoadingLogo src={IconLoadingLogo} />
-        <LoadingText>찜한 벙글이 없습니다.</LoadingText>
+        {/* <LoadingLogo src={IconLoadingLogo} /> */}
+        <LoadingText style={{ marginTop:"80%", color:"#898989" }}>찜한 벙글이 없습니다.</LoadingText>
       </LoadingWrap> )}
        <MapFooterWrap>
           <FooterIconWrap
