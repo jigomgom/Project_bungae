@@ -97,6 +97,7 @@ import Notification from "../assets/icon-notification.svg";
 import NotificationOn from "../assets/icon-notification-on.svg";
 import Setting from "../assets/icon-setting.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
+import IconCloseBtn from "../assets/icon-close-btn.svg";
 
 // Footer Icons
 import IconHomeCurrent from "../assets/icon-home-current.svg";
@@ -331,6 +332,15 @@ function Main() {
     dispatch(Withdrawal({ navigate }));
   };
 
+  //Setting Modal 밖 영역 클릭 시 닫기
+  const handleModal = (e) => {
+    const clicked = e.target.closest(".setting-modal-content-wrap");
+    if (clicked) return;
+    else {
+      setSettingModal(false);
+    }
+  };
+
   return (
     <>
       <OnBoarding />
@@ -382,20 +392,26 @@ function Main() {
           </MainHeaderIconsWrap>
         </MainHeaderWrap>
         {settingModal && (
-          <div className="setting-modal-wrapper">
+          <div
+            className="setting-modal-wrapper"
+            onClick={(e) => {
+              handleModal(e);
+            }}
+          >
             <div className="setting-modal-inner">
               <div className="setting-modal-content-wrap">
                 <div className="modal-content-wrap-setting">
                   <PostHeaderWrap>
                     <ChattingBackKey
                       src={IconBackKey}
+                      style={{ visibility: "hidden" }}
                       onClick={() => {
                         setSettingModal(false);
                       }}
                     />
                     <MapPageTitle>설정</MapPageTitle>
                     <HeadrIconsWrap>
-                      {notificationState ? (
+                      {/* {notificationState ? (
                         <IconNotification
                           src={NotificationOn}
                           onClick={() => {
@@ -404,8 +420,12 @@ function Main() {
                         />
                       ) : (
                         <IconNotification src={Notification} />
-                      )}
-                      <IconSetting style={{ display: "none" }} src={Setting} />
+                      )} */}
+                      {/* <span className="material-icons"> clear </span> */}
+                      {/* <IconSetting
+                        style={{ visibility: "hidden" }}
+                        src={Setting}
+                      /> */}
                     </HeadrIconsWrap>
                   </PostHeaderWrap>
                   <div

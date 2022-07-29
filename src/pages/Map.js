@@ -535,6 +535,15 @@ function Map() {
     dispatch(Withdrawal({ navigate }));
   };
 
+  //Setting Modal 밖 영역 클릭 시 닫기
+  const handleModal = (e) => {
+    const clicked = e.target.closest(".setting-modal-content-wrap");
+    if (clicked) return;
+    else {
+      setSettingModal(false);
+    }
+  };
+
   if (!location) {
     // console.log(location);
     return <Loading></Loading>;
@@ -576,33 +585,40 @@ function Map() {
             </MapIconsWrap>
           </MapHeaderWrap>
           {settingModal && (
-            <div className="setting-modal-wrapper">
+            <div
+              className="setting-modal-wrapper"
+              onClick={(e) => {
+                handleModal(e);
+              }}
+            >
               <div className="setting-modal-inner">
                 <div className="setting-modal-content-wrap">
                   <div className="modal-content-wrap-setting">
                     <PostHeaderWrap>
                       <ChattingBackKey
                         src={IconBackKey}
+                        style={{ visibility: "hidden" }}
                         onClick={() => {
                           setSettingModal(false);
                         }}
                       />
                       <MapPageTitle>설정</MapPageTitle>
                       <HeadrIconsWrap>
-                        {notificationState ? (
-                          <IconNotification
-                            src={NotificationOn}
-                            onClick={() => {
-                              navigate("/notification");
-                            }}
-                          />
-                        ) : (
-                          <IconNotification src={Notification} />
-                        )}
-                        <IconSetting
-                          style={{ display: "none" }}
-                          src={Setting}
+                        {/* {notificationState ? (
+                        <IconNotification
+                          src={NotificationOn}
+                          onClick={() => {
+                            navigate("/notification");
+                          }}
                         />
+                      ) : (
+                        <IconNotification src={Notification} />
+                      )} */}
+                        {/* <span className="material-icons"> clear </span> */}
+                        {/* <IconSetting
+                        style={{ visibility: "hidden" }}
+                        src={Setting}
+                      /> */}
                       </HeadrIconsWrap>
                     </PostHeaderWrap>
                     <div
@@ -623,7 +639,12 @@ function Map() {
                           로그 아웃
                         </div>
                       </div>
-                      <div className="mypage-selectbar-list">
+                      <div
+                        className="mypage-selectbar-list"
+                        onClick={() => {
+                          navigate("/termsconditions");
+                        }}
+                      >
                         <div className="mypage-selectbar">이용 약관</div>
                       </div>
                       <Divider />

@@ -32,7 +32,7 @@ import {
   PageTitle,
   HeadrIconsWrap,
   IconNotification,
-  IconSetting
+  IconSetting,
 } from "../styles/StyledHeader.js";
 
 // icon
@@ -40,7 +40,6 @@ import {
 import Notification from "../assets/icon-notification.svg";
 import Setting from "../assets/icon-setting.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
-
 
 import IconInputClear from "../assets/icon-input-xbtn.svg";
 
@@ -94,7 +93,7 @@ const Signup = () => {
   // 비밀번호 clear btn state
   const [isPasswordClear, setIsPasswordClear] = useState(false);
   // 비밀번호 state
-  const [ completeSingin, setCompleteSigin ] = useState( false );
+  const [completeSingin, setCompleteSigin] = useState(false);
   // 비밀번호 확인 State
   const [isPasswordConfirm, setIsPasswordConfirm] = useState();
   // 비밀번호 확인 clear btn state
@@ -161,8 +160,8 @@ const Signup = () => {
   // email clear click
   const emailClearClickHanlder = () => {
     setNotHangle("");
-    setDuplicateEmail( false );
-    setIsEmail( false );
+    setDuplicateEmail(false);
+    setIsEmail(false);
     setEmailMessage("");
     setIsEmailClear(false);
   };
@@ -177,7 +176,7 @@ const Signup = () => {
   // password clear click
   const passwordConfirmClearClickHandler = () => {
     setIsPasswordConfirm("");
-    setCompleteSigin( false );
+    setCompleteSigin(false);
     setIsPasswordConfirmClear(false);
   };
 
@@ -197,11 +196,11 @@ const Signup = () => {
     if (event.target.value !== pw_ref.current.value) {
       setPasswordMessage("*비밀번호가 다릅니다.");
       setIsSetPassword(false);
-      setCompleteSigin( false );
+      setCompleteSigin(false);
     } else {
       setPasswordMessage("*비밀번호가 동일합니다.");
       setIsSetPassword(true);
-      setCompleteSigin( true );
+      setCompleteSigin(true);
     }
   };
 
@@ -255,8 +254,11 @@ const Signup = () => {
         />
         <PageTitle>회원 가입</PageTitle>
         <HeadrIconsWrap>
-          <IconNotification style={{ visibility:"hidden"}} src={Notification} /> 
-          <IconSetting style={{ visibility:"hidden"}} src={Setting} />
+          <IconNotification
+            style={{ visibility: "hidden" }}
+            src={Notification}
+          />
+          <IconSetting style={{ visibility: "hidden" }} src={Setting} />
         </HeadrIconsWrap>
       </PostHeaderWrap>
       <SiginUpEmailWrapper>
@@ -316,8 +318,17 @@ const Signup = () => {
           />
         )}
       </SignUpPasswordWrapper>
-      
-      { completeSingin && isSetPassword && duplicateEmail ? <SiginUpButton style={{backgroundColor:" #FFC634", color:"black"}} onClick={SignUpClick}>가입하기</SiginUpButton> : <SiginUpButton>가입하기</SiginUpButton> }
+
+      {completeSingin && isSetPassword && duplicateEmail ? (
+        <SiginUpButton
+          style={{ backgroundColor: " #FFC634", color: "black" }}
+          onClick={SignUpClick}
+        >
+          가입하기
+        </SiginUpButton>
+      ) : (
+        <SiginUpButton>가입하기</SiginUpButton>
+      )}
       {isModal && (
         <ModalWrapper>
           <ModalOverlay>
@@ -331,9 +342,15 @@ const Signup = () => {
                 </span>
               </ModalContentWrap>
               <ModalDivider />
-              
+
               {/* <ModalButton onClick={ModalOnClickHandler}>확인</ModalButton> */}
-              <ModalButton >확인</ModalButton>
+              <ModalButton
+                onClick={() => {
+                  ModalOnClickHandler();
+                }}
+              >
+                확인
+              </ModalButton>
               {/* {  ( isSetPassword && duplicateEmail ) ? <ModalButton style={{backgroundColor:" #FFC634", color:"black"}}onClick={ModalOnClickHandler}>확인</ModalButton> : <ModalButton >확인</ModalButton>} */}
             </ModalInner>
           </ModalOverlay>
