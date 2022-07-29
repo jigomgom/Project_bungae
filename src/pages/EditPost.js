@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import {
   getMyBungleList,
   editMyBungleList,
-  deleteMyBungleList
+  deleteMyBungleList,
 } from "../redux/modules/BungleSlice";
 
 // slider 추가
@@ -83,7 +83,7 @@ import {
   PostHeaderWrap,
   ChattingBackKey,
   PageTitle,
-  EditHeadrIconsWrap
+  EditHeadrIconsWrap,
 } from "../styles/StyledHeader.js";
 
 import {
@@ -105,16 +105,15 @@ import IconUpload from "../assets/icon-upload.svg";
 import IconMylocation from "../assets/icon-mylocation-gray.svg";
 import IconBackKey from "../assets/icon-left-arrow.svg";
 
-
 function EditPost() {
   //delete modal state
-  const [ isDeleteModal, setIsDeleteModal ] = useState(false);
+  const [isDeleteModal, setIsDeleteModal] = useState(false);
   // modal state
-  const [ isModal, setIsModal ] = useState( false );
-  const [ modalMessage, setModalMessage ] = useState("");
+  const [isModal, setIsModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   // chat test
-  const client = useSelector( state => state.Bungle.ChatClient.client );
-  const guest = useSelector( state => state.Bungle.ChatClient.guest );
+  const client = useSelector((state) => state.Bungle.ChatClient.client);
+  const guest = useSelector((state) => state.Bungle.ChatClient.guest);
   const Owner = useSelector((state) => state.Bungle.OnwerPostId);
   // console.log( client, guest, Owner );
   // dispatch
@@ -461,7 +460,11 @@ function EditPost() {
   };
   // 인원 수 설정 숫자만 들어가도록 하는 함수
   const InputTextOnChangeNumberHandler = (event) => {
-    if( event.nativeEvent.data === "-" || event.nativeEvent.data === "e" || event.nativeEvent.data === "E" ){
+    if (
+      event.nativeEvent.data === "-" ||
+      event.nativeEvent.data === "e" ||
+      event.nativeEvent.data === "E"
+    ) {
       event.preventDefault();
       return null;
     }
@@ -499,8 +502,10 @@ function EditPost() {
     console.log(event.target.value, isToday);
     if (isToday) {
       if (Number(event.target.value) < Number(currentHour)) {
-        setIsModal( true );
-        setModalMessage(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`)
+        setIsModal(true);
+        setModalMessage(
+          `시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`
+        );
         // alert(
         //   `시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`
         // );
@@ -524,8 +529,10 @@ function EditPost() {
     } else {
       console.log(event.target.value, currentHour);
       if (Number(event.target.value) > Number(currentHour)) {
-        setIsModal( true );
-        setModalMessage(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`)
+        setIsModal(true);
+        setModalMessage(
+          `시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`
+        );
         // alert(
         //   `시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`
         // );
@@ -550,9 +557,13 @@ function EditPost() {
     }
 
     if (!isToday) {
-      if (Number(currentHour + currentMinute) < Number(hour + event.target.value)) {
+      if (
+        Number(currentHour + currentMinute) < Number(hour + event.target.value)
+      ) {
         setIsModal(true);
-        setModalMessage(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        setModalMessage(
+          `시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`
+        );
         // alert(
         //   `시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`
         // );
@@ -563,9 +574,13 @@ function EditPost() {
         setMinute(limitMinute);
       }
     } else {
-      if ( Number(currentHour + currentMinute) > Number(hour + event.target.value) ) {
+      if (
+        Number(currentHour + currentMinute) > Number(hour + event.target.value)
+      ) {
         setIsModal(true);
-        setModalMessage(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+        setModalMessage(
+          `시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`
+        );
         // alert(
         //   `시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`
         // );
@@ -616,12 +631,12 @@ function EditPost() {
       setMinute(("0" + event.target.value).slice(-2));
     }
   };
-  const peopleOnBlur = ( event ) => {
-    if( Number( event.target.value ) < 2 ){
-      setIsModal( true );
+  const peopleOnBlur = (event) => {
+    if (Number(event.target.value) < 2) {
+      setIsModal(true);
       setModalMessage(`인원 설정은 최소 2명입니다.`);
       // alert(`인원 설정은 최소 2명입니다.`);
-      setOnlyNumber( 2 )
+      setOnlyNumber(2);
     }
   };
   // 오늘인지 내일인지 체크
@@ -753,7 +768,7 @@ function EditPost() {
     });
 
     let dates = "";
-    if( isToday ){
+    if (isToday) {
       const today = new Date();
 
       const year = today.getFullYear();
@@ -761,12 +776,12 @@ function EditPost() {
       const day = ("0" + today.getDate()).slice(-2);
 
       dates = year + "-" + month + "-" + day;
-    }else{
+    } else {
       const today = new Date();
 
       const year = today.getFullYear();
       const month = ("0" + (today.getMonth() + 1)).slice(-2);
-      const day = ("0" + ( today.getDate() + 1 ) ).slice(-2);
+      const day = ("0" + (today.getDate() + 1)).slice(-2);
 
       dates = year + "-" + month + "-" + day;
     }
@@ -774,16 +789,16 @@ function EditPost() {
     // const sendCategory = extractCategory.join(",");
     const title = Title_ref.current.value.trim();
     const content = Content_ref.current.value.trim();
-    const hour = hour_ref.current.value;//("0" + hour_ref.current.value).slice(-2);
-    const minute = minute_ref.current.value;//("0" + minute_ref.current.value).slice(-2);
-    if( title.length <= 0 ){
-      setIsModal( true );
+    const hour = hour_ref.current.value; //("0" + hour_ref.current.value).slice(-2);
+    const minute = minute_ref.current.value; //("0" + minute_ref.current.value).slice(-2);
+    if (title.length <= 0) {
+      setIsModal(true);
       setModalMessage("벙글 이름을 입력해주세요.");
       return null;
     }
-    console.log( "제목 길이:", title.length, "본문 길이:", content.length);
-    if( content.length > 100 || content.length === 0){
-      setIsModal( true );
+    console.log("제목 길이:", title.length, "본문 길이:", content.length);
+    if (content.length > 100 || content.length === 0) {
+      setIsModal(true);
       setModalMessage("벙글 소개글은 0자 이상 100자 이하여야 합니다.");
       return null;
     }
@@ -801,16 +816,20 @@ function EditPost() {
       }
 
       let postUrls = [];
-      console.log( isFirstFile?.includes("data"), isSecondFile?.includes("data"), isThirdFile?.includes("data") )
-      if( isFirstFile && !isFirstFile?.includes("data") ){
-        postUrls.push( isFirstFile );
+      console.log(
+        isFirstFile?.includes("data"),
+        isSecondFile?.includes("data"),
+        isThirdFile?.includes("data")
+      );
+      if (isFirstFile && !isFirstFile?.includes("data")) {
+        postUrls.push(isFirstFile);
       }
-      if( isSecondFile && !isSecondFile?.includes("data") ){
-        postUrls.push( isSecondFile );
+      if (isSecondFile && !isSecondFile?.includes("data")) {
+        postUrls.push(isSecondFile);
       }
-      if( isThirdFile && !isThirdFile?.includes("data") ){
+      if (isThirdFile && !isThirdFile?.includes("data")) {
         console.log("??");
-        postUrls.push( isThirdFile );
+        postUrls.push(isThirdFile);
       }
 
       const postDto = {
@@ -822,9 +841,9 @@ function EditPost() {
         tags: tagList,
         categories: extractCategory,
         isLetter: isLetter,
-        postUrls : postUrls
+        postUrls: postUrls,
       };
-      console.log( postDto );
+      console.log(postDto);
       const appendFile = isFile.filter((item) => {
         // console.log(item);
         if (item !== "") {
@@ -832,9 +851,8 @@ function EditPost() {
         }
       });
 
-      
       // console.log( isFirstFile, isSecondFile, isThirdFile );
-      console.log( postUrls );
+      console.log(postUrls);
       console.log("append ", appendFile);
       // console.log("isFile ", isFile);
       const formData = new FormData();
@@ -864,11 +882,11 @@ function EditPost() {
   };
   // 벙글 삭제
   const deleteBunggleOnClickHandler = (postId) => {
-    setIsDeleteModal( false );
+    setIsDeleteModal(false);
     if (myBungle.isLetter) {
       chatDisconnect();
       //dispatch(deleteMyBungleList({ postId, navigate }));
-    }    
+    }
   };
 
   //Disconnect
@@ -884,19 +902,26 @@ function EditPost() {
         roomId: `${parseInt(guest)}`,
       };
     }
-    
-    const PK = Number( localStorage.getItem("userId") );
-    console.log( "삭제 버튼 클릭", chatMessage );
-    dispatch(deleteMyBungleList({ postId:myBungle.postId, client, navigate, chatMessage }));
+
+    const PK = Number(localStorage.getItem("userId"));
+    console.log("삭제 버튼 클릭", chatMessage);
+    dispatch(
+      deleteMyBungleList({
+        postId: myBungle.postId,
+        client,
+        navigate,
+        chatMessage,
+      })
+    );
     // client.send("/pub/chat/message", { PK }, JSON.stringify(chatMessage));
     // client.disconnect(function () {
     // });
   };
 
   const videoButtonClickHandler = () => {
-    setIsModal( true );
-    setModalMessage("서비스 예정 중입니다.")
-  }
+    setIsModal(true);
+    setModalMessage("서비스 예정 중입니다.");
+  };
 
   return (
     <>
@@ -904,25 +929,29 @@ function EditPost() {
       <CreatePostWrap>
         {/* Title 부분 */}
         <PostTilteDiv>
-        <PostHeaderWrap>
-        <ChattingBackKey
-          src={IconBackKey}
-          onClick={() => {
-            navigate("/main");
-          }}
-        />
-        <PageTitle>벙글 수정</PageTitle>
-        <EditHeadrIconsWrap onClick={()=>{editBungleOnClickHandler(myBungle.postId)}}>
-          완료
-        </EditHeadrIconsWrap>
-      </PostHeaderWrap>
+          <PostHeaderWrap>
+            <ChattingBackKey
+              src={IconBackKey}
+              onClick={() => {
+                navigate("/main");
+              }}
+            />
+            <PageTitle>벙글 수정</PageTitle>
+            <EditHeadrIconsWrap
+              onClick={() => {
+                editBungleOnClickHandler(myBungle.postId);
+              }}
+            >
+              완료
+            </EditHeadrIconsWrap>
+          </PostHeaderWrap>
           <PostTitle
             type="search"
             placeholder="벙글 이름을 입력해주세요."
             maxLength={36}
             defaultValue={myBungle.title ? myBungle.title : ""}
             ref={Title_ref}
-            style={{ backgroundColor : "transparent" }}
+            style={{ backgroundColor: "transparent" }}
           />
           {/* <DeleteButton src={IconClear} onClick={clearBtnOnClickHandler} /> */}
         </PostTilteDiv>
@@ -1186,7 +1215,9 @@ function EditPost() {
               </SelectChatLetterBtn>
               <SelectChatVideoBtn
                 CheckedState={isVideo}
-                onClick={()=>{videoButtonClickHandler()}}
+                onClick={() => {
+                  videoButtonClickHandler();
+                }}
                 // onClick={() => {
                 //   ChatButtonClickHandler("video");
                 // }}
@@ -1262,57 +1293,60 @@ function EditPost() {
         <DividerStyle />
         <PostCreateButton
           onClick={() => {
-            setIsDeleteModal( true );
+            setIsDeleteModal(true);
           }}
         >
           삭제하기
         </PostCreateButton>
         {isDeleteModal && (
-        <ModalWrapper>
-          <ModalOverlay>
-            <ModalInner>
-              <ModalContentWrap>
-                <h3>벙글 삭제</h3>
-                <div>정말 삭제하시겠습니까?</div>
-              </ModalContentWrap>
-              <ModalDivider />
-              <ModalButtonWrap>
-                <ModalCancelButton onClick={() => {
-                  setIsDeleteModal(false);
-                }}>
-                  취소
-                </ModalCancelButton>
-                <ModalDeleteButton
-                onClick={() => {
-                  deleteBunggleOnClickHandler(myBungle.postId);
-                }} >
-                  삭제
-                </ModalDeleteButton>
-              </ModalButtonWrap>
-            </ModalInner>
-          </ModalOverlay>
-        </ModalWrapper>
-      )}
-      {isModal && (
-        <ModalWrapper>
-          <ModalOverlay>
-            <ModalInner>
-              <ModalContentWrap>
-                <h3>벙글 수정 실패</h3>
-                <div style={{width:"100%"}}>{modalMessage}</div>
-              </ModalContentWrap>
-              <ModalDivider />
-              <ModalButton
-                onClick={() => {
-                  setIsModal(false);
-                }}
-              >
-                확인
-              </ModalButton>
-            </ModalInner>
-          </ModalOverlay>
-        </ModalWrapper>
-      )}
+          <ModalWrapper>
+            <ModalOverlay>
+              <ModalInner>
+                <ModalContentWrap>
+                  <h3>벙글 삭제</h3>
+                  <div>정말 삭제하시겠습니까?</div>
+                </ModalContentWrap>
+                <ModalDivider />
+                <ModalButtonWrap>
+                  <ModalCancelButton
+                    onClick={() => {
+                      setIsDeleteModal(false);
+                    }}
+                  >
+                    취소
+                  </ModalCancelButton>
+                  <ModalDeleteButton
+                    onClick={() => {
+                      deleteBunggleOnClickHandler(myBungle.postId);
+                    }}
+                  >
+                    삭제
+                  </ModalDeleteButton>
+                </ModalButtonWrap>
+              </ModalInner>
+            </ModalOverlay>
+          </ModalWrapper>
+        )}
+        {isModal && (
+          <ModalWrapper>
+            <ModalOverlay>
+              <ModalInner>
+                <ModalContentWrap>
+                  <h3>벙글 수정 실패</h3>
+                  <div style={{ width: "100%" }}>{modalMessage}</div>
+                </ModalContentWrap>
+                <ModalDivider />
+                <ModalButton
+                  onClick={() => {
+                    setIsModal(false);
+                  }}
+                >
+                  확인
+                </ModalButton>
+              </ModalInner>
+            </ModalOverlay>
+          </ModalWrapper>
+        )}
       </CreatePostWrap>
       {/* </> } */}
     </>

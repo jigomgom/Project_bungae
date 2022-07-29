@@ -20,6 +20,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    margin-top: -10px;
 }
 .chatting-footer-icon{
     margin-right: 20px;
@@ -48,7 +49,7 @@
     resize: none;
     border: 1px solid #898989;
     /* background-color: #d9d9d9; */
-    border-radius: 10px;
+    border-radius: 100px;
     font-weight: 700;
     font-size: 13px;
     line-height: 27px;
@@ -67,6 +68,8 @@
     position: absolute;
     top: 25%;
     left: 100%;
+    width: 20px;
+    height: 20px;
 }
 .chatting-img-sendbtn{
     position: absolute;

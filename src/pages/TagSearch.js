@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getIntervalNotification } from "../redux/modules/BungleSlice";
+import {
+  getIntervalNotification,
+  LogOut,
+  Withdrawal,
+} from "../redux/modules/BungleSlice";
+import { getCookie } from "../customapi/CustomCookie";
 
 //CSS
 import "../styles/TagCategorySearch.css";
@@ -21,6 +26,19 @@ import {
   FooterIconText,
   FooterAddBungae,
 } from "../styles/StyledFooter.js";
+
+import {
+  // Moadl
+  ModalWrapper,
+  ModalOverlay,
+  ModalInner,
+  ModalContentWrap,
+  ModalDivider,
+  ModalButtonWrap,
+  ModalCancelButton,
+  ModalDeleteButton,
+} from "../styles/StyledLogin";
+import { MapPageTitle } from "../styles/StyledHeader";
 
 import { LoadingWrap, LoadingLogo, LoadingText } from "../styles/StyledLoading";
 
@@ -47,6 +65,9 @@ import IconEdit from "../assets/icon-edit-footer.svg";
 
 import IconLoadingLogo from "../assets/icon-splash-logo.svg";
 function TagSearch() {
+  let refreshToken = getCookie("refresh_token");
+  let token = localStorage.getItem("login-token");
+
   const dispatch = useDispatch();
   // 알림 call
   const interval = useRef(null);
@@ -95,6 +116,19 @@ function TagSearch() {
     { key: 2, value: "인기순" },
   ];
 
+  // 설정 modal state
+  const [settingModal, setSettingModal] = useState(false);
+  //로그 아웃
+  const LogOutApi = () => {
+    dispatch(LogOut({ navigate, refreshToken, token }));
+  };
+
+  //회원 탈퇴
+  const [withdrawalModal, setWithdrawalModal] = useState(false);
+  const WithdrawalApi = () => {
+    dispatch(Withdrawal({ navigate }));
+  };
+
   return (
     <div
       style={{
@@ -123,15 +157,143 @@ function TagSearch() {
             // >
             //   notifications
             // </span>
-            <IconNotification src={NotificationOn} onClick={() => {
-                  navigate("/notification");
-                }}/>
+            <IconNotification
+              src={NotificationOn}
+              onClick={() => {
+                navigate("/notification");
+              }}
+            />
           ) : (
             <IconNotification src={Notification} />
           )}
-          <IconSetting style={{ display: "none" }} src={Setting} />
+          <IconSetting
+            src={Setting}
+            onClick={() => {
+              setSettingModal(true);
+            }}
+          />
         </HeadrIconsWrap>
       </PostHeaderWrap>
+      {settingModal && (
+        <div className="setting-modal-wrapper">
+          <div className="setting-modal-inner">
+            <div className="setting-modal-content-wrap">
+              <div className="modal-content-wrap-setting">
+                <PostHeaderWrap>
+                  <ChattingBackKey
+                    src={IconBackKey}
+                    onClick={() => {
+                      setSettingModal(false);
+                    }}
+                  />
+                  <MapPageTitle>설정</MapPageTitle>
+                  <HeadrIconsWrap>
+                    {notificationState ? (
+                      <IconNotification
+                        src={NotificationOn}
+                        onClick={() => {
+                          navigate("/notification");
+                        }}
+                      />
+                    ) : (
+                      <IconNotification src={Notification} />
+                    )}
+                    <IconSetting style={{ display: "none" }} src={Setting} />
+                  </HeadrIconsWrap>
+                </PostHeaderWrap>
+                <div
+                  style={{
+                    width: "89%",
+                    display: "flex",
+                    flexDirection: "column",
+                    margin: "auto",
+                  }}
+                >
+                  <div className="mypage-selectbar-list">
+                    <div
+                      className="mypage-selectbar"
+                      onClick={() => {
+                        LogOutApi();
+                      }}
+                    >
+                      로그 아웃
+                    </div>
+                  </div>
+                  <div className="mypage-selectbar-list">
+                    <div className="mypage-selectbar">이용 약관</div>
+                  </div>
+                  <Divider />
+                  <div className="mypage-selectbar-list">
+                    <div
+                      className="mypage-selectbar"
+                      onClick={() => {
+                        setWithdrawalModal(true);
+                        setSettingModal(false);
+                      }}
+                    >
+                      회원 탈퇴
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {withdrawalModal && (
+        <ModalWrapper>
+          <ModalOverlay>
+            <ModalInner>
+              <ModalContentWrap>
+                <h3>벙글 탈퇴</h3>
+                <div style={{ fontSize: "14px" }}>
+                  정말{" "}
+                  <span
+                    style={{
+                      color: "red",
+                      margin: "0px 3px 0px 3px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    탈퇴
+                  </span>{" "}
+                  하시겠습니까?
+                </div>
+                <div style={{ marginTop: "5px" }}>
+                  탈퇴 후
+                  <span
+                    style={{
+                      color: "red",
+                      margin: "0px 3px 0px 3px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    2일 동안
+                  </span>{" "}
+                  재가입할 수 없습니다.
+                </div>
+              </ModalContentWrap>
+              <ModalDivider />
+              <ModalButtonWrap>
+                <ModalCancelButton
+                  onClick={() => {
+                    setWithdrawalModal(false);
+                  }}
+                >
+                  취소
+                </ModalCancelButton>
+                <ModalDeleteButton
+                  onClick={() => {
+                    WithdrawalApi();
+                  }}
+                >
+                  탈퇴
+                </ModalDeleteButton>
+              </ModalButtonWrap>
+            </ModalInner>
+          </ModalOverlay>
+        </ModalWrapper>
+      )}
       {/* <Tag /> 인기 태그 숨기기 */}
       <Search />
       <div className="search-result-wrap">
@@ -155,10 +317,12 @@ function TagSearch() {
             searchList.map((item, index) => {
               return <TagSearchCard key={index} moreList={item} />;
             })
-          ):(
+          ) : (
             <LoadingWrap>
               {/* <LoadingLogo src={IconLoadingLogo} /> */}
-              <LoadingText style={{ marginTop:"60%", color:"#898989" }}>검색 결과 벙글이 없습니다.</LoadingText>
+              <LoadingText style={{ marginTop: "60%", color: "#898989" }}>
+                검색 결과 벙글이 없습니다.
+              </LoadingText>
             </LoadingWrap>
           )}
         </div>

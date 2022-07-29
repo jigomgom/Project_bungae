@@ -5,7 +5,26 @@ import Divider from "../components/Divider";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // import redux slice
-import { createBungleList, getIntervalNotification } from "../redux/modules/BungleSlice";
+import {
+  createBungleList,
+  getIntervalNotification,
+  LogOut,
+  Withdrawal,
+} from "../redux/modules/BungleSlice";
+import {
+  // Moadl
+  ModalWrapper,
+  ModalOverlay,
+  ModalInner,
+  ModalContentWrap,
+  ModalDivider,
+  ModalButtonWrap,
+  ModalCancelButton,
+  ModalDeleteButton,
+  ModalButton,
+} from "../styles/StyledLogin";
+import { MapPageTitle } from "../styles/StyledHeader";
+import { getCookie } from "../customapi/CustomCookie";
 
 // slider 추가
 import Slider from "rc-slider";
@@ -78,18 +97,8 @@ import {
   PageTitle,
   HeadrIconsWrap,
   IconNotification,
-  IconSetting
+  IconSetting,
 } from "../styles/StyledHeader.js";
-
-import {
-  // Moadl
-  ModalWrapper,
-  ModalOverlay,
-  ModalInner,
-  ModalContentWrap,
-  ModalDivider,
-  ModalButton,
-} from "../styles/StyledLogin";
 
 //icon
 
@@ -117,27 +126,31 @@ const CategoriesArray = [
 ];
 
 function CreatePost() {
+  let refreshToken = getCookie("refresh_token");
+  let token = localStorage.getItem("login-token");
   // 알림 interval
   const interval = useRef(null);
   // 알람 추가
-  const NotificationState = useSelector( state => state.Bungle.isReadNotification );
-  const [ notificationState, setNotificationState ] = useState( NotificationState);
-  useEffect(()=>{
-    setNotificationState( NotificationState );
-  },[NotificationState]);
+  const NotificationState = useSelector(
+    (state) => state.Bungle.isReadNotification
+  );
+  const [notificationState, setNotificationState] = useState(NotificationState);
+  useEffect(() => {
+    setNotificationState(NotificationState);
+  }, [NotificationState]);
 
   // 알림 setInterval
-  useEffect(()=>{
-    interval.current = setInterval( async()=>{
-      dispatch( getIntervalNotification() );
+  useEffect(() => {
+    interval.current = setInterval(async () => {
+      dispatch(getIntervalNotification());
     }, 5000);
-    return () => clearInterval( interval.current );
-  },[])
+    return () => clearInterval(interval.current);
+  }, []);
 
   // modal state
-  const [ isModal, setIsModal ] = useState(false);
+  const [isModal, setIsModal] = useState(false);
   // modal message
-  const [ modalMessage, setModalMessage ] = useState("");
+  const [modalMessage, setModalMessage] = useState("");
   // dispatch
   const dispatch = useDispatch();
   // navigate
@@ -246,7 +259,6 @@ function CreatePost() {
     if (e.target.files[0]) {
       setFirstFile(e.target.files[0]);
       uploadFiles(e, 0);
-      
     } else {
       //업로드 취소할 시
       setIsFirstFile(IconUpload);
@@ -398,7 +410,11 @@ function CreatePost() {
   // 인원 수 설정 숫자만 들어가도록 하는 함수
   const InputTextOnChangeNumberHandler = (event) => {
     // console.log( event );
-    if( event.nativeEvent.data === "-" || event.nativeEvent.data === "e" || event.nativeEvent.data === "E" ){
+    if (
+      event.nativeEvent.data === "-" ||
+      event.nativeEvent.data === "e" ||
+      event.nativeEvent.data === "E"
+    ) {
       event.preventDefault();
       return null;
     }
@@ -412,12 +428,12 @@ function CreatePost() {
     setOnlyNumber(onlyNumber);
   };
 
-  const peopleOnBlur = ( event ) => {
-    if( Number( event.target.value ) < 2 ){
-      setIsModal( true );
+  const peopleOnBlur = (event) => {
+    if (Number(event.target.value) < 2) {
+      setIsModal(true);
       setModalMessage(`인원 설정은 최소 2명입니다.`);
       // alert(`인원 설정은 최소 2명입니다.`);
-      setOnlyNumber( 2 )
+      setOnlyNumber(2);
     }
   };
   // 글자수 제한, 10자 넘으면 10자만 남겨두기
@@ -434,29 +450,18 @@ function CreatePost() {
   // 오늘 내일 여부 판별 state
   const [isToday, setIsToday] = useState(true);
 
-  const isNotNumber = ( value ) => {
+  const isNotNumber = (value) => {
     const regExp = /[a-z|ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g;
     return regExp.test(value);
-  }
+  };
 
   // 시간 숫자만 입력 ( 시 )
   const InputHourNumberChangeHandler = (event) => {
-    if( event.nativeEvent.data === "-" || event.nativeEvent.data === "e" || event.nativeEvent.data === "E" ){
-      event.preventDefault();
-      return null;
-    }
-
-    if( event.nativeEvent.data && isNotNumber( event.nativeEvent.data )){
-      event.preventDefault();
-      return null;
-    }else{
-      setHour( ("0"+event.target.value).slice(-2) );  
-    }
-  };
-
-  // 시간 숫자만 입력 ( 분 )
-  const InputMinuteNumberChangeHandler = (event) => {
-    if( event.nativeEvent.data === "-" || event.nativeEvent.data === "e" || event.nativeEvent.data === "E" ){
+    if (
+      event.nativeEvent.data === "-" ||
+      event.nativeEvent.data === "e" ||
+      event.nativeEvent.data === "E"
+    ) {
       event.preventDefault();
       return null;
     }
@@ -465,81 +470,127 @@ function CreatePost() {
       event.preventDefault();
       return null;
     } else {
-      setMinute(("0"+event.target.value).slice(-2));
+      setHour(("0" + event.target.value).slice(-2));
+    }
+  };
+
+  // 시간 숫자만 입력 ( 분 )
+  const InputMinuteNumberChangeHandler = (event) => {
+    if (
+      event.nativeEvent.data === "-" ||
+      event.nativeEvent.data === "e" ||
+      event.nativeEvent.data === "E"
+    ) {
+      event.preventDefault();
+      return null;
+    }
+
+    if (event.nativeEvent.data && isNotNumber(event.nativeEvent.data)) {
+      event.preventDefault();
+      return null;
+    } else {
+      setMinute(("0" + event.target.value).slice(-2));
     }
   };
   // 오늘인지 내일인지 체크
   const selectTodayOrTommorowClickHanlder = (text) => {
-    if( text === "today" ){
+    if (text === "today") {
       setIsToday(true);
-      setHour( currentHour );
-      setMinute( currentMinute );
-    }else{
+      setHour(currentHour);
+      setMinute(currentMinute);
+    } else {
       setIsToday(false);
-      setHour( currentHour );
-      setMinute( currentMinute );
+      setHour(currentHour);
+      setMinute(currentMinute);
     }
   };
 
   // 시간 focus가 바뀌었을 떄
-  const hourOnBlur = ( event ) => {
-    if( isToday ){
-      if( Number( event.target.value ) < Number( currentHour ) ){
-        setIsModal( true );
-        setModalMessage(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+  const hourOnBlur = (event) => {
+    if (isToday) {
+      if (Number(event.target.value) < Number(currentHour)) {
+        setIsModal(true);
+        setModalMessage(
+          `시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`
+        );
         // alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
-        const limitHour = Math.max(currentHour, Math.min(24, Number(event.target.value)));
-        setHour( limitHour );     
-        setMinute( currentMinute );
-      }else if( Number( event.target.value ) >=  24 ){
-        setIsToday( false );
+        const limitHour = Math.max(
+          currentHour,
+          Math.min(24, Number(event.target.value))
+        );
+        setHour(limitHour);
+        setMinute(currentMinute);
+      } else if (Number(event.target.value) >= 24) {
+        setIsToday(false);
         // alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
         event.target.value -= 24;
-        const limitHour = Math.max(0, Math.min(currentHour, Number(event.target.value)));
-        
-        setHour( ( "0"+ limitHour ).slice(-2) );    
+        const limitHour = Math.max(
+          0,
+          Math.min(currentHour, Number(event.target.value))
+        );
+
+        setHour(("0" + limitHour).slice(-2));
       }
-    }else{
-      if( Number( event.target.value ) > ( currentHour ) ){
-        setIsModal( true );
-        setModalMessage(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+    } else {
+      if (Number(event.target.value) > currentHour) {
+        setIsModal(true);
+        setModalMessage(
+          `시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`
+        );
         // alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
-        const limitHour = Math.max(0, Math.min(currentHour, Number(event.target.value)));
-        setHour( limitHour );     
+        const limitHour = Math.max(
+          0,
+          Math.min(currentHour, Number(event.target.value))
+        );
+        setHour(limitHour);
       }
-      if( event.target.value.length === 1 ){
-        setHour( ("0" + event.target.value).slice(-2) );
+      if (event.target.value.length === 1) {
+        setHour(("0" + event.target.value).slice(-2));
       }
     }
   };
   // 분 focus가 바뀌었을 떄
-  const minuteOnBlur = ( event ) => {
+  const minuteOnBlur = (event) => {
     // console.log( Number( currentHour + currentMinute ));
     // console.log( Number( hour + event.target.value ) );
-    if( Number( event.target.value ) >= 60 ){
-      setIsModal( true );
+    if (Number(event.target.value) >= 60) {
+      setIsModal(true);
       setModalMessage(`분은 60분을 넘길 수 없습니다.`);
       // alert(`분은 60분을 넘길 수 없습니다.`);
-      setMinute(( "0" + currentMinute ).slice(-2));
+      setMinute(("0" + currentMinute).slice(-2));
     }
 
-    if( !isToday ){
-      if( Number( currentHour + currentMinute ) < Number( hour + event.target.value) ){
-        setIsModal( true );
-        setModalMessage(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+    if (!isToday) {
+      if (
+        Number(currentHour + currentMinute) < Number(hour + event.target.value)
+      ) {
+        setIsModal(true);
+        setModalMessage(
+          `시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`
+        );
         // console.log("??");
         // alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
-        const limitMinute = Math.max(0, Math.min(currentMinute, Number(event.target.value)));
-        setMinute( limitMinute );
+        const limitMinute = Math.max(
+          0,
+          Math.min(currentMinute, Number(event.target.value))
+        );
+        setMinute(limitMinute);
       }
-    }else{
-      if( Number( currentHour + currentMinute ) > Number( hour + event.target.value )){
-        setIsModal( true );
-        setModalMessage(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
+    } else {
+      if (
+        Number(currentHour + currentMinute) > Number(hour + event.target.value)
+      ) {
+        setIsModal(true);
+        setModalMessage(
+          `시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`
+        );
         // alert(`시간 설정은 당일 ${currentHour}:${currentMinute}부터 다음 날 ${currentHour}:${currentMinute}까지입니다.`);
-        const limitMinute = Math.max(currentMinute, Math.min(currentMinute, Number(event.target.value)));
-        console.log("limit ", limitMinute );
-        setMinute( limitMinute );
+        const limitMinute = Math.max(
+          currentMinute,
+          Math.min(currentMinute, Number(event.target.value))
+        );
+        console.log("limit ", limitMinute);
+        setMinute(limitMinute);
       }
     }
   };
@@ -564,7 +615,7 @@ function CreatePost() {
     width: "375px",
     height: "470px",
     padding: "7px",
-    marginLeft:"-195px",
+    marginLeft: "-195px",
     // marginTop:"-50px",
     zIndex: 5,
   };
@@ -618,13 +669,13 @@ function CreatePost() {
       handleError,
       options
     );
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
     // const today = new Date();
     // const currentHour = ("0" + today.getHours()).slice(-2);
     // const currentMinute = ("0" + today.getMinutes()).slice(-2);
-    
-    setHour( currentHour );
-    setMinute( currentMinute );
+
+    setHour(currentHour);
+    setMinute(currentMinute);
   }, []);
 
   useEffect(() => {
@@ -649,9 +700,9 @@ function CreatePost() {
   }, [location]);
 
   const videoButtonClickHandler = () => {
-    setIsModal( true );
-    setModalMessage("서비스 예정 중입니다.")
-  }
+    setIsModal(true);
+    setModalMessage("서비스 예정 중입니다.");
+  };
 
   // 등록하기 버튼 클릭
 
@@ -667,7 +718,7 @@ function CreatePost() {
       }
     });
     let dates = "";
-    if( isToday ){
+    if (isToday) {
       const today = new Date();
 
       const year = today.getFullYear();
@@ -675,36 +726,39 @@ function CreatePost() {
       const day = ("0" + today.getDate()).slice(-2);
 
       dates = year + "-" + month + "-" + day;
-    }else{
+    } else {
       const today = new Date();
 
       const year = today.getFullYear();
       const month = ("0" + (today.getMonth() + 1)).slice(-2);
-      const day = ("0" + ( today.getDate() + 1 ) ).slice(-2);
+      const day = ("0" + (today.getDate() + 1)).slice(-2);
 
       dates = year + "-" + month + "-" + day;
     }
-    
+
     const title = Title_ref.current.value.trim();
     let content = "";
-    if( title.length <= 0 ){
-      setIsModal( true );
-      setModalMessage("벙글 이름을 입력해주세요.")
-      window.scrollTo(0,0);
+    if (title.length <= 0) {
+      setIsModal(true);
+      setModalMessage("벙글 이름을 입력해주세요.");
+      window.scrollTo(0, 0);
       return null;
     }
-    if (Content_ref.current.value.trim().length > 100 || Content_ref.current.value.trim().length === 0 ) {
-      setIsModal( true );
+    if (
+      Content_ref.current.value.trim().length > 100 ||
+      Content_ref.current.value.trim().length === 0
+    ) {
+      setIsModal(true);
       setModalMessage("벙글 소개글은 0자 이상 100자 이하여야 합니다.");
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
       return null;
     } else {
       content = Content_ref.current.value.trim();
     }
-    console.log( "제목 길이 :", title.length, "본문 길이 :", content.length );
+    console.log("제목 길이 :", title.length, "본문 길이 :", content.length);
     const hour = ("0" + hour_ref.current.value).slice(-2);
     const minute = ("0" + minute_ref.current.value).slice(-2);
-    
+
     // 타이틀은 필수
     if (title !== "") {
       let address = "";
@@ -728,7 +782,7 @@ function CreatePost() {
         categories: SeelectedCategories,
         isLetter: isLetter,
       };
-      console.log( postDto );
+      console.log(postDto);
 
       const appendFile = isFile.filter((item) => {
         if (item !== "") {
@@ -757,405 +811,546 @@ function CreatePost() {
           formData.append("postImg", item);
         });
       }
-      dispatch(createBungleList( { formData, navigate, isLetter }));
+      dispatch(createBungleList({ formData, navigate, isLetter }));
       // console.log( postDto.isLetter, postDto.personnel )
-    }else{
-      
+    } else {
     }
+  };
+
+  // 설정 modal state
+  const [settingModal, setSettingModal] = useState(false);
+  //로그 아웃
+  const LogOutApi = () => {
+    dispatch(LogOut({ navigate, refreshToken, token }));
+  };
+
+  //회원 탈퇴
+  const [withdrawalModal, setWithdrawalModal] = useState(false);
+  const WithdrawalApi = () => {
+    dispatch(Withdrawal({ navigate }));
   };
 
   return (
     <>
-    <CreatePostWrap>
-    {isModal && (
-        <ModalWrapper>
-          <ModalOverlay>
-            <ModalInner>
-              <ModalContentWrap>
-                <h3>벙글 생성 실패</h3>
-                <div>{modalMessage}</div>
-              </ModalContentWrap>
-              <ModalDivider />
-              <ModalButton
-                onClick={() => {
-                  setIsModal(false);
-                }}
-              >
-                확인
-              </ModalButton>
-            </ModalInner>
-          </ModalOverlay>
-        </ModalWrapper>
-      )}
-      {/* Header */}
-      <PostHeaderWrap>
-        <ChattingBackKey
-          src={IconBackKey}
-          onClick={() => {
-            navigate("/main");
-          }}
-        />
-        <PageTitle>벙글 생성</PageTitle>
-        <HeadrIconsWrap>
-        {notificationState ? (
-                <IconNotification src={NotificationOn} 
-                onClick={() => {
-                      navigate("/notification");
-                    }}
-                />
-              ) : (
-                <IconNotification src={Notification} />
-              )}
-          <IconSetting src={Setting} />
-        </HeadrIconsWrap>
-      </PostHeaderWrap>
-      
-      {/* Title 부분 */}
-      <PostTilteDiv>
-        <PostTitle
-          // type="search"
-          type="text"
-          placeholder="벙글 이름을 작성해주세요."
-          maxLength={36}
-          ref={Title_ref}
-        />
-        {/* <DeleteButton src={IconClear} onClick={clearBtnOnClickHandler} /> */}
-      </PostTilteDiv>
-      {/* Body 저렇게 안 닫아주면 placeholder 안생김*/}
-      <PostBody
-        type="text"
-        ref={Content_ref}
-        placeholder="벙글 소개글을 작성해주세요.( 100글자 미만 )"
-      ></PostBody>
-      <Divider />
-      <PostUploadPictureWrap>
-        <UploadTitle>사진</UploadTitle>
-        <FileUploadWrap>
-          <UploadPictureWrap>
-            <FileInputLabel htmlFor="file-input-1">
-              <FileInputImg src={isFirstFile ? isFirstFile : IconUpload} />
-              {isFirstFileClear && (
-                <FileClearIcon
-                  src={IconClear}
-                  onClick={firstFileClearOnClickHandler}
-                />
-              )}
-            </FileInputLabel>
-            <FileInput
-              id="file-input-1"
-              type="file"
-              accept="image/jpg, image/png, image/jpeg, image/gif image/bmp image/jfif image/JPG image/PNG image/JPEG image/GIF iage/BMP image/img"
-              onChange={onFistFileChange}
-              onClick={(event)=>event.target.value = null}
-              // disabled={isFirstFileClear ? true : false}
-            />
-          </UploadPictureWrap>
-          <UploadPictureWrap>
-            <FileInputLabel htmlFor="file-input-2">
-              <FileInputImg src={isSecondFile ? isSecondFile : IconUpload} />
-              {isSecondFileClear && (
-                <FileClearIcon
-                  src={IconClear}
-                  onClick={secondFileClearOnClickHandler}
-                />
-              )}
-            </FileInputLabel>
-            <FileInput
-              id="file-input-2"
-              type="file"
-              accept="image/jpg, image/png, image/jpeg, image/gif image/bmp image/jfif image/JPG image/PNG image/JPEG image/GIF iage/BMP image/img"
-              onChange={onSecondFileChange}
-              onClick={(event)=>event.target.value = null}
-            />
-          </UploadPictureWrap>
-          <UploadPictureWrap>
-            <FileInputLabel htmlFor="file-input-3">
-              <FileInputImg src={isThirdFile ? isThirdFile : IconUpload} />
-              {isThirdFileClear && (
-                <FileClearIcon
-                  src={IconClear}
-                  onClick={thirdFileClearOnClickHandler}
-                  
-                />
-              )}
-            </FileInputLabel>
-            <FileInput
-              id="file-input-3"
-              type="file"
-              accept="image/jpg, image/png, image/jpeg, image/gif image/bmp image/jfif image/JPG image/PNG image/JPEG image/GIF iage/BMP image/img"
-              onChange={onThirdFileChange}
-              onClick={(event)=>event.target.value = null}
-            />
-          </UploadPictureWrap>
-        </FileUploadWrap>
-      </PostUploadPictureWrap>
-      <DividerStyle />
-      {/* 카테고리 설정 */}
-      <PostCategoriesWrap>
-        <UploadTitle>카테고리 설정</UploadTitle>
-        <PostCategoriesItemWrap>
-          {CategoriesArray.map((item, index) => {
-            return (
-              <PostCategoriesItem
-                isChecked={isCategoryClick[index]}
-                key={index}
-                onClick={() => {
-                  CategoryClickHandler(index);
-                }}
-              >
-                {item}
-              </PostCategoriesItem>
-            );
-          })}
-        </PostCategoriesItemWrap>
-      </PostCategoriesWrap>
-      <DividerStyle />
-
-      {/* 태그 설정 */}
-      <HashTagWrap>
-        <UploadTitle>태그 입력</UploadTitle>
-        <HashTagInput
-          type="text"
-          placeholder="#태그입력 (최대 3개)"
-          readOnly={isReadOnly}
-          onKeyPress={onKeyPress}
-          onInput={onInput}
-          onChange={(e) => setTagItem(e.target.value.replace(/ /g, ""))}
-        />
-        <HashTagItemWrap>
-          {tagList.map((tagItem, index) => {
-            return (
-              <HashTagItem
-                onClick={() => removeHashTagItemHandler(tagItem)}
-                key={index}
-              >
-                #{tagItem}
-              </HashTagItem>
-            );
-          })}
-        </HashTagItemWrap>
-      </HashTagWrap>
-      <DividerStyle />
-      {/* 시간 설정 */}
-      <SetTimeWapper>
-        <UploadTitle>시간 설정</UploadTitle>
-        <TimeItemWapper>
-          <TimeSelectToday
-            isToday={isToday}
+      <CreatePostWrap>
+        {isModal && (
+          <ModalWrapper>
+            <ModalOverlay>
+              <ModalInner>
+                <ModalContentWrap>
+                  <h3>벙글 생성 실패</h3>
+                  <div>{modalMessage}</div>
+                </ModalContentWrap>
+                <ModalDivider />
+                <ModalButton
+                  onClick={() => {
+                    setIsModal(false);
+                  }}
+                >
+                  확인
+                </ModalButton>
+              </ModalInner>
+            </ModalOverlay>
+          </ModalWrapper>
+        )}
+        {/* Header */}
+        <PostHeaderWrap>
+          <ChattingBackKey
+            src={IconBackKey}
             onClick={() => {
-              selectTodayOrTommorowClickHanlder("today");
+              navigate("/main");
             }}
-          >
-            <span
-              className="material-icons"
-              style={{
-                fontWeight: "bold",
-                marginRight: "5px",
-                fontSize: "20px",
-              }}
-            >
-              check
-            </span>
-            오늘
-          </TimeSelectToday>
-          <TimeSelectTommrow
-            isToday={isToday}
-            onClick={() => {
-              selectTodayOrTommorowClickHanlder("tommorow");
-            }}
-          >
-            <span
-              className="material-icons"
-              style={{
-                fontWeight: "bold",
-                marginRight: "5px",
-                fontSize: "20px",
-              }}
-            >
-              check
-            </span>
-            내일
-          </TimeSelectTommrow>
-        </TimeItemWapper>
-        <TimeInputWrapper>
-          <TimeInputHour
-            ref={hour_ref}
-            type="number"
-            maxLength={2}
-            value={hour || ""}
-            onChange={InputHourNumberChangeHandler}
-            onBlur={hourOnBlur}
           />
-
-          <span
-            style={{
-              fontWeight: "400",
-              fontSize: "14px",
-              lineHeight: "20px",
-              marginLeft: "10px",
-              marginRight: "16px",
-            }}
-          >
-            시
-          </span>
-          <TimeInputMinute
-            ref={minute_ref}
-            type="number"
-            value={minute || ""}
-            maxLength={2}
-            onChange={InputMinuteNumberChangeHandler}
-            onBlur={minuteOnBlur}
-          />
-          <span
-            style={{
-              fontWeight: "400",
-              fontSize: "14px",
-              lineHeight: "20px",
-              marginLeft: "10px",
-            }}
-          >
-            분
-          </span>
-        </TimeInputWrapper>
-      </SetTimeWapper>
-      <DividerStyle />
-      {/* 주소 입력 */}
-      <SearchAddressWrap>
-        <UploadTitle>주소 입력</UploadTitle>
-        <SearchAddressItemWrap>
-          <SearchAddressInput
-            readOnly={true}
-            value={isAddress}
-            placeholder="기본 주소"
-          />
-          <SearhAddressBtn onClick={() => {setVisible(!visible)
-          // console.log("주소")
-          }}>
-            {visible ? "취소" : "주소찾기"}
-          </SearhAddressBtn>
-
-          {visible ? (
-            <div>
-              <DaumPostCode
-                onComplete={handleComplete}
-                style={addressStyle}
-                autoClose
-                height={700}
+          <PageTitle>벙글 생성</PageTitle>
+          <HeadrIconsWrap>
+            {notificationState ? (
+              <IconNotification
+                src={NotificationOn}
+                onClick={() => {
+                  navigate("/notification");
+                }}
               />
-            </div>
-          ) : null}
-        </SearchAddressItemWrap>
-        <SearchCurrentPositionItemWrap onClick={getCurrentLocationBtnClick}>
-          <SearchCurrentPositionIcon src={IconMylocation} />
-          <SearchCurrentPositionTitle>현위치로 설정</SearchCurrentPositionTitle>
-          <SearchCurrentPositionIconInput>
-            · {currentAddress ? currentAddress : currentRoadAddress}
-            {/* · 서울 서초구 서초대로 233 */}
-          </SearchCurrentPositionIconInput>
-        </SearchCurrentPositionItemWrap>
-      </SearchAddressWrap>
-      <DividerStyle />
-      {/* 채팅 설정 */}
-      <SelectChatWrap>
-        <SelectChatBox>
-          <UploadTitle>채팅 설정</UploadTitle>
-          <SelectChatBtnWrap>
-            <SelectChatLetterBtn
-              CheckedState={isLetter}
+            ) : (
+              <IconNotification src={Notification} />
+            )}
+            <IconSetting
+              src={Setting}
               onClick={() => {
-                ChatButtonClickHandler("letter");
+                setSettingModal(true);
+              }}
+            />
+          </HeadrIconsWrap>
+        </PostHeaderWrap>
+        {settingModal && (
+          <div className="setting-modal-wrapper">
+            <div className="setting-modal-inner">
+              <div className="setting-modal-content-wrap">
+                <div className="modal-content-wrap-setting">
+                  <PostHeaderWrap>
+                    <ChattingBackKey
+                      src={IconBackKey}
+                      onClick={() => {
+                        setSettingModal(false);
+                      }}
+                    />
+                    <MapPageTitle>설정</MapPageTitle>
+                    <HeadrIconsWrap>
+                      {notificationState ? (
+                        <IconNotification
+                          src={NotificationOn}
+                          onClick={() => {
+                            navigate("/notification");
+                          }}
+                        />
+                      ) : (
+                        <IconNotification src={Notification} />
+                      )}
+                      <IconSetting style={{ display: "none" }} src={Setting} />
+                    </HeadrIconsWrap>
+                  </PostHeaderWrap>
+                  <div
+                    style={{
+                      width: "89%",
+                      display: "flex",
+                      flexDirection: "column",
+                      margin: "auto",
+                    }}
+                  >
+                    <div className="mypage-selectbar-list">
+                      <div
+                        className="mypage-selectbar"
+                        onClick={() => {
+                          LogOutApi();
+                        }}
+                      >
+                        로그 아웃
+                      </div>
+                    </div>
+                    <div className="mypage-selectbar-list">
+                      <div className="mypage-selectbar">이용 약관</div>
+                    </div>
+                    <Divider />
+                    <div className="mypage-selectbar-list">
+                      <div
+                        className="mypage-selectbar"
+                        onClick={() => {
+                          setWithdrawalModal(true);
+                          setSettingModal(false);
+                        }}
+                      >
+                        회원 탈퇴
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {withdrawalModal && (
+          <ModalWrapper>
+            <ModalOverlay>
+              <ModalInner>
+                <ModalContentWrap>
+                  <h3>벙글 탈퇴</h3>
+                  <div style={{ fontSize: "14px" }}>
+                    정말{" "}
+                    <span
+                      style={{
+                        color: "red",
+                        margin: "0px 3px 0px 3px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      탈퇴
+                    </span>{" "}
+                    하시겠습니까?
+                  </div>
+                  <div style={{ marginTop: "5px" }}>
+                    탈퇴 후
+                    <span
+                      style={{
+                        color: "red",
+                        margin: "0px 3px 0px 3px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      2일 동안
+                    </span>{" "}
+                    재가입할 수 없습니다.
+                  </div>
+                </ModalContentWrap>
+                <ModalDivider />
+                <ModalButtonWrap>
+                  <ModalCancelButton
+                    onClick={() => {
+                      setWithdrawalModal(false);
+                    }}
+                  >
+                    취소
+                  </ModalCancelButton>
+                  <ModalDeleteButton
+                    onClick={() => {
+                      WithdrawalApi();
+                    }}
+                  >
+                    탈퇴
+                  </ModalDeleteButton>
+                </ModalButtonWrap>
+              </ModalInner>
+            </ModalOverlay>
+          </ModalWrapper>
+        )}
+        {/* Title 부분 */}
+        <PostTilteDiv>
+          <PostTitle
+            // type="search"
+            type="text"
+            placeholder="벙글 이름을 작성해주세요."
+            maxLength={36}
+            ref={Title_ref}
+          />
+          {/* <DeleteButton src={IconClear} onClick={clearBtnOnClickHandler} /> */}
+        </PostTilteDiv>
+        {/* Body 저렇게 안 닫아주면 placeholder 안생김*/}
+        <PostBody
+          type="text"
+          ref={Content_ref}
+          placeholder="벙글 소개글을 작성해주세요.( 100글자 미만 )"
+        ></PostBody>
+        <Divider />
+        <PostUploadPictureWrap>
+          <UploadTitle>사진</UploadTitle>
+          <FileUploadWrap>
+            <UploadPictureWrap>
+              <FileInputLabel htmlFor="file-input-1">
+                <FileInputImg src={isFirstFile ? isFirstFile : IconUpload} />
+                {isFirstFileClear && (
+                  <FileClearIcon
+                    src={IconClear}
+                    onClick={firstFileClearOnClickHandler}
+                  />
+                )}
+              </FileInputLabel>
+              <FileInput
+                id="file-input-1"
+                type="file"
+                accept="image/jpg, image/png, image/jpeg, image/gif image/bmp image/jfif image/JPG image/PNG image/JPEG image/GIF iage/BMP image/img"
+                onChange={onFistFileChange}
+                onClick={(event) => (event.target.value = null)}
+                // disabled={isFirstFileClear ? true : false}
+              />
+            </UploadPictureWrap>
+            <UploadPictureWrap>
+              <FileInputLabel htmlFor="file-input-2">
+                <FileInputImg src={isSecondFile ? isSecondFile : IconUpload} />
+                {isSecondFileClear && (
+                  <FileClearIcon
+                    src={IconClear}
+                    onClick={secondFileClearOnClickHandler}
+                  />
+                )}
+              </FileInputLabel>
+              <FileInput
+                id="file-input-2"
+                type="file"
+                accept="image/jpg, image/png, image/jpeg, image/gif image/bmp image/jfif image/JPG image/PNG image/JPEG image/GIF iage/BMP image/img"
+                onChange={onSecondFileChange}
+                onClick={(event) => (event.target.value = null)}
+              />
+            </UploadPictureWrap>
+            <UploadPictureWrap>
+              <FileInputLabel htmlFor="file-input-3">
+                <FileInputImg src={isThirdFile ? isThirdFile : IconUpload} />
+                {isThirdFileClear && (
+                  <FileClearIcon
+                    src={IconClear}
+                    onClick={thirdFileClearOnClickHandler}
+                  />
+                )}
+              </FileInputLabel>
+              <FileInput
+                id="file-input-3"
+                type="file"
+                accept="image/jpg, image/png, image/jpeg, image/gif image/bmp image/jfif image/JPG image/PNG image/JPEG image/GIF iage/BMP image/img"
+                onChange={onThirdFileChange}
+                onClick={(event) => (event.target.value = null)}
+              />
+            </UploadPictureWrap>
+          </FileUploadWrap>
+        </PostUploadPictureWrap>
+        <DividerStyle />
+        {/* 카테고리 설정 */}
+        <PostCategoriesWrap>
+          <UploadTitle>카테고리 설정</UploadTitle>
+          <PostCategoriesItemWrap>
+            {CategoriesArray.map((item, index) => {
+              return (
+                <PostCategoriesItem
+                  isChecked={isCategoryClick[index]}
+                  key={index}
+                  onClick={() => {
+                    CategoryClickHandler(index);
+                  }}
+                >
+                  {item}
+                </PostCategoriesItem>
+              );
+            })}
+          </PostCategoriesItemWrap>
+        </PostCategoriesWrap>
+        <DividerStyle />
+
+        {/* 태그 설정 */}
+        <HashTagWrap>
+          <UploadTitle>태그 입력</UploadTitle>
+          <HashTagInput
+            type="text"
+            placeholder="#태그입력 (최대 3개)"
+            readOnly={isReadOnly}
+            onKeyPress={onKeyPress}
+            onInput={onInput}
+            onChange={(e) => setTagItem(e.target.value.replace(/ /g, ""))}
+          />
+          <HashTagItemWrap>
+            {tagList.map((tagItem, index) => {
+              return (
+                <HashTagItem
+                  onClick={() => removeHashTagItemHandler(tagItem)}
+                  key={index}
+                >
+                  #{tagItem}
+                </HashTagItem>
+              );
+            })}
+          </HashTagItemWrap>
+        </HashTagWrap>
+        <DividerStyle />
+        {/* 시간 설정 */}
+        <SetTimeWapper>
+          <UploadTitle>시간 설정</UploadTitle>
+          <TimeItemWapper>
+            <TimeSelectToday
+              isToday={isToday}
+              onClick={() => {
+                selectTodayOrTommorowClickHanlder("today");
               }}
             >
-              {/* <SelectChatBtnImg src={IconChatLetter} /> */}
               <span
-                style={{ marginRight: "7px", marginTop: "4px" }}
                 className="material-icons"
+                style={{
+                  fontWeight: "bold",
+                  marginRight: "5px",
+                  fontSize: "20px",
+                }}
               >
-                chat_bubble_outline
+                check
               </span>
-              일반채팅
-            </SelectChatLetterBtn>
-            <SelectChatVideoBtn
-              CheckedState={isVideo}
-              onClick={()=>{ videoButtonClickHandler() }}
-              // onClick={() => {
-              //   ChatButtonClickHandler("video");
-              // }}
+              오늘
+            </TimeSelectToday>
+            <TimeSelectTommrow
+              isToday={isToday}
+              onClick={() => {
+                selectTodayOrTommorowClickHanlder("tommorow");
+              }}
             >
-              {/* <SelectChatBtnImg src={IconChatVideo} /> */}
               <span
-                className="material-icons-outlined"
-                style={{ marginRight: "7px", marginTop: "2px" }}
+                className="material-icons"
+                style={{
+                  fontWeight: "bold",
+                  marginRight: "5px",
+                  fontSize: "20px",
+                }}
               >
-                video_camera_front
+                check
               </span>
-              화상채팅
-            </SelectChatVideoBtn>
-          </SelectChatBtnWrap>
-        </SelectChatBox>
-      </SelectChatWrap>
-      <DividerStyle />
-      {/* 인원 수 설정 */}
-      <PostPeopleCount>
-        <PostPeopleCountTitleWrap>
-          <PostPeopleTitle>인원 수 설정</PostPeopleTitle>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <PostPeopleCountTitle
-              style={{ textAlign: "right", paddingRight: "5px" }}
+              내일
+            </TimeSelectTommrow>
+          </TimeItemWapper>
+          <TimeInputWrapper>
+            <TimeInputHour
+              ref={hour_ref}
               type="number"
-              value={onlyNumber}
-              onChange={InputTextOnChangeNumberHandler}
-              onBlur={peopleOnBlur}
+              maxLength={2}
+              value={hour || ""}
+              onChange={InputHourNumberChangeHandler}
+              onBlur={hourOnBlur}
             />
-            명
-          </div>
-        </PostPeopleCountTitleWrap>
-        {/* rc slider   */}
-        <Slider
-          className="testName"
-          style={{ marginTop: "15px" }}
-          min={2}
-          max={isLetter ? 50 : 4}
-          value={onlyNumber}
-          trackStyle={{
-            backgroundColor: "#FFC634",
-            border: "1px solid #898989",
-            height: 11,
-          }}
-          inverted={false}
-          handleStyle={{
-            border: "3px solid #FFC634",
-            height: 20,
-            width: 20,
-            marginLeft: 0,
-            marginTop: -4.3,
-            backgroundColor: "white",
-            cursor: "pointer",
-            opacity: 1,
-            boxShadow: "none !imporatnt",
-          }}
-          handle={{ boxShadow: "none" }}
-          onChange={setOnlyNumber}
-          railStyle={{
-            backgroundColor: "white",
-            border: "1px solid #898989",
-            height: 11,
-          }}
-        />
-      </PostPeopleCount>
-      <DividerStyle />
-      <PostCreateButton onClick={CreateBunggleOnClickHandler}>
-        등록하기
-      </PostCreateButton>
-      
-    </CreatePostWrap>
-    
+
+            <span
+              style={{
+                fontWeight: "400",
+                fontSize: "14px",
+                lineHeight: "20px",
+                marginLeft: "10px",
+                marginRight: "16px",
+              }}
+            >
+              시
+            </span>
+            <TimeInputMinute
+              ref={minute_ref}
+              type="number"
+              value={minute || ""}
+              maxLength={2}
+              onChange={InputMinuteNumberChangeHandler}
+              onBlur={minuteOnBlur}
+            />
+            <span
+              style={{
+                fontWeight: "400",
+                fontSize: "14px",
+                lineHeight: "20px",
+                marginLeft: "10px",
+              }}
+            >
+              분
+            </span>
+          </TimeInputWrapper>
+        </SetTimeWapper>
+        <DividerStyle />
+        {/* 주소 입력 */}
+        <SearchAddressWrap>
+          <UploadTitle>주소 입력</UploadTitle>
+          <SearchAddressItemWrap>
+            <SearchAddressInput
+              readOnly={true}
+              value={isAddress}
+              placeholder="기본 주소"
+            />
+            <SearhAddressBtn
+              onClick={() => {
+                setVisible(!visible);
+                // console.log("주소")
+              }}
+            >
+              {visible ? "취소" : "주소찾기"}
+            </SearhAddressBtn>
+
+            {visible ? (
+              <div>
+                <DaumPostCode
+                  onComplete={handleComplete}
+                  style={addressStyle}
+                  autoClose
+                  height={700}
+                />
+              </div>
+            ) : null}
+          </SearchAddressItemWrap>
+          <SearchCurrentPositionItemWrap onClick={getCurrentLocationBtnClick}>
+            <SearchCurrentPositionIcon src={IconMylocation} />
+            <SearchCurrentPositionTitle>
+              현위치로 설정
+            </SearchCurrentPositionTitle>
+            <SearchCurrentPositionIconInput>
+              · {currentAddress ? currentAddress : currentRoadAddress}
+              {/* · 서울 서초구 서초대로 233 */}
+            </SearchCurrentPositionIconInput>
+          </SearchCurrentPositionItemWrap>
+        </SearchAddressWrap>
+        <DividerStyle />
+        {/* 채팅 설정 */}
+        <SelectChatWrap>
+          <SelectChatBox>
+            <UploadTitle>채팅 설정</UploadTitle>
+            <SelectChatBtnWrap>
+              <SelectChatLetterBtn
+                CheckedState={isLetter}
+                onClick={() => {
+                  ChatButtonClickHandler("letter");
+                }}
+              >
+                {/* <SelectChatBtnImg src={IconChatLetter} /> */}
+                <span
+                  style={{ marginRight: "7px", marginTop: "4px" }}
+                  className="material-icons"
+                >
+                  chat_bubble_outline
+                </span>
+                일반채팅
+              </SelectChatLetterBtn>
+              <SelectChatVideoBtn
+                CheckedState={isVideo}
+                onClick={() => {
+                  videoButtonClickHandler();
+                }}
+                // onClick={() => {
+                //   ChatButtonClickHandler("video");
+                // }}
+              >
+                {/* <SelectChatBtnImg src={IconChatVideo} /> */}
+                <span
+                  className="material-icons-outlined"
+                  style={{ marginRight: "7px", marginTop: "2px" }}
+                >
+                  video_camera_front
+                </span>
+                화상채팅
+              </SelectChatVideoBtn>
+            </SelectChatBtnWrap>
+          </SelectChatBox>
+        </SelectChatWrap>
+        <DividerStyle />
+        {/* 인원 수 설정 */}
+        <PostPeopleCount>
+          <PostPeopleCountTitleWrap>
+            <PostPeopleTitle>인원 수 설정</PostPeopleTitle>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <PostPeopleCountTitle
+                style={{ textAlign: "right", paddingRight: "5px" }}
+                type="number"
+                value={onlyNumber}
+                onChange={InputTextOnChangeNumberHandler}
+                onBlur={peopleOnBlur}
+              />
+              명
+            </div>
+          </PostPeopleCountTitleWrap>
+          {/* rc slider   */}
+          <Slider
+            className="testName"
+            style={{ marginTop: "15px" }}
+            min={2}
+            max={isLetter ? 50 : 4}
+            value={onlyNumber}
+            trackStyle={{
+              backgroundColor: "#FFC634",
+              border: "1px solid #898989",
+              height: 11,
+            }}
+            inverted={false}
+            handleStyle={{
+              border: "3px solid #FFC634",
+              height: 20,
+              width: 20,
+              marginLeft: 0,
+              marginTop: -4.3,
+              backgroundColor: "white",
+              cursor: "pointer",
+              opacity: 1,
+              boxShadow: "none !imporatnt",
+            }}
+            handle={{ boxShadow: "none" }}
+            onChange={setOnlyNumber}
+            railStyle={{
+              backgroundColor: "white",
+              border: "1px solid #898989",
+              height: 11,
+            }}
+          />
+        </PostPeopleCount>
+        <DividerStyle />
+        <PostCreateButton onClick={CreateBunggleOnClickHandler}>
+          등록하기
+        </PostCreateButton>
+      </CreatePostWrap>
     </>
   );
 }

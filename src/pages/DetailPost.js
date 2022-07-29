@@ -4,8 +4,11 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   detailBungleList,
   detailLikeBungleList,
-  getIntervalNotification
+  getIntervalNotification,
+  LogOut,
+  Withdrawal,
 } from "../redux/modules/BungleSlice";
+import { getCookie } from "../customapi/CustomCookie";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
@@ -14,7 +17,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 
-import Divider from "../components/Divider";
 import {
   PostWrap,
   PostContent,
@@ -55,7 +57,7 @@ import {
   ChattingBackKey,
   HeadrIconsWrap,
   IconNotification,
-  IconSetting
+  IconSetting,
 } from "../styles/StyledHeader.js";
 
 import {
@@ -65,6 +67,20 @@ import {
   FooterIconText,
   FooterAddBungae,
 } from "../styles/StyledFooter.js";
+
+import {
+  // Moadl
+  ModalWrapper,
+  ModalOverlay,
+  ModalInner,
+  ModalContentWrap,
+  ModalDivider,
+  ModalButtonWrap,
+  ModalCancelButton,
+  ModalDeleteButton,
+} from "../styles/StyledLogin";
+import { MapPageTitle } from "../styles/StyledHeader";
+import Divider from "../components/Divider";
 
 // icons
 import IconShared from "../assets/icon-url-shared.svg";
@@ -96,16 +112,21 @@ import IconEdit from "../assets/icon-edit-footer.svg";
 
 //채팅 입장 client
 const Post = () => {
+  let refreshToken = getCookie("refresh_token");
+  let token = localStorage.getItem("login-token");
+
   const ownerCheck = useSelector((state) => state.Bungle.isOwner);
   const navigate = useNavigate();
-   // 알림 interval
-   const interval = useRef(null);
-   // 알람 추가
-   const NotificationState = useSelector( state => state.Bungle.isReadNotification );
-   const [ notificationState, setNotificationState ] = useState( NotificationState);
-   useEffect(()=>{
-     setNotificationState( NotificationState );
-   },[NotificationState])
+  // 알림 interval
+  const interval = useRef(null);
+  // 알람 추가
+  const NotificationState = useSelector(
+    (state) => state.Bungle.isReadNotification
+  );
+  const [notificationState, setNotificationState] = useState(NotificationState);
+  useEffect(() => {
+    setNotificationState(NotificationState);
+  }, [NotificationState]);
 
   const detailBungleInfo = useSelector((state) => state.Bungle.detailBungle);
   // console.log( detailBungleInfo, detailBungleInfo.length );
@@ -118,12 +139,12 @@ const Post = () => {
   const [isLoaded, setIsLoaded] = useState(true);
 
   // 알림 setInterval
-  useEffect(()=>{
-    interval.current = setInterval( async()=>{
-      dispatch( getIntervalNotification() );
+  useEffect(() => {
+    interval.current = setInterval(async () => {
+      dispatch(getIntervalNotification());
     }, 5000);
-    return () => clearInterval( interval.current );
-  },[])
+    return () => clearInterval(interval.current);
+  }, []);
 
   useEffect(() => {
     // postId가 있을 경우, dispatch 실행
@@ -175,13 +196,26 @@ const Post = () => {
 
   const goToVideoRoom = () => {
     navigate(`/videochat/${postId}`);
-  }
+  };
 
   // 좋아요 클릭
 
   const isLikeClick = (postId) => {
     dispatch(detailLikeBungleList(postId));
     console.log("like ", postId);
+  };
+
+  // 설정 modal state
+  const [settingModal, setSettingModal] = useState(false);
+  //로그 아웃
+  const LogOutApi = () => {
+    dispatch(LogOut({ navigate, refreshToken, token }));
+  };
+
+  //회원 탈퇴
+  const [withdrawalModal, setWithdrawalModal] = useState(false);
+  const WithdrawalApi = () => {
+    dispatch(Withdrawal({ navigate }));
   };
 
   return (
@@ -199,18 +233,147 @@ const Post = () => {
               />
 
               <HeadrIconsWrap>
-              {notificationState ? (
-                <IconNotification src={NotificationOn} 
-                onClick={() => {
+                {notificationState ? (
+                  <IconNotification
+                    src={NotificationOn}
+                    onClick={() => {
                       navigate("/notification");
                     }}
+                  />
+                ) : (
+                  <IconNotification src={Notification} />
+                )}
+                <IconSetting
+                  src={Setting}
+                  onClick={() => {
+                    setSettingModal(true);
+                  }}
                 />
-              ) : (
-                <IconNotification src={Notification} />
-              )}
-                <IconSetting src={Setting} />
               </HeadrIconsWrap>
             </PostHeaderWrap>
+            {settingModal && (
+              <div className="setting-modal-wrapper">
+                <div className="setting-modal-inner">
+                  <div className="setting-modal-content-wrap">
+                    <div className="modal-content-wrap-setting">
+                      <PostHeaderWrap>
+                        <ChattingBackKey
+                          src={IconBackKey}
+                          onClick={() => {
+                            setSettingModal(false);
+                          }}
+                        />
+                        <MapPageTitle>설정</MapPageTitle>
+                        <HeadrIconsWrap>
+                          {notificationState ? (
+                            <IconNotification
+                              src={NotificationOn}
+                              onClick={() => {
+                                navigate("/notification");
+                              }}
+                            />
+                          ) : (
+                            <IconNotification src={Notification} />
+                          )}
+                          <IconSetting
+                            style={{ display: "none" }}
+                            src={Setting}
+                          />
+                        </HeadrIconsWrap>
+                      </PostHeaderWrap>
+                      <div
+                        style={{
+                          width: "89%",
+                          display: "flex",
+                          flexDirection: "column",
+                          margin: "auto",
+                        }}
+                      >
+                        <div className="mypage-selectbar-list">
+                          <div
+                            className="mypage-selectbar"
+                            onClick={() => {
+                              LogOutApi();
+                            }}
+                          >
+                            로그 아웃
+                          </div>
+                        </div>
+                        <div className="mypage-selectbar-list">
+                          <div className="mypage-selectbar">이용 약관</div>
+                        </div>
+                        <Divider />
+                        <div className="mypage-selectbar-list">
+                          <div
+                            className="mypage-selectbar"
+                            onClick={() => {
+                              setWithdrawalModal(true);
+                              setSettingModal(false);
+                            }}
+                          >
+                            회원 탈퇴
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+            {withdrawalModal && (
+              <ModalWrapper>
+                <ModalOverlay>
+                  <ModalInner>
+                    <ModalContentWrap>
+                      <h3>벙글 탈퇴</h3>
+                      <div style={{ fontSize: "14px" }}>
+                        정말{" "}
+                        <span
+                          style={{
+                            color: "red",
+                            margin: "0px 3px 0px 3px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          탈퇴
+                        </span>{" "}
+                        하시겠습니까?
+                      </div>
+                      <div style={{ marginTop: "5px" }}>
+                        탈퇴 후
+                        <span
+                          style={{
+                            color: "red",
+                            margin: "0px 3px 0px 3px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          2일 동안
+                        </span>{" "}
+                        재가입할 수 없습니다.
+                      </div>
+                    </ModalContentWrap>
+                    <ModalDivider />
+                    <ModalButtonWrap>
+                      <ModalCancelButton
+                        onClick={() => {
+                          setWithdrawalModal(false);
+                        }}
+                      >
+                        취소
+                      </ModalCancelButton>
+                      <ModalDeleteButton
+                        onClick={() => {
+                          WithdrawalApi();
+                        }}
+                      >
+                        탈퇴
+                      </ModalDeleteButton>
+                    </ModalButtonWrap>
+                  </ModalInner>
+                </ModalOverlay>
+              </ModalWrapper>
+            )}
             <PostContent>
               <PostIconShared src={IconShared} />
               <PostLike
@@ -219,7 +382,7 @@ const Post = () => {
                   isLikeClick(detailBungleInfo.postId);
                 }}
               />
-              { console.log( detailBungleInfo.postUrls.length)}
+              {console.log(detailBungleInfo.postUrls.length)}
               {/* { detailBungleInfo.postUrls.length === 1 && detailBungleInfo.postUrls[0] === filterPostURL ?
               (
                 <PostImg src={IconNoPost} />
@@ -402,67 +565,67 @@ const Post = () => {
 
             {/* Footer */}
             <FooterWrap>
-          <FooterIconWrap
-            onClick={() => {
-              navigate("/main");
-            }}
-          >
-            <FooterIconImg src={IconHome} />
-            <FooterIconText >홈</FooterIconText>
-          </FooterIconWrap>
-          <FooterIconWrap
-            onClick={() => {
-              navigate("/map");
-            }}
-          >
-            <FooterIconImg src={IconLocation} />
-            <FooterIconText>벙글지도</FooterIconText>
-          </FooterIconWrap>
-          {ownerCheck ? (
-            <FooterAddBungae
-              src={IconEdit}
-              onClick={() => {
-                navigate("/editpost");
-              }}
-            />
-          ) : (
-            <FooterAddBungae
-              src={IconCreate}
-              onClick={() => {
-                navigate("/createpost");
-              }}
-            />
-          )}
-          <FooterIconWrap>
-            <FooterIconImg
-              src={IconChat}
-              onClick={() => {
-                navigate("/chatlist");
-              }}
-            />
-            <FooterIconText>채팅</FooterIconText>
-          </FooterIconWrap>
-          <FooterIconWrap
-            onClick={() => {
-              navigate("/mypage");
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              onClick={() => {
-                navigate("/mypage");
-              }}
-            >
-              <FooterIconImg src={IconMyBungae} />
-              <FooterIconText>나의 벙글</FooterIconText>
-            </div>
-          </FooterIconWrap>
-        </FooterWrap>
+              <FooterIconWrap
+                onClick={() => {
+                  navigate("/main");
+                }}
+              >
+                <FooterIconImg src={IconHome} />
+                <FooterIconText>홈</FooterIconText>
+              </FooterIconWrap>
+              <FooterIconWrap
+                onClick={() => {
+                  navigate("/map");
+                }}
+              >
+                <FooterIconImg src={IconLocation} />
+                <FooterIconText>벙글지도</FooterIconText>
+              </FooterIconWrap>
+              {ownerCheck ? (
+                <FooterAddBungae
+                  src={IconEdit}
+                  onClick={() => {
+                    navigate("/editpost");
+                  }}
+                />
+              ) : (
+                <FooterAddBungae
+                  src={IconCreate}
+                  onClick={() => {
+                    navigate("/createpost");
+                  }}
+                />
+              )}
+              <FooterIconWrap>
+                <FooterIconImg
+                  src={IconChat}
+                  onClick={() => {
+                    navigate("/chatlist");
+                  }}
+                />
+                <FooterIconText>채팅</FooterIconText>
+              </FooterIconWrap>
+              <FooterIconWrap
+                onClick={() => {
+                  navigate("/mypage");
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  onClick={() => {
+                    navigate("/mypage");
+                  }}
+                >
+                  <FooterIconImg src={IconMyBungae} />
+                  <FooterIconText>나의 벙글</FooterIconText>
+                </div>
+              </FooterIconWrap>
+            </FooterWrap>
           </PostWrap>
         </>
       )}

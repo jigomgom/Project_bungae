@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { myChattingList } from "../redux/modules/BungleSlice";
+import {
+  myChattingList,
+  getIntervalNotification,
+  LogOut,
+  Withdrawal,
+} from "../redux/modules/BungleSlice";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+
+import { getCookie } from "../customapi/CustomCookie";
 
 import {
   MapHeaderWrap,
@@ -30,6 +37,12 @@ import {
   ModalButton,
 } from "../styles/StyledLogin";
 
+import {
+  PostHeaderWrap,
+  ChattingBackKey,
+  HeadrIconsWrap,
+} from "../styles/StyledHeader.js";
+
 import { LoadingWrap, LoadingLogo, LoadingText } from "../styles/StyledLoading";
 
 import {
@@ -39,6 +52,13 @@ import {
   SwipeAction,
   TrailingActions,
 } from "react-swipeable-list";
+import {
+  // Moadl
+  ModalButtonWrap,
+  ModalCancelButton,
+  ModalDeleteButton,
+} from "../styles/StyledLogin";
+import Divider from "../components/Divider";
 import "react-swipeable-list/dist/styles.css";
 
 import "../styles/ChatListSwiper.css";
@@ -54,8 +74,12 @@ import IconCreate from "../assets/icon-create-post.svg";
 import IconChatCurrent from "../assets/icon-chat-current.svg";
 import IconMyBungae from "../assets/icon-account.svg";
 import IconDefaultChatList from "../assets/icon-chatlist-default.png";
+import IconBackKey from "../assets/icon-left-arrow.svg";
 
 function App() {
+  let refreshToken = getCookie("refresh_token");
+  let token = localStorage.getItem("login-token");
+
   const [lastMessageTime, setLastMessageTime] = useState([]);
 
   // disconnect modal state
@@ -179,6 +203,20 @@ function App() {
   };
 
   console.log();
+
+  // 설정 modal state
+  const [settingModal, setSettingModal] = useState(false);
+  //로그 아웃
+  const LogOutApi = () => {
+    dispatch(LogOut({ navigate, refreshToken, token }));
+  };
+
+  //회원 탈퇴
+  const [withdrawalModal, setWithdrawalModal] = useState(false);
+  const WithdrawalApi = () => {
+    dispatch(Withdrawal({ navigate }));
+  };
+
   if (myChattingInfo?.length === 0) {
     return (
       <div className="top-chatlist-wrap">
@@ -196,9 +234,139 @@ function App() {
               style={{ visibility: "hidden" }}
               src={Notification}
             />
-            <IconSetting style={{ visibility: "hidden" }} src={Setting} />
+            <IconSetting
+              onClick={() => {
+                setSettingModal(true);
+              }}
+              src={Setting}
+            />
           </MapIconsWrap>
         </MapHeaderWrap>
+        {settingModal && (
+          <div className="setting-modal-wrapper">
+            <div className="setting-modal-inner">
+              <div className="setting-modal-content-wrap">
+                <div className="modal-content-wrap-setting">
+                  <PostHeaderWrap>
+                    <ChattingBackKey
+                      src={IconBackKey}
+                      onClick={() => {
+                        setSettingModal(false);
+                      }}
+                    />
+                    <MapPageTitle>설정</MapPageTitle>
+                    <HeadrIconsWrap>
+                      {/* {notificationState ? (
+                      <IconNotification
+                        src={NotificationOn}
+                        onClick={() => {
+                          navigate("/notification");
+                        }}
+                      />
+                    ) : (
+                      <IconNotification src={Notification} />
+                    )} */}
+                      {/* <IconSetting
+                        onClick={() => {
+                          setSettingModal(true);
+                        }}
+                        src={Setting}
+                      /> */}
+                    </HeadrIconsWrap>
+                  </PostHeaderWrap>
+                  <div
+                    style={{
+                      width: "89%",
+                      display: "flex",
+                      flexDirection: "column",
+                      margin: "auto",
+                    }}
+                  >
+                    <div className="mypage-selectbar-list">
+                      <div
+                        className="mypage-selectbar"
+                        onClick={() => {
+                          LogOutApi();
+                        }}
+                      >
+                        로그 아웃
+                      </div>
+                    </div>
+                    <div className="mypage-selectbar-list">
+                      <div className="mypage-selectbar">이용 약관</div>
+                    </div>
+                    <Divider />
+                    <div className="mypage-selectbar-list">
+                      <div
+                        className="mypage-selectbar"
+                        onClick={() => {
+                          setWithdrawalModal(true);
+                          setSettingModal(false);
+                        }}
+                      >
+                        회원 탈퇴
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {withdrawalModal && (
+          <ModalWrapper>
+            <ModalOverlay>
+              <ModalInner>
+                <ModalContentWrap>
+                  <h3>벙글 탈퇴</h3>
+                  <div style={{ fontSize: "14px" }}>
+                    정말{" "}
+                    <span
+                      style={{
+                        color: "red",
+                        margin: "0px 3px 0px 3px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      탈퇴
+                    </span>{" "}
+                    하시겠습니까?
+                  </div>
+                  <div style={{ marginTop: "5px" }}>
+                    탈퇴 후
+                    <span
+                      style={{
+                        color: "red",
+                        margin: "0px 3px 0px 3px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      2일 동안
+                    </span>{" "}
+                    재가입할 수 없습니다.
+                  </div>
+                </ModalContentWrap>
+                <ModalDivider />
+                <ModalButtonWrap>
+                  <ModalCancelButton
+                    onClick={() => {
+                      setWithdrawalModal(false);
+                    }}
+                  >
+                    취소
+                  </ModalCancelButton>
+                  <ModalDeleteButton
+                    onClick={() => {
+                      WithdrawalApi();
+                    }}
+                  >
+                    탈퇴
+                  </ModalDeleteButton>
+                </ModalButtonWrap>
+              </ModalInner>
+            </ModalOverlay>
+          </ModalWrapper>
+        )}
         <LoadingWrap>
           <LoadingLogo src={IconLoadingLogo} />
           <LoadingText>진행 중인 채팅이 없습니다.</LoadingText>
@@ -279,7 +447,12 @@ function App() {
               style={{ visibility: "hidden" }}
               src={Notification}
             />
-            <IconSetting style={{ visibility: "hidden" }} src={Setting} />
+            <IconSetting
+              onClick={() => {
+                setSettingModal(true);
+              }}
+              src={Setting}
+            />
           </MapIconsWrap>
           <MapPageTitle>채팅</MapPageTitle>
           <MapIconsWrap>
@@ -288,14 +461,133 @@ function App() {
               src={Notification}
             />
             <IconSetting
-              style={{ display: "none" }}
-              src={Setting}
               onClick={() => {
-                dateHandler();
+                setSettingModal(true);
               }}
+              src={Setting}
             />
           </MapIconsWrap>
         </MapHeaderWrap>
+        {settingModal && (
+          <div className="setting-modal-wrapper">
+            <div className="setting-modal-inner">
+              <div className="setting-modal-content-wrap">
+                <div className="modal-content-wrap-setting">
+                  <PostHeaderWrap>
+                    <ChattingBackKey
+                      src={IconBackKey}
+                      onClick={() => {
+                        setSettingModal(false);
+                      }}
+                    />
+                    <MapPageTitle>설정</MapPageTitle>
+                    <HeadrIconsWrap>
+                      {/* {notificationState ? (
+                      <IconNotification
+                        src={NotificationOn}
+                        onClick={() => {
+                          navigate("/notification");
+                        }}
+                      />
+                    ) : (
+                      <IconNotification src={Notification} />
+                    )} */}
+                      <IconSetting style={{ display: "none" }} src={Setting} />
+                    </HeadrIconsWrap>
+                  </PostHeaderWrap>
+                  <div
+                    style={{
+                      width: "89%",
+                      display: "flex",
+                      flexDirection: "column",
+                      margin: "auto",
+                    }}
+                  >
+                    <div className="mypage-selectbar-list">
+                      <div
+                        className="mypage-selectbar"
+                        onClick={() => {
+                          LogOutApi();
+                        }}
+                      >
+                        로그 아웃
+                      </div>
+                    </div>
+                    <div className="mypage-selectbar-list">
+                      <div className="mypage-selectbar">이용 약관</div>
+                    </div>
+                    <Divider />
+                    <div className="mypage-selectbar-list">
+                      <div
+                        className="mypage-selectbar"
+                        onClick={() => {
+                          setWithdrawalModal(true);
+                          setSettingModal(false);
+                        }}
+                      >
+                        회원 탈퇴
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {withdrawalModal && (
+          <ModalWrapper>
+            <ModalOverlay>
+              <ModalInner>
+                <ModalContentWrap>
+                  <h3>벙글 탈퇴</h3>
+                  <div style={{ fontSize: "14px" }}>
+                    정말{" "}
+                    <span
+                      style={{
+                        color: "red",
+                        margin: "0px 3px 0px 3px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      탈퇴
+                    </span>{" "}
+                    하시겠습니까?
+                  </div>
+                  <div style={{ marginTop: "5px" }}>
+                    탈퇴 후
+                    <span
+                      style={{
+                        color: "red",
+                        margin: "0px 3px 0px 3px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      2일 동안
+                    </span>{" "}
+                    재가입할 수 없습니다.
+                  </div>
+                </ModalContentWrap>
+                <ModalDivider />
+                <ModalButtonWrap>
+                  <ModalCancelButton
+                    onClick={() => {
+                      setWithdrawalModal(false);
+                    }}
+                  >
+                    취소
+                  </ModalCancelButton>
+                  <ModalDeleteButton
+                    onClick={() => {
+                      WithdrawalApi();
+                    }}
+                  >
+                    탈퇴
+                  </ModalDeleteButton>
+                </ModalButtonWrap>
+              </ModalInner>
+            </ModalOverlay>
+          </ModalWrapper>
+        )}
         {myChattingInfo.map((item, index) => {
           return (
             <SwipeableList key={index}>

@@ -1,7 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 import AxiosAPI from "../../customapi/CustomAxios";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+
+function resetCookie(cName) {
+  var expireDate = new Date();
+  expireDate.setDate(expireDate.getDate() - 1);
+  document.cookie =
+    cName + "= " + "; expires=" + expireDate.toGMTString() + "; path=/";
+}
 
 // 벙글 생성하기
 export const createBungleList = createAsyncThunk(
@@ -308,7 +316,7 @@ export const tagBungleList = createAsyncThunk(
         item.navigate("/tagsearch");
         // window.location.href = "/tagsearch";
         return response.data.list;
-      }else{
+      } else {
         item.navigate("/tagsearch");
         return null;
       }
@@ -424,6 +432,59 @@ export const getIntervalNotification = createAsyncThunk(
 
       if (response.status === 200) {
         return response.data;
+      }
+    } catch (error) {
+      console.log(error);
+      // window.location.href = `/notFound/${error.message}`;
+    }
+  }
+);
+
+// 로그 아웃
+export const LogOut = createAsyncThunk("POST/LogOut", async (data) => {
+  console.log("로그아웃");
+  console.log(data.refreshToken);
+  console.log(data);
+  try {
+    const response = await axios.post(
+      `${SERVER_URL}/user/logout`,
+      {},
+      {
+        headers: {
+          Authorization: data.token,
+          RefreshToken: data.refreshToken,
+        },
+      }
+    );
+    // console.log(response);
+    if (response.status === 200) {
+      // console.log("쿠키, 로컬 삭제");
+      localStorage.clear();
+      resetCookie("webid_ts");
+      resetCookie("webid");
+      resetCookie("refresh_token");
+      data.navigate("/");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+// 회원 탈퇴
+export const Withdrawal = createAsyncThunk(
+  "DELETE/Withdrawal",
+  async (data) => {
+    console.log("회원 탈퇴");
+
+    try {
+      const response = await AxiosAPI.delete(`/user`);
+
+      if (response.status === 200) {
+        localStorage.clear();
+        resetCookie("webid_ts");
+        resetCookie("webid");
+        resetCookie("refresh_token");
+        data.navigate("/");
       }
     } catch (error) {
       console.log(error);
@@ -699,13 +760,11 @@ const BungleSlice = createSlice({
       console.log(action.payload);
       state.categoriesList = action.payload;
     },
-    [categoryBungleList.rejected]: (state, action) => {
-
-    },
+    [categoryBungleList.rejected]: (state, action) => {},
     // 태그 조회
     [tagBungleList.fulfilled]: (state, action) => {
-      console.log("?????")
-      console.log( action.payload )
+      console.log("?????");
+      console.log(action.payload);
       if (action.payload) {
         state.moreList = action.payload;
       } else {

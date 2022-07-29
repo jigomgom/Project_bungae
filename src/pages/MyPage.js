@@ -4,9 +4,13 @@ import {
   getUserProfile,
   myLikeBungleList,
   getIntervalNotification,
+  LogOut,
+  Withdrawal,
 } from "../redux/modules/BungleSlice";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+
+import { getCookie } from "../customapi/CustomCookie";
 // Library
 
 //CSS
@@ -14,7 +18,6 @@ import "../styles/MyPage.css";
 //Components
 import Divider from "../components/Divider";
 
-// modal
 import {
   // Moadl
   ModalWrapper,
@@ -22,8 +25,17 @@ import {
   ModalInner,
   ModalContentWrap,
   ModalDivider,
+  ModalButtonWrap,
+  ModalCancelButton,
+  ModalDeleteButton,
   ModalButton,
 } from "../styles/StyledLogin";
+
+import {
+  PostHeaderWrap,
+  ChattingBackKey,
+  HeadrIconsWrap,
+} from "../styles/StyledHeader.js";
 
 // Header css
 import {
@@ -58,8 +70,12 @@ import IconEdit from "../assets/icon-edit-footer.svg";
 import IconHighTemp from "../assets/icon-manner-high.svg";
 import IconMiddleTemp from "../assets/icon-manner-middle.svg";
 import IconLowTemp from "../assets/icon-manner-low.svg";
+import IconBackKey from "../assets/icon-left-arrow.svg";
 
 function MyPage() {
+  let refreshToken = getCookie("refresh_token");
+  let token = localStorage.getItem("login-token");
+
   const isOwner = useSelector((state) => state.Bungle.isOwner);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -104,6 +120,19 @@ function MyPage() {
     return () => clearInterval(interval.current);
   }, []);
 
+  // 설정 modal state
+  const [settingModal, setSettingModal] = useState(false);
+  //로그 아웃
+  const LogOutApi = () => {
+    dispatch(LogOut({ navigate, refreshToken, token }));
+  };
+
+  //회원 탈퇴
+  const [withdrawalModal, setWithdrawalModal] = useState(false);
+  const WithdrawalApi = () => {
+    dispatch(Withdrawal({ navigate }));
+  };
+
   // 서비스 예정중인 메뉴 block
   const noActiveMenuClickHander = () => {};
 
@@ -141,18 +170,147 @@ function MyPage() {
             </MapIconsWrap>
             <MapPageTitle>나의 벙글</MapPageTitle>
             <MapIconsWrap>
-            {notificationState ? (
-                <IconNotification src={NotificationOn} 
-                onClick={() => {
-                      navigate("/notification");
-                    }}
+              {notificationState ? (
+                <IconNotification
+                  src={NotificationOn}
+                  onClick={() => {
+                    navigate("/notification");
+                  }}
                 />
               ) : (
                 <IconNotification src={Notification} />
               )}
-              <IconSetting style={{ display:"none"}} src={Setting} />
+              <IconSetting
+                onClick={() => {
+                  setSettingModal(true);
+                }}
+                src={Setting}
+              />
             </MapIconsWrap>
           </MapHeaderWrap>
+          {settingModal && (
+            <div className="setting-modal-wrapper">
+              <div className="setting-modal-inner">
+                <div className="setting-modal-content-wrap">
+                  <div className="modal-content-wrap-setting">
+                    <PostHeaderWrap>
+                      <ChattingBackKey
+                        src={IconBackKey}
+                        onClick={() => {
+                          setSettingModal(false);
+                        }}
+                      />
+                      <MapPageTitle>설정</MapPageTitle>
+                      <HeadrIconsWrap>
+                        {notificationState ? (
+                          <IconNotification
+                            src={NotificationOn}
+                            onClick={() => {
+                              navigate("/notification");
+                            }}
+                          />
+                        ) : (
+                          <IconNotification src={Notification} />
+                        )}
+                        <IconSetting
+                          style={{ display: "none" }}
+                          src={Setting}
+                        />
+                      </HeadrIconsWrap>
+                    </PostHeaderWrap>
+                    <div
+                      style={{
+                        width: "89%",
+                        display: "flex",
+                        flexDirection: "column",
+                        margin: "auto",
+                      }}
+                    >
+                      <div className="mypage-selectbar-list">
+                        <div
+                          className="mypage-selectbar"
+                          onClick={() => {
+                            LogOutApi();
+                          }}
+                        >
+                          로그 아웃
+                        </div>
+                      </div>
+                      <div className="mypage-selectbar-list">
+                        <div className="mypage-selectbar">이용 약관</div>
+                      </div>
+                      <Divider />
+                      <div className="mypage-selectbar-list">
+                        <div
+                          className="mypage-selectbar"
+                          onClick={() => {
+                            setWithdrawalModal(true);
+                            setSettingModal(false);
+                          }}
+                        >
+                          회원 탈퇴
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {withdrawalModal && (
+            <ModalWrapper>
+              <ModalOverlay>
+                <ModalInner>
+                  <ModalContentWrap>
+                    <h3>벙글 탈퇴</h3>
+                    <div style={{ fontSize: "14px" }}>
+                      정말{" "}
+                      <span
+                        style={{
+                          color: "red",
+                          margin: "0px 3px 0px 3px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        탈퇴
+                      </span>{" "}
+                      하시겠습니까?
+                    </div>
+                    <div style={{ marginTop: "5px" }}>
+                      탈퇴 후
+                      <span
+                        style={{
+                          color: "red",
+                          margin: "0px 3px 0px 3px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        2일 동안
+                      </span>{" "}
+                      재가입할 수 없습니다.
+                    </div>
+                  </ModalContentWrap>
+                  <ModalDivider />
+                  <ModalButtonWrap>
+                    <ModalCancelButton
+                      onClick={() => {
+                        setWithdrawalModal(false);
+                      }}
+                    >
+                      취소
+                    </ModalCancelButton>
+                    <ModalDeleteButton
+                      onClick={() => {
+                        WithdrawalApi();
+                      }}
+                    >
+                      탈퇴
+                    </ModalDeleteButton>
+                  </ModalButtonWrap>
+                </ModalInner>
+              </ModalOverlay>
+            </ModalWrapper>
+          )}
           <div className="mypage-content-wrap">
             <div className="mypage-profile-main">
               <div className="mypage-profile-img">
@@ -195,7 +353,7 @@ function MyPage() {
               </div>
             </div>
             <button
-              style={{ color:"black" }}
+              style={{ color: "black" }}
               className="mypage-profile-btn"
               onClick={() => {
                 navigate("/profilesetting");
@@ -223,7 +381,7 @@ function MyPage() {
                 내가 찜한 벙글
               </div>
               <div
-                style={{ borderBottom:"0px" }}
+                style={{ borderBottom: "0px" }}
                 className="mypage-selectbar"
                 onClick={() => {
                   setIsModal(true);

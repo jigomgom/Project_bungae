@@ -1,0 +1,43 @@
+/* Modal Btn */
+.setting-modal-wrapper{
+    box-sizing: border-box;
+    display: block;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    overflow: auto;
+    outline: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1001;
+}
+.setting-modal-inner{
+    box-sizing: border-box;
+    position: relative;
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5);
+    background-color: #fff;
+    border-radius: 10px;
+    /* max-width: 178px; */
+    height: 290px;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    /* top: 275px; */
+    margin: auto;
+    width: 100%;
+    max-width: 335px;
+    top: 20%;
+}
+.setting-modal-content-wrap{
+    width: 335px;
+    /* height: 128px; */
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+}
+.modal-content-wrap-setting{
+
+}

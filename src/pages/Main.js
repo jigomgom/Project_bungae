@@ -7,11 +7,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { getCookie } from "../customapi/CustomCookie";
+
 import {
   getMainBungleList,
   likeBungleList,
   moreBungleList,
   getIntervalNotification,
+  LogOut,
+  Withdrawal,
 } from "../redux/modules/BungleSlice";
 
 import Loading from "../components/Loading";
@@ -20,6 +24,7 @@ import ServiceExplainModal from "../pages/OnBoarding";
 import Tag from "../components/Tag";
 import Search from "../components/Search";
 import Category from "../components/Category";
+import Divider from "../components/Divider";
 
 import {
   MainWrap,
@@ -47,7 +52,14 @@ import {
   IconMyLocation,
   IconSetting,
   IconNotification,
+  MapPageTitle,
 } from "../styles/StyledHeader";
+
+import {
+  PostHeaderWrap,
+  ChattingBackKey,
+  HeadrIconsWrap,
+} from "../styles/StyledHeader.js";
 
 // css
 import {
@@ -57,6 +69,20 @@ import {
   FooterIconText,
   FooterAddBungae,
 } from "../styles/StyledFooter.js";
+
+import {
+  // Moadl
+  ModalWrapper,
+  ModalOverlay,
+  ModalInner,
+  ModalContentWrap,
+  ModalDivider,
+  ModalButtonWrap,
+  ModalCancelButton,
+  ModalDeleteButton,
+} from "../styles/StyledLogin";
+
+import "../styles/Setting.css";
 
 //icons
 import IconLike from "../assets/icon-like.svg";
@@ -71,6 +97,7 @@ import IconMyPoint from "../assets/icon-mylocation.svg";
 import Notification from "../assets/icon-notification.svg";
 import NotificationOn from "../assets/icon-notification-on.svg";
 import Setting from "../assets/icon-setting.svg";
+import IconBackKey from "../assets/icon-left-arrow.svg";
 
 // Footer Icons
 import IconHomeCurrent from "../assets/icon-home-current.svg";
@@ -81,8 +108,11 @@ import IconCreate from "../assets/icon-create-post.svg";
 import IconEdit from "../assets/icon-edit-footer.svg";
 
 function Main() {
+  let refreshToken = getCookie("refresh_token");
+  let token = localStorage.getItem("login-token");
+
   // OnBoarding
-  const [ isOnboard, setIsOnboard ] = useState( false );
+  const [isOnboard, setIsOnboard] = useState(false);
   // 알림 call
   const interval = useRef(null);
   // 알림 state
@@ -113,6 +143,7 @@ function Main() {
   const [location, setLocation] = useState();
   // 에러 메세지 저장
   const [error, setError] = useState();
+
   // GPS 옵션
   const options = {
     /*
@@ -274,10 +305,24 @@ function Main() {
   };
 
   const researchOnClickHandler = () => {
-    window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSdYv_eLc3Bug9ZUUe6UVcbwQJXx98qfoMw_bCKaDX9Xerut2g/viewform?usp=sf_link";
+    window.location.href =
+      "https://docs.google.com/forms/d/e/1FAIpQLSdYv_eLc3Bug9ZUUe6UVcbwQJXx98qfoMw_bCKaDX9Xerut2g/viewform?usp=sf_link";
   };
 
-  if (!location || ( !realTimeList && !endTimeList )) {
+  // 설정 modal state
+  const [settingModal, setSettingModal] = useState(false);
+  //로그 아웃
+  const LogOutApi = () => {
+    dispatch(LogOut({ navigate, refreshToken, token }));
+  };
+
+  //회원 탈퇴
+  const [withdrawalModal, setWithdrawalModal] = useState(false);
+  const WithdrawalApi = () => {
+    dispatch(Withdrawal({ navigate }));
+  };
+
+  if (!location || (!realTimeList && !endTimeList)) {
     // console.log(location);
     return <Loading></Loading>;
   } else {
@@ -289,25 +334,162 @@ function Main() {
           <MainHeaderWrap>
             <MainHeaderLogo src={IconMainLogo} />
             <MainHeaderIconsWrap>
-              <div style={{marginRight:"20px", cursor:"pointer"}} onClick={()=>{researchOnClickHandler()}}>⭐이벤트 참여 Click!⭐</div>
+              <div
+                style={{ marginRight: "20px", cursor: "pointer" }}
+                onClick={() => {
+                  researchOnClickHandler();
+                }}
+              >
+                ⭐이벤트 참여 Click!⭐
+              </div>
               <IconMyLocation
                 src={IconMyPoint}
+                style={{ display: "none" }}
                 onClick={() => {
                   getCurrentLocationBtnClick();
                 }}
               />
               {notificationState ? (
-                <IconNotification src={NotificationOn} 
-                onClick={() => {
-                      navigate("/notification");
-                    }}
+                <IconNotification
+                  src={NotificationOn}
+                  onClick={() => {
+                    navigate("/notification");
+                  }}
                 />
               ) : (
                 <IconNotification src={Notification} />
               )}
-              <IconSetting style={{ display:"none"}} src={Setting} />
+              <IconSetting
+                src={Setting}
+                onClick={() => {
+                  setSettingModal(true);
+                }}
+              />
             </MainHeaderIconsWrap>
           </MainHeaderWrap>
+          {settingModal && (
+            <div className="setting-modal-wrapper">
+              <div className="setting-modal-inner">
+                <div className="setting-modal-content-wrap">
+                  <div className="modal-content-wrap-setting">
+                    <PostHeaderWrap>
+                      <ChattingBackKey
+                        src={IconBackKey}
+                        onClick={() => {
+                          setSettingModal(false);
+                        }}
+                      />
+                      <MapPageTitle>설정</MapPageTitle>
+                      <HeadrIconsWrap>
+                        {notificationState ? (
+                          <IconNotification
+                            src={NotificationOn}
+                            onClick={() => {
+                              navigate("/notification");
+                            }}
+                          />
+                        ) : (
+                          <IconNotification src={Notification} />
+                        )}
+                        <IconSetting
+                          style={{ display: "none" }}
+                          src={Setting}
+                        />
+                      </HeadrIconsWrap>
+                    </PostHeaderWrap>
+                    <div
+                      style={{
+                        width: "89%",
+                        display: "flex",
+                        flexDirection: "column",
+                        margin: "auto",
+                      }}
+                    >
+                      <div className="mypage-selectbar-list">
+                        <div
+                          className="mypage-selectbar"
+                          onClick={() => {
+                            LogOutApi();
+                          }}
+                        >
+                          로그 아웃
+                        </div>
+                      </div>
+                      <div className="mypage-selectbar-list">
+                        <div className="mypage-selectbar">이용 약관</div>
+                      </div>
+                      <Divider />
+                      <div className="mypage-selectbar-list">
+                        <div
+                          className="mypage-selectbar"
+                          onClick={() => {
+                            setWithdrawalModal(true);
+                            setSettingModal(false);
+                          }}
+                        >
+                          회원 탈퇴
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {withdrawalModal && (
+            <ModalWrapper>
+              <ModalOverlay>
+                <ModalInner>
+                  <ModalContentWrap>
+                    <h3>벙글 탈퇴</h3>
+                    <div style={{ fontSize: "14px" }}>
+                      정말{" "}
+                      <span
+                        style={{
+                          color: "red",
+                          margin: "0px 3px 0px 3px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        탈퇴
+                      </span>{" "}
+                      하시겠습니까?
+                    </div>
+                    <div style={{ marginTop: "5px" }}>
+                      탈퇴 후
+                      <span
+                        style={{
+                          color: "red",
+                          margin: "0px 3px 0px 3px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        2일 동안
+                      </span>{" "}
+                      재가입할 수 없습니다.
+                    </div>
+                  </ModalContentWrap>
+                  <ModalDivider />
+                  <ModalButtonWrap>
+                    <ModalCancelButton
+                      onClick={() => {
+                        setWithdrawalModal(false);
+                      }}
+                    >
+                      취소
+                    </ModalCancelButton>
+                    <ModalDeleteButton
+                      onClick={() => {
+                        WithdrawalApi();
+                      }}
+                    >
+                      탈퇴
+                    </ModalDeleteButton>
+                  </ModalButtonWrap>
+                </ModalInner>
+              </ModalOverlay>
+            </ModalWrapper>
+          )}
           {/* <Tag /> 인기 태그 막기*/}
           <Search location={location} />
           <Category location={location} />
@@ -320,16 +502,25 @@ function Main() {
                 // console.log( item );
                 return (
                   <MainContentItemFrame key={index}>
-                    { item.postUrl ? 
-                    (<MainContentItemImg src={item.postUrl} onClick={() => {
-                      showDetailBungle(item.postId);
-                    }}/>) : 
-                    ( <MainContentItemDefalutWrap style={{ marginBottom:"7px" }}>
-                      <MainContentItemImgDefault src={defaultCardImg} onClick={() => {
-                        showDetailBungle(item.postId);
-                      }}/>
-                    </MainContentItemDefalutWrap>)  
-                  }
+                    {item.postUrl ? (
+                      <MainContentItemImg
+                        src={item.postUrl}
+                        onClick={() => {
+                          showDetailBungle(item.postId);
+                        }}
+                      />
+                    ) : (
+                      <MainContentItemDefalutWrap
+                        style={{ marginBottom: "7px" }}
+                      >
+                        <MainContentItemImgDefault
+                          src={defaultCardImg}
+                          onClick={() => {
+                            showDetailBungle(item.postId);
+                          }}
+                        />
+                      </MainContentItemDefalutWrap>
+                    )}
                     <MainContentItemImgTemp
                       src={
                         item.avgTemp >= 50
@@ -341,9 +532,11 @@ function Main() {
                     />
                     <MainContentTextWrap>
                       <MainContentTitleWrap>
-                        <MainContentItemTitle onClick={() => {
-                        showDetailBungle(item.postId);
-                      }}>
+                        <MainContentItemTitle
+                          onClick={() => {
+                            showDetailBungle(item.postId);
+                          }}
+                        >
                           {item.title}
                         </MainContentItemTitle>
                         <MainContentItemLike
@@ -398,16 +591,25 @@ function Main() {
 
                 return (
                   <MainContentItemFrame key={index}>
-                    { item.postUrl ? 
-                    (<MainContentItemImg src={item.postUrl} onClick={() => {
-                      showDetailBungle(item.postId);
-                    }}/>) : 
-                    ( <MainContentItemDefalutWrap style={{ marginBottom:"7px" }}>
-                      <MainContentItemImgDefault src={defaultCardImg} onClick={() => {
-                        showDetailBungle(item.postId);
-                      }}/>
-                    </MainContentItemDefalutWrap>)  
-                  }
+                    {item.postUrl ? (
+                      <MainContentItemImg
+                        src={item.postUrl}
+                        onClick={() => {
+                          showDetailBungle(item.postId);
+                        }}
+                      />
+                    ) : (
+                      <MainContentItemDefalutWrap
+                        style={{ marginBottom: "7px" }}
+                      >
+                        <MainContentItemImgDefault
+                          src={defaultCardImg}
+                          onClick={() => {
+                            showDetailBungle(item.postId);
+                          }}
+                        />
+                      </MainContentItemDefalutWrap>
+                    )}
                     <MainContentItemImgTemp
                       src={
                         item.avgTemp >= 50
@@ -419,9 +621,11 @@ function Main() {
                     />
                     <MainContentTextWrap>
                       <MainContentTitleWrap>
-                        <MainContentItemTitle onClick={() => {
-                        showDetailBungle(item.postId);
-                      }}>
+                        <MainContentItemTitle
+                          onClick={() => {
+                            showDetailBungle(item.postId);
+                          }}
+                        >
                           {item.title}
                         </MainContentItemTitle>
                         <MainContentItemLike
