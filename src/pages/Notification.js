@@ -57,7 +57,7 @@ function Notification() {
   const NotificationList = useSelector(
     (state) => state.Bungle.NoitficationList
   );
-
+    
   const changeDateFormat = (date) => {
     if (date) {
       const dateList = date?.split("T");
@@ -259,9 +259,9 @@ function Notification() {
                     src={IconBell}
                     alt=""
                   />
-                  <NotificationTitle>{item.nickname}</NotificationTitle>
+                  <NotificationTitle>{item.title}</NotificationTitle>
                 </div>
-                <NotificationDisplay>{item.message}</NotificationDisplay>
+                <NotificationDisplay>{item.nickname} : {item.message}</NotificationDisplay>
                 <NofiticationDate>
                   {changeDateFormat(item.createdAt)}
                 </NofiticationDate>

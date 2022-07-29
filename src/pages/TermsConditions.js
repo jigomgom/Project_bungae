@@ -26,11 +26,11 @@ function TermsConditions() {
           />
           <PageTitle>이용약관</PageTitle>
           <HeadrIconsWrap>
-            <IconNotification style={{ visibility:"hidden"}} />
+            <IconNotification style={{ display:"none"}} />
             <IconSetting style={{ visibility:"hidden"}} />
           </HeadrIconsWrap>
         </PostHeaderWrap>
-        <div style={{ display:"flex", width:"100%", flexDirection:"column", marginRight:"auto", marginLeft:"18px" }}>
+        <div style={{ display:"flex", width:"100%", flexDirection:"column", marginRight:"auto" }}>
           <h3 style={{marginBottom:"-10px"}}>제 1 장 총칙</h3>
           <div style={{marginLeft:"10px"}}>
             <h4>제 1 조 (목적)</h4>

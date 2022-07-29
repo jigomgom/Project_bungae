@@ -387,8 +387,10 @@ function App() {
           </ModalWrapper>
         )}
         <LoadingWrap>
+          {/* <LoadingLogo src={IconLoadingLogo} />
+           */}
           <LoadingText style={{ marginTop: "80%", color: "#898989" }}>
-            찜한 벙글이 없습니다.
+            진행 중인 채팅이 없습니다.
           </LoadingText>
         </LoadingWrap>
 
