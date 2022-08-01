@@ -1,1 +1,1 @@
-github.com/jigomgom/Project_bungae/blob/main/README.md?plain=1#L14
+https://github.com/jigomgom/Project_bungae/blob/main/README.md?plain=1#L14
